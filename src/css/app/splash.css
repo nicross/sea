@@ -1,1 +1,67 @@
-.a-splash {}
+.a-splash {
+  text-align: center;
+}
+  .a-splash--author {
+    animation: a-splash--author 4s ease 0s infinite;
+    color: #8080FF;
+    font-family: FiraMonoRegular, monospace;
+  }
+  .a-splash--instruction {
+    animation: a-splash--instruction 2s ease 0s infinite;
+    flex: 0 0 auto;
+    text-transform: uppercase;
+  }
+  .a-splash--logo {
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    letter-spacing: 0;
+  }
+  .a-splash--title {
+    animation: a-splash--title 4s ease 0s infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-color: #8080FF;
+    background-image: linear-gradient(180deg, #FFFFFF, #8080FF);
+    font-family: SuperSubmarineHalf, sans-serif;
+    font-size: 10em;
+    line-height: 0.875;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+  }
+
+@keyframes a-splash--author {
+  0% {
+    color: #8080FF;
+  }
+  50% {
+    color: #C0C0FF;
+  }
+  100% {
+    color: #8080FF;
+  }
+}
+
+@keyframes a-splash--instruction {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes a-splash--title {
+  0% {
+    background-size: 87.5% 87.5%;
+  }
+  50% {
+    background-size: 175% 175%;
+  }
+  100% {
+    background-size: 87.5% 87.5%;
+  }
+}

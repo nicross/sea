@@ -1,7 +1,9 @@
 :root {
   background-color: #000000;
   color: #FFFFFF;
-  font-size: 16px;
+  font-family: RobotoLight, sans-serif;
+  font-size: 20px;
+  font-weight: 300;
   line-height: 1.5;
   user-select: none;
 }
@@ -9,6 +11,10 @@
 html, body {
   height: 100%;
   width: 100%;
+}
+
+:focus {
+  outline: 0;
 }
 
 @media (max-width: 20rem) {

@@ -1,6 +1,7 @@
 .a-app {
   height: 100%;
   left: 0;
+  letter-spacing: 0.125em;
   position: absolute;
   opacity: 0;
   top: 0;
@@ -19,6 +20,7 @@
   .a-app--screen {
     height: 100%;
     left: 0;
+    padding: 4em;
     position: absolute;
     opacity: 0;
     top: 0;

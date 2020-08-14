@@ -11,15 +11,21 @@ app.screen.game = (() => {
 
   function onEnter() {
     app.utility.focus.set(root)
-    engine.loop.on('frame', onFrame)
+
     engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, 1, 1)
+
+    engine.loop.on('frame', onFrame)
     engine.loop.resume()
+
+    app.autosave.enable()
   }
 
   function onExit() {
-    engine.loop.pause()
     engine.loop.off('frame', onFrame)
+    engine.loop.pause()
+
     engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, engine.const.zeroGain, 1)
+    app.autosave.disable().trigger()
   }
 
   function onFrame(e) {

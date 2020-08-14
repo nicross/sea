@@ -1,5 +1,3 @@
-'use strict'
-
 app.screen.mainMenu = (() => {
   let root
 

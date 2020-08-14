@@ -1,11 +1,6 @@
 .a-splash {
   text-align: center;
 }
-  .a-splash--author {
-    animation: a-splash--author 4s ease 0s infinite;
-    color: #8080FF;
-    font-family: FiraMonoRegular, monospace;
-  }
   .a-splash--instruction {
     animation: a-splash--instruction 2s ease 0s infinite;
     flex: 0 0 auto;
@@ -16,6 +11,13 @@
     display: flex;
     flex: 1 1 auto;
     letter-spacing: 0;
+  }
+  .a-splash--row {
+    animation: a-splash--row 4s ease 0s infinite;
+    color: #8080FF;
+    display: flex;
+    font-family: FiraMonoRegular, monospace;
+    justify-content: space-between;
   }
   .a-splash--title {
     animation: a-splash--title 4s ease 0s infinite;
@@ -30,18 +32,6 @@
     text-fill-color: transparent;
   }
 
-@keyframes a-splash--author {
-  0% {
-    color: #8080FF;
-  }
-  50% {
-    color: #C0C0FF;
-  }
-  100% {
-    color: #8080FF;
-  }
-}
-
 @keyframes a-splash--instruction {
   0% {
     opacity: 1;
@@ -51,6 +41,18 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes a-splash--row {
+  0% {
+    color: #8080FF;
+  }
+  50% {
+    color: #C0C0FF;
+  }
+  100% {
+    color: #8080FF;
   }
 }
 

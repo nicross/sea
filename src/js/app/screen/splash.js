@@ -32,6 +32,8 @@ app.screen.splash = (() => {
       app.state.screen.on('enter-splash', onEnter)
       app.state.screen.on('exit-splash', onExit)
 
+      root.querySelector('.a-splash--version').innerHTML = `v${app.version()}`
+
       return this
     },
   }

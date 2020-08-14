@@ -1,6 +1,7 @@
 const cleancss = require('gulp-clean-css')
 const concat = require('gulp-concat')
 const electron = require('gulp-run-electron')
+const footer = require('gulp-footer')
 const gulp = require('gulp')
 const gulpif = require('gulp-if')
 const iife = require('gulp-iife')
@@ -29,6 +30,8 @@ gulp.task('build-js', () => {
     getJs()
   ).pipe(
     concat('scripts.min.js')
+  ).pipe(
+    footer(`;app.version=()=>'${package.version + (isDebug ? '-debug' : '')}';`)
   ).pipe(
     gulpif(!isDebug, iife())
   ).pipe(

@@ -2,17 +2,19 @@
 
 app.controls.keyboard = (() => {
   const controls = {
+    AltLeft: false,
     ArrowDown: false,
     ArrowLeft: false,
     ArrowRight: false,
     ArrowUp: false,
     Backspace: false,
-    Delete: false,
+    ControlLeft: false,
     Enter: false,
     Escape: false,
     KeyA: false,
     KeyD: false,
     KeyE: false,
+    KeyF: false,
     KeyQ: false,
     KeyS: false,
     KeyW: false,
@@ -22,8 +24,7 @@ app.controls.keyboard = (() => {
     Numpad7: false,
     Numpad8: false,
     Numpad9: false,
-    NumpadDecimal: false,
-    NumpadEnter: false,
+    ShiftLeft: false,
     Space: false,
   }
 
@@ -82,6 +83,18 @@ app.controls.keyboard = (() => {
         }
       }
 
+      if (controls.Space && !controls.ControlLeft) {
+        state.z = 1
+      }
+
+      if (controls.ControlLeft && !controls.Space) {
+        state.z = -1
+      }
+
+      if (controls.ShiftLeft) {
+        state.boost = true
+      }
+
       return state
     },
     reset: function () {
@@ -95,10 +108,6 @@ app.controls.keyboard = (() => {
 
       if (controls.Backspace) {
         state.backspace = true
-      }
-
-      if (controls.Delete || controls.NumpadDecimal) {
-        state.delete = true
       }
 
       if (controls.Enter || controls.NumpadEnter) {
@@ -127,6 +136,10 @@ app.controls.keyboard = (() => {
 
       if (controls.ArrowUp || controls.KeyW || controls.Numpad8) {
         state.up = true
+      }
+
+      if (controls.AltLeft || controls.KeyF) {
+        state.ping = true
       }
 
       return state

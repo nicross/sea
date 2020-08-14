@@ -15,7 +15,12 @@ app.controls.gamepad = {
     }
 
     const buttons = {},
-      sticks = []
+      state = {}
+
+    let rotate = 0,
+      x = 0,
+      y = 0,
+      z = 0
 
     for (let i = 0; i < gamepads.length; i += 1) {
       const gamepad = gamepads[i]
@@ -24,54 +29,107 @@ app.controls.gamepad = {
         continue
       }
 
-      if (0 in gamepad.axes && 1 in gamepad.axes) {
-        sticks[0] = {
-          x: this.deadzone(gamepad.axes[0]),
-          y: -this.deadzone(gamepad.axes[1]),
-        }
-      }
+      const hasLeftStick = 0 in gamepad.axes && 1 in gamepad.axes,
+        hasRightStick = 2 in gamepad.axes && 3 in gamepad.axes
 
-      if (2 in gamepad.axes && 3 in gamepad.axes) {
-        sticks[1] = {
-          x: this.deadzone(gamepad.axes[2]),
-          y: -this.deadzone(gamepad.axes[3]),
-        }
+      if (hasLeftStick && hasRightStick) {
+        rotate += this.deadzone(gamepad.axes[2])
+        x += this.deadzone(gamepad.axes[0])
+        y += this.deadzone(gamepad.axes[1])
+      } else if (hasLeftStick) {
+        rotate += this.deadzone(gamepad.axes[0])
+        y += this.deadzone(gamepad.axes[1])
       }
 
       gamepad.buttons.forEach((button, i) => {
         buttons[i] |= button.pressed
       })
+
+      if (6 in gamepad.buttons) {
+        y -= gamepad.buttons[6].value
+      }
+
+      if (7 in gamepad.buttons) {
+        y += gamepad.buttons[7].value
+      }
     }
 
-    let rotate = 0
+    rotate = engine.utility.clamp(rotate, -1, 1) || 0
+    x = engine.utility.clamp(x, -1, 1) || 0
+    y = engine.utility.clamp(y, -1, 1) || 0
+    z = engine.utility.clamp(z, -1, 1) || 0
 
-    if (sticks.length == 1) {
-      rotate = -sticks[0].x
-    } else if (sticks.length == 2) {
-      rotate = -sticks[1].x
+    if (rotate) {
+      state.rotate = rotate
     }
 
-    if (buttons[4] && !buttons[5]) {
-      rotate = 1
+    if (x || y) {
+      state.translate = {
+        radius: Math.min(1, engine.utility.distance(0, 0, x, y)),
+        theta: Math.atan2(-x, y),
+      }
     }
 
     if (buttons[5] && !buttons[4]) {
-      rotate = -1
+      state.z = 1
+    } else if (buttons[4] && !buttons[5]) {
+      state.z = -1
     }
 
-    let x = sticks.length ? sticks[0].x : 0
-
-    if (buttons[14]) {
-      x = -1
+    if (buttons[10] || buttons[11]) {
+      state.boost = true
     }
 
-    if (buttons[15]) {
-      x = 1
+    return state
+  },
+  ui: function () {
+    const gamepads = navigator.getGamepads()
+
+    if (!gamepads.length) {
+      return {}
     }
 
-    x = engine.utility.clamp(x, -1, 1)
+    const buttons = {},
+      state = {}
 
-    let y = sticks.reduce((y, stick) => y + stick.y, 0)
+    let x = 0,
+      y = 0
+
+    for (let i = 0; i < gamepads.length; i += 1) {
+      const gamepad = gamepads[i]
+
+      if (!gamepad) {
+        continue
+      }
+
+      gamepad.buttons.forEach((button, i) => {
+        buttons[i] |= button.pressed
+      })
+
+      const hasLeftStick = 0 in gamepad.axes && 1 in gamepad.axes
+
+      if (hasLeftStick) {
+        x += this.deadzone(gamepad.axes[0])
+        y -= this.deadzone(gamepad.axes[1])
+      }
+    }
+
+    if (buttons[1]) {
+      state.cancel = true
+    }
+
+    if (buttons[0]) {
+      state.confirm = true
+      state.ping = true
+    }
+
+    if (buttons[8]) {
+      state.select = true
+    }
+
+    if (buttons[9]) {
+      state.start = true
+    }
 
     if (buttons[12]) {
       y = 1
@@ -81,71 +139,12 @@ app.controls.gamepad = {
       y = -1
     }
 
-    // XXX: Math.atan2() returns 180° if y is negative zero, so coalesce to positive zero
-    y = engine.utility.clamp(y, -1, 1) || 0
-
-    return {
-      rotate,
-      translate: {
-        radius: Math.min(1, engine.utility.distance(0, 0, x, y)),
-        theta: Math.atan2(-x, y), // NOTE: Rotated -90°
-      },
-    }
-  },
-  ui: function () {
-    const gamepads = navigator.getGamepads(),
-      state = {}
-
-    if (!gamepads.length) {
-      return state
+    if (buttons[14]) {
+      x = -1
     }
 
-    let x = 0,
-      y = 0
-
-    for (let i = 0; i < gamepads.length; i += 1) {
-      const gamepad = gamepads[i],
-        isPressed = (i) => i in gamepad.buttons && gamepad.buttons[i].pressed
-
-      if (!gamepad) {
-        continue
-      }
-
-      if (isPressed(1)) {
-        state.cancel = true
-      }
-
-      if (isPressed(0)) {
-        state.confirm = true
-      }
-
-      if (isPressed(8)) {
-        state.select = true
-      }
-
-      if (isPressed(9)) {
-        state.start = true
-      }
-
-      if (isPressed(3) || isPressed(10) || isPressed(11)) {
-        state.automove = true
-      }
-
-      if (isPressed(12)) {
-        y = 1
-      }
-
-      if (isPressed(13)) {
-        y = -1
-      }
-
-      if (isPressed(14)) {
-        x = -1
-      }
-
-      if (isPressed(15)) {
-        x = 1
-      }
+    if (buttons[15]) {
+      x = 1
     }
 
     const absX = Math.abs(x),

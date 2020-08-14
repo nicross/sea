@@ -8,6 +8,9 @@ There's no land for days.
 It's just you and the sounds of the open sea.
 Your mission is to test its capabilities.
 
+S.E.A. is an exploration game about discovery.
+By revealing the spoilers below, you will miss out on the most important discoveries.
+
 ### Keyboard controls
 <table>
   <thead>
@@ -29,7 +32,7 @@ Your mission is to test its capabilities.
       <th>Reverse</th>
       <td>S</td>
       <td>Down Arrow</td>
-      <td>N</td>
+      <td>Numpad 5</td>
     </tr>
     <tr>
       <th>Turn Left</th>
@@ -221,3 +224,8 @@ gulp electron-build
 | Flag | Description |
 | - | - |
 | `--debug` | Suppresses minification. |
+
+## Credits
+The font Roboto was created by Google.
+The font Super Submarine was created by Iconian Fonts.
+These fonts are free for noncommercial use and not covered by the license of this project.

@@ -81,6 +81,7 @@ gulp.task('dist-html5', () => {
   // XXX: Archive has no root directory
   return gulp.src([
     'public/favicon.png',
+    'public/font/*.woff',
     'public/index.html',
     'public/scripts.min.js',
     'public/styles.min.css',
@@ -108,6 +109,7 @@ gulp.task('watch', () => {
 function getCss() {
   const srcs = [
     'src/css/reset.css',
+    'src/css/fonts.css',
     'src/css/main.css',
     'src/css/*.css',
     'src/css/**/*.css',

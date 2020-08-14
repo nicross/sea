@@ -3,6 +3,7 @@
 app.controls.keyboard = (() => {
   const controls = {
     AltLeft: false,
+    AltRight: false,
     ArrowDown: false,
     ArrowLeft: false,
     ArrowRight: false,
@@ -25,6 +26,7 @@ app.controls.keyboard = (() => {
     Numpad8: false,
     Numpad9: false,
     ShiftLeft: false,
+    ShiftRight: false,
     Space: false,
   }
 
@@ -55,19 +57,16 @@ app.controls.keyboard = (() => {
 
       const state = {}
 
-      let x = 0,
-        y = 0
-
       if (moveBackward && !moveForward) {
-        y = -1
+        state.y = -1
       } else if (moveForward && !moveBackward) {
-        y = 1
+        state.y = 1
       }
 
       if (strafeLeft && !strafeRight) {
-        x = -1
+        state.x = -1
       } else if (strafeRight && !strafeLeft) {
-        x = 1
+        state.x = 1
       }
 
       if (turnLeft && !turnRight) {
@@ -76,18 +75,11 @@ app.controls.keyboard = (() => {
         state.rotate = -1
       }
 
-      if (x || y) {
-        state.translate = {
-          radius: 1,
-          theta: Math.atan2(-x, y), // NOTE: Rotated -90°
-        }
-      }
-
-      if (controls.Space && !controls.ControlLeft) {
+      if (controls.Space && !(controls.ControlLeft || controls.ControlRight)) {
         state.z = 1
       }
 
-      if (controls.ControlLeft && !controls.Space) {
+      if ((controls.ControlLeft || controls.ControlRight) && !controls.Space) {
         state.z = -1
       }
 
@@ -138,8 +130,8 @@ app.controls.keyboard = (() => {
         state.up = true
       }
 
-      if (controls.AltLeft || controls.KeyF) {
-        state.ping = true
+      if (controls.AltLeft || controls.AltRight || controls.KeyF) {
+        state.scan = true
       }
 
       return state

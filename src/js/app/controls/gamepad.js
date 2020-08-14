@@ -63,11 +63,12 @@ app.controls.gamepad = {
       state.rotate = rotate
     }
 
-    if (x || y) {
-      state.translate = {
-        radius: Math.min(1, engine.utility.distance(0, 0, x, y)),
-        theta: Math.atan2(-x, y),
-      }
+    if (x) {
+      state.x = x
+    }
+
+    if (y) {
+      state.y = y
     }
 
     if (buttons[5] && !buttons[4]) {
@@ -120,7 +121,7 @@ app.controls.gamepad = {
 
     if (buttons[0]) {
       state.confirm = true
-      state.ping = true
+      state.scan = true
     }
 
     if (buttons[8]) {

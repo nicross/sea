@@ -226,6 +226,7 @@ gulp electron-build
 | `--debug` | Suppresses minification. |
 
 ## Credits
+The font Fira Mono was created by Mozilla.
 The font Roboto was created by Google.
 The font Super Submarine was created by Iconian Fonts.
 These fonts are free for noncommercial use and not covered by the license of this project.

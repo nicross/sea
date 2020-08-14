@@ -1,4 +1,10 @@
 @font-face {
+  font-family: FiraMonoRegular;
+  font-style: normal;
+  font-weight: 400;
+  src: url('font/firamono-regular.woff') format('woff');
+}
+@font-face {
   font-family: RobotoBold;
   font-style: normal;
   font-weight: 700;

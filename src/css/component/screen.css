@@ -6,9 +6,23 @@
   padding: 4em;
   width: 100%;
 }
-  .c-screen--canvas {
-    height: 100vmin;
-    image-rendering: crisp-edges; /* XXX: Firefox fallback */
-    image-rendering: pixelated;
-    width: 100vmin;
+  .c-screen > * + * {
+    margin-top: 1em;
+  }
+  .c-screen > * + .c-screen--actions {
+    margin-top: 2em;
+  }
+  .c-screen > .c-screen--title + * {
+    margin-top: 2em;
+  }
+  .c-screen--action + .c-screen--action {
+    margin-top: 1em;
+  }
+  .c-screen--actions {
+    list-style-type: none;
+  }
+  .c-screen--title {
+    font-family: RobotoRegular;
+    font-size: 2em;
+    font-weight: 400;
   }

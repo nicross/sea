@@ -1,7 +1,27 @@
 app.state.screen = engine.utility.machine.create({
   state: 'none',
   transition: {
-    game: {},
+    game: {
+      gameMenu: function () {
+        this.change('gameMenu')
+      },
+    },
+    gameMenu: {
+      exitToMenu: function () {
+        this.change('mainMenu')
+      },
+      returnToGame: function () {
+        this.change('game')
+      },
+    },
+    mainMenu: {
+      continue: function () {
+        this.change('game')
+      },
+      newGame: function () {
+        this.change('game')
+      },
+    },
     none: {
       activate: function () {
         this.change('splash')
@@ -9,7 +29,7 @@ app.state.screen = engine.utility.machine.create({
     },
     splash: {
       start: function () {
-        this.change('game')
+        this.change('mainMenu')
       },
     },
   },
@@ -44,14 +64,16 @@ app.state.screen.on('exit', (e) => {
 app.state.screen.on('enter', (e) => {
   const selectors = {
     game: '.a-app--game',
+    gameMenu: '.a-app--gameMenu',
+    mainMenu: '.a-app--mainMenu',
     splash: '.a-app--splash',
   }
 
   const selector = selectors[e.currentState]
   const element = document.querySelector(selector)
 
-  element.classList.add('a-app--screen-active')
   element.removeAttribute('aria-hidden')
   element.removeAttribute('role')
   element.removeAttribute('hidden')
+  element.classList.add('a-app--screen-active')
 })

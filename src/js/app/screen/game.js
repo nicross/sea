@@ -2,13 +2,16 @@ app.screen.game = (() => {
   let root
 
   function handleControls() {
-    // TODO
+    const ui = app.controls.ui()
+
+    if (ui.back || ui.backspace || ui.escape || ui.start) {
+      app.state.screen.dispatch('gameMenu')
+    }
   }
 
   function onEnter() {
     app.utility.focus.set(root)
     engine.loop.on('frame', onFrame)
-
     engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, 1, 1)
     engine.loop.resume()
   }

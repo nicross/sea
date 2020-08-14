@@ -1,4 +1,5 @@
 .a-splash {
+  flex-direction: column;
   text-align: center;
 }
   .a-splash--instruction {

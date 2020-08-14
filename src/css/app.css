@@ -20,7 +20,6 @@
   .a-app--screen {
     height: 100%;
     left: 0;
-    padding: 4em;
     position: absolute;
     opacity: 0;
     top: 0;
@@ -30,11 +29,11 @@
   }
     .a-app--screen-active {
       opacity: 1;
-      z-index: 2;
+      z-index: 3;
     }
     .a-app--screen-inactive {
       opacity: 0;
-      z-index: 1;
+      z-index: 2;
     }
 
 .a-app-active {

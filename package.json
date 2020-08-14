@@ -1,12 +1,12 @@
 {
-  "name": "syngen",
-  "version": "0.1.0",
+  "name": "S.E.A.",
+  "version": "1.0.0",
   "description": "",
   "license": "UNLICENSED",
   "main": "electron/main.js",
   "private": true,
   "devDependencies": {
-    "electron": "^9.0.4",
+    "electron": "^9.2.0",
     "electron-packager": "^14.2.1",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",

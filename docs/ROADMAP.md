@@ -2,10 +2,6 @@
 
 ## Required screens
 - Gallery
-- Miscellaneous
-- Settings
-- Statistics
-- Status
 
 ## Required modules
 - audio
@@ -36,9 +32,8 @@
 - Collision audio
 - Cave generation
 - Scanner audio
-- Screens: Status, Miscellaneous, Statistics
 - Treasure generator
 - Treasure collection
 - Gallery screen
-- Settings screen
 - Soundtrack
+- Add last treasure to status screen

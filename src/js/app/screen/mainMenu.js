@@ -43,13 +43,13 @@ app.screen.mainMenu = (() => {
 
     Object.entries({
       continue: root.querySelector('.a-mainMenu--continue'),
-      exitToDesktop: root.querySelector('.a-mainMenu--exitToDesktop'),
       newGame: root.querySelector('.a-mainMenu--newGame'),
+      quit: root.querySelector('.a-mainMenu--quit'),
     }).forEach(([event, element]) => {
       element.addEventListener('click', () => app.state.screen.dispatch(event))
     })
 
-    root.querySelector('.a-mainMenu--action-exitToDesktop').hidden = !app.isElectron()
+    root.querySelector('.a-mainMenu--action-quit').hidden = !app.isElectron()
 
     app.utility.focus.trap(root)
   })

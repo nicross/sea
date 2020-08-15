@@ -45,14 +45,14 @@ app.screen.gameMenu = (() => {
     app.state.screen.on('exit-gameMenu', onExit)
 
     Object.entries({
-      exitToDesktop: root.querySelector('.a-gameMenu--exitToDesktop'),
-      exitToMenu: root.querySelector('.a-gameMenu--exitToMenu'),
+      mainMenu: root.querySelector('.a-gameMenu--mainMenu'),
+      quit: root.querySelector('.a-gameMenu--quit'),
       resume: root.querySelector('.a-gameMenu--resume'),
     }).forEach(([event, element]) => {
       element.addEventListener('click', () => app.state.screen.dispatch(event))
     })
 
-    root.querySelector('.a-gameMenu--action-exitToDesktop').hidden = !app.isElectron()
+    root.querySelector('.a-gameMenu--action-quit').hidden = !app.isElectron()
 
     app.utility.focus.trap(root)
   })

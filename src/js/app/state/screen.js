@@ -7,8 +7,11 @@ app.state.screen = engine.utility.machine.create({
       },
     },
     gameMenu: {
-      exitToMenu: function () {
+      mainMenu: function () {
         this.change('mainMenu')
+      },
+      quit: () => {
+        ElectronApi.quit()
       },
       resume: function () {
         this.change('game')
@@ -20,6 +23,9 @@ app.state.screen = engine.utility.machine.create({
       },
       newGame: function () {
         this.change('game')
+      },
+      quit: () => {
+        ElectronApi.quit()
       },
     },
     none: {

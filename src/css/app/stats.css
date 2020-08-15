@@ -1,0 +1,35 @@
+.a-stats {}
+  .a-stats--data {
+    list-style-type: none;
+    margin: -0.25em;
+    max-height: calc(1.75em * 5);
+    padding-right: 1em;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  .a-stats--table {
+    border-collapse: collapse;
+    display: block;
+    width: 100%;
+  }
+  .a-stats--table td {
+    padding: 0.25em;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .a-stats--table th {
+    padding: 0.25em;
+    text-align: left;
+    width: 100%;
+  }
+  .a-stats--table tr {
+    transition: opacity 0.5s ease;
+  }
+  .a-stats--table:focus-within tr,
+  .a-stats--table:hover tr {
+    opacity: 0.5;
+  }
+  .a-stats--table:focus-within tr:focus,
+  .a-stats--table:hover tr:hover {
+    opacity: 1;
+  }

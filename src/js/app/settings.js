@@ -3,21 +3,15 @@
 app.settings = (() => {
   const settings = {
     masterVolume: {
-      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 250)),
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,
-      update: (computedValue) => {
-        if (app.state.game.is('none')) {
-          return
-        }
-
-        engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, computedValue, 1/8)
-      },
     },
     musicVolume: {
-      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 250)),
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,
       update: (computedValue) => {
-        // TODO: Set music volume
+        content.system.audio.surface.glitter.setGain(computedValue)
+        // TODO: Set cave music volume
       },
     },
     toggleBoost: {

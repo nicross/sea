@@ -1,4 +1,4 @@
-app.state.mode = engine.utility.machine.create({
+app.state.game = engine.utility.machine.create({
   state: 'none',
   transition: {
     none: {
@@ -26,20 +26,20 @@ app.state.mode = engine.utility.machine.create({
 })
 
 app.on('activate', () => {
-  app.state.screen.on('before-game-pause', () => app.state.mode.dispatch('pause'))
-  app.state.screen.on('before-gameMenu-exitToMenu', () => app.state.mode.dispatch('exit'))
-  app.state.screen.on('before-gameMenu-resume', () => app.state.mode.dispatch('resume'))
-  app.state.screen.on('before-mainMenu-continue', () => app.state.mode.dispatch('load'))
-  app.state.screen.on('before-mainMenu-newGame', () => app.state.mode.dispatch('new'))
+  app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
+  app.state.screen.on('before-gameMenu-exitToMenu', () => app.state.game.dispatch('exit'))
+  app.state.screen.on('before-gameMenu-resume', () => app.state.game.dispatch('resume'))
+  app.state.screen.on('before-mainMenu-continue', () => app.state.game.dispatch('load'))
+  app.state.screen.on('before-mainMenu-newGame', () => app.state.game.dispatch('new'))
 })
 
-app.state.mode.on('before-none-load', () => {
+app.state.game.on('before-none-load', () => {
   engine.state.import(
     app.storage.getGame()
   )
 })
 
-app.state.mode.on('before-none-new', () => {
+app.state.game.on('before-none-new', () => {
   app.storage.clearGame()
 
   engine.state.import({
@@ -53,13 +53,13 @@ app.state.mode.on('before-none-new', () => {
   })
 })
 
-app.state.mode.on('enter-paused', () => {
+app.state.game.on('enter-paused', () => {
   engine.audio.ramp.exponential(engine.audio.mixer.master.param.gain, engine.const.zeroGain, 1)
   app.autosave.disable().trigger()
   engine.loop.pause()
 })
 
-app.state.mode.on('enter-running', () => {
+app.state.game.on('enter-running', () => {
   engine.audio.ramp.exponential(engine.audio.mixer.master.param.gain, 1, 1)
   app.autosave.enable()
   engine.loop.resume()

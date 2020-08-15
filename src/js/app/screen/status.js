@@ -2,13 +2,13 @@ app.screen.status = (() => {
   let root
 
   function handleControls() {
-    const controls = app.controls.ui()
+    const ui = app.controls.ui()
 
-    if (controls.backspace || controls.cancel || controls.escape || controls.start) {
-      return app.state.screen.dispatch('back')
+    if (ui.backspace || ui.cancel || ui.escape) {
+      return onBackClick()
     }
 
-    if (controls.confirm) {
+    if (ui.confirm) {
       const focused = app.utility.focus.get(root)
 
       if (focused) {
@@ -16,11 +16,11 @@ app.screen.status = (() => {
       }
     }
 
-    if (controls.up) {
+    if (ui.up) {
       return app.utility.focus.setPreviousFocusable(root)
     }
 
-    if (controls.down) {
+    if (ui.down) {
       return app.utility.focus.setNextFocusable(root)
     }
   }

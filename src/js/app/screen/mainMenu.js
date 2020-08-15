@@ -2,9 +2,9 @@ app.screen.mainMenu = (() => {
   let root
 
   function handleControls() {
-    const controls = app.controls.ui()
+    const ui = app.controls.ui()
 
-    if (controls.confirm) {
+    if (ui.confirm) {
       const focused = app.utility.focus.get(root)
 
       if (focused) {
@@ -12,11 +12,11 @@ app.screen.mainMenu = (() => {
       }
     }
 
-    if (controls.up) {
+    if (ui.up) {
       return app.utility.focus.setPreviousFocusable(root)
     }
 
-    if (controls.down) {
+    if (ui.down) {
       return app.utility.focus.setNextFocusable(root)
     }
   }

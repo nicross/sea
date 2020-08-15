@@ -4,7 +4,7 @@ app.screen.game = (() => {
   function handleControls() {
     const ui = app.controls.ui()
 
-    if (ui.back || ui.backspace || ui.escape || ui.start) {
+    if (ui.backspace || ui.cancel || ui.escape || ui.start) {
       app.state.screen.dispatch('pause')
     }
   }

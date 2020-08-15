@@ -55,13 +55,13 @@ By revealing the spoilers below, you will miss out on the most important discove
     <tr>
       <th>Confirm</th>
       <td>Enter</td>
-      <td></td>
+      <td>Space</td>
       <td></td>
     </tr>
     <tr>
       <th>Back</th>
       <td>Escape</td>
-      <td></td>
+      <td>Backspace</td>
       <td></td>
     </tr>
   </tbody>

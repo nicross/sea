@@ -11,9 +11,9 @@ app.screen.splash = (() => {
   }
 
   function onFrame(e) {
-    const controls = app.controls.ui()
+    const ui = app.controls.ui()
 
-    if (controls.confirm || controls.enter || controls.space || controls.start) {
+    if (ui.confirm || ui.enter || ui.space || ui.start) {
       onInteract()
     }
   }

@@ -40,7 +40,7 @@ app.screen.settings = (() => {
 
   function onExit() {
     engine.loop.off('frame', onEngineLoopFrame)
-    // TODO: Save settings
+    app.settings.save()
   }
 
   app.once('activate', () => {

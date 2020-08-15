@@ -19,6 +19,12 @@
   .c-screen--action + .c-screen--action {
     margin-top: 1em;
   }
+  .c-screen--action[hidden] + .c-screen--action {
+    margin-top: 0;
+  }
+  .c-screen--action + .c-screen--action[hidden] + .c-screen--action {
+    margin-top: 1em;
+  }
   .c-screen--actions {
     list-style-type: none;
   }

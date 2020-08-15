@@ -27,7 +27,7 @@ app.state.game = engine.utility.machine.create({
 
 app.on('activate', () => {
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
-  app.state.screen.on('before-gameMenu-exitToMenu', () => app.state.game.dispatch('exit'))
+  app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))
   app.state.screen.on('before-gameMenu-resume', () => app.state.game.dispatch('resume'))
   app.state.screen.on('before-mainMenu-continue', () => app.state.game.dispatch('load'))
   app.state.screen.on('before-mainMenu-newGame', () => app.state.game.dispatch('new'))

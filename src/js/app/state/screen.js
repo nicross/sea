@@ -6,9 +6,17 @@ app.state.screen = engine.utility.machine.create({
         this.change('gameMenu')
       },
     },
+    gallery: {
+      back: function () {
+        this.change('misc')
+      },
+    },
     gameMenu: {
       mainMenu: function () {
         this.change('mainMenu')
+      },
+      misc: function () {
+        this.change('misc')
       },
       quit: () => {
         ElectronApi.quit()
@@ -16,10 +24,16 @@ app.state.screen = engine.utility.machine.create({
       resume: function () {
         this.change('game')
       },
+      status: function () {
+        this.change('status')
+      },
     },
     mainMenu: {
       continue: function () {
         this.change('game')
+      },
+      misc: function () {
+        this.change('misc')
       },
       newGame: function () {
         this.change('game')
@@ -28,9 +42,42 @@ app.state.screen = engine.utility.machine.create({
         ElectronApi.quit()
       },
     },
+    misc: {
+      back: function () {
+        if (app.state.mode.is('none')) {
+          this.change('mainMenu')
+        } else {
+          this.change('gameMenu')
+        }
+      },
+      gallery: function () {
+        this.change('gallery')
+      },
+      settings: function () {
+        this.change('settings')
+      },
+      statistics: function () {
+        this.change('statistics')
+      },
+    },
     none: {
       activate: function () {
         this.change('splash')
+      },
+    },
+    settings: {
+      back: function () {
+        this.change('misc')
+      },
+    },
+    statistics: {
+      back: function () {
+        this.change('misc')
+      },
+    },
+    status: {
+      back: function () {
+        this.change('gameMenu')
       },
     },
     splash: {

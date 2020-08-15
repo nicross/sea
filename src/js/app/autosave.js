@@ -6,6 +6,9 @@ app.autosave = (() => {
     app.storage.setGame(
       engine.state.export()
     )
+
+    // TODO: Save stats
+    // TODO: Save treasure
   }
 
   return {

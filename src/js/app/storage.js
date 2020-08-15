@@ -10,7 +10,9 @@ app.storage = (() => {
         setItem: (key) => this.data[key] = value,
       }
 
-  const gameKey = 'sea_game'
+  const gameKey = 'sea_game',
+    statsKey = 'sea_stats',
+    treasureKey = 'sea_treasure'
 
   function get(key) {
     return storage.getItem(key)
@@ -30,11 +32,27 @@ app.storage = (() => {
       return this
     },
     getGame: () => get(gameKey),
+    getStats: () => get(statsKey),
+    getTreasure: () => get(treasureKey) || [],
     hasGame: function () {
       return Boolean(this.getGame())
     },
+    hasStats: function () {
+      return Boolean(this.getStats())
+    },
+    hasTreasure: function () {
+      return this.getTreasure().length > 0
+    },
     setGame: function (value) {
       set(gameKey, value)
+      return this
+    },
+    setStats: function (value) {
+      set(statsKey, value)
+      return this
+    },
+    setTreasure: function (value) {
+      set(treasureKey, value)
       return this
     },
   }

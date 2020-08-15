@@ -46,8 +46,10 @@ app.screen.gameMenu = (() => {
 
     Object.entries({
       mainMenu: root.querySelector('.a-gameMenu--mainMenu'),
+      misc: root.querySelector('.a-gameMenu--misc'),
       quit: root.querySelector('.a-gameMenu--quit'),
       resume: root.querySelector('.a-gameMenu--resume'),
+      status: root.querySelector('.a-gameMenu--status'),
     }).forEach(([event, element]) => {
       element.addEventListener('click', () => app.state.screen.dispatch(event))
     })

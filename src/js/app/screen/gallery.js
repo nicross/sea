@@ -1,8 +1,12 @@
-app.screen.mainMenu = (() => {
+app.screen.gallery = (() => {
   let root
 
   function handleControls() {
     const controls = app.controls.ui()
+
+    if (controls.backspace || controls.cancel || controls.escape || controls.start) {
+      return app.state.screen.dispatch('back')
+    }
 
     if (controls.confirm) {
       const focused = app.utility.focus.get(root)
@@ -21,12 +25,16 @@ app.screen.mainMenu = (() => {
     }
   }
 
+  function onBackClick() {
+    app.state.screen.dispatch('back')
+  }
+
   function onEngineLoopFrame(e) {
     handleControls(e)
   }
 
   function onEnter() {
-    root.querySelector('.a-mainMenu--action-continue').hidden = !app.storage.hasGame()
+    updateItems()
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
   }
@@ -35,22 +43,17 @@ app.screen.mainMenu = (() => {
     engine.loop.off('frame', onEngineLoopFrame)
   }
 
+  function updateItems() {
+    // TODO: Update items
+  }
+
   app.once('activate', () => {
-    root = document.querySelector('.a-mainMenu')
+    root = document.querySelector('.a-gallery')
 
-    app.state.screen.on('enter-mainMenu', onEnter)
-    app.state.screen.on('exit-mainMenu', onExit)
+    app.state.screen.on('enter-gallery', onEnter)
+    app.state.screen.on('exit-gallery', onExit)
 
-    Object.entries({
-      continue: root.querySelector('.a-mainMenu--continue'),
-      misc: root.querySelector('.a-mainMenu--misc'),
-      newGame: root.querySelector('.a-mainMenu--newGame'),
-      quit: root.querySelector('.a-mainMenu--quit'),
-    }).forEach(([event, element]) => {
-      element.addEventListener('click', () => app.state.screen.dispatch(event))
-    })
-
-    root.querySelector('.a-mainMenu--action-quit').hidden = !app.isElectron()
+    root.querySelector('.a-gallery--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
   })

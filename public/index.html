@@ -10,15 +10,34 @@
     <main class="a-app">
       <canvas class="a-app--overlaySupport"></canvas>
 
+      <div class="a-app--screen a-app--gallery">
+        <section class="c-screen a-gallery">
+          <h1 class="c-screen--title">Gallery</h1>
+          <ul class="a-gallery--items"></ul>
+          <ul class="c-screen--actions">
+            <li class="c-screen--action">
+              <button class="c-menuButton a-gallery--back" type="button">Back</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
       <div class="a-app--screen a-app--game">
         <section class="c-screen a-game" tabindex="-1" arial-label="Game"></section>
       </div>
 
       <div class="a-app--screen a-app--gameMenu">
-        <section class="c-screen a-gameMenu">
-          <ul class="c-screen--actions" aria-label="Game paused">
+        <section class="c-screen a-gameMenu" aria-label="Game paused">
+          <h1 class="c-screen--title">Game Paused</h1>
+          <ul class="c-screen--actions">
             <li class="c-screen--action">
               <button class="c-menuButton a-gameMenu--resume" type="button">Resume Game</button>
+            </li>
+            <li class="c-screen--action">
+              <button class="c-menuButton a-gameMenu--status" type="button">Status</button>
+            </li>
+            <li class="c-screen--action">
+              <button class="c-menuButton a-gameMenu--misc" type="button">Miscellaneous</button>
             </li>
             <li class="c-screen--action">
               <button class="c-menuButton a-gameMenu--mainMenu" type="button">Exit to Main Menu</button>
@@ -31,16 +50,40 @@
       </div>
 
       <div class="a-app--screen a-app--mainMenu">
-        <section class="c-screen a-mainMenu">
-          <ul class="c-screen--actions" aria-label="Main menu">
+        <section class="c-screen a-mainMenu" aria-label="Main menu">
+          <h1 class="c-screen--title">Main Menu</h1>
+          <ul class="c-screen--actions">
             <li class="c-screen--action a-mainMenu--action-continue">
               <button class="c-menuButton a-mainMenu--continue" type="button">Continue</button>
             </li>
-            <li class="c-screen--action a-mainMenu--action-newGame">
+            <li class="c-screen--action">
               <button class="c-menuButton a-mainMenu--newGame" type="button">New Game</button>
+            </li>
+            <li class="c-screen--action">
+              <button class="c-menuButton a-mainMenu--misc" type="button">Miscellaneous</button>
             </li>
             <li class="c-screen--action a-mainMenu--action-quit">
               <button class="c-menuButton a-mainMenu--quit" type="button">Quit to Desktop</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="a-app--screen a-app--misc">
+        <section class="c-screen a-misc">
+          <h1 class="c-screen--title">Miscellaneous</h1>
+          <ul class="c-screen--actions" aria-label="Miscellaneous">
+            <li class="c-screen--action a-misc--action-gallery">
+              <button class="c-menuButton a-misc--gallery" type="button">Gallery</button>
+            </li>
+            <li class="c-screen--action a-misc--action-stats">
+              <button class="c-menuButton a-misc--stats" type="button">Statistics</button>
+            </li>
+            <li class="c-screen--action">
+              <button class="c-menuButton a-misc--settings" type="button">Settings</button>
+            </li>
+            <li class="c-screen--action">
+              <button class="c-menuButton a-misc--back" type="button">Back</button>
             </li>
           </ul>
         </section>
@@ -60,6 +103,50 @@
           <div class="a-splash--instruction">Interact to Begin</div>
         </section>
       </div>
+
+      <div class="a-app--screen a-app--settings">
+        <section class="c-screen a-settings">
+          <h1 class="c-screen--title">Settings</h1>
+          <div class="c-screen--fields">
+          </div>
+          <ul class="c-screen--actions">
+            <li class="c-screen--action">
+              <button class="c-menuButton a-settings--back" type="button">Back</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="a-app--screen a-app--stats">
+        <section class="c-screen a-stats">
+          <h1 class="c-screen--title">Statistics</h1>
+          <div class="ss-a-stats--data">
+            <table class="ss-a-stats--table" aria-label="Statistics">
+            </table>
+          </div>
+          <ul class="c-screen--actions">
+            <li class="c-screen--action">
+              <button class="c-menuButton a-stats--back" type="button">Back</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="a-app--screen a-app--status">
+        <section class="c-screen a-status">
+          <h1 class="c-screen--title">Status</h1>
+          <div class="ss-a-status--data">
+            <table class="ss-a-status--table" aria-label="Status">
+            </table>
+          </div>
+          <ul class="c-screen--actions">
+            <li class="c-screen--action">
+              <button class="c-menuButton a-status--back" type="button">Back</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
     </main>
     <script src="./scripts.min.js"></script>
   </body>

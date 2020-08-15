@@ -56,8 +56,8 @@ app.state.screen = engine.utility.machine.create({
       settings: function () {
         this.change('settings')
       },
-      statistics: function () {
-        this.change('statistics')
+      stats: function () {
+        this.change('stats')
       },
     },
     none: {
@@ -70,7 +70,7 @@ app.state.screen = engine.utility.machine.create({
         this.change('misc')
       },
     },
-    statistics: {
+    stats: {
       back: function () {
         this.change('misc')
       },
@@ -116,10 +116,15 @@ app.state.screen.on('exit', (e) => {
 
 app.state.screen.on('enter', (e) => {
   const selectors = {
+    gallery: '.a-app--gallery',
     game: '.a-app--game',
     gameMenu: '.a-app--gameMenu',
     mainMenu: '.a-app--mainMenu',
+    misc: '.a-app--misc',
+    settings: '.a-app--settings',
     splash: '.a-app--splash',
+    stats: '.a-app--stats',
+    status: '.a-app--status',
   }
 
   const selector = selectors[e.currentState]

@@ -1,7 +1,7 @@
-content.system.stats.maxDistance = (() => {
+app.stats.maxDistance = (() => {
   let maxDistance = 0
 
-  return content.system.stats.invent('maxDistance', {
+  return app.stats.invent('maxDistance', {
     get: function () {
       return maxDistance
     },
@@ -27,5 +27,5 @@ engine.loop.on('frame', ({paused}) => {
     return
   }
 
-  content.system.stats.maxDistance.update()
+  app.stats.maxDistance.update()
 })

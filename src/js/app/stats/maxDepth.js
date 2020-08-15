@@ -1,7 +1,7 @@
-content.system.stats.maxDepth = (() => {
+app.stats.maxDepth = (() => {
   let maxDepth = 0
 
-  return content.system.stats.invent('maxDepth', {
+  return app.stats.invent('maxDepth', {
     get: function () {
       return maxDepth
     },
@@ -26,5 +26,5 @@ engine.loop.on('frame', ({paused}) => {
     return
   }
 
-  content.system.stats.maxDepth.update()
+  app.stats.maxDepth.update()
 })

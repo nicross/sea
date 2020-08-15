@@ -63,7 +63,3 @@ app.storage = (() => {
     },
   }
 })()
-
-app.on('activate', () => {
-  content.system.stats.import(app.storage.getStats())
-})

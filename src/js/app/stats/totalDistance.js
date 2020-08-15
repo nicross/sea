@@ -1,16 +1,16 @@
-content.system.stats.distance = (() => {
-  let distance = 0
+app.stats.totalDistance = (() => {
+  let totalDistance = 0
 
-  return content.system.stats.invent('distance', {
+  return app.stats.invent('totalDistance', {
     get: function () {
-      return distance
+      return totalDistance
     },
     increment: function (value) {
-      distance += value
+      totalDistance += value
       return this
     },
     set: function (value) {
-      distance = Number(value) || 0
+      totalDistance = Number(value) || 0
       return this
     },
   })
@@ -24,6 +24,6 @@ engine.loop.on('frame', ({paused}) => {
   const {deltaVelocity} = engine.movement.get()
 
   if (deltaVelocity) {
-    content.system.meta.distance.increment(deltaVelocity)
+    app.stats.totalDistance.increment(deltaVelocity)
   }
 })

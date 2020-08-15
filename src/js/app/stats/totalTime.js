@@ -1,16 +1,16 @@
-content.system.stats.time = (() => {
-  let time = 0
+app.stats.totalTime = (() => {
+  let totalTime = 0
 
-  return content.system.stats.invent('time', {
+  return app.stats.invent('totalTime', {
     get: function () {
-      return time
+      return totalTime
     },
     increment: function (value) {
-      time += value
+      totalTime += value
       return this
     },
     set: function (value) {
-      time = Number(value) || 0
+      totalTime = Number(value) || 0
       return this
     },
   })
@@ -21,5 +21,5 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  content.system.stats.time.increment(delta)
+  app.stats.totalTime.increment(delta)
 })

@@ -1,4 +1,4 @@
-content.system.stats = engine.utility.pubsub.decorate({
+app.stats = engine.utility.pubsub.decorate({
   export: function () {
     const data = {}
     this.emit('export', data)
@@ -14,3 +14,7 @@ content.system.stats = engine.utility.pubsub.decorate({
     return stat
   },
 })
+
+app.on('activate', () => app.stats.import(
+  app.storage.getStats()
+))

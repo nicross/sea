@@ -8,7 +8,7 @@ app.autosave = (() => {
     )
 
     app.storage.setStats(
-      content.system.stats.export()
+      app.stats.export()
     )
 
     // TODO: Save treasure

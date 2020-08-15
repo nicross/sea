@@ -1,4 +1,8 @@
 app.screen.stats = (() => {
+  const numberFormat = Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 0,
+  })
+
   let root
 
   function handleControls() {
@@ -44,7 +48,20 @@ app.screen.stats = (() => {
   }
 
   function updateStats() {
-    // TODO: Update stats
+    const maxDepth = app.stats.maxDepth.get(),
+      maxDistance = app.stats.maxDistance.get(),
+      treasures = app.storage.getTreasure().length,
+      totalDistance = app.stats.totalDistance.get(),
+      totalTime = app.stats.totalTime.get()
+
+    root.querySelector('.a-stats--row-maxDepth').hidden = maxDepth == 0
+    root.querySelector('.a-stats--row-treasures').hidden = treasures == 0
+
+    root.querySelector('.a-stats--metric-maxDepth').innerHTML = numberFormat.format(maxDepth)
+    root.querySelector('.a-stats--metric-maxDistance').innerHTML = numberFormat.format(maxDistance)
+    root.querySelector('.a-stats--metric-totalDistance').innerHTML = numberFormat.format(totalDistance)
+    root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.formatAccessibleTime(totalTime)
+    root.querySelector('.a-stats--metric-treasures').innerHTML = numberFormat.format(treasures)
   }
 
   app.once('activate', () => {

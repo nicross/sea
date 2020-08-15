@@ -1,6 +1,6 @@
 content.system.stats = engine.utility.pubsub.decorate({
   export: function () {
-    data = {}
+    const data = {}
     this.emit('export', data)
     return data
   },
@@ -9,8 +9,8 @@ content.system.stats = engine.utility.pubsub.decorate({
     return this
   },
   invent: function (key, stat = {}) {
-    this.on('export', (data) => data[key] = stat.export())
-    this.on('import', (data) => stat.import(data[key]))
+    this.on('export', (data) => data[key] = stat.get())
+    this.on('import', (data) => stat.set(data[key]))
     return stat
   },
 })

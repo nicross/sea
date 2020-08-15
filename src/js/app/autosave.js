@@ -7,7 +7,10 @@ app.autosave = (() => {
       engine.state.export()
     )
 
-    // TODO: Save stats
+    app.storage.setStats(
+      content.system.stats.export()
+    )
+
     // TODO: Save treasure
   }
 

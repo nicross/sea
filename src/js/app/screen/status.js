@@ -44,7 +44,15 @@ app.screen.status = (() => {
   }
 
   function updateStatus() {
-    // TODO: Update status
+    const depth = Math.min(0, -content.system.z.get()),
+      position = engine.position.get(),
+      time = content.system.time.get()
+
+    root.querySelector('.a-status--row-depth').hidden = !depth
+
+    root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(position)
+    root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
+    root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
   }
 
   app.once('activate', () => {

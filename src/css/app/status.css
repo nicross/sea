@@ -1,0 +1,35 @@
+.a-status {}
+  .a-status--data {
+    list-style-type: none;
+    margin: -0.25em;
+    max-height: calc(1.75em * 5);
+    padding-right: 1em;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+  .a-status--table {
+    border-collapse: collapse;
+    display: block;
+    width: 100%;
+  }
+  .a-status--table td {
+    padding: 0.25em;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .a-status--table th {
+    padding: 0.25em;
+    text-align: left;
+    width: 100%;
+  }
+  .a-status--table tr {
+    transition: opacity 0.5s ease;
+  }
+  .a-status--table:focus-within tr,
+  .a-status--table:hover tr {
+    opacity: 0.5;
+  }
+  .a-status--table:focus-within tr:focus,
+  .a-status--table:hover tr:hover {
+    opacity: 1;
+  }

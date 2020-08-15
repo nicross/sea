@@ -1,0 +1,85 @@
+.c-slider {
+  align-items: center;
+  display: flex;
+}
+  .c-slider--input {
+    flex: 1 0 auto;
+  }
+  .c-slider--input input {
+    -webkit-appearance: none;
+    display: block;
+    cursor: pointer;
+    height: 1em;
+    width: 100%;
+  }
+
+  .c-slider--input input::-webkit-slider-runnable-track {
+    border: 1px solid rgba(128, 128, 255, 0.25);
+    border-radius: 0;
+    height: 0.75em;
+    transition: all 0.5s ease;
+    transition-property: border-color;
+  }
+  .c-slider--input input:hover::-webkit-slider-runnable-track {
+    border-color: rgba(128, 128, 255, 0.5);
+  }
+  .c-slider--input input:focus::-webkit-slider-runnable-track {
+    border-color: rgba(192, 192, 255, 0.5);
+  }
+  .c-slider--input input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #404080;
+    border-radius: 0;
+    cursor: ew-resize;
+    height: 1em;
+    margin-top: calc(-0.125em - 1px);
+    transition: all 0.5s ease;
+    transition-property: background-color;
+    width: 1em;
+  }
+  .c-slider--input input:hover::-webkit-slider-thumb {
+    background-color: #8080FF;
+  }
+  .c-slider--input input:focus::-webkit-slider-thumb {
+    background-color: #C0C0FF;
+  }
+
+  .c-slider--input input::-moz-range-progress {
+    display: none;
+  }
+  .c-slider--input input::-moz-range-track {
+    border: 1px solid rgba(128, 128, 255, 0.25);
+    border-radius: 0;
+    height: 0.75em;
+    transition: all 0.5s ease;
+    transition-property: border-color;
+  }
+  .c-slider--input input:hover::-moz-range-track {
+    border-color: rgba(128, 128, 255, 0.5);
+  }
+  .c-slider--input input:focus::-moz-range-track {
+    border-color: rgba(192, 192, 255, 0.5);
+  }
+  .c-slider--input input::-moz-range-thumb {
+    background-color: #404080;
+    border: 0;
+    border-radius: 0;
+    cursor: ew-resize;
+    height: 1em;
+    margin-top: calc(-0.125em - 1px);
+    transition: all 0.5s ease;
+    transition-property: background-color;
+    width: 1em;
+  }
+  .c-slider--input input:hover::-moz-range-thumb {
+    background-color: #8080FF;
+  }
+  .c-slider--input input:focus::-moz-range-thumb {
+    background-color: #C0C0FF;
+  }
+
+  .c-slider--value {
+    flex: 0 0 2em;
+    margin-left: 1em;
+    text-align: right;
+  }

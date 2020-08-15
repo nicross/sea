@@ -2,7 +2,7 @@ app.state.screen = engine.utility.machine.create({
   state: 'none',
   transition: {
     game: {
-      gameMenu: function () {
+      pause: function () {
         this.change('gameMenu')
       },
     },
@@ -10,7 +10,7 @@ app.state.screen = engine.utility.machine.create({
       exitToMenu: function () {
         this.change('mainMenu')
       },
-      returnToGame: function () {
+      resume: function () {
         this.change('game')
       },
     },

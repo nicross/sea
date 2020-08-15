@@ -6,6 +6,7 @@ app.storage = (() => {
     : {
         data: {},
         getItem: (key) => this.data[key],
+        removeItem: (key) => delete this.data[key],
         setItem: (key) => this.data[key] = value,
       }
 
@@ -15,13 +16,18 @@ app.storage = (() => {
     return storage.getItem(key)
   }
 
+  function remove(key) {
+    return storage.removeItem(key)
+  }
+
   function set(key, value) {
     return storage.setItem(key, value)
   }
 
   return {
     clearGame: function () {
-      return this.setHighscore(0)
+      remove(gameKey)
+      return this
     },
     getGame: () => get(gameKey),
     hasGame: function () {

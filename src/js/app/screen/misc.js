@@ -31,10 +31,7 @@ app.screen.misc = (() => {
 
   function onEnter() {
     engine.loop.on('frame', onEngineLoopFrame)
-
     root.querySelector('.a-misc--action-gallery').hidden = !app.storage.hasTreasure()
-    root.querySelector('.a-misc--action-stats').hidden = !app.storage.hasStats()
-
     app.utility.focus.setWithin(root)
   }
 

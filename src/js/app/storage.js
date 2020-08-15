@@ -32,16 +32,11 @@ app.storage = (() => {
       remove(gameKey)
       return this
     },
-    getGame: () => get(gameKey),
+    getGame: () => get(gameKey) || {},
     getSettings: () => get(settingsKey) || {},
-    getStats: () => get(statsKey),
+    getStats: () => get(statsKey) || {},
     getTreasure: () => get(treasureKey) || [],
-    hasGame: function () {
-      return Boolean(this.getGame())
-    },
-    hasStats: function () {
-      return Boolean(this.getStats())
-    },
+    hasGame: () => Boolean(get(gameKey)),
     hasTreasure: function () {
       return this.getTreasure().length > 0
     },

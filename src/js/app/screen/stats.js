@@ -1,8 +1,4 @@
 app.screen.stats = (() => {
-  const numberFormat = Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0,
-  })
-
   let root
 
   function handleControls() {
@@ -57,11 +53,11 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--row-maxDepth').hidden = maxDepth == 0
     root.querySelector('.a-stats--row-treasures').hidden = treasures == 0
 
-    root.querySelector('.a-stats--metric-maxDepth').innerHTML = numberFormat.format(maxDepth)
-    root.querySelector('.a-stats--metric-maxDistance').innerHTML = numberFormat.format(maxDistance)
-    root.querySelector('.a-stats--metric-totalDistance').innerHTML = numberFormat.format(totalDistance)
-    root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.formatAccessibleTime(totalTime)
-    root.querySelector('.a-stats--metric-treasures').innerHTML = numberFormat.format(treasures)
+    root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
+    root.querySelector('.a-stats--metric-maxDistance').innerHTML = app.utility.format.number(maxDistance)
+    root.querySelector('.a-stats--metric-totalDistance').innerHTML = app.utility.format.number(totalDistance)
+    root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.format.time(totalTime)
+    root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasures)
   }
 
   app.once('activate', () => {

@@ -17,5 +17,6 @@ const app = engine.utility.pubsub.decorate({
   },
   screen: {},
   state: {},
+  utility: {},
   version: () => '0.0.0', // XXX: Replaced via Gulpfile.js
 })

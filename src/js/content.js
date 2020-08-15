@@ -2,5 +2,9 @@
 
 const content  = {
   prop: {},
-  system: {},
+  system: {
+    audio: {
+      surface: {},
+    },
+  },
 }

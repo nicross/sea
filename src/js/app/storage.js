@@ -16,7 +16,10 @@ app.storage = (() => {
     treasureKey = 'sea_treasure'
 
   function get(key) {
-    return storage.getItem(key)
+    try {
+      const value = storage.getItem(key)
+      return JSON.parse(value)
+    } catch (e) {}
   }
 
   function remove(key) {
@@ -24,7 +27,9 @@ app.storage = (() => {
   }
 
   function set(key, value) {
-    return storage.setItem(key, value)
+    try {
+      storage.setItem(key, JSON.stringify(value))
+    } catch (e) {}
   }
 
   return {

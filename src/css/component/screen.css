@@ -7,7 +7,8 @@
   padding: 4em;
   width: 100%;
 }
-  .c-screen > * + * {
+  .c-screen > * + *,
+  .c-screen--field + .c-screen--field {
     margin-top: 1em;
   }
   .c-screen > * + .c-screen--actions {
@@ -27,6 +28,23 @@
   }
   .c-screen--actions {
     list-style-type: none;
+  }
+  .c-screen--field {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .c-screen--field > .c-screen--label {
+    flex: 1 1 100%;
+  }
+  .c-screen--field > .c-slider {
+    flex: 1 1 auto;
+  }
+  .c-screen--label {
+    display: block;
+    font-family: RobotoRegular;
+    font-size: 0.75em;
+    font-weight: 400;
+    margin-bottom: 0.5em;
   }
   .c-screen--title {
     font-family: RobotoRegular;

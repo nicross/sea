@@ -1,4 +1,6 @@
 app.screen.settings = (() => {
+  const sliders = []
+
   let root
 
   function handleControls() {
@@ -23,6 +25,42 @@ app.screen.settings = (() => {
     if (ui.down) {
       return app.utility.focus.setNextFocusable(root)
     }
+
+    if (ui.left) {
+      for (const slider of sliders) {
+        if (app.utility.focus.isWithin(slider.rootElement)) {
+          return slider.decrement()
+        }
+      }
+    }
+
+    if (ui.right) {
+      for (const slider of sliders) {
+        if (app.utility.focus.isWithin(slider.rootElement)) {
+          return slider.increment()
+        }
+      }
+    }
+  }
+
+  function hydrateSliders() {
+    [
+      ['.a-settings--masterVolume', app.settings.raw.masterVolume, app.settings.setMasterVolume],
+      ['.a-settings--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
+    ].forEach(([selector, initialValue, setter]) => {
+      const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)
+      component.on('change', () => setter(component.getValueAsFloat()))
+      sliders.push(component)
+    })
+  }
+
+  function hydrateToggles() {
+    [
+      ['.a-settings--toggleBoost', app.settings.raw.toggleBoost, app.settings.setToggleBoost],
+    ].forEach(([selector, initialValue, setter]) => {
+      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
+      component.on('change', () => setter(component.getValue()))
+    })
   }
 
   function onBackClick() {
@@ -53,7 +91,8 @@ app.screen.settings = (() => {
 
     app.utility.focus.trap(root)
 
-    // TODO: Hydrate settings
+    hydrateSliders()
+    hydrateToggles()
   })
 
   return {}

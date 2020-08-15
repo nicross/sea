@@ -108,6 +108,33 @@
         <section class="c-screen a-settings" aria-label="Settings">
           <h1 class="c-screen--title">Settings</h1>
           <div class="c-screen--fields">
+            <div class="c-screen--field">
+              <label class="c-screen--label" for="a-mixer--masterVolumeInput">Master Volume</label>
+              <div class="c-slider a-settings--masterVolume">
+                <div class="c-slider--input">
+                  <input id="a-settings--masterVolumeInput" max="10" min="0" step="1" type="range" />
+                </div>
+                <div class="c-slider--value"></div>
+              </div>
+            </div>
+            <div class="c-screen--field">
+              <label class="c-screen--label" for="a-mixer--musicVolumeInput">Music Volume</label>
+              <div class="c-slider a-settings--musicVolume">
+                <div class="c-slider--input">
+                  <input id="a-settings--musicVolumeInput" max="10" min="0" step="1" type="range" />
+                </div>
+                <div class="c-slider--value"></div>
+              </div>
+            </div>
+            <div class="c-screen--field">
+              <div class="c-screen--label" id="a-settings--toggleBoostLabel">Toggle Boost</div>
+              <div class="c-toggle a-settings--toggleBoost">
+                <button class="c-toggle--button" role="switch" aria-checked="false" aria-labeledby="a-settings--toggleBoostLabel">
+                  <span class="c-toggle--off">No</span>
+                  <span class="c-toggle--on">Yes</span>
+                </button>
+              </div>
+            </div>
           </div>
           <ul class="c-screen--actions">
             <li class="c-screen--action">
@@ -120,8 +147,8 @@
       <div class="a-app--screen a-app--stats">
         <section class="c-screen a-stats" aria-label="Statistics">
           <h1 class="c-screen--title">Statistics</h1>
-          <div class="ss-a-stats--data">
-            <table class="ss-a-stats--table">
+          <div class="a-stats--data">
+            <table class="a-stats--table">
             </table>
           </div>
           <ul class="c-screen--actions">
@@ -135,8 +162,8 @@
       <div class="a-app--screen a-app--status">
         <section class="c-screen a-status" aria-label="Status">
           <h1 class="c-screen--title">Status</h1>
-          <div class="ss-a-status--data">
-            <table class="ss-a-status--table">
+          <div class="a-status--data">
+            <table class="a-status--table">
             </table>
           </div>
           <ul class="c-screen--actions">

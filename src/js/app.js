@@ -6,6 +6,7 @@ const app = engine.utility.pubsub.decorate({
     this.pubsub.emit('activate')
     return this
   },
+  component: {},
   isElectron: () => typeof ElectronApi != 'undefined',
   quit: function () {
     if (this.isElectron()) {

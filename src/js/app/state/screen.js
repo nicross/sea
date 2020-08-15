@@ -44,7 +44,7 @@ app.state.screen = engine.utility.machine.create({
     },
     misc: {
       back: function () {
-        if (app.state.mode.is('none')) {
+        if (app.state.game.is('none')) {
           this.change('mainMenu')
         } else {
           this.change('gameMenu')

@@ -5,7 +5,7 @@ app.screen.misc = (() => {
     const ui = app.controls.ui()
 
     if (ui.backspace || ui.cancel || ui.escape) {
-      return onBackClick()
+      return app.state.screen.dispatch('back')
     }
 
     if (ui.confirm) {

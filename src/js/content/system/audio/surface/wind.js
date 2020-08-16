@@ -29,8 +29,9 @@ content.system.audio.surface.wind = (() => {
 
   function updateSynth() {
     const {angle} = engine.position.get()
-    const value = content.system.wind.value()
-    const {velocity} = engine.movement.get()
+
+    const value = content.system.wind.value(),
+      velocity = engine.movement.get().velocity + content.system.movement.zVelocity()
 
     let x = Math.cos(angle) * value,
       y = Math.sin(angle) * value

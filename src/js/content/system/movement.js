@@ -2,6 +2,7 @@ content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create()
 
   let isBoost = false,
+    isCatchingAir = false,
     isUnderwater = false,
     zVelocity = 0
 
@@ -16,8 +17,7 @@ content.system.movement = (() => {
 
     const {x, y} = engine.position.get()
 
-    if (content.system.z.get() > content.system.surface.height(x, y)) {
-      // Catching air, no friction
+    if (isCatchingAir) {
       return engine.movement.update({
         rotate: 0,
         translate: {
@@ -72,6 +72,7 @@ content.system.movement = (() => {
 
       if (zInput && z <= height) {
         // Basically a cheat to continue
+        isCatchingAir = false
         z = 0
       } else {
         if (velocity == 0) {
@@ -79,7 +80,7 @@ content.system.movement = (() => {
         }
 
         if (z < height) {
-          pubsub.emit('splash', (height - z) / content.const.waveHeight)
+          pubsub.emit('surface-splash', (height - z) / content.const.waveHeight)
           z = height
         }
 
@@ -88,10 +89,12 @@ content.system.movement = (() => {
           z = Math.max(height, z + (delta * zVelocity))
         }
 
+        isCatchingAir = z > height
+
         if (z == height) {
           if (zVelocity) {
             // TODO: Look into scaling to a value [0,1]
-            pubsub.emit('smack', -zVelocity)
+            pubsub.emit('surface-smack', -zVelocity)
           }
           zVelocity = 0
         }
@@ -119,14 +122,14 @@ content.system.movement = (() => {
   function setBoost(state) {
     if (isBoost != state) {
       isBoost = state
-      pubsub.emit(isBoost ? 'boost' : 'normal')
+      pubsub.emit('transition-' + (isBoost ? 'boost' : 'normal'))
     }
   }
 
   function setUnderwater(state) {
     if (isUnderwater != state) {
       isUnderwater = state
-      pubsub.emit(isUnderwater ? 'underwater' : 'surface')
+      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'))
     }
   }
 
@@ -168,6 +171,7 @@ content.system.movement = (() => {
       isUnderwater = z < 0
       return this
     },
+    isCatchingAir: () => isCatchingAir,
     update: function (controls = {}) {
       const z = content.system.z.get()
 

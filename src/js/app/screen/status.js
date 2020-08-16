@@ -44,7 +44,7 @@ app.screen.status = (() => {
   }
 
   function updateStatus() {
-    const depth = Math.min(0, -content.system.z.get()),
+    const depth = Math.max(0, -content.system.z.get()),
       position = engine.position.get(),
       time = content.system.time.get()
 

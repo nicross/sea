@@ -57,10 +57,12 @@ app.utility.format.coordinates = function ({
     return 'Origin'
   }
 
+  let label = ''
+
   if (y >= 0) {
     label += `${this.number(y)} <abbr aria-label="North">N</abbr>`
   } else {
-    label += `${this.number(y)} <abbr aria-label="South">S</abbr>`
+    label += `${this.number(Math.abs(y))} <abbr aria-label="South">S</abbr>`
   }
 
   label += ', '
@@ -68,7 +70,7 @@ app.utility.format.coordinates = function ({
   if (x >= 0) {
     label += `${this.number(x)} <abbr aria-label="East">E</abbr>`
   } else {
-    label += `${this.number(x)} <abbr aria-label="West">W</abbr>`
+    label += `${this.number(Math.abs(x))} <abbr aria-label="West">W</abbr>`
   }
 
   return label

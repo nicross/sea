@@ -64,36 +64,40 @@ content.system.movement = (() => {
       zInput = 0
     }
 
-    // Surface gravity
     if (z >= 0) {
       const {x, y} = engine.position.get()
       const {velocity} = engine.movement.get()
       const surface = content.system.surface.value(x, y)
-      const height = surface * content.const.surfaceHeight
+      const height = surface * content.const.waveHeight
 
-      if (velocity == 0) {
-        z = height
-      }
-
-      if (z < height) {
-        pubsub.emit('splash', (height - z) / content.const.surfaceHeight)
-        z = height
-      }
-
-      if (z > height) {
-        zVelocity -= delta * engine.const.gravity
-        z = Math.max(height, z + (delta * zVelocity))
-      }
-
-      if (z == height) {
-        if (zVelocity) {
-          // TODO: Look into scaling to a value [0,1]
-          pubsub.emit('smack', -zVelocity)
+      if (zInput && z <= height) {
+        // Basically a cheat to continue
+        z = 0
+      } else {
+        if (velocity == 0) {
+          z = height
         }
-        zVelocity = 0
-      }
 
-      return content.system.z.set(z)
+        if (z < height) {
+          pubsub.emit('splash', (height - z) / content.const.waveHeight)
+          z = height
+        }
+
+        if (z > height) {
+          zVelocity -= delta * engine.const.gravity
+          z = Math.max(height, z + (delta * zVelocity))
+        }
+
+        if (z == height) {
+          if (zVelocity) {
+            // TODO: Look into scaling to a value [0,1]
+            pubsub.emit('smack', -zVelocity)
+          }
+          zVelocity = 0
+        }
+
+        return content.system.z.set(z)
+      }
     }
 
     if (zInput) {

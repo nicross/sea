@@ -3,7 +3,8 @@ app.screen.game = (() => {
     root
 
   function handleControls() {
-    const ui = app.controls.ui()
+    const game = app.controls.game(),
+      ui = app.controls.ui()
 
     if (ui.backspace || ui.cancel || ui.escape || ui.start) {
       app.state.screen.dispatch('pause')
@@ -12,6 +13,11 @@ app.screen.game = (() => {
     if (ui.boost) {
       boostState = !boostState
     }
+
+    content.system.movement.update({
+      boost: app.settings.computed.toggleBoost ? boostState : game.boost,
+      ...game,
+    })
   }
 
   function onEngineStateReset() {

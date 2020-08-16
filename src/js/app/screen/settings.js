@@ -56,7 +56,7 @@ app.screen.settings = (() => {
 
   function hydrateToggles() {
     [
-      ['.a-settings--toggleBoost', app.settings.raw.toggleBoost, app.settings.setToggleBoost],
+      ['.a-settings--toggleTurbo', app.settings.raw.toggleTurbo, app.settings.setToggleTurbo],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValue()))

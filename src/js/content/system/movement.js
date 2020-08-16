@@ -1,21 +1,19 @@
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create()
 
-  let isBoost = false,
+  let isTurbo = false,
     isCatchingAir = false,
     isUnderwater = false,
     zVelocity = 0
 
   function handleSurface(controls) {
-    if (isUnderwater || controls.boost != isBoost) {
-      if (controls.boost) {
-        switchToSurfaceBoost()
+    if (isUnderwater || controls.turbo != isTurbo) {
+      if (controls.turbo) {
+        switchToSurfaceTurbo()
       } else {
         switchToSurfaceNormal()
       }
     }
-
-    const {x, y} = engine.position.get()
 
     if (isCatchingAir) {
       return engine.movement.update({
@@ -37,9 +35,9 @@ content.system.movement = (() => {
   }
 
   function handleUnderwater(controls) {
-    if (!isUnderwater || controls.boost != isBoost) {
-      if (controls.boost) {
-        switchToUnderwaterBoost()
+    if (!isUnderwater || controls.turbo != isTurbo) {
+      if (controls.turbo) {
+        switchToUnderwaterTurbo()
       } else {
         switchToUnderwaterNormal()
       }
@@ -115,10 +113,10 @@ content.system.movement = (() => {
     content.system.z.set(z)
   }
 
-  function setBoost(state) {
-    if (isBoost != state) {
-      isBoost = state
-      pubsub.emit('transition-' + (isBoost ? 'boost' : 'normal'))
+  function setTurbo(state) {
+    if (isTurbo != state) {
+      isTurbo = state
+      pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
     }
   }
 
@@ -129,32 +127,32 @@ content.system.movement = (() => {
     }
   }
 
-  function switchToSurfaceBoost() {
-    setBoost(true)
+  function switchToSurfaceTurbo() {
+    setTurbo(true)
     setUnderwater(false)
 
-    engine.const.movementAcceleration = content.const.surfaceBoostAcceleration
-    engine.const.movementMaxVelocity = content.const.surfaceBoostMaxVelocity
+    engine.const.movementAcceleration = content.const.surfaceTurboAcceleration
+    engine.const.movementMaxVelocity = content.const.surfaceTurboMaxVelocity
   }
 
   function switchToSurfaceNormal() {
-    setBoost(false)
+    setTurbo(false)
     setUnderwater(false)
 
     engine.const.movementAcceleration = content.const.surfaceNormalAcceleration
     engine.const.movementMaxVelocity = content.const.surfaceNormalMaxVelocity
   }
 
-  function switchToUnderwaterBoost() {
-    setBoost(true)
+  function switchToUnderwaterTurbo() {
+    setTurbo(true)
     setUnderwater(true)
 
-    engine.const.movementAcceleration = content.const.underwaterBoostAcceleration
-    engine.const.movementMaxVelocity = content.const.underwaterBoostMaxVelocity
+    engine.const.movementAcceleration = content.const.underwaterTurboAcceleration
+    engine.const.movementMaxVelocity = content.const.underwaterTurboMaxVelocity
   }
 
   function switchToUnderwaterNormal() {
-    setBoost(false)
+    setTurbo(false)
     setUnderwater(true)
 
     engine.const.movementAcceleration = content.const.underwaterNormalAcceleration
@@ -163,7 +161,7 @@ content.system.movement = (() => {
 
   return engine.utility.pubsub.decorate({
     import: function ({z}) {
-      isBoost = false
+      isTurbo = false
       isUnderwater = z < 0
       return this
     },

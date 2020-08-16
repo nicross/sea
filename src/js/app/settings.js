@@ -14,7 +14,7 @@ app.settings = (() => {
         // TODO: Set cave music volume
       },
     },
-    toggleBoost: {
+    toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
       default: 0,
     },

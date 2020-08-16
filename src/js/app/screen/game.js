@@ -1,6 +1,6 @@
 app.screen.game = (() => {
-  let boostState = false,
-    root
+  let root,
+    turboState = false
 
   function handleControls() {
     const game = app.controls.game(),
@@ -10,18 +10,18 @@ app.screen.game = (() => {
       app.state.screen.dispatch('pause')
     }
 
-    if (ui.boost) {
-      boostState = !boostState
+    if (ui.turbo) {
+      turboState = !turboState
     }
 
     content.system.movement.update({
-      boost: app.settings.computed.toggleBoost ? boostState : game.boost,
+      turbo: app.settings.computed.toggleTurbo ? turboState : game.turbo,
       ...game,
     })
   }
 
   function onEngineStateReset() {
-    boostState = false
+    turboState = false
   }
 
   function onEnter() {

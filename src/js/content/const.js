@@ -7,13 +7,13 @@ engine.const.movementRotationalDeceleration = engine.const.gravity
 
 content.const = {
   lightZone: -1000,
-  surfaceBoostAcceleration: 10,
+  surfaceTurboAcceleration: 10,
   surfaceNormalAcceleration: 5,
-  surfaceBoostMaxVelocity: 20,
+  surfaceTurboMaxVelocity: 20,
   surfaceNormalMaxVelocity: 10,
-  underwaterBoostAcceleration: 5,
+  underwaterTurboAcceleration: 5,
   underwaterNormalAcceleration: 1,
-  underwaterBoostMaxVelocity: 15,
+  underwaterTurboMaxVelocity: 15,
   underwaterNormalMaxVelocity: 2,
   waveHeight: 4,
 }

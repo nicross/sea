@@ -77,8 +77,8 @@ app.controls.gamepad = {
       state.z = -1
     }
 
-    if ((buttons[10] || buttons[11]) && !app.settings.computed.toggleBoost) {
-      state.boost = true
+    if ((buttons[10] || buttons[11]) && !app.settings.computed.toggleTurbo) {
+      state.turbo = true
     }
 
     return state
@@ -115,8 +115,8 @@ app.controls.gamepad = {
       }
     }
 
-    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleBoost) {
-      state.boost = true
+    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleTurbo) {
+      state.turbo = true
     }
 
     if (buttons[1]) {

@@ -2,7 +2,8 @@ content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create()
 
   let isBoost = false,
-    isUnderwater = false
+    isUnderwater = false,
+    zVelocity = 0
 
   function handleSurface(controls) {
     if (isUnderwater || controls.boost != isBoost) {
@@ -13,8 +14,13 @@ content.system.movement = (() => {
       }
     }
 
-    // TODO: No strafing
-    // TODO: Gravity pulls to z = 0
+    engine.movement.update({
+      rotate: controls.rotate,
+      translate: {
+        radius: controls.y,
+        theta: controls.y >= 0 ? 0 : Math.PI,
+      },
+    })
   }
 
   function handleUnderwater(controls) {
@@ -26,12 +32,22 @@ content.system.movement = (() => {
       }
     }
 
-    // TODO: Strafing
     // TODO: Detect collisions and prevent movement
+
+    engine.movement.update({
+      rotate: controls.rotate,
+      translate: {
+        radius: engine.utility.clamp(engine.utility.distanceOrigin(controls.x, controls.y), 0, 1),
+        theta: Math.atan2(-controls.x, controls.y),
+      },
+    })
   }
 
-  function handleZ(z) {
+  function handleZ(z, zInput) {
+    const delta = engine.loop.delta()
+
     // TODO: Handle positive/negative z inputs
+    // TODO: Sample surface at position, catch air (z > 0) at high velocities with gravity
     // TODO: Detect collisions and prevent movement
   }
 
@@ -96,7 +112,7 @@ content.system.movement = (() => {
         handleSurface(controls)
       }
 
-      handleZ(controls.z)
+      handleZ(z, controls.z)
 
       return this
     },

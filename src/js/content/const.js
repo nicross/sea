@@ -15,4 +15,5 @@ content.const = {
   underwaterNormalAcceleration: 1,
   underwaterBoostMaxVelocity: 15,
   underwaterNormalMaxVelocity: 2,
+  waveHeight: 4,
 }

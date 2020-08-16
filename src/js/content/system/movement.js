@@ -68,15 +68,16 @@ content.system.movement = (() => {
     if (z >= 0) {
       const {x, y} = engine.position.get()
       const {velocity} = engine.movement.get()
-      const height = content.system.surface.height(x, y)
+      const surface = content.system.surface.value(x, y)
+      const height = surface * content.const.surfaceHeight
 
       if (velocity == 0) {
         z = height
       }
 
       if (z < height) {
+        pubsub.emit('splash', (height - z) / content.const.surfaceHeight)
         z = height
-        // TODO: Emit splash event?
       }
 
       if (z > height) {
@@ -86,7 +87,8 @@ content.system.movement = (() => {
 
       if (z == height) {
         if (zVelocity) {
-          // TODO: Emit smack event?
+          // TODO: Look into scaling to a value [0,1]
+          pubsub.emit('smack', -zVelocity)
         }
         zVelocity = 0
       }

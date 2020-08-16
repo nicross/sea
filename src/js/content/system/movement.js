@@ -102,7 +102,10 @@ content.system.movement = (() => {
           velocity: -zVelocity,
         })
 
-        zVelocity = 0
+        // Allow momentum to persist if intending to dive
+        if (zInput >= 0) {
+          zVelocity = 0
+        }
       }
 
       return content.system.z.set(z)

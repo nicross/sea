@@ -83,6 +83,8 @@ content.system.audio.surface.glitter = (() => {
   }
 
   function updateFilter(z) {
+    z = Math.min(0, z)
+
     const zRatio = 1 - (z / content.const.lightZone)
 
     const frequency = z >= 0

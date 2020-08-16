@@ -61,6 +61,8 @@ content.system.audio.surface.waves = (() => {
   }
 
   function updateLowpassFilter(z) {
+    z = Math.min(0, z)
+
     const zRatio = 1 - (z / content.const.lightZone)
 
     const frequency = z >= 0

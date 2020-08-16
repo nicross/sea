@@ -2,8 +2,7 @@ content.system.audio.surface.wind = (() => {
   const binaural = engine.audio.binaural.create(),
     bus = engine.audio.mixer.createBus()
 
-  const frequencyDropoff = 2,
-    gain = engine.utility.fromDb(-6),
+  const frequencyDropoff = 1,
     maxFrequency = 80,
     minFrequency = 20
 
@@ -18,12 +17,12 @@ content.system.audio.surface.wind = (() => {
       frequency: engine.const.minFrequency,
     })
 
-    engine.audio.ramp.linear(synth.param.gain, gain, engine.const.zeroTime)
+    engine.audio.ramp.linear(bus.gain, 1, engine.const.zeroTime)
     binaural.from(synth)
   }
 
   function destroySynth() {
-    engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, engine.const.zeroTime)
+    engine.audio.ramp.linear(bus.gain, engine.const.zeroGain, engine.const.zeroTime)
     synth.stop(engine.audio.zeroTime())
     synth = null
   }
@@ -31,14 +30,27 @@ content.system.audio.surface.wind = (() => {
   function updateSynth() {
     const {angle} = engine.position.get()
     const value = content.system.wind.value()
-    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, value, frequencyDropoff)
+    const {velocity} = engine.movement.get()
+
+    let x = Math.cos(angle) * value,
+      y = Math.sin(angle) * value
+
+    x += velocity
+
+    const theta = Math.atan2(y, x)
 
     binaural.update({
-      x: Math.cos(angle),
-      y: Math.sin(angle),
+      x: Math.cos(theta),
+      y: Math.sin(theta),
     })
 
+    const strength = engine.utility.distanceOrigin(x, y)
+
+    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff),
+      gain = engine.utility.fromDb(engine.utility.scale(strength, 0, content.const.surfaceBoostMaxVelocity, -6, -9))
+
     engine.audio.ramp.set(synth.filter.frequency, frequency)
+    engine.audio.ramp.set(synth.param.gain, gain)
   }
 
   return {

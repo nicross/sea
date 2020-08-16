@@ -5,10 +5,10 @@ content.system.audio.surface.waves = (() => {
     lowpassFilter = context.createBiquadFilter()
 
   const distance = 2.5,
-    highpassFrequency = 60,
-    lowpassDropoffRate = 2,
+    highpassFrequency = 40,
+    lowpassDropoffRate = 3,
     lowpassMaxFrequency = 1000,
-    lowpassMinFrequency = 40,
+    lowpassMinFrequency = 20,
     waveFrequencyDropoff = 2.5,
     waveGainDropoff = 2.5,
     waveMaxFrequency = engine.const.maxFrequency / 2,

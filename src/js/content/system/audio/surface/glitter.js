@@ -39,8 +39,9 @@ content.system.audio.surface.glitter = (() => {
 
   const grainChance = 1/24
 
-  const maxFrequency = engine.utility.midiToFrequency(78),
-    minFrequency = engine.utility.midiToFrequency(21)
+  const frequencyDropoff = 2,
+    maxFrequency = engine.utility.midiToFrequency(78),
+    minFrequency = engine.utility.midiToFrequency(33)
 
   for (let i = 0; i < 4; i += 1) {
     const feedbackDelay = engine.audio.effect.createFeedbackDelay({
@@ -89,7 +90,7 @@ content.system.audio.surface.glitter = (() => {
 
     const frequency = z >= 0
       ? engine.const.maxFrequency
-      : engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, 2)
+      : engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
 
     engine.audio.ramp.set(filter.frequency, frequency)
   }

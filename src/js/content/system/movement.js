@@ -14,7 +14,18 @@ content.system.movement = (() => {
       }
     }
 
-    // TODO: Check if catching air and set radius / rotation to zero
+    const {x, y} = engine.position.get()
+
+    if (content.system.z.get() > content.system.surface.height(x, y)) {
+      // Catching air, no friction
+      return engine.movement.update({
+        rotate: 0,
+        translate: {
+          radius: 0,
+          theta: 0,
+        },
+      })
+    }
 
     engine.movement.update({
       rotate: controls.rotate,
@@ -54,13 +65,29 @@ content.system.movement = (() => {
     }
 
     // Surface gravity
-    if (z > 0) {
-      // TODO: Sample surface at position, pull z to height at surface
+    if (z >= 0) {
+      const {x, y} = engine.position.get()
+      const {velocity} = engine.movement.get()
+      const height = content.system.surface.height(x, y)
 
-      zVelocity -= delta * engine.const.gravity
-      z = Math.max(0, z + (delta * zVelocity))
+      if (velocity == 0) {
+        z = height
+      }
 
-      if (z == 0) {
+      if (z < height) {
+        z = height
+        // TODO: Emit splash event?
+      }
+
+      if (z > height) {
+        zVelocity -= delta * engine.const.gravity
+        z = Math.max(height, z + (delta * zVelocity))
+      }
+
+      if (z == height) {
+        if (zVelocity) {
+          // TODO: Emit smack event?
+        }
         zVelocity = 0
       }
 

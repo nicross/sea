@@ -52,6 +52,7 @@ app.screen.status = (() => {
 
     root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(position)
     root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
+    root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(position.angle)
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
   }
 

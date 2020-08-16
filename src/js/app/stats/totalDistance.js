@@ -16,14 +16,15 @@ app.stats.totalDistance = (() => {
   })
 })()
 
-engine.loop.on('frame', ({paused}) => {
+engine.loop.on('frame', ({delta, paused}) => {
   if (paused) {
     return
   }
 
   const {deltaVelocity} = engine.movement.get()
+  const deltaVelocityZ = Math.abs(content.system.movement.zVelocity() * delta)
 
-  if (deltaVelocity) {
-    app.stats.totalDistance.increment(deltaVelocity)
+  if (deltaVelocity || deltaVelocityZ) {
+    app.stats.totalDistance.increment(deltaVelocity + deltaVelocityZ)
   }
 })

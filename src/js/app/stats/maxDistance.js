@@ -10,8 +10,10 @@ app.stats.maxDistance = (() => {
       return this
     },
     update: function () {
-      const position = engine.position.get()
-      const distance = engine.utility.distanceOrigin(position.x, position.y)
+      const position = engine.position.get(),
+        z = Math.min(0, content.system.z.get())
+
+      const distance = Math.sqrt((position.x ** 2) + (position.y ** 2) + (z ** 2))
 
       if (distance > maxDistance) {
         maxDistance = distance

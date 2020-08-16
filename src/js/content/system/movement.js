@@ -179,6 +179,7 @@ content.system.movement = (() => {
 
       return this
     },
+    zVelocity: () => zVelocity,
   }, pubsub)
 })()
 

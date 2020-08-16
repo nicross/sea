@@ -83,7 +83,7 @@ app.controls.keyboard = (() => {
         state.z = -1
       }
 
-      if (controls.ShiftLeft) {
+      if ((controls.ShiftLeft || controls.shiftRight) && !app.settings.computed.toggleBoost) {
         state.boost = true
       }
 
@@ -132,6 +132,10 @@ app.controls.keyboard = (() => {
 
       if (controls.AltLeft || controls.AltRight || controls.KeyF) {
         state.scan = true
+      }
+
+      if ((controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleBoost) {
+        state.boost = true
       }
 
       return state

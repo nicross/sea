@@ -1,5 +1,6 @@
 app.screen.game = (() => {
-  let root
+  let boostState = false,
+    root
 
   function handleControls() {
     const ui = app.controls.ui()
@@ -7,6 +8,14 @@ app.screen.game = (() => {
     if (ui.backspace || ui.cancel || ui.escape || ui.start) {
       app.state.screen.dispatch('pause')
     }
+
+    if (ui.boost) {
+      boostState = !boostState
+    }
+  }
+
+  function onEngineStateReset() {
+    boostState = false
   }
 
   function onEnter() {
@@ -29,6 +38,8 @@ app.screen.game = (() => {
 
       app.state.screen.on('enter-game', onEnter)
       app.state.screen.on('exit-game', onExit)
+
+      engine.state.on('reset', onEngineStateReset)
 
       return this
     },

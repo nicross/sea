@@ -77,7 +77,7 @@ app.controls.gamepad = {
       state.z = -1
     }
 
-    if (buttons[10] || buttons[11]) {
+    if ((buttons[10] || buttons[11]) && !app.settings.computed.toggleBoost) {
       state.boost = true
     }
 
@@ -113,6 +113,10 @@ app.controls.gamepad = {
         x += this.deadzone(gamepad.axes[0])
         y -= this.deadzone(gamepad.axes[1])
       }
+    }
+
+    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleBoost) {
+      state.boost = true
     }
 
     if (buttons[1]) {

@@ -1,16 +1,17 @@
 'use strict'
 
 app.controls = (() => {
+  const gameDefaults = {
+    rotate: 0,
+    x: 0,
+    y: 0,
+    z: 0,
+  }
+
   let uiCache = {},
     uiDelta = {}
 
-  let gameCache = {
-    rotate: 0,
-    translate: {
-      radius: 0,
-      theta: 0,
-    },
-  }
+  let gameCache = {...gameDefaults}
 
   return {
     game: () => ({...gameCache}),
@@ -20,16 +21,10 @@ app.controls = (() => {
     },
     updateGame: function () {
       gameCache = {
-        rotate: 0,
-        translate: {
-          radius: 0,
-          theta: 0,
-        },
+        ...gameDefaults,
         ...this.gamepad.game(),
         ...this.keyboard.game(),
       }
-
-      gameCache.translate.theta = engine.utility.normalizeAngleSigned(gameCache.translate.theta)
 
       return this
     },

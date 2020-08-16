@@ -58,49 +58,45 @@ content.system.movement = (() => {
   }
 
   function handleZ(z, zInput) {
-    const delta = engine.loop.delta()
+    const delta = engine.loop.delta(),
+      shouldSubmerge = zInput < 0 && z >= 0 && !isCatchingAir
 
-    if (z >= 0 && zInput > 0) {
-      zInput = 0
-    }
-
-    if (z >= 0) {
+    if (z >= 0 && !shouldSubmerge) {
       const {x, y} = engine.position.get()
       const {velocity} = engine.movement.get()
       const surface = content.system.surface.value(x, y)
       const height = surface * content.const.waveHeight
 
-      if (zInput && z <= height) {
-        // Basically a cheat to continue
-        isCatchingAir = false
-        z = 0
-      } else {
-        if (velocity == 0) {
-          z = height
-        }
-
-        if (z < height) {
-          pubsub.emit('surface-splash', (height - z) / content.const.waveHeight)
-          z = height
-        }
-
-        if (z > height) {
-          zVelocity -= delta * engine.const.gravity
-          z = Math.max(height, z + (delta * zVelocity))
-        }
-
-        isCatchingAir = z > height
-
-        if (z == height) {
-          if (zVelocity) {
-            // TODO: Look into scaling to a value [0,1]
-            pubsub.emit('surface-smack', -zVelocity)
-          }
-          zVelocity = 0
-        }
-
-        return content.system.z.set(z)
+      if (velocity == 0) {
+        z = height
       }
+
+      if (z < height) {
+        pubsub.emit('surface-splash', (height - z) / content.const.waveHeight)
+        z = height
+      }
+
+      if (z > height) {
+        zVelocity -= delta * engine.const.gravity
+        z = Math.max(height, z + (delta * zVelocity))
+      }
+
+      isCatchingAir = z > height
+
+      if (z == height) {
+        if (zVelocity) {
+          // TODO: Look into scaling to a value [0,1]
+          pubsub.emit('surface-smack', -zVelocity)
+        }
+        zVelocity = 0
+      }
+
+      return content.system.z.set(z)
+    }
+
+    if (z > 0) {
+      // Cheat so submersion is instantaneous
+      z = 0
     }
 
     if (zInput) {

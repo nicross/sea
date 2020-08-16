@@ -39,7 +39,7 @@ content.system.audio.surface.glitter = (() => {
 
   const grainChance = 1/24
 
-  const frequencyDropoff = 2,
+  const frequencyDropoff = 2.25,
     maxFrequency = engine.utility.midiToFrequency(78),
     minFrequency = engine.utility.midiToFrequency(33)
 
@@ -59,12 +59,16 @@ content.system.audio.surface.glitter = (() => {
   filter.frequency.value = 0
   filter.connect(bus)
 
-  function createGrain() {
+  function createGrain(z) {
+    z = Math.min(0, z)
+
+    const zBias = 1 + (z / content.const.lightZone * 2)
+
     const feedbackDelay = engine.utility.choose(feedbackDelays, Math.random()),
       panner = context.createStereoPanner()
 
     const synth = engine.audio.synth.createSimple({
-      frequency: engine.utility.choose(frequencies, Math.random()),
+      frequency: engine.utility.choose(frequencies, Math.random() ** zBias),
     }).connect(panner)
 
     panner.pan.value = engine.utility.random.float(-1, 1)
@@ -111,7 +115,7 @@ content.system.audio.surface.glitter = (() => {
       updateFilter(z)
 
       if (Math.random() * grainChance) {
-        createGrain()
+        createGrain(z)
       }
     },
   }

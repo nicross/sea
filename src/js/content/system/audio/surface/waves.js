@@ -6,7 +6,7 @@ content.system.audio.surface.waves = (() => {
 
   const distance = 2.5,
     highpassFrequency = 40,
-    lowpassDropoffRate = 3,
+    lowpassDropoffRate = 2.25,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
     waveFrequencyDropoff = 2.5,

@@ -65,27 +65,43 @@ content.system.movement = (() => {
       const surface = content.system.surface.value(x, y)
       const height = surface * content.const.waveHeight
 
-      if (velocity == 0) {
+      if (velocity == 0 && zVelocity == 0) {
+        // Move with surface height when stationary
         z = height
       }
 
-      if (z < height) {
-        pubsub.emit('surface-splash', (height - z) / content.const.waveHeight)
+      if (z < height && zVelocity == 0) {
+        // Splash when moving toward higher water
+        pubsub.emit('surface-splash', {
+          size: (height - z) / content.const.waveHeight,
+          velocity,
+        })
+
         z = height
       }
 
-      if (z > height) {
-        zVelocity -= delta * engine.const.gravity
-        z = Math.max(height, z + (delta * zVelocity))
+      if (z < height && zVelocity > 0) {
+        // XXX: Cheat so launching into air from water works
+        z = height
       }
 
       isCatchingAir = z > height
 
-      if (z == height) {
-        if (zVelocity) {
-          // TODO: Look into scaling to a value [0,1]
-          pubsub.emit('surface-smack', -zVelocity)
-        }
+      if (isCatchingAir) {
+        // Decelerate from gravity when in the air
+        zVelocity -= delta * engine.const.gravity
+      }
+
+      z += zVelocity * delta
+      z = Math.max(height, z)
+
+      if (z == height && zVelocity < 0) {
+        // Smack when landing into water
+        // TODO: Look into scaling to a value [0,1]
+        pubsub.emit('surface-smack', {
+          velocity: -zVelocity,
+        })
+
         zVelocity = 0
       }
 
@@ -93,7 +109,7 @@ content.system.movement = (() => {
     }
 
     if (z > 0) {
-      // Cheat so submersion is instantaneous
+      // XXX: Cheat so submersion is instantaneous
       z = 0
     }
 
@@ -105,7 +121,7 @@ content.system.movement = (() => {
       zVelocity = Math.min(0, zVelocity + (delta * engine.const.movementDeceleration))
     }
 
-    z = Math.min(0, z + (delta * zVelocity))
+    z = z + (delta * zVelocity)
 
     // TODO: Check collisions
     // emit event, halt velocity, and return early if next z is invalid
@@ -123,7 +139,7 @@ content.system.movement = (() => {
   function setUnderwater(state) {
     if (isUnderwater != state) {
       isUnderwater = state
-      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'))
+      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), zVelocity)
     }
   }
 

@@ -14,6 +14,8 @@ content.system.movement = (() => {
       }
     }
 
+    // TODO: Check if catching air and set radius / rotation to zero
+
     engine.movement.update({
       rotate: controls.rotate,
       translate: {
@@ -32,7 +34,8 @@ content.system.movement = (() => {
       }
     }
 
-    // TODO: Detect collisions and prevent movement
+    // TODO: Detect collisions
+    // emit event, halt movement, and return early if movement is invalid
 
     engine.movement.update({
       rotate: controls.rotate,
@@ -46,9 +49,38 @@ content.system.movement = (() => {
   function handleZ(z, zInput) {
     const delta = engine.loop.delta()
 
-    // TODO: Handle positive/negative z inputs
-    // TODO: Sample surface at position, catch air (z > 0) at high velocities with gravity
-    // TODO: Detect collisions and prevent movement
+    if (z >= 0 && zInput > 0) {
+      zInput = 0
+    }
+
+    // Surface gravity
+    if (z > 0) {
+      // TODO: Sample surface at position, pull z to height at surface
+
+      zVelocity -= delta * engine.const.gravity
+      z = Math.max(0, z + (delta * zVelocity))
+
+      if (z == 0) {
+        zVelocity = 0
+      }
+
+      return content.system.z.set(z)
+    }
+
+    if (zInput) {
+      zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * engine.const.movementAcceleration), -engine.const.movementMaxVelocity, engine.const.movementMaxVelocity)
+    } else if (zVelocity > 0) {
+      zVelocity = Math.max(0, zVelocity - (delta * engine.const.movementDeceleration))
+    } else if (zVelocity < 0) {
+      zVelocity = Math.min(0, zVelocity + (delta * engine.const.movementDeceleration))
+    }
+
+    z = Math.min(0, z + (delta * zVelocity))
+
+    // TODO: Check collisions
+    // emit event, halt velocity, and return early if next z is invalid
+
+    content.system.z.set(z)
   }
 
   function setBoost(state) {

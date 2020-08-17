@@ -28,15 +28,14 @@ content.system.audio.surface.wind = (() => {
   }
 
   function updateSynth() {
-    const {angle} = engine.position.get()
+    const movement = engine.movement.get(),
+      position = engine.position.get()
 
     const value = content.system.wind.value(),
-      velocity = engine.movement.get().velocity + content.system.movement.zVelocity()
+      velocity = movement.velocity + content.system.movement.zVelocity()
 
-    let x = Math.cos(angle) * value,
-      y = Math.sin(angle) * value
-
-    x += velocity
+    const x = (Math.cos(position.angle) * value) + (Math.cos(movement.angle) * velocity),
+      y = (Math.sin(position.angle) * value) + (Math.sin(movement.angle) * velocity)
 
     const theta = Math.atan2(y, x)
 

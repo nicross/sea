@@ -52,6 +52,8 @@ app.state.game.on('before-none-new', () => {
     seed: Math.random(),
     z: 0,
   })
+
+  app.autosave.trigger()
 })
 
 app.state.game.on('enter-paused', () => {

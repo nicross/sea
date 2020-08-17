@@ -89,15 +89,15 @@ content.system.movement = (() => {
         z = height
       }
 
-      isCatchingAir = z > height
-
-      if (isCatchingAir) {
+      if (z > height) {
         // Decelerate from gravity when in the air
         zVelocity -= delta * engine.const.gravity
       }
 
       z += zVelocity * delta
       z = Math.max(height, z)
+
+      isCatchingAir = z > height
 
       if (z == height && zVelocity < 0) {
         // Smack when landing into water

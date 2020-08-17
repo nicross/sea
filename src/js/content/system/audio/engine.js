@@ -36,7 +36,8 @@ content.system.audio.engine = (() => {
   }
 
   function calculateSurfacePoints(controls) {
-    const movement = engine.movement.get(),
+    const isCatchingAir = content.system.movement.isCatchingAir(),
+      movement = engine.movement.get(),
       points = []
 
     if (controls.rotate) {
@@ -47,10 +48,17 @@ content.system.audio.engine = (() => {
     }
 
     if (controls.y) {
-      points.push({
-        x: controls.y * (movement.velocity / content.const.surfaceTurboMaxVelocity),
-        y: 0,
-      })
+      if (isCatchingAir) {
+        points.push({
+          x: controls.y * (engine.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity),
+          y: 0,
+        })
+      } else {
+        points.push({
+          x: controls.y * (movement.velocity / content.const.surfaceTurboMaxVelocity),
+          y: 0,
+        })
+      }
     }
 
     return points

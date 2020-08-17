@@ -43,6 +43,8 @@ content.system.audio.surface.glitter = (() => {
     maxFrequency = engine.utility.midiToFrequency(78),
     minFrequency = engine.utility.midiToFrequency(33)
 
+  let wasAbove
+
   for (let i = 0; i < 4; i += 1) {
     const feedbackDelay = engine.audio.effect.createFeedbackDelay({
       delay: (i + 1) / 4,
@@ -90,17 +92,32 @@ content.system.audio.surface.glitter = (() => {
   function updateFilter(z) {
     z = Math.min(0, z)
 
-    const zRatio = 1 - (z / content.const.lightZone)
+    const isAbove = z >= 0
 
-    const frequency = z >= 0
-      ? engine.const.maxFrequency
-      : engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
+    if (isAbove && wasAbove) {
+      return
+    }
 
-    engine.audio.ramp.set(filter.frequency, frequency)
+    if (isAbove) {
+      engine.audio.ramp.exponential(filter.frequency, engine.const.maxFrequency, 0.5)
+    } else {
+      const zRatio = 1 - (z / content.const.lightZone)
+      const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
+      engine.audio.ramp.set(filter.frequency, frequency)
+    }
   }
 
   return {
     bus: () => bus,
+    import: function ({z}) {
+      const isAbove = z >= 0
+
+      if (isAbove) {
+        filter.frequency.value = engine.const.maxFrequency
+      }
+
+      return this
+    },
     setGain: function (value) {
       engine.audio.ramp.set(bus.gain, value)
       return this
@@ -128,3 +145,5 @@ engine.loop.on('frame', ({paused}) => {
 
   content.system.audio.surface.glitter.update()
 })
+
+engine.state.on('import', (data) => content.system.audio.surface.glitter.import(data))

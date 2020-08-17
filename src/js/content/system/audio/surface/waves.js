@@ -31,6 +31,8 @@ content.system.audio.surface.waves = (() => {
 
   const synths = []
 
+  let wasAbove
+
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)
 
@@ -63,13 +65,21 @@ content.system.audio.surface.waves = (() => {
   function updateLowpassFilter(z) {
     z = Math.min(0, z)
 
-    const zRatio = 1 - (z / content.const.lightZone)
+    const isAbove = z >= 0
 
-    const frequency = z >= 0
-      ? engine.const.maxFrequency
-      : engine.utility.lerpExp(lowpassMinFrequency, lowpassMaxFrequency, zRatio, lowpassDropoffRate)
+    if (isAbove && wasAbove) {
+      return
+    }
 
-    engine.audio.ramp.set(lowpassFilter.frequency, frequency)
+    if (isAbove) {
+      engine.audio.ramp.exponential(lowpassFilter.frequency, engine.const.maxFrequency, 0.5)
+    } else {
+      const zRatio = 1 - (z / content.const.lightZone)
+      const frequency = engine.utility.lerpExp(lowpassMinFrequency, lowpassMaxFrequency, zRatio, lowpassDropoffRate)
+      engine.audio.ramp.set(lowpassFilter.frequency, frequency)
+    }
+
+    wasAbove = isAbove
   }
 
   function updateSynths() {
@@ -91,6 +101,15 @@ content.system.audio.surface.waves = (() => {
 
   return {
     bus: () => bus,
+    import: function ({z}) {
+      const isAbove = z >= 0
+
+      if (isAbove) {
+        lowpassFilter.frequency.value = engine.const.maxFrequency
+      }
+
+      return this
+    },
     update: function () {
       const z = content.system.z.get()
 
@@ -118,3 +137,5 @@ engine.loop.on('frame', ({paused}) => {
 
   content.system.audio.surface.waves.update()
 })
+
+engine.state.on('import', (data) => content.system.audio.surface.waves.import(data))

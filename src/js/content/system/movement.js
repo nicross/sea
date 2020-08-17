@@ -28,7 +28,7 @@ content.system.movement = (() => {
     engine.movement.update({
       rotate: controls.rotate,
       translate: {
-        radius: controls.y,
+        radius: Math.abs(controls.y),
         theta: controls.y >= 0 ? 0 : Math.PI,
       },
     })

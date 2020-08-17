@@ -117,7 +117,13 @@ content.system.movement = (() => {
     }
 
     if (zInput) {
-      zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * engine.const.movementAcceleration), -engine.const.movementMaxVelocity, engine.const.movementMaxVelocity)
+      if (zVelocity > engine.const.movementMaxVelocity) {
+        zVelocity -= delta * engine.const.movementDeceleration
+      } else if (zVelocity < -engine.const.movementMaxVelocity) {
+        zVelocity += delta * engine.const.movementDeceleration
+      } else {
+        zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * engine.const.movementAcceleration), -engine.const.movementMaxVelocity, engine.const.movementMaxVelocity)
+      }
     } else if (zVelocity > 0) {
       zVelocity = Math.max(0, zVelocity - (delta * engine.const.movementDeceleration))
     } else if (zVelocity < 0) {

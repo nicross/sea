@@ -1,3 +1,5 @@
+// TODO: A noise field that gives glitter a 2D geometry
+
 content.system.audio.surface.glitter = (() => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context(),

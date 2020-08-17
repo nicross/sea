@@ -191,6 +191,8 @@ content.system.movement = (() => {
       return this
     },
     isCatchingAir: () => isCatchingAir,
+    isTurbo: () => isTurbo,
+    isUnderwater: () => isUnderwater,
     update: function (controls = {}) {
       const z = content.system.z.get()
 

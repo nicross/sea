@@ -1,12 +1,17 @@
 content.system.audio.engine = (() => {
-  const bus = engine.audio.mixer.createBus(),
-    context = engine.audio.context()
+  const binaural = engine.audio.binaural.create(),
+    bus = engine.audio.mixer.createBus(),
+    context = engine.audio.context(),
+    filter = context.createBiquadFilter()
 
   const turnStrength = 1/16
 
   let synth
 
-  function calculatePoints(controls) {
+  bus.gain.value = engine.utility.fromDb(-9)
+  binaural.from(filter).to(bus)
+
+  function calculateParams(controls) {
     const points = content.system.movement.isUnderwater()
       ? calculateUnderwaterPoints(controls)
       : calculateSurfacePoints(controls)
@@ -36,15 +41,15 @@ content.system.audio.engine = (() => {
 
     if (controls.rotate) {
       points.push({
-        x: controls.rotate * turnStrength,
-        y: Math.abs(controls.rotate * turnStrength),
+        x: Math.abs(controls.rotate * turnStrength),
+        y: -controls.rotate * turnStrength,
       })
     }
 
     if (controls.y) {
       points.push({
-        x: 0,
-        y: controls.y * (movement.velocity / content.const.surfaceTurboMaxVelocity),
+        x: controls.y * (movement.velocity / content.const.surfaceTurboMaxVelocity),
+        y: 0,
       })
     }
 
@@ -57,29 +62,29 @@ content.system.audio.engine = (() => {
 
     if (controls.rotate) {
       points.push({
-        x: controls.rotate * turnStrength,
-        y: Math.abs(controls.rotate * turnStrength),
+        x: Math.abs(controls.rotate * turnStrength),
+        y: -controls.rotate * turnStrength,
       })
     }
 
     if (controls.y) {
       points.push({
-        x: 0,
-        y: controls.y * (movement.velocity / content.const.underwaterTurboMaxVelocity),
+        x: controls.y * (movement.velocity / content.const.underwaterTurboMaxVelocity),
+        y: 0,
       })
     }
 
     if (controls.x) {
       points.push({
-        x: controls.x * (movement.velocity / content.const.underwaterTurboMaxVelocity),
-        y: 0,
+        x: 0,
+        y: controls.x * (movement.velocity / content.const.underwaterTurboMaxVelocity),
       })
     }
 
     if (controls.z) {
       points.push({
-        x: 0,
-        y: controls.z * (content.system.movement.zVelocity() / content.const.underwaterTurboMaxVelocity),
+        x: controls.z * (content.system.movement.zVelocity() / content.const.underwaterTurboMaxVelocity),
+        y: 0,
       })
     }
 
@@ -87,7 +92,11 @@ content.system.audio.engine = (() => {
   }
 
   function createSynth() {
-    synth = engine.audio.synth.createMod().filtered().connect(bus)
+    synth = engine.audio.synth.createMod({
+      gain: 1,
+    }).filtered()
+
+    binaural.from(synth)
   }
 
   function destroySynth() {
@@ -104,7 +113,19 @@ content.system.audio.engine = (() => {
   }
 
   function updateSynth(controls) {
-    
+    const {
+      radius,
+      x,
+      y,
+    } = calculateParams(controls)
+
+    binaural.update({
+      x,
+      y,
+    })
+
+    // TODO: Update parameters based on radius
+    engine.audio.ramp.set(synth.param.gain, radius ** 0.5)
   }
 
   return {

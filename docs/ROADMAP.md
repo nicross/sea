@@ -10,24 +10,18 @@
   - scanner
   - soundtrack
   - surface
-    - soundtrack
-    - waves
+    - smack
+    - splash
 - cave
 - floor
-- movement
-- surface
 - treasure
-- z
 
 ## Required props
 - treasure
 
 ## Gameplan
-- Surface gameplay
 - Surface audio
 - Engine audio
-- z-index
-- Midwater gameplay
 - Floor generation
 - Collision audio
 - Cave generation

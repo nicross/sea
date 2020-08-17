@@ -1,3 +1,3 @@
 app.const = {
-  autosaveInterval: 60 * 1000,
+  autosaveInterval: 30 * 1000,
 }

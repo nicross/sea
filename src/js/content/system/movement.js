@@ -16,11 +16,15 @@ content.system.movement = (() => {
     }
 
     if (isCatchingAir) {
+      const movement = engine.movement.get(),
+        position = engine.position.get()
+
+      // Maintain momentum, allow spinning
       return engine.movement.update({
         rotate: 0,
         translate: {
           radius: 0,
-          theta: 0,
+          theta: movement.angle - position.angle,
         },
       })
     }

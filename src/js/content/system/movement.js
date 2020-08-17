@@ -186,12 +186,16 @@ content.system.movement = (() => {
 
   return engine.utility.pubsub.decorate({
     import: function ({z}) {
+      isCatchingAir = false
       isTurbo = false
       isUnderwater = z < 0
+      zVelocity = 0
       return this
     },
     isCatchingAir: () => isCatchingAir,
+    isNormal: () => !isTurbo,
     isTurbo: () => isTurbo,
+    isSurface: () => !isUnderwater,
     isUnderwater: () => isUnderwater,
     update: function (controls = {}) {
       const z = content.system.z.get()
@@ -210,4 +214,4 @@ content.system.movement = (() => {
   }, pubsub)
 })()
 
-engine.state.on('import', (data) => content.system.movement.import(data))
+engine.state.on('import', (state) => content.system.movement.import(state))

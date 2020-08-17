@@ -14,10 +14,13 @@ app.screen.game = (() => {
       turboState = !turboState
     }
 
-    content.system.movement.update({
+    const controls = {
       turbo: app.settings.computed.toggleTurbo ? turboState : game.turbo,
       ...game,
-    })
+    }
+
+    content.system.movement.update(controls)
+    content.system.audio.engine.update(controls)
   }
 
   function onEngineStateReset() {

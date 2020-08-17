@@ -4,7 +4,7 @@ app.screen.gameMenu = (() => {
   function handleControls() {
     const ui = app.controls.ui()
 
-    if (ui.backspace || ui.cancel || ui.escape) {
+    if (ui.backspace || ui.cancel || ui.escape || ui.start) {
       return app.state.screen.dispatch('resume')
     }
 

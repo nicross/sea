@@ -13,4 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
   engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3))
+
+  if (!app.isElectron()) {
+    window.addEventListener('beforeunload', (e) => {
+      if (app.state.game.is('running')) {
+        e.preventDefault()
+        e.returnValue = 'Quit S.E.A.?'
+      }
+    })
+  }
 })

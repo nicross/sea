@@ -2,10 +2,9 @@ content.system.audio.engine = (() => {
   const binaural = engine.audio.binaural.create(),
     bus = engine.audio.mixer.createBus()
 
-  const fadeDuration = 1/8,
+  const fadeDuration = 1/6,
     rootFrequency = engine.utility.midiToFrequency(33),
-    turboDetune = 1200,
-    turnStrength = 1/8
+    turboDetune = 1200
 
   let synth
 
@@ -42,7 +41,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate && !isCatchingAir) {
-      const rotate = controls.rotate * turnStrength * (Math.abs(movement.rotation) / engine.const.movementMaxRotation)
+      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / content.const.surfaceTurboMaxVelocity
 
       points.push({
         x: Math.abs(rotate),
@@ -53,12 +52,12 @@ content.system.audio.engine = (() => {
     if (controls.y) {
       if (isCatchingAir) {
         points.push({
-          x: controls.y * (engine.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity),
+          x: controls.y * engine.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity,
           y: 0,
         })
       } else {
         points.push({
-          x: controls.y * (movement.velocity / content.const.surfaceTurboMaxVelocity),
+          x: controls.y * movement.velocity / content.const.surfaceTurboMaxVelocity,
           y: 0,
         })
       }
@@ -72,7 +71,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate) {
-      const rotate = controls.rotate * turnStrength * (Math.abs(movement.rotation) / engine.const.movementMaxRotation)
+      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / content.const.underwaterTurboMaxVelocity
 
       points.push({
         x: Math.abs(rotate),
@@ -82,7 +81,7 @@ content.system.audio.engine = (() => {
 
     if (controls.y) {
       points.push({
-        x: controls.y * (movement.velocity / content.const.underwaterTurboMaxVelocity),
+        x: controls.y * movement.velocity / content.const.underwaterTurboMaxVelocity,
         y: 0,
       })
     }
@@ -90,13 +89,13 @@ content.system.audio.engine = (() => {
     if (controls.x) {
       points.push({
         x: 0,
-        y: controls.x * (movement.velocity / content.const.underwaterTurboMaxVelocity),
+        y: controls.x * movement.velocity / content.const.underwaterTurboMaxVelocity,
       })
     }
 
     if (controls.z) {
       points.push({
-        x: controls.z * (content.system.movement.zVelocity() / content.const.underwaterTurboMaxVelocity),
+        x: controls.z * content.system.movement.zVelocity() / content.const.underwaterTurboMaxVelocity,
         y: 0,
       })
     }
@@ -120,7 +119,7 @@ content.system.audio.engine = (() => {
       fmodDetune: detune + (isTurbo ? turboDetune : 0),
       fmodFrequency: rootFrequency,
       fmodType: 'sawtooth',
-      gain: 1,
+      gain: engine.const.zeroGain,
     }).filtered({
       detune: detune + (isTurbo ? turboDetune : 0),
       frequency: rootFrequency,
@@ -152,7 +151,8 @@ content.system.audio.engine = (() => {
     } = calculateParams(controls)
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
-      isSurface = content.system.movement.isSurface()
+      isSurface = content.system.movement.isSurface(),
+      isTurbo = content.system.movement.isTurbo()
 
     const amodFrequency = isCatchingAir
       ? 27.5
@@ -160,7 +160,7 @@ content.system.audio.engine = (() => {
 
     const color = isSurface
       ? (isCatchingAir ? 3 : 2)
-      : 1.5
+      : (isTurbo ? 1 : 2)
 
     binaural.update({
       x,
@@ -169,19 +169,10 @@ content.system.audio.engine = (() => {
 
     engine.audio.ramp.set(synth.filter.frequency, rootFrequency * color)
     engine.audio.ramp.set(synth.param.amod.frequency, amodFrequency)
-    engine.audio.ramp.set(synth.param.gain, radius ** 0.5)
+    engine.audio.ramp.set(synth.param.gain, radius ** 0.25)
   }
 
   return {
-    import: function ({z}) {
-      if (z >= 0) {
-        this.onSurface()
-      } else {
-        this.onUnderwater()
-      }
-
-      return this
-    },
     onNormal: function () {
       if (synth) {
         engine.audio.ramp.linear(synth.filter.detune, 0, 0.5)
@@ -189,18 +180,12 @@ content.system.audio.engine = (() => {
         engine.audio.ramp.linear(synth.param.fmod.detune, 0, 0.5)
       }
     },
-    onSurface: function () {
-      // TODO: Mix out underwater filter
-    },
     onTurbo: function () {
       if (synth) {
         engine.audio.ramp.linear(synth.filter.detune, turboDetune, 0.5)
         engine.audio.ramp.linear(synth.param.detune, turboDetune, 0.5)
         engine.audio.ramp.linear(synth.param.fmod.detune, turboDetune, 0.5)
       }
-    },
-    onUnderwater: function () {
-      // TODO: Mix in underwater filter
     },
     reset: function () {
       if (synth) {
@@ -223,13 +208,10 @@ content.system.audio.engine = (() => {
   }
 })()
 
-engine.state.on('import', (state) => content.system.audio.engine.import(state))
 engine.state.on('reset', () => content.system.audio.engine.reset())
 
 // HACK: Essentially app.once('activate')
 engine.loop.once('frame', () => {
   content.system.movement.on('transition-normal', () => content.system.audio.engine.onNormal())
-  content.system.movement.on('transition-surface', () => content.system.audio.engine.onSurface())
   content.system.movement.on('transition-turbo', () => content.system.audio.engine.onTurbo())
-  content.system.movement.on('transition-underwater', () => content.system.audio.engine.onUnderwater())
 })

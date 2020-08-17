@@ -3,8 +3,9 @@ content.system.audio.surface.transition = (() => {
     context = engine.audio.context()
 
   let input = context.createGain()
+  input.connect(bus)
 
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-9)
 
   function kill() {
     const previousInput = input
@@ -16,28 +17,48 @@ content.system.audio.surface.transition = (() => {
     input.connect(bus)
   }
 
-  function triggerSubmerge() {
-    // TODO: Splash down sound
-    return
+  function triggerSubmerge(velocity) {
+    const duration = engine.utility.scale(velocity, 0, -20, 1, 2),
+      frequency = engine.utility.scale(velocity, 0, -20, 1000, 2500)
 
     const synth = engine.audio.synth.createBuffer({
       buffer: engine.audio.buffer.noise.white(),
       gain: 1,
     }).filtered().connect(input)
 
-    synth.stop(engine.audio.time(1))
+    const now = engine.audio.time()
+
+    synth.filter.frequency.setValueAtTime(frequency, now)
+    synth.filter.frequency.exponentialRampToValueAtTime(100, now + duration)
+
+    synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
+    synth.param.gain.linearRampToValueAtTime(1/4, now + engine.const.zeroTime)
+    synth.param.gain.linearRampToValueAtTime(1, now + (duration / 2))
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
+
+    synth.stop(now + duration)
   }
 
   function triggerSurface(velocity) {
-    // TODO: Splash up sound
-    return
+    const duration = engine.utility.scale(velocity, 0, 20, 1, 2),
+      frequency = engine.utility.scale(velocity, 0, 20, 1000, 2500)
 
     const synth = engine.audio.synth.createBuffer({
       buffer: engine.audio.buffer.noise.white(),
       gain: 1,
     }).filtered().connect(input)
 
-    synth.stop(engine.audio.time(1))
+    const now = engine.audio.time()
+
+    synth.filter.frequency.setValueAtTime(100, now)
+    synth.filter.frequency.exponentialRampToValueAtTime(frequency, now + (duration / 2))
+
+    synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
+    synth.param.gain.linearRampToValueAtTime(1, now + engine.const.zeroTime)
+    synth.param.gain.linearRampToValueAtTime(1/4, now + (duration / 2))
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
+
+    synth.stop(now + duration)
   }
 
   return {
@@ -46,9 +67,9 @@ content.system.audio.surface.transition = (() => {
       triggerSurface(velocity)
       return this
     },
-    underwater: function () {
+    underwater: function (velocity) {
       kill()
-      triggerSubmerge()
+      triggerSubmerge(velocity)
       return this
     },
   }
@@ -60,7 +81,7 @@ engine.loop.once('frame', () => {
     content.system.audio.surface.transition.surface(velocity)
   })
 
-  content.system.movement.on('transition-underwater', () => {
-    content.system.audio.surface.transition.underwater()
+  content.system.movement.on('transition-underwater', (velocity) => {
+    content.system.audio.surface.transition.underwater(velocity)
   })
 })

@@ -59,17 +59,19 @@ app.utility.format.coordinates = function ({
 
   let label = ''
 
-  if (y >= 0) {
+  if (y > 0) {
     label += `${this.number(y)} <abbr aria-label="North">N</abbr>`
-  } else {
+  } else if (y < 0) {
     label += `${this.number(Math.abs(y))} <abbr aria-label="South">S</abbr>`
   }
 
-  label += ', '
+  if (y && x) {
+    label += ', '
+  }
 
-  if (x >= 0) {
+  if (x > 0) {
     label += `${this.number(x)} <abbr aria-label="East">E</abbr>`
-  } else {
+  } else if (x < 0) {
     label += `${this.number(Math.abs(x))} <abbr aria-label="West">W</abbr>`
   }
 

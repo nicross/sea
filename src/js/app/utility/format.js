@@ -1,11 +1,11 @@
 app.utility.format = {}
 
 app.utility.format.angle = function (radians = 0) {
-  radians = engine.utility.normalizeAngle(radians)
+  const degrees = engine.utility.radiansToDegrees(
+    engine.utility.normalizeAngle(radians)
+  )
 
-  const degrees = engine.utility.radiansToDegrees(radians)
-
-  let label = `${Math.round(degrees)}<abbr aria-label=" degrees">°</abbr> (`;
+  let label = ''
 
   if (degrees > 348.75 || degrees < 11.25) {
     label += '<abbr aria-label="east">E</abbr>'
@@ -41,7 +41,7 @@ app.utility.format.angle = function (radians = 0) {
     label += '<abbr aria-label="east-southeast">ESE</abbr>'
   }
 
-  label += ')'
+  label += ` (${Math.round(degrees)}<abbr aria-label=" degrees">°</abbr>)`;
 
   return label
 }

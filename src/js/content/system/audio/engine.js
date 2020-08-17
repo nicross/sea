@@ -1,15 +1,16 @@
 content.system.audio.engine = (() => {
   const binaural = engine.audio.binaural.create(),
-    bus = engine.audio.mixer.createBus(),
-    context = engine.audio.context(),
-    filter = context.createBiquadFilter()
+    bus = engine.audio.mixer.createBus()
 
-  const turnStrength = 1/16
+  const fadeDuration = 1/8,
+    rootFrequency = engine.utility.midiToFrequency(33),
+    turboDetune = 1200,
+    turnStrength = 1/8
 
   let synth
 
-  bus.gain.value = engine.utility.fromDb(-9)
-  binaural.from(filter).to(bus)
+  bus.gain.value = engine.utility.fromDb(-3)
+  binaural.to(bus)
 
   function calculateParams(controls) {
     const points = content.system.movement.isUnderwater()
@@ -40,10 +41,12 @@ content.system.audio.engine = (() => {
       movement = engine.movement.get(),
       points = []
 
-    if (controls.rotate) {
+    if (controls.rotate && !isCatchingAir) {
+      const rotate = controls.rotate * turnStrength * (Math.abs(movement.rotation) / engine.const.movementMaxRotation)
+
       points.push({
-        x: Math.abs(controls.rotate * turnStrength),
-        y: -controls.rotate * turnStrength,
+        x: Math.abs(rotate),
+        y: -rotate,
       })
     }
 
@@ -69,9 +72,11 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate) {
+      const rotate = controls.rotate * turnStrength * (Math.abs(movement.rotation) / engine.const.movementMaxRotation)
+
       points.push({
-        x: Math.abs(controls.rotate * turnStrength),
-        y: -controls.rotate * turnStrength,
+        x: Math.abs(rotate),
+        y: -rotate,
       })
     }
 
@@ -100,17 +105,36 @@ content.system.audio.engine = (() => {
   }
 
   function createSynth() {
-    synth = engine.audio.synth.createMod({
-      gain: 1,
-    }).filtered()
+    const detune = engine.utility.random.float(-12.5, 12.5),
+      isTurbo = content.system.movement.isTurbo()
 
-    binaural.from(synth)
+    synth = engine.audio.synth.createMod({
+      amodDepth: 0,
+      amodFrequency: 0,
+      amodType: 'triangle',
+      carrierDetune: detune + (isTurbo ? turboDetune : 0),
+      carrierFrequency: rootFrequency,
+      carrierGain: 0,
+      carrierType: 'sawtooth',
+      fmodDepth: rootFrequency / 2,
+      fmodDetune: detune + (isTurbo ? turboDetune : 0),
+      fmodFrequency: rootFrequency,
+      fmodType: 'sawtooth',
+      gain: 1,
+    }).filtered({
+      detune: detune + (isTurbo ? turboDetune : 0),
+      frequency: rootFrequency,
+    })
+
+    engine.audio.ramp.linear(synth.param.carrierGain, 1/2, fadeDuration)
+    engine.audio.ramp.linear(synth.param.amod.depth, 1/2, fadeDuration)
+
+    binaural.from(synth.output)
   }
 
   function destroySynth() {
-    const release = 1/16
-    engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, release)
-    synth.stop(engine.audio.time(release))
+    engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, fadeDuration)
+    synth.stop(engine.audio.time(fadeDuration))
     synth = null
   }
 
@@ -127,12 +151,24 @@ content.system.audio.engine = (() => {
       y,
     } = calculateParams(controls)
 
+    const isCatchingAir = content.system.movement.isCatchingAir(),
+      isSurface = content.system.movement.isSurface()
+
+    const amodFrequency = isCatchingAir
+      ? 27.5
+      : engine.utility.lerp(4, 16, radius)
+
+    const color = isSurface
+      ? (isCatchingAir ? 3 : 2)
+      : 1.5
+
     binaural.update({
       x,
       y,
     })
 
-    // TODO: Update parameters based on radius
+    engine.audio.ramp.set(synth.filter.frequency, rootFrequency * color)
+    engine.audio.ramp.set(synth.param.amod.frequency, amodFrequency)
     engine.audio.ramp.set(synth.param.gain, radius ** 0.5)
   }
 
@@ -147,13 +183,21 @@ content.system.audio.engine = (() => {
       return this
     },
     onNormal: function () {
-      // TODO: Decrease an octave
+      if (synth) {
+        engine.audio.ramp.linear(synth.filter.detune, 0, 0.5)
+        engine.audio.ramp.linear(synth.param.detune, 0, 0.5)
+        engine.audio.ramp.linear(synth.param.fmod.detune, 0, 0.5)
+      }
     },
     onSurface: function () {
       // TODO: Mix out underwater filter
     },
     onTurbo: function () {
-      // TODO: Increase an octave
+      if (synth) {
+        engine.audio.ramp.linear(synth.filter.detune, turboDetune, 0.5)
+        engine.audio.ramp.linear(synth.param.detune, turboDetune, 0.5)
+        engine.audio.ramp.linear(synth.param.fmod.detune, turboDetune, 0.5)
+      }
     },
     onUnderwater: function () {
       // TODO: Mix in underwater filter

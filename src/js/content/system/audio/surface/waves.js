@@ -33,6 +33,8 @@ content.system.audio.surface.waves = (() => {
 
   let wasAbove
 
+  bus.gain.value = engine.utility.fromDb(-3)
+
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)
 

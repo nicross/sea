@@ -1,7 +1,8 @@
 content.system.surface = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 4),
-    physicalScale = 30, // Nodes are 30m apart
-    timeScale = 60 // Evolves over 60 seconds
+  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 2),
+    momentumX = -1/2, // Moves westward N m/s
+    physicalScale = 60, // Nodes are N m apart
+    timeScale = 300 // Evolves over N seconds
 
   return {
     height: function (x, y) {
@@ -16,7 +17,7 @@ content.system.surface = (() => {
         z = time / timeScale
 
       x /= physicalScale
-      x -= time / 4 // Moving westward at 0.25 m/s
+      x += time * momentumX
 
       y /= physicalScale
 

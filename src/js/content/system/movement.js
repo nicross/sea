@@ -124,17 +124,22 @@ content.system.movement = (() => {
       setCatchingAir(z > height)
 
       if (z == height && zVelocity < 0) {
-        if (zInput >= 0) {
-          // Max velocity is fastest player can jump from the water
-          pubsub.emit('surface-smack', {
-            velocity: engine.utility.clamp(-zVelocity / content.const.underwaterTurboMaxVelocity, 0, 1),
-          })
+        // Max velocity is fastest player can jump from the water
+        pubsub.emit('surface-smack', {
+          velocity: engine.utility.clamp(-zVelocity / content.const.underwaterTurboMaxVelocity, 0, 1),
+        })
 
-          // Brick wall if not intending to dive
-          zVelocity = 0
+        if (zInput < 0) {
+          // Intending to dive
+          // Allow momentum to persist
         } else {
-          // Allow momentum to persist if intending to dive
-          // Trigger the transition sound instead of smack
+          if (zVelocity < -1 && velocity) {
+            // Skip like a stone
+            zVelocity /= -2
+          } else {
+            // Eventually rest
+            zVelocity = 0
+          }
         }
       }
 

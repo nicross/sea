@@ -77,7 +77,7 @@ content.system.audio.surface.smack = (() => {
       return this
     },
     underwater: function () {
-      engine.audio.ramp.exponential(filter.frequency, 200, 1/8)
+      engine.audio.ramp.exponential(filter.frequency, 500, 1/8)
       return this
     },
   }

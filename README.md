@@ -8,8 +8,10 @@ There's no land for days.
 It's just you and the sounds of the open sea.
 Your mission is to test its capabilities.
 
-S.E.A. is an exploration game about experimentation and discovery.
-By revealing the spoilers below, you will miss out on the most important discoveries.
+The ocean is endless.
+Listen and relax.
+Surf the waves.
+Experiment.
 
 <details>
   <summary>Light Spoiler Warning</summary>
@@ -18,7 +20,7 @@ By revealing the spoilers below, you will miss out on the most important discove
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
-  <p>The military has intelligence that a vast network of caves exists beneath the ocean floor. They suspect that valuable treasures, some not of this world, lay dormant inside. Your secondary objective is to submerge, explore, and acquire these artifacts.</p>
+  <p>The military has intelligence that a vast network of caves exists beneath the ocean floor. They suspect that valuable treasures, some not of this world, lay dormant inside. Perhaps your objective is to submerge, explore, and acquire these artifacts.</p>
 </details>
 
 ### Keyboard controls
@@ -84,6 +86,7 @@ By revealing the spoilers below, you will miss out on the most important discove
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
+  <p>A radio transmission instructs you that the S.E.A. has additional controls for navigating below the surface:</p>
   <table>
     <thead>
       <tr>
@@ -178,6 +181,7 @@ By revealing the spoilers below, you will miss out on the most important discove
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
+  <p>A radio transmission instructs you that the S.E.A. has additional controls for navigating below the surface:</p>
   <table>
     <thead>
       <tr>

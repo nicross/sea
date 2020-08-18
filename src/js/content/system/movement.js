@@ -9,6 +9,11 @@ content.system.movement = (() => {
     isUnderwater = false,
     zVelocity = 0
 
+  function checkZCollision(z, leeway) {
+    const {x, y} = engine.position.get()
+    return content.system.terrain.isCollision(x, y, z, leeway)
+  }
+
   function handleSurface(controls) {
     if (isUnderwater || controls.turbo != isTurbo) {
       if (controls.turbo) {
@@ -141,8 +146,10 @@ content.system.movement = (() => {
 
     z = z + (delta * zVelocity)
 
-    // TODO: Check collisions
-    // emit event, halt velocity, and return early if next z is invalid
+    if (checkZCollision(z, delta * Math.abs(zVelocity))) {
+      zVelocity = 0
+      return pubsub.emit('collision')
+    }
 
     content.system.z.set(z)
   }

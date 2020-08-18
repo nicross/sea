@@ -13,6 +13,7 @@ app.component.slider.prototype = {
     this.valueElement = root.querySelector('.c-slider--value')
 
     this.inputElement.addEventListener('input', this.onInput.bind(this))
+    this.inputElement.addEventListener('keydown', this.onKeydown.bind(this))
 
     this.setValueAsFloat(initialValue)
     this.setAriaLive(true)
@@ -60,6 +61,9 @@ app.component.slider.prototype = {
     }
 
     return this
+  },
+  onKeydown: function (e) {
+    e.preventDefault()
   },
   setAriaLive: function (state) {
     if (state) {

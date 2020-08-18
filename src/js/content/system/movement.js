@@ -9,6 +9,18 @@ content.system.movement = (() => {
     isUnderwater = false,
     zVelocity = 0
 
+  function checkMovementCollision() {
+    const {angle, deltaVelocity} = engine.movement.get()
+    const z = content.system.z.get()
+
+    let {x, y} = engine.position.get()
+
+    x += Math.cos(angle) * deltaVelocity
+    y += Math.sin(angle) * deltaVelocity
+
+    return content.system.terrain.isCollision(x, y, z, deltaVelocity)
+  }
+
   function checkZCollision(z, leeway) {
     const {x, y} = engine.position.get()
     return content.system.terrain.isCollision(x, y, z, leeway)
@@ -55,9 +67,7 @@ content.system.movement = (() => {
       }
     }
 
-    // TODO: Detect collisions
-    // emit event, halt movement, and return early if movement is invalid
-
+    // Update to see target vector for this frame, see checkMovementCollision()
     engine.movement.update({
       rotate: controls.rotate,
       translate: {
@@ -65,6 +75,12 @@ content.system.movement = (() => {
         theta: Math.atan2(-controls.x, controls.y),
       },
     })
+
+    if (checkMovementCollision()) {
+      // Reset vector if collision is detected
+      engine.movement.set({})
+      return pubsub.emit('collision')
+    }
   }
 
   function handleZ(z, zInput) {

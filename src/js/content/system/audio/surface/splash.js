@@ -3,12 +3,15 @@
 content.system.audio.surface.splash = (() => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context(),
-    filter = context.createBiquadFilter()
+    filter = context.createBiquadFilter(),
+    throttleRate = 1000/10
+
+  let throttle = 0
 
   bus.gain.value = engine.utility.fromDb(-12)
   filter.connect(bus)
 
-  function createGrain({size, velocity}) {
+  function trigger({size, velocity}) {
     const color = engine.utility.lerpExp(100, 1000, velocity, 3),
       duration = engine.utility.lerp(1/2, 1, size),
       gain = engine.utility.lerp(1, 1/2, velocity),
@@ -54,7 +57,13 @@ content.system.audio.surface.splash = (() => {
       return this
     },
     trigger: function (e) {
-      createGrain(e)
+      const now = performance.now()
+
+      if (now > throttle + throttleRate) {
+        trigger(e)
+        throttle = now
+      }
+
       return this
     },
     underwater: function () {

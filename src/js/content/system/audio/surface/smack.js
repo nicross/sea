@@ -1,9 +1,10 @@
-// TODO: throttle to prevent audio hiccups
-
 content.system.audio.surface.smack = (() => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context(),
-    filter = context.createBiquadFilter()
+    filter = context.createBiquadFilter(),
+    throttleRate = 1000/10
+
+  let throttle = 0
 
   bus.gain.value = engine.utility.fromDb(-6)
   filter.connect(bus)
@@ -63,7 +64,13 @@ content.system.audio.surface.smack = (() => {
       return this
     },
     trigger: function (e) {
-      trigger(e)
+      const now = performance.now()
+
+      if (now > throttle + throttleRate) {
+        trigger(e)
+        throttle = now
+      }
+
       return this
     },
     underwater: function () {

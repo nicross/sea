@@ -1,3 +1,6 @@
+// TODO: Handle catching air differently
+// when switching, z still obeys gravity, but movement deceleration switches to content.const.airResistanceDeceleration
+
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create()
 

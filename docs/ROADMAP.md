@@ -26,3 +26,4 @@
 - Gallery screen
 - Soundtrack
 - Add last treasure to status screen
+- Cue when switching between turbo states (like soundStrider auto-move toggle)

@@ -13,12 +13,15 @@ app.controls.keyboard = (() => {
     Enter: false,
     Escape: false,
     KeyA: false,
+    KeyC: false,
     KeyD: false,
     KeyE: false,
     KeyF: false,
     KeyQ: false,
     KeyS: false,
     KeyW: false,
+    KeyX: false,
+    KeyZ: false,
     Numpad4: false,
     Numpad5: false,
     Numpad6: false,
@@ -48,10 +51,13 @@ app.controls.keyboard = (() => {
 
   return {
     game: () => {
-      const moveBackward = controls.ArrowDown || controls.KeyS || controls.Numpad5,
+      const ascend = controls.KeyZ || controls.Space,
+        descend = controls.ControlLeft || controls.ControlRight || controls.KeyC,
+        moveBackward = controls.ArrowDown || controls.KeyS || controls.Numpad5,
         moveForward = controls.ArrowUp || controls.KeyW || controls.Numpad8,
         strafeLeft = controls.KeyA || controls.Numpad4,
         strafeRight = controls.KeyD || controls.Numpad6,
+        turbo = controls.KeyX || controls.ShiftLeft || controls.ShiftRight,
         turnLeft = controls.ArrowLeft || controls.KeyQ || controls.Numpad7,
         turnRight = controls.ArrowRight || controls.KeyE || controls.Numpad9
 
@@ -75,15 +81,15 @@ app.controls.keyboard = (() => {
         state.rotate = -1
       }
 
-      if (controls.Space && !(controls.ControlLeft || controls.ControlRight)) {
+      if (ascend && !descend) {
         state.z = 1
       }
 
-      if ((controls.ControlLeft || controls.ControlRight) && !controls.Space) {
+      if (descend && !ascend) {
         state.z = -1
       }
 
-      if ((controls.ShiftLeft || controls.shiftRight) && !app.settings.computed.toggleTurbo) {
+      if (turbo && !app.settings.computed.toggleTurbo) {
         state.turbo = true
       }
 
@@ -134,7 +140,7 @@ app.controls.keyboard = (() => {
         state.scan = true
       }
 
-      if ((controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleTurbo) {
+      if ((controls.KeyX || controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleTurbo) {
         state.turbo = true
       }
 

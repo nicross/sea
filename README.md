@@ -48,9 +48,9 @@ By revealing the spoilers below, you will miss out on the most important discove
     </tr>
     <tr>
       <th>Turbo</th>
+      <td>X</td>
       <td>Left Shift</td>
       <td>Right Shift</td>
-      <td></td>
     </tr>
     <tr>
       <th>Confirm</th>
@@ -99,15 +99,15 @@ By revealing the spoilers below, you will miss out on the most important discove
       </tr>
       <tr>
         <th>Ascend</th>
+        <td>Z</td>
         <td>Space</td>
-        <td></td>
         <td></td>
       </tr>
       <tr>
         <th>Descend</th>
+        <td>C</td>
         <td>Left Control</td>
         <td>Right Control</td>
-        <td></td>
       </tr>
     </tbody>
   </table>

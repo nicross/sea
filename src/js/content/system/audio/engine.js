@@ -95,7 +95,7 @@ content.system.audio.engine = (() => {
 
     if (controls.z) {
       points.push({
-        x: controls.z * content.system.movement.zVelocity() / content.const.underwaterTurboMaxVelocity,
+        x: Math.abs(controls.z * content.system.movement.zVelocity()) / content.const.underwaterTurboMaxVelocity,
         y: 0,
       })
     }

@@ -5,6 +5,7 @@ const content  = {
   system: {
     audio: {
       surface: {},
+      underwater: {},
     },
   },
 }

@@ -6,22 +6,17 @@
 ## Required modules
 - audio
   - collision
-  - engine
   - scanner
-  - soundtrack
-  - surface
-    - smack
-    - splash
-- cave
-- floor
+  - underwater soundtrack
+- terrain
+  - cave
+  - floor
 - treasure
 
 ## Required props
 - treasure
 
 ## Gameplan
-- Surface audio
-- Engine audio
 - Floor generation
 - Collision audio
 - Cave generation

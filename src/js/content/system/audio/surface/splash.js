@@ -3,7 +3,7 @@ content.system.audio.surface.splash = (() => {
     context = engine.audio.context(),
     filter = context.createBiquadFilter()
 
-  bus.gain.value = engine.utility.fromDb(-9)
+  bus.gain.value = engine.utility.fromDb(-10.5)
   filter.connect(bus)
 
   function createGrain({size, velocity}) {

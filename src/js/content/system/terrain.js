@@ -46,14 +46,5 @@ content.system.terrain = (() => {
   return {
     getFloorZ,
     isCollision,
-    // TODO: Raytracer
   }
 })()
-
-// XXX: debug
-engine.loop.on('frame', ({frame, paused}) => {
-  if (!paused && frame % 60 == 0) {
-    const {x, y} = engine.position.get()
-    console.log(content.system.terrain.getFloorZ(x, y))
-  }
-})

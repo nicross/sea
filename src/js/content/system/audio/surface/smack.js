@@ -1,3 +1,5 @@
+// TODO: throttle to prevent audio hiccups
+
 content.system.audio.surface.smack = (() => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context(),

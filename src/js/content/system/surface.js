@@ -1,6 +1,6 @@
 content.system.surface = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 2),
-    physicalScale = 20, // Nodes are 10m apart
+  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 4),
+    physicalScale = 30, // Nodes are 30m apart
     timeScale = 60 // Evolves over 60 seconds
 
   return {

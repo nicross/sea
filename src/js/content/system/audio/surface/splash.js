@@ -7,8 +7,8 @@ content.system.audio.surface.splash = (() => {
   filter.connect(bus)
 
   function createGrain({size, velocity}) {
-    const color = engine.utility.lerpExp(400, 2000, velocity),
-      duration = engine.utility.lerp(1/4, 1, size),
+    const color = engine.utility.lerpExp(100, 1000, velocity, 3),
+      duration = engine.utility.lerp(1/2, 1, size),
       gain = engine.utility.lerp(1, 1/2, velocity),
       panner = context.createStereoPanner()
 

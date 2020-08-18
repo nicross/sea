@@ -9,8 +9,8 @@ content.system.audio.surface.smack = (() => {
   function trigger({velocity}) {
     const isTurbo = content.system.movement.isTurbo()
 
-    const color = engine.utility.lerpExp(200, 2000, velocity),
-      duration = engine.utility.lerpExp(1/4, 2, velocity),
+    const color = engine.utility.lerpExp(200, 4000, velocity, 3),
+      duration = engine.utility.lerpExp(1/4, 4, velocity, 3),
       gain = engine.utility.lerp(isTurbo ? 1/2 : 1/8, 1, velocity),
       modDepth = engine.utility.lerp(0, 1/3, velocity),
       panner = context.createStereoPanner()

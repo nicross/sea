@@ -9,11 +9,11 @@ content.system.audio.surface.waves = (() => {
     lowpassDropoffRate = 2.25,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
-    waveFrequencyDropoff = 2.5,
-    waveGainDropoff = 2.5,
-    waveMaxFrequency = engine.const.maxFrequency / 2,
+    waveFrequencyDropoff = 3,
+    waveGainDropoff = 3,
+    waveMaxFrequency = 10000,
     waveMaxGain = 1/2,
-    waveMinFrequency = engine.const.maxFrequency / 20,
+    waveMinFrequency = 100,
     waveMinGain = 1/4
 
   const coordinates = [
@@ -33,7 +33,7 @@ content.system.audio.surface.waves = (() => {
 
   let wasAbove
 
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-1.5)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)

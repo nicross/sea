@@ -43,7 +43,7 @@ content.system.movement = (() => {
       return engine.movement.update({
         rotate: 0,
         translate: {
-          radius: 0,
+          radius: movement.rotation,
           theta: movement.angle - position.angle,
         },
       })
@@ -121,7 +121,7 @@ content.system.movement = (() => {
       z += zVelocity * delta
       z = Math.max(height, z)
 
-      isCatchingAir = z > height
+      setCatchingAir(z > height)
 
       if (z == height && zVelocity < 0) {
         if (zInput >= 0) {
@@ -170,6 +170,16 @@ content.system.movement = (() => {
     content.system.z.set(z)
   }
 
+  function setCatchingAir(state) {
+    if (isCatchingAir != state) {
+      isCatchingAir = state
+
+      engine.const.movementDeceleration = isCatchingAir
+        ? content.const.dragDeceleration
+        : content.const.normalDeceleration
+    }
+  }
+
   function setTurbo(state) {
     if (isTurbo != state) {
       isTurbo = state
@@ -179,6 +189,10 @@ content.system.movement = (() => {
 
   function setUnderwater(state) {
     if (isUnderwater != state) {
+      if (state) {
+        setCatchingAir(false)
+      }
+
       isUnderwater = state
       pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), zVelocity)
     }
@@ -232,13 +246,13 @@ content.system.movement = (() => {
     update: function (controls = {}) {
       const z = content.system.z.get()
 
+      handleZ(z, controls.z)
+
       if (z < 0) {
         handleUnderwater(controls)
       } else {
         handleSurface(controls)
       }
-
-      handleZ(z, controls.z)
 
       return this
     },

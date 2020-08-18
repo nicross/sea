@@ -6,7 +6,8 @@ engine.const.movementRotationalDeceleration = engine.const.gravity
 // NOTE: Max velocity and acceleration are handled via movement module, i.e. different movement models based on z-value
 
 content.const = {
-  airResistanceDeceleration: 1,
+  dragDeceleration: 1,
+  normalDeceleration: engine.const.gravity,
   lightZone: -1000,
   surfaceTurboAcceleration: engine.const.gravity,
   surfaceNormalAcceleration: engine.const.gravity / 2,

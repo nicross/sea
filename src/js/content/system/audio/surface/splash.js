@@ -3,13 +3,13 @@ content.system.audio.surface.splash = (() => {
     context = engine.audio.context(),
     filter = context.createBiquadFilter()
 
-  bus.gain.value = engine.utility.fromDb(-10.5)
+  bus.gain.value = engine.utility.fromDb(-12)
   filter.connect(bus)
 
   function createGrain({size, velocity}) {
-    const color = engine.utility.lerpExp(200, 2000, velocity),
+    const color = engine.utility.lerpExp(400, 2000, velocity),
       duration = engine.utility.lerp(1/4, 1, size),
-      gain = engine.utility.lerp(1, 1/4, velocity),
+      gain = engine.utility.lerp(1, 1/2, velocity),
       panner = context.createStereoPanner()
 
     // Position based on turning

@@ -7,9 +7,12 @@ content.system.audio.surface.smack = (() => {
   filter.connect(bus)
 
   function trigger({velocity}) {
-    const color = engine.utility.lerpExp(200, 1000, velocity),
-      duration = engine.utility.lerpExp(1/4, 3, velocity),
-      gain = engine.utility.lerp(1/2, 1, velocity),
+    const isTurbo = content.system.movement.isTurbo()
+
+    const color = engine.utility.lerpExp(200, 2000, velocity),
+      duration = engine.utility.lerpExp(1/4, 2, velocity),
+      gain = engine.utility.lerp(isTurbo ? 1/2 : 1/8, 1, velocity),
+      modDepth = engine.utility.lerp(0, 1/3, velocity),
       panner = context.createStereoPanner()
 
     // Position based on turning
@@ -23,21 +26,22 @@ content.system.audio.surface.smack = (() => {
     panner.connect(filter)
 
     const synth = engine.audio.synth.createAmBuffer({
-      buffer: engine.audio.buffer.noise.pink(),
-      carrierGain: 7/8,
-      modDepth: 1/8,
-    }).filtered({
-      frequency: color,
-    }).connect(panner)
+      buffer: engine.audio.buffer.noise.brown(),
+      carrierGain: 1 - modDepth,
+      modDepth: modDepth,
+    }).filtered().connect(panner)
 
     const now = engine.audio.time()
+
+    synth.filter.frequency.setValueAtTime(200, now)
+    synth.filter.frequency.exponentialRampToValueAtTime(color, now + duration)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.exponentialRampToValueAtTime(gain, now + 1/32)
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
 
-    synth.param.mod.frequency.setValueAtTime(20, now)
-    synth.param.mod.frequency.exponentialRampToValueAtTime(2, now + duration)
+    synth.param.mod.frequency.setValueAtTime(27.5, now)
+    synth.param.mod.frequency.exponentialRampToValueAtTime(3.4375, now + duration)
 
     synth.stop(now + duration)
   }

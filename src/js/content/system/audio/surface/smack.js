@@ -28,6 +28,9 @@ content.system.audio.surface.smack = (() => {
 
     panner.connect(filter)
 
+    // Simulate traveling away from it
+    const fadeDuration = engine.utility.lerp(duration, 1/4, movement.velocity / content.const.surfaceTurboMaxVelocity)
+
     const synth = engine.audio.synth.createAmBuffer({
       buffer: engine.audio.buffer.noise.brown(),
       carrierGain: 1 - modDepth,
@@ -41,12 +44,12 @@ content.system.audio.surface.smack = (() => {
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.exponentialRampToValueAtTime(gain, now + 1/32)
-    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + fadeDuration)
 
     synth.param.mod.frequency.setValueAtTime(27.5, now)
     synth.param.mod.frequency.exponentialRampToValueAtTime(3.4375, now + duration)
 
-    synth.stop(now + duration)
+    synth.stop(now + fadeDuration)
   }
 
   return {

@@ -44,6 +44,10 @@ content.system.terrain = (() => {
   }
 
   return {
+    getCurrentFloorZ: function () {
+      const {x, y} = engine.position.get()
+      return getFloorZ(x, y)
+    },
     getFloorZ,
     isCollision,
   }

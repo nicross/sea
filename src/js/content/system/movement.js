@@ -77,9 +77,19 @@ content.system.movement = (() => {
     })
 
     if (checkMovementCollision()) {
-      // Reset vector if collision is detected
-      engine.movement.set({})
-      return pubsub.emit('collision')
+      // Bounce off and prevent movement
+      const movement = engine.movement.get()
+
+      engine.movement.set({
+        angle: engine.utility.normalizeAngle(movement.angle + Math.PI),
+        rotation: movement.rotation,
+        velocity: movement.velocity / 2,
+      })
+
+      return pubsub.emit('collision', {
+        angle: movement.angle,
+        velocity: movement.velocity,
+      })
     }
   }
 
@@ -168,8 +178,14 @@ content.system.movement = (() => {
     z = z + (delta * zVelocity)
 
     if (checkZCollision(z, delta * Math.abs(zVelocity))) {
-      zVelocity = 0
-      return pubsub.emit('collision')
+      // Bounce off and prevent movement
+      pubsub.emit('collision', {
+        velocity: zVelocity,
+        z: engine.utility.sign(zVelocity),
+      })
+
+      zVelocity /= -2
+      return
     }
 
     content.system.z.set(z)

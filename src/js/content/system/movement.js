@@ -100,15 +100,17 @@ content.system.movement = (() => {
       isCatchingAir = z > height
 
       if (z == height && zVelocity < 0) {
-        // Smack when landing into water
-        // TODO: Look into scaling to a value [0,1]
-        pubsub.emit('surface-smack', {
-          velocity: -zVelocity,
-        })
-
-        // Allow momentum to persist if intending to dive
         if (zInput >= 0) {
+          // Max velocity is fastest player can jump from the water
+          pubsub.emit('surface-smack', {
+            velocity: engine.utility.clamp(-zVelocity / content.const.underwaterTurboMaxVelocity, 0, 1),
+          })
+
+          // Brick wall if not intending to dive
           zVelocity = 0
+        } else {
+          // Allow momentum to persist if intending to dive
+          // Trigger the transition sound instead of smack
         }
       }
 

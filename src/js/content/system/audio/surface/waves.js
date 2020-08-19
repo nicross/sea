@@ -4,36 +4,40 @@ content.system.audio.surface.waves = (() => {
     highpassFilter = context.createBiquadFilter(),
     lowpassFilter = context.createBiquadFilter()
 
-  const distance = 2.5,
-    highpassFrequency = 40,
+  const distance = 4,
+    highpassFrequency = 80,
     lowpassDropoffRate = 2.25,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
     waveFrequencyDropoff = 3,
     waveGainDropoff = 3,
     waveMaxFrequency = 10000,
-    waveMaxGain = 1/2,
+    waveMaxGain = 1,
     waveMinFrequency = 100,
-    waveMinGain = 1/4
+    waveMinGain = 1/2
 
-  const coordinates = [
-    {x: distance, y: distance},
-    {x: -distance, y: distance},
-    {x: -distance, y: -distance},
-    {x: distance, y: -distance},
+  // 0 is forward
+  const angles = [
+    Math.PI * 7/4, // forward right
+    Math.PI * 1/4, // forward left
+    Math.PI * 3/4, // backward left
+    Math.PI * 5/4, // backward right
   ]
 
-  const binaurals = coordinates.map((position) => {
+  const binaurals = angles.map((angle) => {
     return engine.audio.binaural.create()
-      .update(position)
       .to(lowpassFilter)
+      .update({
+        x: Math.cos(angle) * distance,
+        y: Math.sin(angle) * distance,
+      })
   })
 
   const synths = []
 
   let wasAbove
 
-  bus.gain.value = engine.utility.fromDb(-1.5)
+  bus.gain.value = engine.utility.fromDb(0)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)
@@ -43,7 +47,7 @@ content.system.audio.surface.waves = (() => {
   highpassFilter.connect(bus)
 
   function createSynths() {
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < binaurals.length; i += 1) {
       const binaural = binaurals[i]
 
       const synth = engine.audio.synth.createBuffer({
@@ -88,8 +92,8 @@ content.system.audio.surface.waves = (() => {
     synths.forEach((synth, i) => {
       let {x, y, angle} = engine.position.get()
 
-      x += Math.cos(angle) * coordinates[i].x
-      y += Math.cos(angle) * coordinates[i].y
+      x += Math.cos(angle + angles[i]) * distance
+      y += Math.sin(angle + angles[i]) * distance
 
       const value = content.system.surface.value(x, y)
 

@@ -1,8 +1,6 @@
-// TODO: Handle catching air differently
-// when switching, z still obeys gravity, but movement deceleration switches to content.const.airResistanceDeceleration
-
 content.system.movement = (() => {
-  const pubsub = engine.utility.pubsub.create()
+  const pubsub = engine.utility.pubsub.create(),
+    reflectionRate = 1/2
 
   let isTurbo = false,
     isCatchingAir = false,
@@ -10,20 +8,88 @@ content.system.movement = (() => {
     zVelocity = 0
 
   function checkMovementCollision() {
-    const {angle, deltaVelocity} = engine.movement.get()
-    const z = content.system.z.get()
+    const movement = engine.movement.get()
 
-    let {x, y} = engine.position.get()
+    if (!movement.velocity) {
+      return false
+    }
 
-    x += Math.cos(angle) * deltaVelocity
-    y += Math.sin(angle) * deltaVelocity
+    const position = engine.position.get(),
+      radius = engine.const.positionRadius,
+      z = content.system.z.get()
 
-    return content.system.terrain.isCollision(x, y, z, deltaVelocity)
+    const cos = Math.cos(movement.angle + position.angle),
+      sin = Math.sin(movement.angle + position.angle)
+
+    const deltaCos = cos * movement.deltaVelocity,
+      deltaSin = sin * movement.deltaVelocity,
+      radiusCos = cos * radius,
+      radiusSin = sin * radius
+
+    const points = [
+      {
+        x: deltaCos + radiusCos,
+        y: deltaSin + radiusSin,
+        z: z + radius,
+      },
+      {
+        x: deltaCos - radiusCos,
+        y: deltaSin + radiusSin,
+        z: z + radius,
+      },
+      {
+        x: deltaCos + radiusCos,
+        y: deltaSin - radiusSin,
+        z: z - radius,
+      },
+      {
+        x: deltaCos - radiusCos,
+        y: deltaSin - radiusSin,
+        z: z - radius,
+      },
+    ]
+
+    for (const {x, y, z} of points) {
+      if (content.system.terrain.isCollision(x, y, z)) {
+        return true
+      }
+    }
+
+    return false
   }
 
-  function checkZCollision(z, leeway) {
-    const {x, y} = engine.position.get()
-    return content.system.terrain.isCollision(x, y, z, leeway)
+  function checkZCollision(z) {
+    const position = engine.position.get(),
+      radius = engine.const.positionRadius
+
+    const points = [
+      {
+        x: position.x + radius,
+        y: position.y + radius,
+      },
+      {
+        x: position.x - radius,
+        y: position.y + radius,
+      },
+      {
+        x: position.x + radius,
+        y: position.y - radius,
+      },
+      {
+        x: position.x - radius,
+        y: position.y - radius,
+      },
+    ]
+
+    z += engine.utility.sign(zVelocity) * engine.const.positionRadius
+
+    for (const {x, y} of points) {
+      if (content.system.terrain.isCollision(x, y, z)) {
+        return true
+      }
+    }
+
+    return false
   }
 
   function handleSurface(controls) {
@@ -83,7 +149,7 @@ content.system.movement = (() => {
       engine.movement.set({
         angle: engine.utility.normalizeAngle(movement.angle + Math.PI),
         rotation: movement.rotation,
-        velocity: movement.velocity / 2,
+        velocity: movement.velocity * reflectionRate,
       })
 
       return pubsub.emit('underwater-collision', {
@@ -145,7 +211,7 @@ content.system.movement = (() => {
         } else {
           if (zVelocity < -1 && velocity) {
             // Skip like a stone
-            zVelocity /= -2
+            zVelocity *= -reflectionRate
           } else {
             // Eventually rest
             zVelocity = 0
@@ -175,16 +241,20 @@ content.system.movement = (() => {
       zVelocity = Math.min(0, zVelocity + (delta * engine.const.movementDeceleration))
     }
 
+    if (!zVelocity) {
+      return
+    }
+
     z = z + (delta * zVelocity)
 
-    if (checkZCollision(z, delta * Math.abs(zVelocity))) {
+    if (checkZCollision(z)) {
       // Bounce off and prevent movement
       pubsub.emit('underwater-collision', {
         angle: 0,
         velocity: Math.abs(zVelocity) / content.const.underwaterTurboMaxVelocity,
       })
 
-      zVelocity /= -2
+      zVelocity *= -reflectionRate
       return
     }
 

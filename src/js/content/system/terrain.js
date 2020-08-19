@@ -29,18 +29,14 @@ content.system.terrain = (() => {
     return value
   }
 
-  function isCollision(x, y, z, leeway = engine.const.zero) {
+  function isCollision(x, y, z) {
     const floorZ = getFloorZ(x, y)
 
-    if (engine.utility.between(z, floorZ - leeway, floorZ + leeway)) {
-      return true
+    if (z > floorZ) {
+      return false
     }
 
-    if (z < floorZ) {
-      // TODO: Check caves
-    }
-
-    return false
+    return true
   }
 
   return {

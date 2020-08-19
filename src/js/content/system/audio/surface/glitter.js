@@ -70,13 +70,16 @@ content.system.audio.surface.glitter = (() => {
   filter.connect(bus)
 
   function createGrain(z) {
-    z = Math.min(0, z)
-
-    let zBias = (1 - ((z / content.const.lightZone) ** 2))
+    let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
 
     const {x, y} = engine.position.get()
     const surface = content.system.surface.value(x, y)
     zBias *= surface ** 0.5
+
+    if (content.system.movement.isCatchingAir()) {
+      const height = content.system.surface.height(x, y)
+      zBias = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, zBias, 1), 0, 1) ** 0.5
+    }
 
     const feedbackDelay = engine.utility.choose(feedbackDelays, Math.random()),
       panner = context.createStereoPanner()

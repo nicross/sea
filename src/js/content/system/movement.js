@@ -88,7 +88,7 @@ content.system.movement = (() => {
 
       return pubsub.emit('underwater-collision', {
         angle: movement.angle,
-        velocity: movement.velocity,
+        velocity: movement.velocity / content.const.underwaterTurboMaxVelocity,
       })
     }
   }
@@ -180,8 +180,8 @@ content.system.movement = (() => {
     if (checkZCollision(z, delta * Math.abs(zVelocity))) {
       // Bounce off and prevent movement
       pubsub.emit('underwater-collision', {
-        velocity: zVelocity,
-        z: engine.utility.sign(zVelocity),
+        angle: 0,
+        velocity: Math.abs(zVelocity) / content.const.underwaterTurboMaxVelocity,
       })
 
       zVelocity /= -2

@@ -1,26 +1,45 @@
 content.system.audio.underwater.collision = (() => {
   const bus = engine.audio.mixer.createBus(),
-    context = engine.audio.context(),
-    filter = context.createBiquadFilter(),
-    throttleRate = 1000/10
-
-  // TODO: Reverb send
+    reverb = engine.audio.send.reverb.create(),
+    throttleRate = 1000/60
 
   let throttle = 0
 
-  bus.gain.value = engine.utility.fromDb(-6)
-  filter.connect(bus)
+  bus.gain.value = engine.utility.fromDb(-3)
+  bus.connect(reverb.input)
+
+  reverb.update({
+    x: 0,
+    y: 0,
+  })
 
   function trigger({
     angle = 0,
     velocity = 0,
-    z = 0,
   } = {}) {
-    console.log('bang', angle, velocity, z)
+    const synth = engine.audio.synth.createBuffer({
+      buffer: engine.audio.buffer.noise.white(),
+    }).filtered({
+      frequency: engine.utility.lerpExp(300, 2000, velocity, 2),
+    })
 
-    // TODO: Build synth
-    // TODO: Position in space
-    // TODO: Automate parameters
+    const binaural = engine.audio.binaural.create()
+      .from(synth.output)
+      .to(bus)
+      .update({
+        x: Math.cos(angle),
+        y: Math.sin(angle),
+      })
+
+    const duration = engine.utility.lerp(1/4, 1, velocity)
+    const now = engine.audio.time()
+
+    synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
+    synth.param.gain.exponentialRampToValueAtTime(1, now + 1/32)
+    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, now + duration)
+
+    synth.stop(now + duration)
+    setTimeout(() => binaural.destroy(), duration * 1000)
   }
 
   return {

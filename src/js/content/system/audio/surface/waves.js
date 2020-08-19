@@ -5,15 +5,16 @@ content.system.audio.surface.waves = (() => {
     lowpassFilter = context.createBiquadFilter()
 
   const distance = 4,
-    highpassFrequency = 80,
+    highpassFrequency = 40,
     lowpassDropoffRate = 2.25,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
     waveFrequencyDropoff = 3,
+    waveFrequencyRange = 1/4, // 2 octaves
     waveGainDropoff = 3,
-    waveMaxFrequency = 10000,
+    waveMaxFrequency = 5000,
     waveMaxGain = 1,
-    waveMinFrequency = 100,
+    waveMinFrequency = 500,
     waveMinGain = 1/2
 
   // 0 is forward
@@ -52,7 +53,14 @@ content.system.audio.surface.waves = (() => {
 
       const synth = engine.audio.synth.createBuffer({
         buffer: engine.audio.buffer.noise.pink(),
-      }).filtered()
+      })
+
+      synth.chainAssign('lowpassFilter', context.createBiquadFilter())
+      synth.lowpassFilter.frequency.value = engine.const.maxFrequency
+
+      synth.chainAssign('highpassFilter', context.createBiquadFilter())
+      synth.highpassFilter.frequency.value = engine.const.minFrequency
+      synth.highpassFilter.type = 'highpass'
 
       binaural.from(synth)
       synths.push(synth)
@@ -88,7 +96,9 @@ content.system.audio.surface.waves = (() => {
     wasAbove = isAbove
   }
 
-  function updateSynths() {
+  function updateSynths(z) {
+    const isSurface = z >= 0
+
     synths.forEach((synth, i) => {
       let {x, y, angle} = engine.position.get()
 
@@ -97,10 +107,12 @@ content.system.audio.surface.waves = (() => {
 
       const value = content.system.surface.value(x, y)
 
-      const frequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
-        gain = engine.utility.lerpExp(waveMinGain, waveMaxGain, value, waveGainDropoff)
+      const gain = engine.utility.lerpExp(waveMinGain, waveMaxGain, value, waveGainDropoff),
+        maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
+        minFrequency = isSurface ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
 
-      engine.audio.ramp.set(synth.filter.frequency, frequency)
+      engine.audio.ramp.set(synth.highpassFilter.frequency, minFrequency)
+      engine.audio.ramp.set(synth.lowpassFilter.frequency, maxFrequency)
       engine.audio.ramp.set(synth.param.gain, gain)
     })
   }
@@ -131,7 +143,7 @@ content.system.audio.surface.waves = (() => {
       }
 
       updateLowpassFilter(z)
-      updateSynths()
+      updateSynths(z)
     },
   }
 })()

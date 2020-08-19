@@ -2,8 +2,8 @@ content.system.audio.underwater.momentum = (() => {
   const binaural = engine.audio.binaural.create(),
     bus = engine.audio.mixer.createBus()
 
-  const frequencyDropoff = 1/2,
-    gainDropoff = 1,
+  const frequencyDropoff = 1/4,
+    gainDropoff = 1/2,
     maxFrequency = 200,
     minFrequency = 80
 

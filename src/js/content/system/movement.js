@@ -50,7 +50,7 @@ content.system.movement = (() => {
     ]
 
     for (const {x, y, z} of points) {
-      if (content.system.terrain.isCollision(x, y, z)) {
+      if (content.system.terrain.isSolid(x, y, z)) {
         return true
       }
     }
@@ -84,7 +84,7 @@ content.system.movement = (() => {
     z += engine.utility.sign(zVelocity) * engine.const.positionRadius
 
     for (const {x, y} of points) {
-      if (content.system.terrain.isCollision(x, y, z)) {
+      if (content.system.terrain.isSolid(x, y, z)) {
         return true
       }
     }

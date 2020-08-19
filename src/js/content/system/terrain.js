@@ -1,50 +1,11 @@
-content.system.terrain = (() => {
-  const floor = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'floor', 8),
-    floorHeight = 250,
-    floorScale = 1000
+content.system.terrain = {
+  isSolid: function (x, y, z) {
+    const floor = this.floor.value(x, y)
 
-  const hill = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'hill', 4),
-    hillHeight = 250,
-    hillScale = 100
-
-  const hillMix = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'hillMix', 2),
-    hillMixScale = 1000
-
-  const trench = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'trench', 4),
-    trenchHeight = 1500,
-    trenchScaleX = 2500,
-    trenchScaleY = 10000
-
-  const trenchMix = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'trenchMix', 4),
-    trenchMixScaleX = 2500,
-    trenchMixScaleY = 10000
-
-  function getFloorZ(x, y) {
-    let value = content.const.lightZone - floorHeight - hillHeight
-
-    value += floor.value(x / floorScale, y / floorScale) * floorHeight
-    value += hill.value(x / hillScale, y / hillScale) * hillMix.value(x / hillMixScale, y / hillMixScale) * hillHeight
-    value -= (trench.value(x / trenchScaleX, y / trenchScaleY) ** 0.5) * (trenchMix.value(x / trenchMixScaleX, y / trenchMixScaleY) ** 2) * trenchHeight
-
-    return value
-  }
-
-  function isCollision(x, y, z) {
-    const floorZ = getFloorZ(x, y)
-
-    if (z > floorZ) {
+    if (z > floor) {
       return false
     }
 
     return true
   }
-
-  return {
-    getCurrentFloorZ: function () {
-      const {x, y} = engine.position.get()
-      return getFloorZ(x, y)
-    },
-    getFloorZ,
-    isCollision,
-  }
-})()
+}

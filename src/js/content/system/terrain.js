@@ -6,6 +6,14 @@ content.system.terrain = {
       return false
     }
 
-    return true
+    /*
+      TODO: Other terrain features:
+      - latitudinal tubes
+      - longitudinal tubes
+      - vertical tubes
+      - expanses
+    */
+
+    return this.lattice.isSolid(x, y, z)
   }
 }

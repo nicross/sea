@@ -43,16 +43,7 @@ content.system.scan = (() => {
       // Empty results
       // Don't bother hurting the frame rate at the surface
       // But allow its use like a "honk"
-      return {
-        center: {},
-        aheadL: {},
-        aheadR: {},
-        sideL: {},
-        sideR: {},
-        aheadR: {},
-        behindL: {},
-        behindR: {},
-      }
+      return {}
     }
 
     const position = {
@@ -126,7 +117,7 @@ content.system.scan = (() => {
       }
 
       const results = scan()
-      // TODO: trigger audio
+      content.system.audio.scan.trigger(results)
       // TODO: generate treasure
 
       cooldownTimer = performance.now()

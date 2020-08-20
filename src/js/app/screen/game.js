@@ -21,6 +21,10 @@ app.screen.game = (() => {
 
     content.system.movement.update(controls)
     content.system.audio.engine.update(controls)
+
+    if (ui.scan) {
+      content.system.scan.trigger()
+    }
   }
 
   function onEngineStateReset() {

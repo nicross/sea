@@ -4,7 +4,7 @@ content.system.scan = (() => {
     unit2 = Math.sqrt(2) / 2,
     unit3 = Math.sqrt(3) / 3
 
-  // TODO: cooldown
+  let cooldownTimer = 0
 
   function raytrace(position, vector) {
     let {
@@ -38,6 +38,22 @@ content.system.scan = (() => {
   function scan() {
     const {angle, x, y} = engine.position.get()
     const z = content.system.z.get()
+
+    if (z >= 0) {
+      // Empty results
+      // Don't bother hurting the frame rate at the surface
+      // But allow its use like a "honk"
+      return {
+        center: {},
+        aheadL: {},
+        aheadR: {},
+        sideL: {},
+        sideR: {},
+        aheadR: {},
+        behindL: {},
+        behindR: {},
+      }
+    }
 
     const position = {
       angle,
@@ -99,15 +115,22 @@ content.system.scan = (() => {
   return {
     benchmark: function () {
       const start = performance.now()
-      const result = scan()
-      const time = performance.now() - start
-      console.log(result)
-      return time
+      this.trigger()
+      return performance.now() - start
     },
     trigger: function () {
+      // Basic cooldown timer
+      // TODO: Make more sophisticated, perhaps an audio cue indicating it's recharged
+      if (performance.now() < cooldownTimer + content.const.scanCooldown) {
+        return this
+      }
+
       const results = scan()
       // TODO: trigger audio
       // TODO: generate treasure
+
+      cooldownTimer = performance.now()
+
       return this
     },
   }

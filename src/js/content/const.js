@@ -10,6 +10,7 @@ content.const = {
   dragDeceleration: 1,
   normalDeceleration: engine.const.gravity,
   lightZone: -1000,
+  scanCooldown: 2 * 1000,
   surfaceTurboAcceleration: engine.const.gravity,
   surfaceNormalAcceleration: engine.const.gravity / 2,
   surfaceTurboMaxVelocity: 30,

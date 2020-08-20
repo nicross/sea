@@ -22,29 +22,27 @@ content.system.movement = (() => {
       sin = Math.sin(movement.angle + position.angle)
 
     const deltaCos = cos * movement.deltaVelocity,
-      deltaSin = sin * movement.deltaVelocity,
-      radiusCos = cos * radius,
-      radiusSin = sin * radius
+      deltaSin = sin * movement.deltaVelocity
 
     const points = [
       {
-        x: deltaCos + radiusCos,
-        y: deltaSin + radiusSin,
+        x: position.x + deltaCos + radius,
+        y: position.y + deltaSin + radius,
         z: z + radius,
       },
       {
-        x: deltaCos - radiusCos,
-        y: deltaSin + radiusSin,
+        x: position.x + deltaCos - radius,
+        y: position.y + deltaSin + radius,
         z: z + radius,
       },
       {
-        x: deltaCos + radiusCos,
-        y: deltaSin - radiusSin,
+        x: position.x + deltaCos + radius,
+        y: position.y + deltaSin - radius,
         z: z - radius,
       },
       {
-        x: deltaCos - radiusCos,
-        y: deltaSin - radiusSin,
+        x: position.x + deltaCos - radius,
+        y: position.y + deltaSin - radius,
         z: z - radius,
       },
     ]

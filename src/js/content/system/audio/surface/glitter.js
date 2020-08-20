@@ -21,7 +21,7 @@ content.system.audio.surface.glitter = (() => {
     54,
     // A4
     57,
-    58,
+    59,
     61,
     64,
     66,

@@ -8,12 +8,12 @@ content.system.terrain = {
 
     /*
       TODO: Other terrain features:
-      - latitudinal tubes
-      - longitudinal tubes
-      - vertical tubes
       - expanses
     */
 
     return this.lattice.isSolid(x, y, z)
+      && this.latitudinalTube.isSolid(x, y, z)
+      && this.longitudinalTube.isSolid(x, y, z)
+      && this.verticalTube.isSolid(x, y, z)
   }
 }

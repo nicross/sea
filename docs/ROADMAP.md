@@ -13,10 +13,6 @@
 - treasure
 
 ## Gameplan
-- Cave generation
-  - Latitudinal tubes
-  - Longitudinal tubes
-  - Vertical tubes
 - Treasure generator
   - Define archetypes
   - Placement and spawning rules

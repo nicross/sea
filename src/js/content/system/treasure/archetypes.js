@@ -35,28 +35,128 @@ content.system.treasure.archetypes = (() => {
 })()
 
 content.system.treasure.archetypes.register('alien', 1, (srand) => {
-  return engine.utility.choose([
+  const names = [
+    'Alien Computational Device',
+    'Alien Communications Device',
+    'Alien Navigational Device',
+    'Alien Translation Device',
+    'Unknown Alien Technology',
+  ]
+
+  return {
+    name: engine.utility.choose(names, srand()),
+    value: 1000,
+  }
+})
+
+content.system.treasure.archetypes.register('bone', 10, (srand) => {
+  const adjectives = [
     {
-      name: 'Alien Computational Device',
-      value: 1000,
+      name: 'Chipped',
+      modifier: (value) => value,
+      weight: 2,
     },
     {
-      name: 'Alien Communications Device',
-      value: 1000,
+      name: 'Partial',
+      modifier: (value) => value * 0.5,
+      weight: 3,
     },
     {
-      name: 'Alien Navigational Device',
-      value: 1000,
+      name: 'Fossilized',
+      modifier: (value) => value * 2,
+      weight: 1,
+    },
+  ]
+
+  const animals = [
+    {
+      name: 'Human',
+      value: 1,
+      weight: 1,
     },
     {
-      name: 'Alien Translation Device',
-      value: 1000,
+      name: 'Icthyosaur',
+      value: 6,
+      weight: 2,
     },
     {
-      name: 'Unknown Alien Technology',
-      value: 1000,
+      name: 'Megalodon',
+      value: 10,
+      weight: 1,
     },
-  ], srand())
+    {
+      name: 'Plesiosaur',
+      value: 6,
+      weight: 2,
+    },
+    {
+      name: 'Pterosaur',
+      value: 5,
+      weight: 1,
+    },
+    {
+      name: 'Orca',
+      value: 3,
+      weight: 2,
+    },
+    {
+      name: 'Turtle',
+      value: 2,
+      weight: 2,
+    },
+    {
+      name: 'Whale',
+      value: 4,
+      weight: 2,
+    },
+  ]
+
+  const types = [
+    {
+      modifier: (value) => value * 4,
+      name: 'Femur',
+      weight: 3,
+    },
+    {
+      modifier: (value) => value * 4,
+      name: 'Humerus',
+      weight: 3,
+    },
+    {
+      modifier: (value) => value * 3,
+      name: 'Jawbone',
+      weight: 2,
+    },
+    {
+      modifier: (value) => value * 2,
+      name: 'Rib',
+      weight: 3,
+    },
+    {
+      modifier: (value) => value * 10,
+      name: 'Skull',
+      weight: 1,
+    },
+    {
+      modifier: (value) => value,
+      name: 'Tooth',
+      weight: 5,
+    },
+    {
+      modifier: (value) => value,
+      name: 'Vertibrae',
+      weight: 5,
+    },
+  ]
+
+  const adjective = engine.utility.chooseWeighted(adjectives, srand()),
+    animal = engine.utility.chooseWeighted(animals, srand()),
+    type = engine.utility.chooseWeighted(types, srand())
+
+  return {
+    name: `${adjective.name} ${animal.name} ${type.name}`,
+    value: adjective.modifier(type.modifier(animal.value)),
+  }
 })
 
 content.system.treasure.archetypes.register('coin', 5, (srand) => {
@@ -199,7 +299,7 @@ content.system.treasure.archetypes.register('dogtag', 5, (srand) => {
   }
 })
 
-content.system.treasure.archetypes.register('fossil', 10, (srand) => {
+content.system.treasure.archetypes.register('shell', 10, (srand) => {
   const adjectives = [
     {
       name: 'Chipped',
@@ -207,105 +307,61 @@ content.system.treasure.archetypes.register('fossil', 10, (srand) => {
       weight: 2,
     },
     {
+      name: 'Fossilized',
+      modifier: (value) => value * 2,
+      weight: 1,
+    },
+    {
       name: 'Partial',
       modifier: (value) => value * 0.5,
       weight: 3,
-    },
-    {
-      name: 'Pristine',
-      modifier: (value) => value * 2,
-      weight: 1,
     },
   ]
 
   const animals = [
     {
-      name: 'Human',
-      value: 1,
-      weight: 1,
+      name: 'Barnacle',
+      value: 2,
+      weight: 3,
     },
     {
-      name: 'Icthyosaur',
-      value: 6,
+      name: 'Clam',
+      value: 4,
       weight: 2,
     },
     {
-      name: 'Megalodon',
+      name: 'Mussel',
+      value: 3,
+      weight: 4,
+    },
+    {
+      name: 'Nautilus',
       value: 10,
       weight: 1,
     },
     {
-      name: 'Plesiosaur',
-      value: 6,
-      weight: 2,
-    },
-    {
-      name: 'Pterosaur',
+      name: 'Oyster',
       value: 5,
-      weight: 1,
+      weight: 2,
     },
     {
-      name: 'Orca',
-      value: 3,
-      weight: 2,
+      name: 'Snail',
+      value: 2,
+      weight: 5,
     },
     {
       name: 'Turtle',
-      value: 2,
+      value: 5,
       weight: 2,
-    },
-    {
-      name: 'Whale',
-      value: 4,
-      weight: 2,
-    },
-  ]
-
-  const types = [
-    {
-      modifier: (value) => value * 4,
-      name: 'Femur',
-      weight: 3,
-    },
-    {
-      modifier: (value) => value * 4,
-      name: 'Humerus',
-      weight: 3,
-    },
-    {
-      modifier: (value) => value * 3,
-      name: 'Jawbone',
-      weight: 2,
-    },
-    {
-      modifier: (value) => value * 2,
-      name: 'Rib',
-      weight: 3,
-    },
-    {
-      modifier: (value) => value * 10,
-      name: 'Skull',
-      weight: 1,
-    },
-    {
-      modifier: (value) => value,
-      name: 'Tooth',
-      weight: 5,
-    },
-    {
-      modifier: (value) => value,
-      name: 'Vertibrae',
-      weight: 5,
     },
   ]
 
   const adjective = engine.utility.chooseWeighted(adjectives, srand()),
-    animal = engine.utility.chooseWeighted(animals, srand()),
-    type = engine.utility.chooseWeighted(types, srand())
+    animal = engine.utility.chooseWeighted(animals, srand())
 
   return {
-    name: `${adjective.name} ${animal.name} ${type.name}`,
-    value: adjective.modifier(type.modifier(animal.value)),
+    name: `${adjective.name} ${animal.name} Shell`,
+    value: adjective.modifier(animal.value),
   }
 })
 

@@ -263,39 +263,39 @@ content.system.treasure.archetypes.register('fossil', 10, (srand) => {
 
   const types = [
     {
-      modifier: (value) => value,
+      modifier: (value) => value * 4,
       name: 'Femur',
-      weight: 4,
-    },
-    {
-      modifier: (value) => value,
-      name: 'Humerus',
-      weight: 4,
-    },
-    {
-      modifier: (value) => value,
-      name: 'Jawbone',
       weight: 3,
     },
     {
-      modifier: (value) => value,
-      name: 'Rib',
+      modifier: (value) => value * 4,
+      name: 'Humerus',
+      weight: 3,
+    },
+    {
+      modifier: (value) => value * 3,
+      name: 'Jawbone',
       weight: 2,
     },
     {
-      modifier: (value) => value,
+      modifier: (value) => value * 2,
+      name: 'Rib',
+      weight: 3,
+    },
+    {
+      modifier: (value) => value * 10,
       name: 'Skull',
-      weight: 10,
+      weight: 1,
     },
     {
       modifier: (value) => value,
       name: 'Tooth',
-      weight: 1,
+      weight: 5,
     },
     {
       modifier: (value) => value,
       name: 'Vertibrae',
-      weight: 1,
+      weight: 5,
     },
   ]
 

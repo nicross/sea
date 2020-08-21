@@ -53,14 +53,8 @@ content.system.audio.scan = (() => {
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.exponentialRampToValueAtTime(1, now + 1/32)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, now + 0.5)
-    synth.param.gain.setValueAtTime(engine.const.zeroGain, now + 2)
-    synth.param.gain.exponentialRampToValueAtTime(1/8, now + 2.5 - engine.const.zeroTime)
-    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + 2.5)
 
-    synth.param.detune.setValueAtTime(-1200, now + 2)
-    synth.param.detune.linearRampToValueAtTime(0, now + 2.5)
-
-    synth.stop(now + 3 + engine.const.zeroTime)
+    synth.stop(now + 0.5)
   }
 
   function render(scan) {

@@ -117,10 +117,10 @@ content.system.audio.scan = (() => {
       return
     }
 
-    const gain = (1 - value) ** 4,
+    const gain = Math.max(engine.const.zeroGain, (1 - value) ** 4),
       panner = context.createStereoPanner()
 
-    when += value / 4
+    when += value / 8
 
     const synth = engine.audio.synth.createSimple({
       frequency: engine.utility.midiToFrequency(note),

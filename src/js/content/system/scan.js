@@ -1,13 +1,13 @@
 content.system.scan = (() => {
   const maxDistance = 50,
     pubsub = engine.utility.pubsub.create(),
-    stepDistance = 1,
+    stepDistance = 1/4,
     unit2 = Math.sqrt(2) / 2,
     unit3 = Math.sqrt(3) / 3
 
   let isCooldown = false
 
-  function raytrace(position, vector) {
+  function doRaytrace(position, vector) {
     let {
       x: dx = 0,
       y: dy = 0,
@@ -55,35 +55,43 @@ content.system.scan = (() => {
     }
 
     return {
-      down: raytrace(position, {z: -1}),
-      forward: raytrace(position, {x: 1}),
-      forwardDown: raytrace(position, {x: unit2, z: -unit2}),
-      forwardLeft: raytrace(position, {x: unit2, y: -unit2}),
-      forwardLeftDown: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      forwardLeftUp: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      forwardRight: raytrace(position, {x: unit2, y: unit2}),
-      forwardRightDown: raytrace(position, {x: unit3, y: unit3, z: -unit3}),
-      forwardRightUp: raytrace(position, {x: unit3, y: unit3, z: unit3}),
-      forwardUp: raytrace(position, {x: unit2, z: unit2}),
-      left: raytrace(position, {y: -1}),
-      leftDown: raytrace(position, {y: -unit2, z: -unit2}),
-      leftUp: raytrace(position, {y: -unit2, z: unit2}),
+      down: await scheduleRaytrace(position, {z: -1}),
+      forward: await scheduleRaytrace(position, {x: 1}),
+      forwardDown: await scheduleRaytrace(position, {x: unit2, z: -unit2}),
+      forwardLeft: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
+      forwardLeftDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
+      forwardLeftUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
+      forwardRight: await scheduleRaytrace(position, {x: unit2, y: unit2}),
+      forwardRightDown: await scheduleRaytrace(position, {x: unit3, y: unit3, z: -unit3}),
+      forwardRightUp: await scheduleRaytrace(position, {x: unit3, y: unit3, z: unit3}),
+      forwardUp: await scheduleRaytrace(position, {x: unit2, z: unit2}),
+      left: await scheduleRaytrace(position, {y: -1}),
+      leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
+      leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
       /*
-      reverse: raytrace(position, {x: -1}),
-      reverseDown: raytrace(position, {x: -unit2, z: -unit2}),
-      reverseLeft: raytrace(position, {x: -unit2, y: -unit2}),
-      reverseLeftDown: raytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
-      reverseLeftUp: raytrace(position, {x: -unit3, y: -unit3, z: unit3}),
-      reverseRight: raytrace(position, {x: unit2, y: -unit2}),
-      reverseRightDown: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      reverseRightUp: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      reverseUp: raytrace(position, {x: -unit2, z: unit2}),
+      reverse: await scheduleRaytrace(position, {x: -1}),
+      reverseDown: await scheduleRaytrace(position, {x: -unit2, z: -unit2}),
+      reverseLeft: await scheduleRaytrace(position, {x: -unit2, y: -unit2}),
+      reverseLeftDown: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
+      reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: unit3}),
+      reverseRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
+      reverseRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
+      reverseRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
+      reverseUp: await scheduleRaytrace(position, {x: -unit2, z: unit2}),
       */
-      right: raytrace(position, {y: 1}),
-      rightDown: raytrace(position, {y: unit2, z: -unit2}),
-      rightUp: raytrace(position, {y: unit2, z: unit2}),
-      up: raytrace(position, {z: 1}),
+      right: await scheduleRaytrace(position, {y: 1}),
+      rightDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
+      rightUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
+      up: await scheduleRaytrace(position, {z: 1}),
     }
+  }
+
+  async function scheduleRaytrace(...args) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(doRaytrace(...args))
+      })
+    })
   }
 
   return engine.utility.pubsub.decorate({

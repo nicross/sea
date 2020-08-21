@@ -177,10 +177,13 @@ content.system.audio.scan = (() => {
   }
 
   return {
-    trigger: function (scan) {
-      honk()
+    complete: function (scan) {
       render(scan)
       recharge()
+      return this
+    },
+    trigger: function (scan) {
+      honk()
       return this
     },
   }
@@ -188,5 +191,6 @@ content.system.audio.scan = (() => {
 
 // HACK: Essentially app.once('activate')
 engine.loop.once('frame', () => {
-  content.system.scan.on('trigger', (scan) => content.system.audio.scan.trigger(scan))
+  content.system.scan.on('complete', (scan) => content.system.audio.scan.complete(scan))
+  content.system.scan.on('trigger', () => content.system.audio.scan.trigger())
 })

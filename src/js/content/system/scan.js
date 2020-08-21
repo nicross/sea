@@ -36,7 +36,7 @@ content.system.scan = (() => {
       : -1
   }
 
-  function scan() {
+  async function scan() {
     const {angle, x, y} = engine.position.get()
     const z = content.system.z.get()
 
@@ -93,15 +93,16 @@ content.system.scan = (() => {
       return performance.now() - start
     },
     isCooldown: () => isCooldown,
-    trigger: function () {
+    trigger: async function () {
       if (isCooldown) {
         return this
       }
 
       isCooldown = true
+      pubsub.emit('trigger')
 
-      const results = scan()
-      pubsub.emit('trigger', results)
+      const results = await scan()
+      pubsub.emit('complete', results)
 
       engine.utility.timing.promise(content.const.scanCooldown).then(() => {
         isCooldown = false

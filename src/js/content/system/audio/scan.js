@@ -25,6 +25,34 @@ content.system.audio.scan = (() => {
     synth.stop(now + 0.5)
   }
 
+  function recharge() {
+    const synth = engine.audio.synth.createFm({
+      carrierFrequency: engine.utility.midiToFrequency(33),
+      carrierType: 'square',
+      modDepth: 0,
+      modFrequency: 0,
+    }).filtered({
+      frequency: engine.utility.midiToFrequency(45),
+    }).connect(bus)
+
+    const now = engine.audio.time()
+
+    const attack = now + (content.const.scanCooldown / 1000) - 1/32,
+      release = now + (content.const.scanCooldown / 1000)
+
+    synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
+    synth.param.gain.exponentialRampToValueAtTime(1/4, attack)
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
+
+    synth.param.mod.depth.setValueAtTime(0, now)
+    synth.param.mod.depth.linearRampToValueAtTime(5, release)
+
+    synth.param.mod.frequency.setValueAtTime(0, now)
+    synth.param.mod.frequency.linearRampToValueAtTime(16, release)
+
+    synth.stop(release)
+  }
+
   function render(scan) {
     // up
     renderGrain({
@@ -152,6 +180,7 @@ content.system.audio.scan = (() => {
     trigger: function (scan) {
       honk()
       render(scan)
+      recharge()
       return this
     },
   }

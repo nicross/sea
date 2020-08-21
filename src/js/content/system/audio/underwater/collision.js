@@ -1,17 +1,10 @@
 content.system.audio.underwater.collision = (() => {
   const bus = engine.audio.mixer.createBus(),
-    reverb = engine.audio.send.reverb.create(),
     throttleRate = 1000/60
 
   let throttle = 0
 
   bus.gain.value = engine.utility.fromDb(-3)
-  bus.connect(reverb.input)
-
-  reverb.update({
-    x: 0,
-    y: 0,
-  })
 
   function trigger({
     angle = 0,
@@ -22,6 +15,8 @@ content.system.audio.underwater.collision = (() => {
     }).filtered({
       frequency: engine.utility.lerpExp(300, 2000, velocity, 2),
     })
+
+    content.system.reverb.from(synth.output)
 
     const binaural = engine.audio.binaural.create()
       .from(synth.output)

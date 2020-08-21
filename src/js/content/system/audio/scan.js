@@ -1,7 +1,6 @@
 content.system.audio.scan = (() => {
   const bus = engine.audio.mixer.createBus(),
-    context = engine.audio.context(),
-    reverb = engine.audio.send.reverb.create()
+    context = engine.audio.context()
 
   const frequencies = {}
   ;[
@@ -36,7 +35,6 @@ content.system.audio.scan = (() => {
   })
 
   bus.gain.value = engine.utility.fromDb(-6)
-  reverb.update({x: 0, y: 0})
 
   function honk() {
     const root = frequencies[69]
@@ -48,7 +46,7 @@ content.system.audio.scan = (() => {
       modtype: 'sawtooth',
     }).connect(bus)
 
-    reverb.from(synth.output)
+    content.system.reverb.from(synth.output)
 
     const now = engine.audio.time()
 

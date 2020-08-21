@@ -1,22 +1,18 @@
 content.system.treasure.archetypes = (() => {
-  const defaultKey = 'error',
-    registry = new Map()
+  const registry = new Map()
 
   const defaults = {
     name: 'Error',
     value: 0,
   }
 
-  registry.set(defaultKey, () => ({...defaults}))
-
   return {
-    get: (key) => registry.get(key) || registry.get(defaultKey),
+    get: (key) => registry.get(key) || {...defaults},
     generate: function () {
       const time = Math.floor(Date.now() / 1000)
       const srand = engine.utility.srand('treasure', time)
 
-      const key = engine.utility.choose([...registry.keys()], srand())
-      const generator = registry.get(key)
+      const {generator, key} = engine.utility.chooseWeighted([...registry.values()], srand())
 
       return {
         depth: content.system.z.get(),
@@ -26,14 +22,19 @@ content.system.treasure.archetypes = (() => {
         ...generator(srand),
       }
     },
-    register: function (key, generator) {
-      registry.set(key, generator)
+    register: function (key, weight, generator) {
+      registry.set(key, {
+        generator,
+        key,
+        weight,
+      })
+
       return this
     },
   }
 })()
 
-content.system.treasure.archetypes.register('alien', (srand) => {
+content.system.treasure.archetypes.register('alien', 1, (srand) => {
   return engine.utility.choose([
     {
       name: 'Alien Computational Device',
@@ -58,7 +59,7 @@ content.system.treasure.archetypes.register('alien', (srand) => {
   ], srand())
 })
 
-content.system.treasure.archetypes.register('coin', (srand) => {
+content.system.treasure.archetypes.register('coin', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 5,
@@ -135,11 +136,11 @@ content.system.treasure.archetypes.register('coin', (srand) => {
 
   return {
     name: `${adjective.name} ${material.name} Coin`,
-    value: adjective.modifier(material.modifier(0))
+    value: adjective.modifier(material.value)
   }
 })
 
-content.system.treasure.archetypes.register('dogtag', (srand) => {
+content.system.treasure.archetypes.register('dogtag', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 0.75,
@@ -198,7 +199,7 @@ content.system.treasure.archetypes.register('dogtag', (srand) => {
   }
 })
 
-content.system.treasure.archetypes.register('fossil', (srand) => {
+content.system.treasure.archetypes.register('fossil', 10, (srand) => {
   const adjectives = [
     {
       name: 'Chipped',
@@ -308,7 +309,7 @@ content.system.treasure.archetypes.register('fossil', (srand) => {
   }
 })
 
-content.system.treasure.archetypes.register('trash', (srand) => {
+content.system.treasure.archetypes.register('trash', 20, (srand) => {
   const adjectives = [
     {
       name: 'Damaged',
@@ -368,7 +369,7 @@ content.system.treasure.archetypes.register('trash', (srand) => {
   }
 })
 
-content.system.treasure.archetypes.register('uxo', (srand) => {
+content.system.treasure.archetypes.register('uxo', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 0.5,

@@ -42,8 +42,8 @@ content.system.audio.scan = (() => {
     const synth = engine.audio.synth.createFm({
       carrierFrequency: root,
       modDepth: root / 2,
-      modFrequency: root,
-      modtype: 'sawtooth',
+      modFrequency: root * 2,
+      modType: 'square',
     }).connect(bus)
 
     content.system.reverb.from(synth.output)
@@ -72,8 +72,9 @@ content.system.audio.scan = (() => {
     note = 0,
     pan = 0,
   } = {}) {
-    const panner = context.createStereoPanner(),
-      when = engine.audio.time(0.5 + (delay * 2))
+    const gain = (1 - delay) ** 4,
+      panner = context.createStereoPanner(),
+      when = engine.audio.time(0.25 + (delay * 2))
 
     const synth = engine.audio.synth.createSimple({
       frequency: frequencies[note],
@@ -84,7 +85,7 @@ content.system.audio.scan = (() => {
     panner.connect(bus)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
-    synth.param.gain.exponentialRampToValueAtTime(1, when + 1/32)
+    synth.param.gain.exponentialRampToValueAtTime(gain, when + 1/32)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.5)
 
     synth.stop(when + 0.5)

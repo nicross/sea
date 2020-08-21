@@ -29,9 +29,6 @@ content.system.reverb = (() => {
       return this
     },
     update: function () {
-      // XXX: Minor bug where changing impulse cuts out
-      // Perhaps the engine should create a new convolver and let it get GCed after its tail ends
-
       const z = content.system.z.get()
 
       if (z > content.const.lightZone) {
@@ -59,7 +56,7 @@ content.system.reverb = (() => {
 })()
 
 engine.loop.on('frame', ({frame, paused}) => {
-  if (paused || frame % 60) {
+  if (paused || frame % 15) {
     return
   }
 

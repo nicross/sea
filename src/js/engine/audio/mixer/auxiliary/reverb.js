@@ -2,12 +2,12 @@
 
 engine.audio.mixer.auxiliary.reverb = (() => {
   const context = engine.audio.context(),
-    convolver = context.createConvolver(),
     input = context.createGain(),
     output = engine.audio.mixer.createBus(),
     pubsub = engine.utility.pubsub.create()
 
-  let active = engine.const.reverbActive
+  let active = engine.const.reverbActive,
+    convolver = context.createConvolver()
 
   if (active) {
     input.connect(convolver)
@@ -46,7 +46,16 @@ engine.audio.mixer.auxiliary.reverb = (() => {
       return this
     },
     setImpulse: function (buffer) {
+      input.disconnect()
+
+      convolver = context.createConvolver()
       convolver.buffer = buffer
+      convolver.connect(output)
+
+      if (active) {
+        input.connect(convolver)
+      }
+
       return this
     },
   }, pubsub)

@@ -185,3 +185,8 @@ content.system.audio.scan = (() => {
     },
   }
 })()
+
+// HACK: Essentially app.once('activate')
+engine.loop.once('frame', () => {
+  content.system.scan.on('trigger', (scan) => content.system.audio.scan.trigger(scan))
+})

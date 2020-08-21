@@ -1,10 +1,11 @@
 content.system.scan = (() => {
   const maxDistance = 50,
+    pubsub = engine.utility.pubsub.create(),
     stepDistance = 1,
     unit2 = Math.sqrt(2) / 2,
     unit3 = Math.sqrt(3) / 3
 
-  let cooldownTimer = 0
+  let isCooldown = false
 
   function raytrace(position, vector) {
     let {
@@ -85,26 +86,29 @@ content.system.scan = (() => {
     }
   }
 
-  return {
+  return engine.utility.pubsub.decorate({
     benchmark: function () {
       const start = performance.now()
       this.trigger()
       return performance.now() - start
     },
+    isCooldown: () => isCooldown,
     trigger: function () {
-      // Basic cooldown timer
-      // TODO: Make more sophisticated, perhaps an audio cue indicating it's recharged
-      if (performance.now() < cooldownTimer + content.const.scanCooldown) {
+      if (isCooldown) {
         return this
       }
 
-      const results = scan()
-      content.system.audio.scan.trigger(results)
-      // TODO: generate treasure
+      isCooldown = true
 
-      cooldownTimer = performance.now()
+      const results = scan()
+      pubsub.emit('trigger', results)
+
+      engine.utility.timing.promise(content.const.scanCooldown).then(() => {
+        isCooldown = false
+        pubsub.emit('recharge')
+      })
 
       return this
     },
-  }
+  }, pubsub)
 })()

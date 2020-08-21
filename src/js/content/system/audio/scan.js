@@ -2,42 +2,10 @@ content.system.audio.scan = (() => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context()
 
-  const frequencies = {}
-  ;[
-    // A3
-    45, // below
-    48,
-    50,
-    52,
-    55,
-    // A4
-    57,
-    60, // behind
-    62, // backward/left/right
-    64, // left/right
-    67, // forward left/right
-    // A5
-    69, // ahead
-    72,
-    74,
-    76,
-    79,
-    // A6
-    81,
-    84,
-    86,
-    88,
-    91,
-    // A7
-    93, // above
-  ].forEach((note) => {
-    frequencies[note] = engine.utility.midiToFrequency(note)
-  })
-
   bus.gain.value = engine.utility.fromDb(-6)
 
   function honk() {
-    const root = frequencies[69]
+    const root = engine.utility.midiToFrequency(69)
 
     const synth = engine.audio.synth.createFm({
       carrierFrequency: root,
@@ -58,26 +26,76 @@ content.system.audio.scan = (() => {
   }
 
   function render(scan) {
-    renderGroup(scan.aheadL, -0.5)
-    renderGroup(scan.aheadR, 0.5)
-    renderGroup(scan.behindL, -0.5)
-    renderGroup(scan.behindR, 0.5)
-    renderGroup(scan.center, 0)
-    renderGroup(scan.sideL, -1)
-    renderGroup(scan.sideR, 1)
+    // up
+    renderGrain({
+      note: 89,
+      pan: 0,
+      value: scan.up,
+      when: engine.audio.time(0.5),
+    })
+
+    // up
+    renderGroup([
+      scan.leftUp,
+      scan.forwardLeftUp,
+      scan.forwardUp,
+      scan.forwardRightUp,
+      scan.rightUp,
+    ], {
+      octave: 1,
+      when: engine.audio.time(0.75),
+    })
+
+    // level
+    renderGroup([
+      scan.left,
+      scan.forwardLeft,
+      scan.forward,
+      scan.forwardRight,
+      scan.right,
+    ], {
+      octave: 0,
+      when: engine.audio.time(1),
+    })
+
+    // down
+    renderGroup([
+      scan.leftDown,
+      scan.forwardLeftDown,
+      scan.forwardDown,
+      scan.forwardRightDown,
+      scan.rightDown,
+    ], {
+      octave: -1,
+      when: engine.audio.time(1.25),
+    })
+
+    // down
+    renderGrain({
+      note: 45,
+      pan: 0,
+      value: scan.down,
+      when: engine.audio.time(1.5),
+    })
   }
 
   function renderGrain({
-    delay = 0,
     note = 0,
     pan = 0,
+    value = 0,
+    when = 0,
   } = {}) {
-    const gain = (1 - delay) ** 4,
-      panner = context.createStereoPanner(),
-      when = engine.audio.time(0.25 + (delay * 2))
+    if (value == -1) {
+      return
+    }
+
+    const gain = (1 - value) ** 4,
+      panner = context.createStereoPanner()
+
+    when += value / 4
 
     const synth = engine.audio.synth.createSimple({
-      frequency: frequencies[note],
+      frequency: engine.utility.midiToFrequency(note),
       when,
     }).connect(panner)
 
@@ -91,18 +109,43 @@ content.system.audio.scan = (() => {
     synth.stop(when + 0.5)
   }
 
-  function renderGroup(group = {}, pan) {
-    for (const [note, delay] of Object.entries(group)) {
-      if (note == -1) {
-        continue
-      }
+  function renderGroup(group = [], {octave, when} = {}) {
+    octave *= 12
 
-      renderGrain({
-        delay,
-        note,
-        pan,
-      })
-    }
+    renderGrain({
+      note: 62 + octave,
+      pan: -1,
+      value: group[0],
+      when,
+    })
+
+    renderGrain({
+      note: 67 + octave,
+      pan: -0.5,
+      value: group[1],
+      when,
+    })
+
+    renderGrain({
+      note: 69 + octave,
+      pan: 0,
+      value: group[2],
+      when,
+    })
+
+    renderGrain({
+      note: 64 + octave,
+      pan: 0.5,
+      value: group[3],
+      when,
+    })
+
+    renderGrain({
+      note: 60 + octave,
+      pan: 1,
+      value: group[4],
+      when,
+    })
   }
 
   return {

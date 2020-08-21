@@ -54,52 +54,34 @@ content.system.scan = (() => {
     }
 
     return {
-      center: {
-        // 0deg - A
-        // z + 1
-        93: raytrace(position, {z: 1}),
-        81: raytrace(position, {x: unit2, z: unit2}),
-        69: raytrace(position, {x: 1}),
-        57: raytrace(position, {x: unit2, z: -unit2}),
-        45: raytrace(position, {z: -1}),
-        // 180deg - C
-        72: raytrace(position, {x: -unit2, z: unit2}),
-        60: raytrace(position, {x: -1}),
-        48: raytrace(position, {x: -unit2, z: -unit2})
-      },
-      // 45deg - G
-      aheadL: {
-        79: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
-        67: raytrace(position, {x: unit2, y: -unit2}),
-        55: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      },
-      aheadR: {
-        79: raytrace(position, {x: unit3, y: unit3, z: unit3}),
-        67: raytrace(position, {x: unit2, y: unit2}),
-        55: raytrace(position, {x: unit3, y: unit3, z: -unit3}),
-      },
-      // 90deg - E
-      sideL: {
-        76: raytrace(position, {y: -unit2, z: unit2}),
-        64: raytrace(position, {y: -1}),
-        52: raytrace(position, {y: -unit2, z: -unit2}),
-      },
-      sideR: {
-        76: raytrace(position, {y: unit2, z: unit2}),
-        64: raytrace(position, {y: 1}),
-        52: raytrace(position, {y: unit2, z: -unit2}),
-      },
-      // 135deg - D
-      behindL: {
-        74: raytrace(position, {x: -unit3, y: -unit3, z: unit3}),
-        62: raytrace(position, {x: -unit2, y: -unit2}),
-        48: raytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
-      },
-      behindR: {
-        74: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
-        62: raytrace(position, {x: unit2, y: -unit2}),
-        48: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      },
+      down: raytrace(position, {z: -1}),
+      forward: raytrace(position, {x: 1}),
+      forwardDown: raytrace(position, {x: unit2, z: -unit2}),
+      forwardLeft: raytrace(position, {x: unit2, y: -unit2}),
+      forwardLeftDown: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
+      forwardLeftUp: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
+      forwardRight: raytrace(position, {x: unit2, y: unit2}),
+      forwardRightDown: raytrace(position, {x: unit3, y: unit3, z: -unit3}),
+      forwardRightUp: raytrace(position, {x: unit3, y: unit3, z: unit3}),
+      forwardUp: raytrace(position, {x: unit2, z: unit2}),
+      left: raytrace(position, {y: -1}),
+      leftDown: raytrace(position, {y: -unit2, z: -unit2}),
+      leftUp: raytrace(position, {y: -unit2, z: unit2}),
+      /*
+      reverse: raytrace(position, {x: -1}),
+      reverseDown: raytrace(position, {x: -unit2, z: -unit2}),
+      reverseLeft: raytrace(position, {x: -unit2, y: -unit2}),
+      reverseLeftDown: raytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
+      reverseLeftUp: raytrace(position, {x: -unit3, y: -unit3, z: unit3}),
+      reverseRight: raytrace(position, {x: unit2, y: -unit2}),
+      reverseRightDown: raytrace(position, {x: unit3, y: -unit3, z: -unit3}),
+      reverseRightUp: raytrace(position, {x: unit3, y: -unit3, z: unit3}),
+      reverseUp: raytrace(position, {x: -unit2, z: unit2}),
+      */
+      right: raytrace(position, {y: 1}),
+      rightDown: raytrace(position, {y: unit2, z: -unit2}),
+      rightUp: raytrace(position, {y: unit2, z: unit2}),
+      up: raytrace(position, {z: 1}),
     }
   }
 

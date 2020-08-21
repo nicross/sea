@@ -1,8 +1,8 @@
 content.system.terrain.longitudinalTube = (() => {
   const tube = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'longitudinalTube', 1),
-    tubeScaleX = 10,
+    tubeScaleX = 50,
     tubeScaleY = 1000,
-    tubeScaleZ = 10
+    tubeScaleZ = 50
 
   const mix = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'longitudinalTubeMix', 8),
     mixScale = 1000
@@ -10,7 +10,7 @@ content.system.terrain.longitudinalTube = (() => {
   const range = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'longitudinalTubeRange', 2),
     rangeScale = 100
 
-  const maxRange = 0.45,
+  const maxRange = 0.1,
     minRange = 0.05
 
   function getMix(x, y, z) {

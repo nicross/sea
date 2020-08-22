@@ -121,8 +121,6 @@ content.system.treasure.spawner = (() => {
       const chunk = getChunk(scaledX, scaledY, scaledZ),
         found = getFound(chunk)
 
-      console.log(chunk)
-
       if (found >= chunk.density) {
         // All treasure has been found
         return

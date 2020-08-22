@@ -33,11 +33,11 @@ app.controls.gamepad = {
         hasRightStick = 2 in gamepad.axes && 3 in gamepad.axes
 
       if (hasLeftStick && hasRightStick) {
-        rotate += this.deadzone(gamepad.axes[2])
+        rotate -= this.deadzone(gamepad.axes[2])
         x += this.deadzone(gamepad.axes[0])
         y -= this.deadzone(gamepad.axes[1])
       } else if (hasLeftStick) {
-        rotate += this.deadzone(gamepad.axes[0])
+        rotate -= this.deadzone(gamepad.axes[0])
         y -= this.deadzone(gamepad.axes[1])
       }
 
@@ -52,6 +52,22 @@ app.controls.gamepad = {
       if (7 in gamepad.buttons) {
         y += gamepad.buttons[7].value
       }
+    }
+
+    if (buttons[12]) {
+      x = 1
+    }
+
+    if (buttons[13]) {
+      x = -1
+    }
+
+    if (buttons[14]) {
+      rotate = 1
+    }
+
+    if (buttons[15]) {
+      rotate = -1
     }
 
     rotate = engine.utility.clamp(rotate, -1, 1) || 0
@@ -71,13 +87,16 @@ app.controls.gamepad = {
       state.y = y
     }
 
-    if (buttons[5] && !buttons[4]) {
+    const isAscend = buttons[3] || buttons[5],
+      isDescend = buttons[2] || buttons[4]
+
+    if (isAscend && !isDescend) {
       state.z = 1
-    } else if (buttons[4] && !buttons[5]) {
+    } else if (isDescend && !isAscend) {
       state.z = -1
     }
 
-    if ((buttons[10] || buttons[11]) && !app.settings.computed.toggleTurbo) {
+    if ((buttons[1] || buttons[10]) && !app.settings.computed.toggleTurbo) {
       state.turbo = true
     }
 
@@ -115,16 +134,19 @@ app.controls.gamepad = {
       }
     }
 
-    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleTurbo) {
+    if ((buttons[1] || buttons[10]) && app.settings.computed.toggleTurbo) {
       state.turbo = true
     }
 
-    if (buttons[1]) {
+    if (buttons[1] || buttons[8]) {
       state.cancel = true
     }
 
     if (buttons[0]) {
       state.confirm = true
+    }
+
+    if (buttons[0] || buttons[11]) {
       state.scan = true
     }
 

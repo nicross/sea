@@ -138,6 +138,7 @@ Experiment.
       <th>Action</th>
       <th>Button 1</th>
       <th>Button 2</th>
+      <th>Button 3</th>
     </tr>
   </thead>
   <tbody>
@@ -145,30 +146,42 @@ Experiment.
       <th>Forward</th>
       <td>Right Stick</td>
       <td>Right Trigger</td>
+      <td>D-Pad Up</td>
     </tr>
     <tr>
       <th>Reverse</th>
       <td>Right Stick</td>
       <td>Left Trigger</td>
+      <td>D-Pad Down</td>
     </tr>
     <tr>
-      <th>Turning</th>
+      <th>Turn Left</th>
       <td>Left Stick</td>
+      <td>D-Pad Left</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Turn Right</th>
+      <td>Left Stick</td>
+      <td>D-Pad Right</td>
       <td></td>
     </tr>
     <tr>
       <th>Turbo</th>
-      <td>Press Any Stick</td>
+      <td>B</td>
+      <td>Press Left Stick</td>
       <td></td>
     </tr>
     <tr>
       <th>Confirm</th>
       <td>A</td>
       <td></td>
+      <td></td>
     </tr>
     <tr>
       <th>Back</th>
       <td>B</td>
+      <td>Select</td>
       <td></td>
     </tr>
   </tbody>
@@ -186,24 +199,29 @@ Experiment.
     <thead>
       <tr>
         <th>Action</th>
-        <th>Button</th>
+        <th>Button 1</th>
+        <th>Button 2</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <th>Strafing</th>
         <td>Right Stick</td>
+        <td></td>
       </tr>
       <tr>
         <th>Scan Area</th>
         <td>A</td>
+        <td>Press Left Stick</td>
       </tr>
       <tr>
         <th>Ascend</th>
+        <td>Y</td>
         <td>Right Bumper</td>
       </tr>
       <tr>
         <th>Descend</th>
+        <td>X</td>
         <td>Left Bumper</td>
       </tr>
     </tbody>

@@ -1,4 +1,4 @@
-content.system.treasure.archetypes.register('trash', 20, (srand) => {
+content.system.treasures.register('trash', 20, (srand) => {
   const adjectives = [
     {
       name: 'Damaged',
@@ -55,43 +55,5 @@ content.system.treasure.archetypes.register('trash', 20, (srand) => {
   return {
     name: `${adjective.name} ${type}`,
     value: adjective.modifier(1)
-  }
-})
-
-content.system.treasure.archetypes.register('uxo', 5, (srand) => {
-  const adjectives = [
-    {
-      modifier: (value) => value * 0.5,
-      name: 'Corroded',
-      weight: 2,
-    },
-    {
-      modifier: (value) => value * 0.5,
-      name: 'Encrusted',
-      weight: 2,
-    },
-    {
-      modifier: (value) => value,
-      name: 'Pristine',
-      weight: 1,
-    },
-    {
-      modifier: (value) => value * 0.5,
-      name: 'Rusty',
-      weight: 2,
-    },
-  ]
-
-  const sides = [
-    'Allied',
-    'Axis',
-  ]
-
-  const adjective = engine.utility.chooseWeighted(adjectives, srand()),
-    side = engine.utility.choose(sides, srand())
-
-  return {
-    name: `${adjective.name} ${side} UXO`,
-    value: adjective.modifier(100)
   }
 })

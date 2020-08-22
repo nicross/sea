@@ -1,4 +1,4 @@
-content.system.treasure.archetypes.register('bone', 10, (srand) => {
+content.system.treasures.register('bone', 10, (srand) => {
   const adjectives = [
     {
       name: 'Chipped',

@@ -1,4 +1,4 @@
-content.system.treasure.archetypes.register('alien', 1, (srand) => {
+content.system.treasures.register('alien', 1, (srand) => {
   const names = [
     'Alien Computational Device',
     'Alien Communications Device',

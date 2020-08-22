@@ -1,4 +1,4 @@
-content.system.treasure.archetypes.register('coin', 5, (srand) => {
+content.system.treasures.register('coin', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 5,

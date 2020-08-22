@@ -1,4 +1,4 @@
-content.system.treasure.archetypes = (() => {
+content.system.treasures = (() => {
   const registry = new Map()
 
   const defaults = {

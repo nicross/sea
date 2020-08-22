@@ -32,18 +32,18 @@ content.system.audio.scan = ((undefined) => {
       modDepth: 0,
       modFrequency: 0,
     }).shaped(
-      engine.audio.shape.noise2()
+      engine.audio.shape.noise()
     ).filtered({
       frequency: engine.utility.midiToFrequency(45),
     }).connect(bus)
 
     const now = engine.audio.time()
 
-    const attack = now + (content.const.scanCooldown / 1000) - 1/32,
+    const attack = now + (content.const.scanCooldown / 1000) - 1/16,
       release = now + (content.const.scanCooldown / 1000)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.exponentialRampToValueAtTime(1/8, attack)
+    synth.param.gain.linearRampToValueAtTime(1/8, attack)
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
 
     synth.param.mod.depth.setValueAtTime(0, now)

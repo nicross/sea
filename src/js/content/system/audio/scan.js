@@ -1,4 +1,4 @@
-content.system.audio.scan = (() => {
+content.system.audio.scan = ((undefined) => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context()
 
@@ -112,17 +112,17 @@ content.system.audio.scan = (() => {
   function renderGrain({
     note = 0,
     pan = 0,
-    value = 0,
+    value,
     when = 0,
   } = {}) {
-    if (value == -1) {
+    if (value === undefined || value == -1) {
       return
     }
 
     const gain = Math.max(engine.const.zeroGain, (1 - value) ** 4),
       panner = context.createStereoPanner()
 
-    when += value / 8
+    when += value / 6
 
     const synth = engine.audio.synth.createSimple({
       frequency: engine.utility.midiToFrequency(note),
@@ -184,7 +184,7 @@ content.system.audio.scan = (() => {
       recharge()
       return this
     },
-    trigger: function (scan) {
+    trigger: function () {
       honk()
       return this
     },

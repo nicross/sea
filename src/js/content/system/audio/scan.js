@@ -107,7 +107,7 @@ content.system.audio.scan = ((undefined) => {
     renderGrain({
       note: 45,
       pan: 0,
-      value: scan.down,
+      scan: scan.down,
       when: engine.audio.time(1.5),
     })
   }
@@ -115,17 +115,17 @@ content.system.audio.scan = ((undefined) => {
   function renderGrain({
     note = 0,
     pan = 0,
-    value,
+    scan,
     when = 0,
   } = {}) {
-    if (value === undefined || value == -1) {
+    if (!scan || !scan.isSolid) {
       return
     }
 
-    const gain = Math.max(engine.const.zeroGain, (1 - value) ** 4),
+    const gain = Math.max(engine.const.zeroGain, (1 - scan.ratio) ** 4),
       panner = context.createStereoPanner()
 
-    when += value / 6
+    when += scan.ratio / 6
 
     const synth = engine.audio.synth.createSimple({
       frequency: engine.utility.midiToFrequency(note),
@@ -148,35 +148,35 @@ content.system.audio.scan = ((undefined) => {
     renderGrain({
       note: 62 + octave,
       pan: -1,
-      value: group[0],
+      scan: group[0],
       when,
     })
 
     renderGrain({
       note: 67 + octave,
       pan: -0.5,
-      value: group[1],
+      scan: group[1],
       when,
     })
 
     renderGrain({
       note: 69 + octave,
       pan: 0,
-      value: group[2],
+      scan: group[2],
       when,
     })
 
     renderGrain({
       note: 64 + octave,
       pan: 0.5,
-      value: group[3],
+      scan: group[3],
       when,
     })
 
     renderGrain({
       note: 60 + octave,
       pan: 1,
-      value: group[4],
+      scan: group[4],
       when,
     })
   }

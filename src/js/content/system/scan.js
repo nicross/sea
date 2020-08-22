@@ -32,9 +32,14 @@ content.system.scan = (() => {
       isSolid = content.system.terrain.isSolid(x, y, z)
     } while (!isSolid && d < maxDistance)
 
-    return isSolid
-      ? d / maxDistance
-      : -1
+    return {
+      distance: d,
+      isSolid,
+      ratio: isSolid ? d / maxDistance : Infinity,
+      x,
+      y,
+      z,
+    }
   }
 
   async function scan() {
@@ -69,17 +74,15 @@ content.system.scan = (() => {
       left: await scheduleRaytrace(position, {y: -1}),
       leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
       leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
-      /*
       reverse: await scheduleRaytrace(position, {x: -1}),
       reverseDown: await scheduleRaytrace(position, {x: -unit2, z: -unit2}),
       reverseLeft: await scheduleRaytrace(position, {x: -unit2, y: -unit2}),
       reverseLeftDown: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
-      reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: unit3}),
-      reverseRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
+      //reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: unit3}),
+      //reverseRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
       reverseRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      reverseRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      reverseUp: await scheduleRaytrace(position, {x: -unit2, z: unit2}),
-      */
+      //reverseRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
+      //reverseUp: await scheduleRaytrace(position, {x: -unit2, z: unit2}),
       right: await scheduleRaytrace(position, {y: 1}),
       rightDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
       rightUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),

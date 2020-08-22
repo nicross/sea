@@ -32,7 +32,7 @@ content.utility.threed.prototype = {
 
     return false
   },
-  import: function (data) {
+  import: function (data = {}) {
     // XXX: Shallow copy
     this.store = {...data}
     return this

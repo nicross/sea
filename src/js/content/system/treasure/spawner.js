@@ -79,6 +79,10 @@ content.system.treasure.spawner = (() => {
   }
 
   return {
+    export: function (data = {}) {
+      data.treasureFound = foundThreed.export()
+      return data
+    },
     getCurrentChunk: function () {
       let {x, y} = engine.position.get()
       let z = content.system.z.get()
@@ -88,6 +92,10 @@ content.system.treasure.spawner = (() => {
       z = Math.floor(z / chunkScale)
 
       return getChunk(x, y, z)
+    },
+    import: function (data = {}) {
+      foundThreed.import(data.treasureFound)
+      return data
     },
     onScan: function (scan) {
       const z = content.system.z.get()
@@ -144,3 +152,6 @@ content.system.treasure.spawner = (() => {
 engine.loop.once('frame', () => {
   content.system.scan.on('recharge', (scan) => content.system.treasure.spawner.onScan(scan))
 })
+
+engine.state.on('export', (data) => content.system.treasure.spawner.export(data))
+engine.state.on('import', (data) => content.system.treasure.spawner.import(data))

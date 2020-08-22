@@ -1,6 +1,31 @@
 content.system.reverb = (() => {
   const send = engine.audio.send.reverb.create()
 
+  const machine = engine.utility.machine.create({
+    state: 'none',
+    transition: {
+      none: {},
+      cave: {
+        ascend: function() {
+          this.change('underwater')
+        },
+      },
+      surface: {
+        descend: function() {
+          this.change('underwater')
+        },
+      },
+      underwater: {
+        ascend: function() {
+          this.change('surface')
+        },
+        descend: function() {
+          this.change('cave')
+        },
+      },
+    },
+  })
+
   let isCave = false
 
   send.update({
@@ -8,47 +33,66 @@ content.system.reverb = (() => {
     y: 0,
   })
 
-  engine.audio.mixer.auxiliary.reverb.setGain(engine.const.zeroGain)
+  machine.on('enter-cave', () => {
+    engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3), 0.125)
+    engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.medium())
+  })
+
+  machine.on('enter-surface', () => {
+    engine.audio.mixer.auxiliary.reverb.setGain(engine.const.zeroGain, 0.125)
+  })
+
+  machine.on('enter-underwater', () => {
+    engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3), 0.125)
+    engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
+  })
 
   return {
     from: function (...args) {
       send.from(...args)
       return this
     },
-    import: function ({z}) {
-      const gain = z > 0 ? engine.const.zeroGain : engine.utility.fromDb(-3)
-      engine.audio.mixer.auxiliary.reverb.setGain(gain)
-      return this
-    },
-    surface: function () {
-      engine.audio.mixer.auxiliary.reverb.setGain(engine.const.zeroGain, 0.125)
-      return this
-    },
-    underwater: function () {
-      engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3), 0.125)
+    import: function () {
+      // Wait for next event loop so everything has reset
+      setTimeout(() => {
+        const {x, y} = engine.position.get()
+        const z = content.system.z.get()
+
+        if (z >= 0) {
+          machine.change('surface')
+        } else if (z >= content.system.terrain.floor.value(x, y)) {
+          machine.change('underwater')
+        } else {
+          machine.change('cave')
+        }
+      })
       return this
     },
     update: function () {
+      const {x, y} = engine.position.get()
       const z = content.system.z.get()
 
-      if (z > content.const.lightZone) {
+      if (machine.is('surface')) {
+        if (z < 0) {
+          machine.dispatch('descend')
+        }
         return this
       }
 
-      const floor = content.system.terrain.floor.currentValue()
-      const caveCheck = z < floor
-
-      if (isCave == caveCheck) {
+      if (machine.is('underwater')) {
+        if (z >= 0) {
+          machine.dispatch('ascend')
+        } else if (z < content.const.lightZone && z < content.system.terrain.floor.value(x, y)) {
+          machine.dispatch('descend')
+        }
         return this
       }
 
-      isCave = caveCheck
-
-      engine.audio.mixer.auxiliary.reverb.setImpulse(
-        isCave
-          ? engine.audio.buffer.impulse.medium()
-          : engine.audio.buffer.impulse.large()
-      )
+      if (machine.is('cave')) {
+        if (z >= content.system.terrain.floor.value(x, y)) {
+          machine.dispatch('ascend')
+        }
+      }
 
       return this
     },
@@ -64,6 +108,3 @@ engine.loop.on('frame', ({frame, paused}) => {
 })
 
 engine.state.on('import', (data) => content.system.reverb.import(data))
-
-content.system.movement.on('transition-surface', () => content.system.reverb.surface())
-content.system.movement.on('transition-underwater', () => content.system.reverb.underwater())

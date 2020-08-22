@@ -15,7 +15,6 @@ content.system.treasure.archetypes = (() => {
       const {generator, key} = engine.utility.chooseWeighted([...registry.values()], srand())
 
       return {
-        depth: content.system.z.get(),
         key,
         time,
         ...defaults,

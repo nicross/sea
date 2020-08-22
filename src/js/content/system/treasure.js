@@ -161,8 +161,8 @@ content.system.treasure = (() => {
 
 // HACK: Essentially app.once('activate')
 engine.loop.once('frame', () => {
-  content.system.scan.on('recharge', (scan) => content.system.treasure.treasure.onScan(scan))
+  content.system.scan.on('recharge', (scan) => content.system.treasure.onScan(scan))
 })
 
-engine.state.on('export', (data) => data.treasure = content.system.treasure.treasure.export())
-engine.state.on('import', (data) => content.system.treasure.treasure.import(data.treasure))
+engine.state.on('export', (data) => data.treasure = content.system.treasure.export())
+engine.state.on('import', (data) => content.system.treasure.import(data.treasure))

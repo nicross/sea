@@ -13,7 +13,7 @@ content.system.scan = (() => {
       y: dy = 0,
     } = engine.utility.rotatePoint(vector.x || 0, vector.y || 0, -position.angle)
 
-    let dz = vector.z
+    let dz = vector.z || 0
 
     let {x, y, z} = position
 
@@ -41,7 +41,7 @@ content.system.scan = (() => {
     const {angle, x, y} = engine.position.get()
     const z = content.system.z.get()
 
-    if (z >= 0) {
+    if (z >= engine.const.lightZone) {
       // Empty results
       // Don't bother hurting the frame rate at the surface
       // But allow its use like a "honk"

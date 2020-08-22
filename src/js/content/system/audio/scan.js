@@ -31,7 +31,9 @@ content.system.audio.scan = (() => {
       carrierType: 'square',
       modDepth: 0,
       modFrequency: 0,
-    }).filtered({
+    }).shaped(
+      engine.audio.shape.noise2()
+    ).filtered({
       frequency: engine.utility.midiToFrequency(45),
     }).connect(bus)
 
@@ -41,7 +43,7 @@ content.system.audio.scan = (() => {
       release = now + (content.const.scanCooldown / 1000)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.exponentialRampToValueAtTime(1/4, attack)
+    synth.param.gain.exponentialRampToValueAtTime(1/8, attack)
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
 
     synth.param.mod.depth.setValueAtTime(0, now)

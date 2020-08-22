@@ -11,7 +11,7 @@ content.system.scan = (() => {
     let {
       x: dx = 0,
       y: dy = 0,
-    } = engine.utility.rotatePoint(vector.x || 0, vector.y || 0, position.angle)
+    } = engine.utility.rotatePoint(vector.x || 0, vector.y || 0, -position.angle)
 
     let dz = vector.z
 

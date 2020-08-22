@@ -46,14 +46,17 @@ app.screen.status = (() => {
   function updateStatus() {
     const depth = Math.max(0, -content.system.z.get()),
       position = engine.position.get(),
+      treasures = content.system.treasure.getTotalCollected(),
       time = content.system.time.get()
 
     root.querySelector('.a-status--row-depth').hidden = !depth
+    root.querySelector('.a-status--row-treasures').hidden = !treasures
 
     root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(position)
     root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
     root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(position.angle)
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
+    root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasures)
   }
 
   app.once('activate', () => {

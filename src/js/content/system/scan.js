@@ -11,8 +11,9 @@ content.system.scan = (() => {
     let {
       x: dx = 0,
       y: dy = 0,
-      z: dz = 0,
-    } = vector
+    } = engine.utility.rotatePoint(vector.x || 0, vector.y || 0, position.angle)
+
+    let dz = vector.z
 
     let {x, y, z} = position
 

@@ -8,4 +8,5 @@ const content  = {
       underwater: {},
     },
   },
+  utility: {},
 }

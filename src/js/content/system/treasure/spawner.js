@@ -1,6 +1,8 @@
 content.system.treasure.spawner = (() => {
-  const chunks = new Map(),
-    chunkScale = 100
+  const chunkThreed = content.utility.threed.create(),
+    chunkScale = 100,
+    foundThreed = content.utility.threed.create(),
+    spawnedThreed = content.utility.threed.create()
 
   function generateChunk(x, y, z) {
     const srand = engine.utility.srand('chunk', x, y, z)
@@ -16,49 +18,64 @@ content.system.treasure.spawner = (() => {
   }
 
   function getChunk(x, y, z) {
-    if (!chunks.has(x)) {
-      chunks.set(x, new Map())
+    if (chunkThreed.has(x, y, z)) {
+      return chunkThreed.get(x, y, z)
     }
 
-    const chunkX = chunks.get(x)
-
-    if (!chunkX.has(y)) {
-      chunkX.set(y, new Map())
-    }
-
-    const chunkY = chunkX.get(y)
-
-    if (!chunkY.has(z)) {
-      chunkY.set(z, generateChunk(x, y, z))
-    }
-
-    return chunkY.get(z)
+    const chunk = generateChunk(x, y, z)
+    chunkThreed.set(x, y, z, chunk)
+    return chunk
   }
 
-  function getRedeemed({x, y, z}) {
-    // TODO: Data structure that persists via engine.state / storage
-    // Stores the number of treasure found in each chunk
+  function getFound({x, y, z}) {
+    if (foundThreed.has(x, y, z)) {
+      return foundThreed.get(x, y, z)
+    }
+
+    foundThreed.set(x, y, z, 0)
     return 0
   }
 
   function getSpawned({x, y, z}) {
-    // TODO: Data structure that stores the number of treasure currently spawned
+    if (spawnedThreed.has(x, y, z)) {
+      return spawnedThreed.get(x, y, z)
+    }
+
+    spawnedThreed.set(x, y, z, 0)
     return 0
+  }
+
+  function incrementFound({x, y, z}) {
+    if (!foundThreed.has(x, y, z)) {
+      return foundThreed.set(x, y, z, 1)
+    }
+
+    const amount = foundThreed.get(x, y, z)
+    foundThreed.set(x, y, z, amount + 1)
+  }
+
+  function incrementSpawned({x, y, z}) {
+    if (!spawnedThreed.has(x, y, z)) {
+      return spawnedThreed.set(x, y, z, 1)
+    }
+
+    const amount = spawnedThreed.get(x, y, z)
+    spawnedThreed.set(x, y, z, amount + 1)
   }
 
   function spawnTreasure({
     chunk,
     scan,
-    x,
-    y,
-    z,
   }) {
     console.log('spawn treasure')
+
     // TODO: Spawn a treasure prop
     // Cheat by placing it randomly at a point or along the plane defined by scan, e.g.
     // forwardLeftDown forwardRightDown
     // reverseLeftDown reverseRightDown
     // And then raytrace to find closest non-solid surface (up if solid, down if not)
+
+    incrementSpawned(chunk)
   }
 
   return {
@@ -94,16 +111,18 @@ content.system.treasure.spawner = (() => {
         scaledY = Math.floor(y / chunkScale)
 
       const chunk = getChunk(scaledX, scaledY, scaledZ),
-        redeemed = getRedeemed(chunk)
+        found = getFound(chunk)
 
-      if (redeemed >= chunk.density) {
+      console.log(chunk)
+
+      if (found >= chunk.density) {
         // All treasure has been found
         return
       }
 
       const spawned = getSpawned(chunk)
 
-      if ((redeemed + spawned) >= chunk.density) {
+      if ((found + spawned) >= chunk.density) {
         // All treasure has been spawned
         return
       }
@@ -116,9 +135,6 @@ content.system.treasure.spawner = (() => {
       spawnTreasure({
         chunk,
         scan,
-        x,
-        y,
-        z,
       })
     },
   }

@@ -48,6 +48,14 @@ content.system.terrain.lattice = (() => {
         upperBound = 0.5 + boundary
 
       return !engine.utility.between(value, lowerBound, upperBound)
-    }
+    },
+    reset: function () {
+      lattice.reset()
+      mix.reset()
+      range.reset()
+      return this
+    },
   }
 })()
+
+engine.state.on('reset', () => content.system.terrain.lattice.reset())

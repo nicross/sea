@@ -50,6 +50,14 @@ content.system.terrain.verticalTube = (() => {
         upperBound = 0.5 + boundary
 
       return !engine.utility.between(value, lowerBound, upperBound)
-    }
+    },
+    reset: function () {
+      tube.reset()
+      mix.reset()
+      range.reset()
+      return this
+    },
   }
 })()
+
+engine.state.on('reset', () => content.system.terrain.verticalTube.reset())

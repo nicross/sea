@@ -24,6 +24,14 @@ content.system.terrain.floor = (() => {
       const {x, y} = engine.position.get()
       return this.value(x, y)
     },
+    reset: function () {
+      floor.reset()
+      hill.reset()
+      hillMix.reset()
+      trench.reset()
+      trenchMix.reset()
+      return this
+    },
     value: (x, y) => {
       let value = content.const.lightZone - floorHeight - hillHeight
 
@@ -35,3 +43,5 @@ content.system.terrain.floor = (() => {
     }
   }
 })()
+
+engine.state.on('reset', () => content.system.terrain.floor.reset())

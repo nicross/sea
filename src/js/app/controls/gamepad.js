@@ -35,10 +35,10 @@ app.controls.gamepad = {
       if (hasLeftStick && hasRightStick) {
         rotate += this.deadzone(gamepad.axes[2])
         x += this.deadzone(gamepad.axes[0])
-        y += this.deadzone(gamepad.axes[1])
+        y -= this.deadzone(gamepad.axes[1])
       } else if (hasLeftStick) {
         rotate += this.deadzone(gamepad.axes[0])
-        y += this.deadzone(gamepad.axes[1])
+        y -= this.deadzone(gamepad.axes[1])
       }
 
       gamepad.buttons.forEach((button, i) => {

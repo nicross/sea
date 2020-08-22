@@ -27,8 +27,8 @@ content.system.audio.scan = ((undefined) => {
 
   function recharge() {
     const synth = engine.audio.synth.createFm({
-      carrierFrequency: engine.utility.midiToFrequency(33),
-      carrierType: 'square',
+      carrierFrequency: engine.utility.midiToFrequency(21),
+      carrierType: 'sawtooth',
       modDepth: 0,
       modFrequency: 0,
     }).shaped(
@@ -51,6 +51,9 @@ content.system.audio.scan = ((undefined) => {
 
     synth.param.mod.frequency.setValueAtTime(0, now)
     synth.param.mod.frequency.linearRampToValueAtTime(16, release)
+
+    synth.param.frequency.setValueAtTime(engine.utility.midiToFrequency(21), now)
+    synth.param.frequency.exponentialRampToValueAtTime(engine.utility.midiToFrequency(28), release)
 
     synth.stop(release)
   }

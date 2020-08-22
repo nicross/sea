@@ -4,6 +4,8 @@ content.system.treasure.spawner = (() => {
     foundThreed = content.utility.threed.create(),
     spawnedThreed = content.utility.threed.create()
 
+  let foundTotal = 0
+
   function generateChunk(x, y, z) {
     const srand = engine.utility.srand('chunk', x, y, z)
 
@@ -52,6 +54,8 @@ content.system.treasure.spawner = (() => {
 
     const amount = foundThreed.get(x, y, z)
     foundThreed.set(x, y, z, amount + 1)
+
+    foundTotal += 1
   }
 
   function incrementSpawned({x, y, z}) {
@@ -79,9 +83,13 @@ content.system.treasure.spawner = (() => {
   }
 
   return {
-    export: function (data = {}) {
-      data.treasureFound = foundThreed.export()
-      return data
+    export: function () {
+      return {
+        found: {
+          threed: foundThreed.export(),
+          total: foundTotal,
+        },
+      }
     },
     getCurrentChunk: function () {
       let {x, y} = engine.position.get()
@@ -93,9 +101,14 @@ content.system.treasure.spawner = (() => {
 
       return getChunk(x, y, z)
     },
+    getTotalFound: () => foundTotal,
     import: function (data = {}) {
-      foundThreed.import(data.treasureFound)
-      return data
+      const dataFound = data.found || {}
+
+      foundThreed.import(dataFound.threed)
+      foundTotal = Number(dataFound.total) || 0
+
+      return this
     },
     onScan: function (scan) {
       const z = content.system.z.get()
@@ -151,5 +164,5 @@ engine.loop.once('frame', () => {
   content.system.scan.on('recharge', (scan) => content.system.treasure.spawner.onScan(scan))
 })
 
-engine.state.on('export', (data) => content.system.treasure.spawner.export(data))
-engine.state.on('import', (data) => content.system.treasure.spawner.import(data))
+engine.state.on('export', (data) => data.treasure = content.system.treasure.spawner.export())
+engine.state.on('import', (data) => content.system.treasure.spawner.import(data.treasure))

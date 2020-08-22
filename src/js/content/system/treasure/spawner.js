@@ -26,6 +26,8 @@ content.system.treasure.spawner = (() => {
       chunkX.set(y, new Map())
     }
 
+    const chunkY = chunkX.get(y)
+
     if (!chunkY.has(z)) {
       chunkY.set(z, generateChunk(x, y, z))
     }
@@ -33,13 +35,13 @@ content.system.treasure.spawner = (() => {
     return chunkY.get(z)
   }
 
-  function getRedeemed(x, y, z) {
+  function getRedeemed({x, y, z}) {
     // TODO: Data structure that persists via engine.state / storage
     // Stores the number of treasure found in each chunk
     return 0
   }
 
-  function getSpawned(x, y, z) {
+  function getSpawned({x, y, z}) {
     // TODO: Data structure that stores the number of treasure currently spawned
     return 0
   }
@@ -91,14 +93,17 @@ content.system.treasure.spawner = (() => {
       const scaledX = Math.floor(x / chunkScale),
         scaledY = Math.floor(y / chunkScale)
 
-      const chunk = getChunk(scaledX, scaledY, scaledZ)
+      const chunk = getChunk(scaledX, scaledY, scaledZ),
+        redeemed = getRedeemed(chunk)
 
-      if (getRedeemed(scaledX, scaledY, scaledZ) >= chunk.density) {
+      if (redeemed >= chunk.density) {
         // All treasure has been found
         return
       }
 
-      if (getSpawned(scaledX, scaledY, scaledZ) >= chunk.density) {
+      const spawned = getSpawned(chunk)
+
+      if ((redeemed + spawned) >= chunk.density) {
         // All treasure has been spawned
         return
       }
@@ -118,3 +123,8 @@ content.system.treasure.spawner = (() => {
     },
   }
 })()
+
+// HACK: Essentially app.once('activate')
+engine.loop.once('frame', () => {
+  content.system.scan.on('recharge', (scan) => content.system.treasure.spawner.onScan(scan))
+})

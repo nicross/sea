@@ -65,7 +65,7 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     const position = engine.position.get(),
       relative = engine.utility.toRelativeCoordinates(position, this),
       z = content.system.z.get(),
-      zDifference = Math.abs(this.z - z)
+      zDifference = Math.max(0, Math.abs(this.z - z) - this.radius)
 
     this.atan2 = Math.atan2(this.y - position.y, this.x - position.x)
     this.distance = content.utility.distanceRadius(position.x, position.y, z, this.x, this.y, this.z, this.radius)

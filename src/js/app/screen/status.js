@@ -49,7 +49,7 @@ app.screen.status = (() => {
       treasures = content.system.treasure.getCollected(),
       time = content.system.time.get()
 
-    const earnings = treasures.reduce((sum, treasure) => sum + treasure.value, 0),
+    const earnings = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),
       treasuresCollected = treasures.length
 
     const lastTreasure = treasuresCollected

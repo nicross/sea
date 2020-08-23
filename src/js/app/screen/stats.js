@@ -50,7 +50,7 @@ app.screen.stats = (() => {
       totalDistance = app.stats.totalDistance.get(),
       totalTime = app.stats.totalTime.get()
 
-    const galleryValue = treasures.reduce((sum, treasure) => sum + treasure.value, 0),
+    const galleryValue = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),
       treasuresCollected = treasures.length
 
     root.querySelector('.a-stats--row-gallery').hidden = !treasuresCollected

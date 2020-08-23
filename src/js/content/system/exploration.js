@@ -7,7 +7,11 @@ content.system.exploration = (() => {
     list.push(node)
     tree.insert(node)
 
-    // TODO: Add prop to streaming service
+    content.system.streamer.registerProp(content.prop.exploration, {
+      x: node.x,
+      y: node.y,
+      z: node.z,
+    })
   }
 
   return {

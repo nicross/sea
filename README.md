@@ -12,15 +12,22 @@ The ocean is endless.
 Listen and relax.
 Surf the waves.
 Experiment.
+Reveal the spoilers at your own pace.
 
 <details>
   <summary>Light Spoiler Warning</summary>
-  <p>The console suggests that S.E.A. is an acronym for Submersible Exploration Apparatus.</p>
+  <p>S.E.A. is an acronym for Submersible Exploration Apparatus.</p>
 </details>
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
   <p>The military has intelligence that a vast network of caves exists beneath the ocean floor. They suspect that valuable treasures, some not of this world, lay dormant inside. Perhaps your objective is to submerge, explore, and acquire these artifacts.</p>
+</details>
+
+<details>
+  <summary>Ultimate Spoiler Warning</summary>
+  <p>S.E.A. is an underwater cave diving simulator with mild dungeon crawling elements. It's influenced by games like Sub Culture and Scanner Sombre. At its surface it presents a false exterior of being a relaxing watercraft simulator. Deep below lies a vast oceanic landscape filled with procedurally generated caves. With its scanning mechanic players paint a sonic trail of the areas they've visited with the chance of revealing valuable treasures to collect for their personal galleries. What will you find beneath the surface?</p>
+  <p>Please be mindful of these spoilers while discussing this game.</p>
 </details>
 
 ### Keyboard controls
@@ -81,12 +88,12 @@ Experiment.
 
 <details>
   <summary>Light Spoiler Warning</summary>
-  <p>The briefing suggested that the S.E.A. has undocumented capabilities. Try to experiment with its controls.</p>
+  <p>The S.E.A. may have undocumented capabilities. Try to experiment with its controls.</p>
 </details>
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
-  <p>A radio transmission instructs you that the S.E.A. has additional controls for navigating below the surface:</p>
+  <p>The S.E.A. has additional controls for navigating below the surface:</p>
   <table>
     <thead>
       <tr>
@@ -189,12 +196,12 @@ Experiment.
 
 <details>
   <summary>Light Spoiler Warning</summary>
-  <p>The briefing suggested that the S.E.A. has undocumented capabilities. Try to experiment with its controls.</p>
+  <p>The S.E.A. may have undocumented capabilities. Try to experiment with its controls.</p>
 </details>
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
-  <p>A radio transmission instructs you that the S.E.A. has additional controls for navigating below the surface:</p>
+  <p>The S.E.A. has additional controls for navigating below the surface:</p>
   <table>
     <thead>
       <tr>

@@ -67,9 +67,9 @@ Reveal the spoilers at your own pace.
     </tr>
     <tr>
       <th>Turbo</th>
-      <td>X</td>
-      <td>Left Shift</td>
-      <td>Right Shift</td>
+      <td>Shift</td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
       <th>Confirm</th>
@@ -107,32 +107,32 @@ Reveal the spoilers at your own pace.
       <tr>
         <th>Strafe Left</th>
         <td>A</td>
+        <td>Z</td>
         <td>Numpad 4</td>
-        <td></td>
       </tr>
       <tr>
         <th>Strafe Right</th>
         <td>D</td>
+        <td>X</td>
         <td>Numpad 6</td>
-        <td></td>
       </tr>
       <tr>
         <th>Scan Area</th>
         <td>F</td>
-        <td>Left Alt</td>
-        <td>Right Alt</td>
+        <td>Alt</td>
+        <td></td>
       </tr>
       <tr>
         <th>Ascend</th>
-        <td>Z</td>
         <td>Space</td>
+        <td>V</td>
         <td></td>
       </tr>
       <tr>
         <th>Descend</th>
+        <td>Control</td>
         <td>C</td>
-        <td>Left Control</td>
-        <td>Right Control</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -191,6 +191,12 @@ Reveal the spoilers at your own pace.
       <td>Select</td>
       <td></td>
     </tr>
+    <tr>
+      <th>Game Menu</th>
+      <td>Start</td>
+      <td>Select</td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
 
@@ -219,7 +225,7 @@ Reveal the spoilers at your own pace.
       <tr>
         <th>Scan Area</th>
         <td>A</td>
-        <td>Press Left Stick</td>
+        <td>Press Right Stick</td>
       </tr>
       <tr>
         <th>Ascend</th>

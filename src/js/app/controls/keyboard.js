@@ -19,6 +19,7 @@ app.controls.keyboard = (() => {
     KeyF: false,
     KeyQ: false,
     KeyS: false,
+    KeyV: false,
     KeyW: false,
     KeyX: false,
     KeyZ: false,
@@ -51,13 +52,13 @@ app.controls.keyboard = (() => {
 
   return {
     game: () => {
-      const ascend = controls.KeyZ || controls.Space,
+      const ascend = controls.KeyV || controls.Space,
         descend = controls.ControlLeft || controls.ControlRight || controls.KeyC,
         moveBackward = controls.ArrowDown || controls.KeyS || controls.Numpad5,
         moveForward = controls.ArrowUp || controls.KeyW || controls.Numpad8,
-        strafeLeft = controls.KeyA || controls.Numpad4,
-        strafeRight = controls.KeyD || controls.Numpad6,
-        turbo = controls.KeyX || controls.ShiftLeft || controls.ShiftRight,
+        strafeLeft = controls.KeyA || controls.KeyZ || controls.Numpad4,
+        strafeRight = controls.KeyD || controls.KeyX || controls.Numpad6,
+        turbo = controls.ShiftLeft || controls.ShiftRight,
         turnLeft = controls.ArrowLeft || controls.KeyQ || controls.Numpad7,
         turnRight = controls.ArrowRight || controls.KeyE || controls.Numpad9
 
@@ -140,7 +141,7 @@ app.controls.keyboard = (() => {
         state.scan = true
       }
 
-      if ((controls.KeyX || controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleTurbo) {
+      if ((controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleTurbo) {
         state.turbo = true
       }
 

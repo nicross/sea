@@ -64,18 +64,17 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     // Copied but with added z compensation
     const position = engine.position.get(),
       relative = engine.utility.toRelativeCoordinates(position, this),
-      z = content.system.z.get()
+      z = content.system.z.get(),
+      zDifference = Math.abs(this.z - z)
 
     this.atan2 = Math.atan2(this.y - position.y, this.x - position.x)
     this.distance = content.utility.distanceRadius(position.x, position.y, z, this.x, this.y, this.z, this.radius)
 
-    const distance2d = engine.utility.distanceRadius(position.x, position.y, this.x, this.y, this.radius),
-      zDifference = Math.abs(z - this.z),
-      zFactor = this.distance / Math.max(distance2d, 1)
-
-    // Scale vector by z-factor to stretch its apparent distance
-    relative.x = Math.max(relative.x * zFactor, zDifference * content.const.unit2)
-    relative.y = Math.max(relative.y * zFactor, zDifference * content.const.unit2)
+    // Scale coordinates for z distance
+    if (zDifference) {
+      relative.x += Math.cos(this.atan2) * zDifference
+      relative.y += Math.sin(this.atan2) * zDifference
+    }
 
     this.output.binaural.update({
       delta,

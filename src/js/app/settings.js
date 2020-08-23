@@ -16,7 +16,7 @@ app.settings = (() => {
     },
     toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
-      default: 0,
+      default: 1,
     },
   }
 

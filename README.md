@@ -145,14 +145,14 @@ Experiment.
     <tr>
       <th>Forward</th>
       <td>Right Stick</td>
-      <td>Right Trigger</td>
       <td>D-Pad Up</td>
+      <td>Right Trigger</td>
     </tr>
     <tr>
       <th>Reverse</th>
       <td>Right Stick</td>
-      <td>Left Trigger</td>
       <td>D-Pad Down</td>
+      <td>Left Trigger</td>
     </tr>
     <tr>
       <th>Turn Left</th>

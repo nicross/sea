@@ -1,3 +1,4 @@
+engine.const.distancePower = 1.25
 engine.const.movementDeceleration = engine.const.gravity
 engine.const.movementMaxRotation = Math.PI / 2
 engine.const.movementRotationalAcceleration = Math.PI

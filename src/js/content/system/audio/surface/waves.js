@@ -38,7 +38,8 @@ content.system.audio.surface.waves = (() => {
 
   let wasAbove
 
-  bus.gain.value = engine.utility.fromDb(0)
+  // XXX: Compensate for engine.const.distancePower = 1 (was 0 at 2)
+  bus.gain.value = engine.utility.fromDb(-6)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)

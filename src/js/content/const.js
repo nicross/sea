@@ -16,6 +16,7 @@ content.const = {
   surfaceNormalAcceleration: engine.const.gravity / 2,
   surfaceTurboMaxVelocity: 30,
   surfaceNormalMaxVelocity: 10,
+  treasurePickupRadius: 2,
   underwaterTurboAcceleration: engine.const.gravity,
   underwaterNormalAcceleration: 1,
   underwaterTurboMaxVelocity: 20,

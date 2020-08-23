@@ -51,8 +51,12 @@ content.system.streamer = (() => {
       }
 
       registry.delete(token)
-      registryTree.delete(registeredProp)
+      registryTree.remove(registeredProp)
 
+      return this
+    },
+    destroyStreamedProp: function (token) {
+      destroyStreamedProp(token)
       return this
     },
     registerProp: function(prototype, options = {}) {

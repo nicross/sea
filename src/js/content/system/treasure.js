@@ -6,6 +6,15 @@ content.system.treasure = (() => {
 
   let collectedTotal = 0
 
+  function decrementSpawned({x, y, z}) {
+    if (!spawnedThreed.has(x, y, z)) {
+      return
+    }
+
+    const amount = spawnedThreed.get(x, y, z)
+    spawnedThreed.set(x, y, z, Math.max(0, amount - 1))
+  }
+
   function generateChunk(x, y, z) {
     const srand = engine.utility.srand('chunk', x, y, z)
 
@@ -20,6 +29,10 @@ content.system.treasure = (() => {
   }
 
   function getChunk(x, y, z) {
+    x = scale(x)
+    y = scale(y)
+    z = scale(z)
+
     if (chunkThreed.has(x, y, z)) {
       return chunkThreed.get(x, y, z)
     }
@@ -67,6 +80,10 @@ content.system.treasure = (() => {
     spawnedThreed.set(x, y, z, amount + 1)
   }
 
+  function scale(value) {
+    return Math.floor(value / chunkScale)
+  }
+
   function spawnTreasure({
     chunk,
     scan,
@@ -92,7 +109,14 @@ content.system.treasure = (() => {
       return
     }
 
-    // TODO: Spawn a treasure prop
+    console.log(location)
+
+    content.system.streamer.registerProp(content.prop.treasure, {
+      radius: 1,
+      x: location.x,
+      y: location.y,
+      z: location.z,
+    })
 
     /*
       TODO: Better placement, e.g. randomly along the faces defined by scan, e.g.
@@ -103,6 +127,27 @@ content.system.treasure = (() => {
   }
 
   return {
+    collect: function (prop) {
+      const chunkCoordinates = {
+        x: scale(prop.x),
+        y: scale(prop.y),
+        z: scale(prop.z),
+      }
+
+      content.system.streamer.deregisterProp(prop.token)
+      content.system.streamer.destroyStreamedProp(prop.token)
+
+      incrementCollected(chunkCoordinates)
+      decrementSpawned(chunkCoordinates)
+
+      const treasure = content.system.treasures.generate()
+      console.log(treasure)
+
+      // TODO: Add to gallery
+      // TODO: Emit event, e.g. for autosaving and sound cue
+
+      return this
+    },
     export: function () {
       return {
         collected: {
@@ -112,13 +157,8 @@ content.system.treasure = (() => {
       }
     },
     getCurrentChunk: function () {
-      let {x, y} = engine.position.get()
-      let z = content.system.z.get()
-
-      x = Math.floor(x / chunkScale)
-      y = Math.floor(y / chunkScale)
-      z = Math.floor(z / chunkScale)
-
+      const {x, y} = engine.position.get()
+      const z = content.system.z.get()
       return getChunk(x, y, z)
     },
     getTotalCollected: () => collectedTotal,
@@ -141,17 +181,12 @@ content.system.treasure = (() => {
       const {x, y} = engine.position.get()
       const floor = content.system.terrain.floor.value(x, y)
 
-      const scaledZ = Math.floor(z / chunkScale)
-
-      if (Math.floor(floor / chunkScale) < scaledZ) {
+      if (scale(floor) < scale(z)) {
         // Current chunk is above closest possible spawn place
         return
       }
 
-      const scaledX = Math.floor(x / chunkScale),
-        scaledY = Math.floor(y / chunkScale)
-
-      const chunk = getChunk(scaledX, scaledY, scaledZ),
+      const chunk = getChunk(x, y, z),
         collected = getCollected(chunk)
 
       if (collected >= chunk.density) {

@@ -95,10 +95,8 @@ content.system.treasure = (() => {
     // TODO: Spawn a treasure prop
 
     /*
-      TODO: Better placement, e.g. randomly along the plane defined by scan, e.g.
-      forwardLeftDown forwardRightDown
-      reverseLeftDown reverseRightDown
-      And then raytrace to find closest non-solid surface (up if solid, down if not)
+      TODO: Better placement, e.g. randomly along the faces defined by scan, e.g.
+      treat 3-4 solid points as a 2d surface and shoot a ray through for solid point
     */
 
     incrementSpawned(chunk)

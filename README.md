@@ -182,7 +182,7 @@ Reveal the spoilers at your own pace.
     <tr>
       <th>Confirm</th>
       <td>A</td>
-      <td></td>
+      <td>Start</td>
       <td></td>
     </tr>
     <tr>

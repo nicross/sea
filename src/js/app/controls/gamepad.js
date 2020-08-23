@@ -142,7 +142,7 @@ app.controls.gamepad = {
       state.cancel = true
     }
 
-    if (buttons[0]) {
+    if (buttons[0] || buttons[9]) {
       state.confirm = true
     }
 

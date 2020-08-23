@@ -122,10 +122,10 @@ content.system.audio.scan = ((undefined) => {
       return
     }
 
-    const gain = Math.max(engine.const.zeroGain, (1 - scan.ratio) ** 4),
+    const gain = engine.utility.distanceToPower(scan.distance),
       panner = context.createStereoPanner()
 
-    when += scan.ratio / 6
+    when += scan.distance / content.const.underwaterSpeedOfSound
 
     const synth = engine.audio.synth.createSimple({
       frequency: engine.utility.midiToFrequency(note),

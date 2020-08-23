@@ -10,8 +10,6 @@ app.autosave = (() => {
     app.storage.setStats(
       app.stats.export()
     )
-
-    // TODO: Save treasure
   }
 
   return {
@@ -49,3 +47,12 @@ app.autosave = (() => {
     },
   }
 })()
+
+content.system.treasure.on('collect', (treasure) => {
+  const treasures = app.storage.getTreasures()
+
+  treasures.push(treasure)
+  app.storage.setTreasures(treasures)
+
+  app.autosave.trigger()
+})

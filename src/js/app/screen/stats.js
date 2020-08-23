@@ -46,7 +46,7 @@ app.screen.stats = (() => {
   function updateStats() {
     const maxDepth = app.stats.maxDepth.get(),
       maxDistance = app.stats.maxDistance.get(),
-      treasures = app.storage.getTreasure().length,
+      treasures = app.storage.getTreasures().length,
       totalDistance = app.stats.totalDistance.get(),
       totalTime = app.stats.totalTime.get()
 

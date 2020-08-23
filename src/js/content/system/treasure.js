@@ -2,6 +2,7 @@ content.system.treasure = (() => {
   const chunkThreed = content.utility.threed.create(),
     chunkScale = 100,
     collectedThreed = content.utility.threed.create(),
+    pubsub = engine.utility.pubsub.create(),
     spawnedThreed = content.utility.threed.create()
 
   let collectedTotal = 0
@@ -126,7 +127,7 @@ content.system.treasure = (() => {
     incrementSpawned(chunk)
   }
 
-  return {
+  return engine.utility.pubsub.decorate({
     collect: function (prop) {
       const chunkCoordinates = {
         x: scale(prop.x),
@@ -141,10 +142,11 @@ content.system.treasure = (() => {
       decrementSpawned(chunkCoordinates)
 
       const treasure = content.system.treasures.generate()
-      console.log(treasure)
 
       // TODO: Add to gallery
       // TODO: Emit event, e.g. for autosaving and sound cue
+
+      pubsub.emit('collect', treasure)
 
       return this
     },
@@ -211,7 +213,7 @@ content.system.treasure = (() => {
         scan,
       })
     },
-  }
+  }, pubsub)
 })()
 
 // HACK: Essentially app.once('activate')

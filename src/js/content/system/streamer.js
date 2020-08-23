@@ -63,6 +63,9 @@ content.system.streamer = (() => {
         options,
         prototype,
         token,
+        x: options.x,
+        y: options.y,
+        z: options.z,
       }
 
       registry.set(token, registeredProp)
@@ -126,7 +129,7 @@ content.system.streamer = (() => {
   }
 })()
 
-engine.loop.on('frame', ({ paused }) => {
+engine.loop.on('frame', ({paused}) => {
   if (paused) {
     return
   }

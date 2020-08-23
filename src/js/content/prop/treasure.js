@@ -1,4 +1,4 @@
-content.prop.exploration = content.prop.base.invent({
+content.prop.treasure = content.prop.base.invent({
   name: 'Treasure',
   onUpdate: function () {
     // TODO: Collect on this.distance <= pickup radius

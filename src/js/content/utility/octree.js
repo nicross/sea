@@ -220,6 +220,21 @@ content.utility.octree.prototype = {
 
     return items
   },
+  remove: function (item) {
+    if (this.nodes.length) {
+      const index = this.getIndex(item)
+      this.nodes[index].remove(item)
+      return this
+    }
+
+    const index = this.items.indexOf(item)
+
+    if (index != -1) {
+      this.items.splice(index, 1)
+    }
+
+    return this
+  },
   split: function () {
     if (this.nodes.length) {
       return this

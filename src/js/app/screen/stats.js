@@ -46,18 +46,24 @@ app.screen.stats = (() => {
   function updateStats() {
     const maxDepth = app.stats.maxDepth.get(),
       maxDistance = app.stats.maxDistance.get(),
-      treasures = app.storage.getTreasures().length,
+      treasures = app.storage.getTreasures(),
       totalDistance = app.stats.totalDistance.get(),
       totalTime = app.stats.totalTime.get()
 
-    root.querySelector('.a-stats--row-maxDepth').hidden = maxDepth == 0
-    root.querySelector('.a-stats--row-treasures').hidden = treasures == 0
+    const galleryValue = treasures.reduce((sum, treasure) => sum + treasure.value, 0),
+      treasuresCollected = treasures.length
 
+    root.querySelector('.a-stats--row-gallery').hidden = !treasuresCollected
+    root.querySelector('.a-stats--row-maxDepth').hidden = !maxDepth
+    root.querySelector('.a-stats--row-treasures').hidden = !treasuresCollected
+
+    root.querySelector('.a-stats--metric-gallery').innerHTML = app.utility.format.number(galleryValue)
+    root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDistance').innerHTML = app.utility.format.number(maxDistance)
     root.querySelector('.a-stats--metric-totalDistance').innerHTML = app.utility.format.number(totalDistance)
     root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.format.time(totalTime)
-    root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasures)
+    root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
   }
 
   app.once('activate', () => {

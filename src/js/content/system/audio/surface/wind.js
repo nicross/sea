@@ -11,7 +11,7 @@ content.system.audio.surface.wind = (() => {
   binaural.to(bus)
 
   // XXX: Compensate for engine.const.distancePower = 1 (was 0 at 2)
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-6)
 
   function createSynth() {
     synth = engine.audio.synth.createBuffer({

@@ -122,7 +122,7 @@ content.system.audio.scan = ((undefined) => {
       return
     }
 
-    const gain = engine.utility.distanceToPower(scan.distance),
+    const gain = engine.utility.distanceToPower(scan.distance ** 0.5),
       panner = context.createStereoPanner()
 
     when += scan.distance / content.const.underwaterSpeedOfSound

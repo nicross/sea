@@ -9,7 +9,7 @@ content.system.audio.engine = (() => {
   let synth
 
   // XXX: Compensate for engine.const.distancePower = 1 (was -4.5 at 2)
-  bus.gain.value = engine.utility.fromDb(-7.5)
+  bus.gain.value = engine.utility.fromDb(-6)
   binaural.to(bus)
 
   function calculateParams(controls) {
@@ -160,7 +160,7 @@ content.system.audio.engine = (() => {
       : engine.utility.lerp(4, 16, radius)
 
     const color = isSurface
-      ? (isCatchingAir ? 3 : 2)
+      ? (isCatchingAir ? 4 : 3)
       : (isTurbo ? 1 : 2)
 
     binaural.update({

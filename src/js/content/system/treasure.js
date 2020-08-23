@@ -71,13 +71,35 @@ content.system.treasure = (() => {
     chunk,
     scan,
   }) {
-    console.log('spawn treasure')
+    // Use scan results for possible locations
+    // Sort locations by distance descending to prevent
+    const locations = [
+      scan.down,
+      scan.forward,
+      scan.forwardLeftDown,
+      scan.forwardRightDown,
+      scan.left,
+      scan.reverse,
+      scan.reverseLeftDown,
+      scan.reverseRightDown,
+      scan.right,
+    ].filter((trace) => trace && trace.isSolid).sort((a, b) => b.distance - a.distance)
+
+    // Bias towards farther scans, e.g. to prevent automatic acquisition
+    const location = engine.utility.choose(locations, Math.random() ** 2)
+
+    if (!location) {
+      return
+    }
 
     // TODO: Spawn a treasure prop
-    // Cheat by placing it randomly at a point or along the plane defined by scan, e.g.
-    // forwardLeftDown forwardRightDown
-    // reverseLeftDown reverseRightDown
-    // And then raytrace to find closest non-solid surface (up if solid, down if not)
+
+    /*
+      TODO: Better placement, e.g. randomly along the plane defined by scan, e.g.
+      forwardLeftDown forwardRightDown
+      reverseLeftDown reverseRightDown
+      And then raytrace to find closest non-solid surface (up if solid, down if not)
+    */
 
     incrementSpawned(chunk)
   }

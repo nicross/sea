@@ -118,7 +118,7 @@ content.system.scan = (() => {
 
       engine.utility.timing.promise(content.const.scanCooldown).then(() => {
         isCooldown = false
-        pubsub.emit('recharge')
+        pubsub.emit('recharge', results)
       })
 
       return this

@@ -1,5 +1,8 @@
 app.screen.gallery = (() => {
-  let root
+  const uuids = new Set()
+
+  let items,
+    root
 
   function handleControls() {
     const ui = app.controls.ui()
@@ -44,11 +47,26 @@ app.screen.gallery = (() => {
   }
 
   function updateItems() {
-    // TODO: Update items
+    const treasures = app.storage.getTreasures()
+
+    for (const treasure of treasures) {
+      if (uuids.has(treasure.uuid)) {
+        continue
+      }
+
+      const li = document.createElement('li')
+
+      li.classList.add('a-gallery--item')
+      app.component.treasure.create(treasure).attach(li)
+      items.appendChild(li)
+
+      uuids.add(treasure.uuid)
+    }
   }
 
   app.once('activate', () => {
     root = document.querySelector('.a-gallery')
+    items = root.querySelector('.a-gallery--items')
 
     app.state.screen.on('enter-gallery', onEnter)
     app.state.screen.on('exit-gallery', onExit)

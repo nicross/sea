@@ -1,11 +1,10 @@
 content.system.treasure = (() => {
   const chunkThreed = content.utility.threed.create(),
     chunkScale = 100,
+    collected = [],
     collectedThreed = content.utility.threed.create(),
     pubsub = engine.utility.pubsub.create(),
     spawnedThreed = content.utility.threed.create()
-
-  let collectedTotal = 0
 
   function decrementSpawned({x, y, z}) {
     if (!spawnedThreed.has(x, y, z)) {
@@ -43,7 +42,7 @@ content.system.treasure = (() => {
     return chunk
   }
 
-  function getCollected({x, y, z}) {
+  function getTotalCollected({x, y, z}) {
     if (collectedThreed.has(x, y, z)) {
       return collectedThreed.get(x, y, z)
     }
@@ -52,13 +51,25 @@ content.system.treasure = (() => {
     return 0
   }
 
-  function getSpawned({x, y, z}) {
+  function getTotalSpawned({x, y, z}) {
     if (spawnedThreed.has(x, y, z)) {
       return spawnedThreed.get(x, y, z)
     }
 
     spawnedThreed.set(x, y, z, 0)
     return 0
+  }
+
+  function importCollected(items = []) {
+    for (const item of items) {
+      collected.push(item)
+
+      incrementCollected({
+        x: scale(item.x),
+        y: scale(item.y),
+        z: scale(item.z),
+      })
+    }
   }
 
   function incrementCollected({x, y, z}) {
@@ -68,8 +79,6 @@ content.system.treasure = (() => {
 
     const amount = collectedThreed.get(x, y, z)
     collectedThreed.set(x, y, z, amount + 1)
-
-    collectedTotal += 1
   }
 
   function incrementSpawned({x, y, z}) {
@@ -110,8 +119,6 @@ content.system.treasure = (() => {
       return
     }
 
-    console.log(location)
-
     content.system.streamer.registerProp(content.prop.treasure, {
       radius: 1,
       x: location.x,
@@ -135,27 +142,27 @@ content.system.treasure = (() => {
         z: scale(prop.z),
       }
 
+      decrementSpawned(chunkCoordinates)
+      incrementCollected(chunkCoordinates)
+
       content.system.streamer.deregisterProp(prop.token)
       content.system.streamer.destroyStreamedProp(prop.token)
 
-      incrementCollected(chunkCoordinates)
-      decrementSpawned(chunkCoordinates)
-
       const treasure = content.system.treasures.generate()
 
-      // TODO: Add to gallery
-      // TODO: Emit event, e.g. for autosaving and sound cue
+      treasure.x = prop.x
+      treasure.y = prop.y
+      treasure.z = prop.z
 
+      collected.push(treasure)
       pubsub.emit('collect', treasure)
 
       return this
     },
     export: function () {
       return {
-        collected: {
-          threed: collectedThreed.export(),
-          total: collectedTotal,
-        },
+        collected: [...collected],
+        // TODO: Export spawned
       }
     },
     getCurrentChunk: function () {
@@ -163,16 +170,15 @@ content.system.treasure = (() => {
       const z = content.system.z.get()
       return getChunk(x, y, z)
     },
-    getTotalCollected: () => collectedTotal,
+    getCollected: () => [...collected],
     import: function (data = {}) {
-      const dataCollected = data.collected || {}
-
-      collectedThreed.import(dataCollected.threed)
-      collectedTotal = Number(dataCollected.total) || 0
-
+      importCollected(data.collected || [])
+      // TODO: Import spawned
       return this
     },
     onScan: function (scan) {
+      // TODO: Improve this by rolling chunk for each individual scan point
+
       const z = content.system.z.get()
 
       if (z > content.const.lightZone) {
@@ -189,17 +195,17 @@ content.system.treasure = (() => {
       }
 
       const chunk = getChunk(x, y, z),
-        collected = getCollected(chunk)
+        totalCollected = getTotalCollected(chunk)
 
-      if (collected >= chunk.density) {
+      if (totalCollected >= chunk.density) {
         // All treasures have been collected
         return
       }
 
-      const spawned = getSpawned(chunk)
+      const totalSpawned = getTotalSpawned(chunk)
 
-      if ((collected + spawned) >= chunk.density) {
-        // All treasures have been spawned
+      if ((totalCollected + totalSpawned) >= chunk.density) {
+        // All treasures have been collected or spawned
         return
       }
 
@@ -213,6 +219,10 @@ content.system.treasure = (() => {
         scan,
       })
     },
+    reset: function () {
+      collected.length = 0
+      return this
+    },
   }, pubsub)
 })()
 
@@ -223,3 +233,4 @@ engine.loop.once('frame', () => {
 
 engine.state.on('export', (data) => data.treasure = content.system.treasure.export())
 engine.state.on('import', (data) => content.system.treasure.import(data.treasure))
+engine.state.on('reset', () => content.system.treasure.reset())

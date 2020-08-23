@@ -46,8 +46,13 @@ app.screen.status = (() => {
   function updateStatus() {
     const depth = Math.max(0, -content.system.z.get()),
       position = engine.position.get(),
-      treasures = content.system.treasure.getTotalCollected(),
+      treasures = content.system.treasure.getCollected(),
       time = content.system.time.get()
+
+    const totalTreasures = treasures.length
+
+    // TODO: Treasure value
+    // TODO: Last treasure
 
     root.querySelector('.a-status--row-depth').hidden = !depth
     root.querySelector('.a-status--row-treasures').hidden = !treasures
@@ -56,7 +61,7 @@ app.screen.status = (() => {
     root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
     root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(position.angle)
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
-    root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasures)
+    root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(totalTreasures)
   }
 
   app.once('activate', () => {

@@ -20,5 +20,6 @@ content.const = {
   underwaterNormalAcceleration: 1,
   underwaterTurboMaxVelocity: 20,
   underwaterNormalMaxVelocity: 2,
+  unit2: Math.sqrt(2) / 2,
   waveHeight: 8,
 }

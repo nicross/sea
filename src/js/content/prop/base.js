@@ -9,7 +9,7 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     z = 0,
     ...options
   } = {}) {
-    // Copied but with added token and z values
+    // Copied but with added token and z values, no reverb
     const context = engine.audio.context()
 
     this.acceleration = 0
@@ -35,19 +35,28 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     this.output = {
       binaural: engine.audio.binaural.create(),
       input: context.createGain(),
-      reverb: engine.audio.send.reverb.create(),
     }
 
     this.output.binaural.from(this.output.input)
     this.output.binaural.to(output)
-
-    this.output.reverb.from(this.output.input)
 
     this.output.input.gain.value = engine.const.zeroGain
     engine.audio.ramp.linear(this.output.input.gain, 1, engine.const.propFadeDuration)
 
     this.recalculate()
     this.onConstruct(options)
+
+    return this
+  },
+  destroy: function () {
+    // Copied but without reverb
+    engine.audio.ramp.linear(this.output.input.gain, engine.const.zeroGain, engine.const.propFadeDuration)
+
+    setTimeout(() => {
+      this.output.input.disconnect()
+      this.output.binaural.destroy()
+      this.onDestroy()
+    }, engine.const.propFadeDuration * 1000)
 
     return this
   },
@@ -61,18 +70,14 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     this.distance = content.utility.distanceRadius(position.x, position.y, z, this.x, this.y, this.z, this.radius)
 
     const distance2d = engine.utility.distanceRadius(position.x, position.y, this.x, this.y, this.radius),
-      zFactor = this.distance / distance2d
+      zDifference = Math.abs(z - this.z),
+      zFactor = this.distance / Math.max(distance2d, 1)
 
-    // Multiply vector by z-factor to stretch its apparent distance
-    relative.x *= zFactor
-    relative.y *= zFactor
+    // Scale vector by z-factor to stretch its apparent distance
+    relative.x = Math.max(relative.x * zFactor, zDifference * content.const.unit2)
+    relative.y = Math.max(relative.y * zFactor, zDifference * content.const.unit2)
 
     this.output.binaural.update({
-      delta,
-      ...relative,
-    })
-
-    this.output.reverb.update({
       delta,
       ...relative,
     })

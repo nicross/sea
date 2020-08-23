@@ -2,7 +2,7 @@
   .a-stats--data {
     list-style-type: none;
     margin: -0.25em;
-    max-height: calc(1.75em * 5);
+    max-height: calc(2em * 5);
     padding-right: 1em;
     overflow-y: auto;
     scroll-behavior: smooth;

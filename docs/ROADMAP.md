@@ -12,12 +12,14 @@
 - treasure
 
 ## Gameplan
+- Exploration system
+  - Add props to system that triggers their sounds in a tempo sequence (e.g. every 15 frames)
+  - Sountrack module has dynamic partials (frequencies) that it selects from when triggering their sounds
 - Treasure generator
   - Spawning
-  - Cue on successful scan
+  - Cue on successful scan?
 - Treasure prop
   - Shiny object cue
-  - Figure out how z-index works with prop streaming
 - Treasure collection
   - Collision detection
   - Reward sound cue

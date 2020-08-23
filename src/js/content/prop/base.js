@@ -55,11 +55,13 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     // Copied but with added z compensation
     const position = engine.position.get(),
       relative = engine.utility.toRelativeCoordinates(position, this),
-      z = content.system.z.get(),
-      zFactor = 1 + (Math.abs(z - this.z) ** 0.5)
+      z = content.system.z.get()
 
     this.atan2 = Math.atan2(this.y - position.y, this.x - position.x)
     this.distance = content.utility.distanceRadius(position.x, position.y, z, this.x, this.y, this.z, this.radius)
+
+    const distance2d = engine.utility.distanceRadius(position.x, position.y, this.x, this.y, this.radius),
+      zFactor = this.distance / distance2d
 
     // Multiply vector by z-factor to stretch its apparent distance
     relative.x *= zFactor

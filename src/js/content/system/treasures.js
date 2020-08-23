@@ -17,6 +17,7 @@ content.system.treasures = (() => {
       return {
         key,
         time,
+        uuid: engine.utility.uuid(),
         ...defaults,
         ...generator(srand),
       }

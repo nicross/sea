@@ -6,7 +6,6 @@
 ## Required modules
 - audio
   - underwater soundtrack
-- terrain
 - treasure
 
 ## Required props
@@ -14,8 +13,7 @@
 
 ## Gameplan
 - Treasure generator
-  - Define archetypes
-  - Placement and spawning rules
+  - Spawning
   - Cue on successful scan
 - Treasure prop
   - Shiny object cue

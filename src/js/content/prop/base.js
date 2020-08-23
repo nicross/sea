@@ -72,8 +72,9 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
 
     // Scale coordinates for z distance
     if (zDifference) {
-      relative.x += Math.cos(this.atan2) * zDifference
-      relative.y += Math.sin(this.atan2) * zDifference
+      const atan2 = Math.atan2(relative.y, relative.x)
+      relative.x += Math.cos(atan2) * zDifference
+      relative.y += Math.sin(atan2) * zDifference
     }
 
     this.output.binaural.update({

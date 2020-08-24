@@ -11,7 +11,7 @@ content.prop.treasure = content.prop.base.invent({
       return this
     }
 
-    if (this.distance < content.const.treasurePickupRadius) {
+    if (this.distance <= 0) {
       return this.collect()
     }
 

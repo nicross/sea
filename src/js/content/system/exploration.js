@@ -1,6 +1,5 @@
 content.system.exploration = (() => {
   const list = [],
-    radius = 3,
     tree = content.utility.octree.create()
 
   function addNode(node) {
@@ -28,7 +27,7 @@ content.system.exploration = (() => {
           continue
         }
 
-        const checkNearby = tree.find(result, radius)
+        const checkNearby = tree.find(result, content.const.explorationNodeRadius)
 
         if (checkNearby) {
           continue

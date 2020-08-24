@@ -120,7 +120,7 @@ content.system.treasure = (() => {
     }
 
     content.system.streamer.registerProp(content.prop.treasure, {
-      radius: 1,
+      radius: content.const.treasurePickupRadius,
       x: location.x,
       y: location.y,
       z: location.z,

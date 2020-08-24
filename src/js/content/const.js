@@ -11,6 +11,7 @@ engine.const.streamerRadius = 50
 
 content.const = {
   dragDeceleration: 1,
+  explorationNodeRadius: 1,
   normalDeceleration: engine.const.gravity,
   lightZone: -1000,
   midnightZoneMin: -750,
@@ -21,7 +22,7 @@ content.const = {
   surfaceNormalMaxVelocity: 10,
   surfaceTurboAcceleration: engine.const.gravity,
   surfaceTurboMaxVelocity: 30,
-  treasurePickupRadius: 2,
+  treasurePickupRadius: 4,
   underwaterNormalAcceleration: 1,
   underwaterNormalMaxVelocity: 2,
   underwaterSpeedOfSound: 1450,

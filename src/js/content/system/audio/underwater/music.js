@@ -6,7 +6,6 @@ content.system.audio.underwater.music = (() => {
   let gain = 1
 
   bus.gain.value = gain
-  reverbMix.gain.value = engine.utility.fromDb(-6)
   bus.connect(reverbMix)
 
   return {

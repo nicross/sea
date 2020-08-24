@@ -1,5 +1,5 @@
 content.system.soundtrack = (() => {
-  const root = 33
+  const root = 45
 
   const chords = [
     [-4, 0, 3],
@@ -63,6 +63,21 @@ content.system.soundtrack = (() => {
   return {
     frequencies: () => [...frequencies],
     harmonics: () => [...harmonics],
+    import: function (data) {
+      const position = data.position || {}
+
+      const present = {
+        time: data.time || 0,
+        x: position.x || 0,
+        y: position.y || 0,
+        z: data.z || 0,
+      }
+
+      updateFrequencies(present)
+      updateHarmonics(present)
+
+      return this
+    },
     reset: function () {
       // TODO: Reset fields
       return this
@@ -70,13 +85,18 @@ content.system.soundtrack = (() => {
     update: function () {
       // TODO: Possibly a frame limiter
 
+      const z = content.system.z.get()
+
+      if (z > content.const.midnightZoneMin + 1) {
+        // Don't waste frames when not audible
+        // Some leeway to prevent race conditions
+        return this
+      }
+
       const {x, y} = engine.position.get()
 
-      const time = content.system.time.get(),
-        z = content.system.z.get()
-
       const present = {
-        time,
+        time: content.system.time.get(),
         x,
         y,
         z,
@@ -98,4 +118,5 @@ engine.loop.on('frame', ({paused}) => {
   content.system.soundtrack.update()
 })
 
+engine.state.on('import', (data) => content.system.soundtrack.import(data))
 engine.state.on('reset', () => content.system.soundtrack.reset())

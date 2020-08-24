@@ -11,22 +11,25 @@ content.system.audio.underwater.drones = (() => {
 
   const binaurals = angles.map(() => engine.audio.binaural.create().to(mix))
 
-  let synths = [],
+  const frequencyRampDuration = 30
+
+  let frequencyCache = [],
+    synths = [],
     wasAbove = false,
     wasBelow = false
 
   mix.connect(bus)
 
   function createSynths() {
-    // TODO: Get initial frequencies via soundtrack module
+    const frequencies = content.system.soundtrack.frequencies()
 
     for (let i = 0; i < binaurals.length; i += 1) {
       const binaural = binaurals[i]
 
       const synth = engine.audio.synth.createAm({
         carrierGain: 1,
-        carrierFrequency: 0,
-        gain: engine.utility.fromDb(-18),
+        carrierFrequency: frequencies[i],
+        gain: engine.utility.fromDb(-21),
         modDepth: 0,
         modFrequency: 0,
       })
@@ -34,6 +37,8 @@ content.system.audio.underwater.drones = (() => {
       binaural.from(synth.output)
       synths.push(synth)
     }
+
+    frequencyCache = frequencies
   }
 
   function destroySynths() {
@@ -79,9 +84,16 @@ content.system.audio.underwater.drones = (() => {
   }
 
   function updateSynths() {
-    // TODO: Get notes and sort by frequency, always assign
-    // TODO: Ramp frequencies if changed
-    // TODO: Update AM frequency/depth
+    const frequencies = content.system.soundtrack.frequencies()
+
+    synths.forEach((synth, i) => {
+      if (frequencies[i] != frequencyCache[i]) {
+        engine.audio.ramp.exponential(synth.param.frequency, frequencies[i], frequencyRampDuration)
+        frequencyCache[i] = frequencies[i]
+      }
+
+      // TODO: Update AM frequency/depth
+    })
   }
 
   return {

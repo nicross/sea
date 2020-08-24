@@ -17,15 +17,19 @@ content.system.soundtrack = (() => {
     [0, -1, -1],
   ]
 
+  const multiples = [
+    1.5,
+    2,
+    3,
+    4,
+    6,
+    8,
+  ]
+
   const chordField = engine.utility.perlin3d.create('soundtrack', 'chord'),
-    chordMomentum = 5,
+    chordMomentum = 7,
     chordScale = 1000,
     chordTimeScale = 300
-
-  const colorField = engine.utility.perlin3d.create('soundtrack', 'color'),
-    colorMomentum = 7,
-    colorScale = 1000,
-    colorTimeScale = 300
 
   const inversionField = engine.utility.perlin3d.create('soundtrack', 'inversion'),
     inversionMomentum = 11,
@@ -45,18 +49,6 @@ content.system.soundtrack = (() => {
     let z = present.time / chordTimeScale
 
     return engine.utility.choose(chords, chordField.value(x, y, z))
-  }
-
-  function getColor(present) {
-    let x = present.x / colorScale
-    x += present.time * colorMomentum / colorScale
-
-    let y = present.y / colorScale
-    y += present.time * colorMomentum / colorScale
-
-    let z = present.time / colorTimeScale
-
-    return engine.utility.lerp(4, 8, colorField.value(x, y, z))
   }
 
   function getInversion(present) {
@@ -83,13 +75,11 @@ content.system.soundtrack = (() => {
   }
 
   function updateHarmonics(present) {
-    const color = getColor(present)
-
     harmonics.length = 0
 
-    for (let i = 2; i <= color; i += 1) {
+    for (const multiple of multiples) {
       for (const frequency of frequencies) {
-        harmonics.push(frequency * i)
+        harmonics.push(frequency * multiple)
       }
     }
   }

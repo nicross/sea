@@ -2,13 +2,13 @@ content.prop.exploration = content.prop.base.invent({
   name: 'Exploration Node',
   glitter: function () {
     const {angle} = engine.position.get()
-    const strength = Math.random(),
-      zRatio = 1 - (Math.abs(this.z - content.system.z.get()) / engine.const.streamerRadius)
+    const strength = Math.random()
 
-    const facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1) * zRatio,
-      frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], facingRatio)
+    const distanceRatio = 1 - (this.distance / engine.const.streamerRadius),
+      facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1),
+      frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], distanceRatio * facingRatio)
 
-    const duration = engine.utility.lerp(0.5, 1, strength),
+    const duration = engine.utility.lerp(1, 2, strength),
       frequency = engine.utility.choose(content.system.soundtrack.harmonics(), frequencyRoll),
       gain = engine.utility.fromDb(engine.utility.lerp(-24, -18, strength))
 
@@ -24,7 +24,7 @@ content.prop.exploration = content.prop.base.invent({
 
     synth.stop(now + duration)
 
-    return engine.utility.timing.promise(duration * 1500)
+    return engine.utility.timing.promise(duration * 1000)
   },
   onUpdate: function () {
     this.handlePeriodic({

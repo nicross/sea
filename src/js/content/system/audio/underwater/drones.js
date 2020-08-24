@@ -11,7 +11,7 @@ content.system.audio.underwater.drones = (() => {
 
   const binaurals = angles.map(() => engine.audio.binaural.create().to(mix))
 
-  const frequencyRampDuration = 30
+  const frequencyRampDuration = 4
 
   let frequencyCache = [],
     synths = [],

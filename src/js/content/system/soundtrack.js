@@ -17,24 +17,58 @@ content.system.soundtrack = (() => {
     [0, -1, -1],
   ]
 
-  // TODO: Define fields
+  const chordField = engine.utility.perlin3d.create('soundtrack', 'chord'),
+    chordMomentum = 5,
+    chordScale = 1000,
+    chordTimeScale = 300
+
+  const colorField = engine.utility.perlin3d.create('soundtrack', 'color'),
+    colorMomentum = 7,
+    colorScale = 1000,
+    colorTimeScale = 300
+
+  const inversionField = engine.utility.perlin3d.create('soundtrack', 'inversion'),
+    inversionMomentum = 11,
+    inversionScale = 1000,
+    inversionTimeScale = 300
 
   let frequencies = [],
     harmonics = []
 
-  function getChord({time, x, y, z}) {
-    // TODO: Leverage fields
-    return chords[2]
+  function getChord(present) {
+    let x = present.x / chordScale
+    x += present.time * chordMomentum / chordScale
+
+    let y = present.z / chordScale
+    y += present.time * chordMomentum / chordScale
+
+    let z = present.time / chordTimeScale
+
+    return engine.utility.choose(chords, chordField.value(x, y, z))
   }
 
-  function getColor({time, x, y, z}) {
-    // TODO: Leverage fields
-    return 8
+  function getColor(present) {
+    let x = present.x / colorScale
+    x += present.time * colorMomentum / colorScale
+
+    let y = present.y / colorScale
+    y += present.time * colorMomentum / colorScale
+
+    let z = present.time / colorTimeScale
+
+    return engine.utility.lerp(4, 8, colorField.value(x, y, z))
   }
 
-  function getInversion({time, x, y, z}) {
-    // TODO: Leverage fields
-    return inversions[2]
+  function getInversion(present) {
+    let x = present.y / inversionScale
+    x += present.time * inversionMomentum / inversionScale
+
+    let y = present.z / inversionScale
+    y += present.time * inversionMomentum / inversionScale
+
+    let z = present.time / inversionTimeScale
+
+    return engine.utility.choose(inversions, inversionField.value(x, y, z))
   }
 
   function updateFrequencies(present) {

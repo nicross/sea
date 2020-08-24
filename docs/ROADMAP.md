@@ -1,34 +1,25 @@
 # ROADMAP
-
-## Required screens
-- Gallery
-
-## Required modules
-- audio
-  - underwater soundtrack
-- treasure
-
-## Required props
-- treasure
-
-## Gameplan
-- Exploration system
-  - Add props to system that triggers their sounds in a tempo sequence (e.g. every 15 frames)
-  - Sountrack module has dynamic partials (frequencies) that it selects from when triggering their sounds
-- Treasure generator
-  - Cue on successful scan?
+- Exploration props
+  - Add props to system that triggers their sounds in a tempo sequence (e.g. every 15 frames) similar to glitter
+  - Select frequencies from soundtrack module
 - Treasure prop
   - Better cue
 - Treasure collection
   - Reward cue
 - Gallery screen
-  - Scrollable list
-  - Item name, value, depth
+  - Improve visual presentation
 - Soundtrack
-  - Long-running drones
   - Fade in from light zone
-  - Dynamic based on depth
-  - Filtered when in caves
-  - Generated like Kaleidophone
+  - Long-running low drones
+    - pick between four chords
+    - three oscillators with slight slow AM positioned binaurally along an equilateral triangle with radius 1
+    - respond to position.angle so panning relates to cardinal directions
+    - smoothly lerp frequencies over time
+  - "Four-dimensional"
+    - Chord - X/Y, time is Z axis, X/Y are also offset over time at constant rate
+    - Color - X/Z, time is Y axis, X/Z are also offset over time at constant rate
+    - Inversion - Y/Z, time is X axis, Y/Z are also offset over time at constant rate
+    - need to know previous and next values for lerping
+  - List of partials (integer harmonic series) for exploration node to pick from
 - Cue when switching between turbo states (like soundStrider auto-move toggle)
-- Mouse controls
+- Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)

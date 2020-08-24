@@ -7,7 +7,8 @@ content.system.streamer = (() => {
 
   let currentX,
     currentY,
-    currentZ
+    currentZ,
+    shouldForce = false
 
   function createRegisteredProp(token) {
     const streamedProp = engine.streamer.prop.create(
@@ -75,9 +76,7 @@ content.system.streamer = (() => {
       registry.set(token, registeredProp)
       registryTree.insert(registeredProp)
 
-      if (isWithinRadius(options.x, options.y, options.z)) {
-        createRegisteredProp(token)
-      }
+      shouldForce = true
 
       return token
     },
@@ -91,6 +90,7 @@ content.system.streamer = (() => {
       currentX = null
       currentY = null
       currentZ = null
+      shouldForce = false
 
       return this
     },
@@ -101,32 +101,51 @@ content.system.streamer = (() => {
         positionZ = Math.round(content.system.z.get()),
         radius = engine.const.streamerRadius
 
-      if (currentX === positionX && currentY === positionY && currentZ === positionZ && !force) {
+      if (!force && !shouldForce && currentX === positionX && currentY === positionY && currentZ === positionZ) {
         return this
       }
 
       currentX = positionX
       currentY = positionY
       currentZ = positionZ
+      shouldForce = false
 
-      streamed.forEach((streamedProp, token) => {
-        if (streamedProp.prop.distance > engine.const.streamerRadius) {
-          destroyStreamedProp(token)
-        }
-      })
+      const nowStreaming = new Set()
 
-      registryTree.retrieve({
+      const props = registryTree.retrieve({
         depth: radius * 2,
         height: radius * 2,
         width: radius * 2,
         x: currentX - radius,
         y: currentY - radius,
         z: currentZ - radius,
-      }).forEach(({token}) => {
+      }).map((prop) => ({
+        distance: content.utility.distance2(positionX, positionY, positionZ, prop.x, prop.y, prop.z),
+        ...prop,
+      })).sort((a, b) => {
+        if (a.prototype == content.prop.treasure) {
+          return -1
+        }
+
+        if (b.prototype == content.prop.treasure) {
+          return 1
+        }
+
+        return a.distance - b.distance
+      }).slice(0, content.const.propLimit)
+
+      for (const {token} of props) {
         if (!streamed.has(token)) {
           createRegisteredProp(token)
         }
-      })
+        nowStreaming.add(token)
+      }
+
+      for (const token of streamed.keys()) {
+        if (!nowStreaming.has(token)) {
+          destroyStreamedProp(token)
+        }
+      }
 
       return this
     },

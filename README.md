@@ -12,7 +12,6 @@ The ocean is endless.
 Listen and relax.
 Surf the waves.
 Experiment.
-Reveal the spoilers at your own pace.
 
 <details>
   <summary>Light Spoiler Warning</summary>
@@ -21,13 +20,12 @@ Reveal the spoilers at your own pace.
 
 <details>
   <summary>Heavy Spoiler Warning</summary>
-  <p>The military has intelligence that a vast network of caves exists beneath the ocean floor. They suspect that valuable treasures, some not of this world, lay dormant inside. Perhaps your objective is to submerge, explore, and acquire these artifacts.</p>
+  <p>The military has intelligence that a vast network of caves exists beneath the ocean floor. They suspect that valuable treasures, some not of this world, lay dormant inside.</p>
 </details>
 
 <details>
   <summary>Ultimate Spoiler Warning</summary>
-  <p>S.E.A. is an underwater cave diving simulator with mild dungeon crawling elements. It's influenced by games like Sub Culture and Scanner Sombre. At its surface it presents a false exterior of being a relaxing watercraft simulator. Deep below lies a vast oceanic landscape filled with procedurally generated caves. With its scanning mechanic players paint a sonic trail of the areas they've visited with the chance of revealing valuable treasures to collect for their personal galleries. What will you find beneath the surface?</p>
-  <p>Please be mindful of these spoilers while discussing this game.</p>
+  <p>S.E.A. is an underwater cave diving simulator with mild dungeon crawling elements. It's influenced by games like Sub Culture and Scanner Sombre. At its surface it presents a false exterior of being a relaxing watercraft simulator. Deep below lies a vast oceanic landscape filled with endless caves. With its scanning mechanic players paint a sonic trail of the areas they've visited with the chance of revealing valuable treasures to collect for their personal galleries. What will you find beneath the surface?</p>
 </details>
 
 ### Keyboard controls
@@ -219,7 +217,7 @@ Reveal the spoilers at your own pace.
     <tbody>
       <tr>
         <th>Strafing</th>
-        <td>Right Stick</td>
+        <td>Left Stick</td>
         <td></td>
       </tr>
       <tr>

@@ -11,7 +11,7 @@ app.settings = (() => {
       default: 1,
       update: (computedValue) => {
         content.system.audio.surface.glitter.setGain(computedValue)
-        // TODO: Set cave music volume
+        content.system.audio.underwater.drones.setGain(computedValue)
       },
     },
     toggleTurbo: {

@@ -13,6 +13,8 @@ content.const = {
   dragDeceleration: 1,
   normalDeceleration: engine.const.gravity,
   lightZone: -1000,
+  midnightZoneMin: -750,
+  midnightZoneMax: -1250,
   scanCooldown: 2 * 1000,
   surfaceNormalAcceleration: engine.const.gravity / 2,
   surfaceNormalMaxVelocity: 10,

@@ -131,6 +131,8 @@ content.system.audio.surface.glitter = (() => {
         filter.frequency.value = engine.const.maxFrequency
       }
 
+      wasAbove = isAbove
+
       return this
     },
     setGain: function (value) {

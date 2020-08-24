@@ -2,7 +2,7 @@ content.system.audio.scan = ((undefined) => {
   const bus = engine.audio.mixer.createBus(),
     context = engine.audio.context()
 
-  bus.gain.value = engine.utility.fromDb(-6)
+  bus.gain.value = engine.utility.fromDb(-3)
 
   function honk() {
     const root = engine.utility.midiToFrequency(69)
@@ -14,12 +14,12 @@ content.system.audio.scan = ((undefined) => {
       modType: 'square',
     }).connect(bus)
 
-    content.system.reverb.from(synth.output)
+    content.system.audio.reverb.from(synth.output)
 
     const now = engine.audio.time()
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.exponentialRampToValueAtTime(1, now + 1/32)
+    synth.param.gain.exponentialRampToValueAtTime(1/2, now + 1/32)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, now + 0.5)
 
     synth.stop(now + 0.5)
@@ -43,7 +43,7 @@ content.system.audio.scan = ((undefined) => {
       release = now + (content.const.scanCooldown / 1000)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.linearRampToValueAtTime(1/8, attack)
+    synth.param.gain.linearRampToValueAtTime(1/16, attack)
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
 
     synth.param.mod.depth.setValueAtTime(0, now)

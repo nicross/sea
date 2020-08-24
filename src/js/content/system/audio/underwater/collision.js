@@ -17,7 +17,7 @@ content.system.audio.underwater.collision = (() => {
       frequency: engine.utility.lerpExp(300, 2000, velocity, 2),
     })
 
-    content.system.reverb.from(synth.output)
+    content.system.audio.reverb.from(synth.output)
 
     const binaural = engine.audio.binaural.create()
       .from(synth.output)

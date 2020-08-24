@@ -1,4 +1,4 @@
-content.system.reverb = (() => {
+content.system.audio.reverb = (() => {
   const send = engine.audio.send.reverb.create()
 
   const machine = engine.utility.machine.create({
@@ -104,7 +104,7 @@ engine.loop.on('frame', ({frame, paused}) => {
     return
   }
 
-  content.system.reverb.update()
+  content.system.audio.reverb.update()
 })
 
-engine.state.on('import', (data) => content.system.reverb.import(data))
+engine.state.on('import', (data) => content.system.audio.reverb.import(data))

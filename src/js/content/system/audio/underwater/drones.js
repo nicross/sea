@@ -1,6 +1,5 @@
 content.system.audio.underwater.drones = (() => {
-  const bus = engine.audio.mixer.createBus(),
-    context = engine.audio.context(),
+  const context = engine.audio.context(),
     mix = context.createGain()
 
   const angles = [
@@ -17,8 +16,6 @@ content.system.audio.underwater.drones = (() => {
     synths = [],
     wasAbove = false,
     wasBelow = false
-
-  mix.connect(bus)
 
   function createSynths() {
     const frequencies = content.system.soundtrack.frequencies()
@@ -97,14 +94,14 @@ content.system.audio.underwater.drones = (() => {
   }
 
   return {
+    activate: function () {
+      mix.connect(content.system.audio.underwater.music.bus())
+      return this
+    },
     import: function ({z}) {
       wasAbove = false
       wasBelow = false
       updateGain(z)
-      return this
-    },
-    setGain: function (value) {
-      engine.audio.ramp.set(bus.gain, value)
       return this
     },
     update: function () {
@@ -129,6 +126,11 @@ content.system.audio.underwater.drones = (() => {
     },
   }
 })()
+
+// HACK: Essentially app.once('activate')
+engine.loop.once('frame', () => {
+  content.system.audio.underwater.drones.activate()
+})
 
 engine.loop.on('frame', ({paused}) => {
   if (paused) {

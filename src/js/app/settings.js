@@ -11,7 +11,7 @@ app.settings = (() => {
       default: 1,
       update: (computedValue) => {
         content.system.audio.surface.glitter.setGain(computedValue)
-        content.system.audio.underwater.drones.setGain(computedValue)
+        content.system.audio.underwater.music.setGain(computedValue)
       },
     },
     toggleTurbo: {

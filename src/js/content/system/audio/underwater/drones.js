@@ -17,6 +17,10 @@ content.system.audio.underwater.drones = (() => {
     wasAbove = false,
     wasBelow = false
 
+  // TODO: Turn notes into synth pads
+  // 4s attack and decay, they'll naturally crossfade
+  // random am depth/frequency with each note, try 1/prime seconds
+
   function createSynths() {
     const frequencies = content.system.soundtrack.frequencies()
 

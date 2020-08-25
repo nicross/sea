@@ -1,25 +1,14 @@
 # ROADMAP
-- Exploration props
-  - Add props to system that triggers their sounds in a tempo sequence (e.g. every 15 frames) similar to glitter
-  - Select frequencies from soundtrack module
 - Treasure prop
   - Better cue
 - Treasure collection
   - Reward cue
-- Gallery screen
-  - Improve visual presentation
-- Soundtrack
-  - Fade in from light zone
-  - Long-running low drones
-    - pick between four chords
-    - three oscillators with slight slow AM positioned binaurally along an equilateral triangle with radius 1
-    - respond to position.angle so panning relates to cardinal directions
-    - smoothly lerp frequencies over time
-  - "Four-dimensional"
-    - Chord - X/Y, time is Z axis, X/Y are also offset over time at constant rate
-    - Color - X/Z, time is Y axis, X/Z are also offset over time at constant rate
-    - Inversion - Y/Z, time is X axis, Y/Z are also offset over time at constant rate
-    - need to know previous and next values for lerping
-  - List of partials (integer harmonic series) for exploration node to pick from
-- Cue when switching between turbo states (like soundStrider auto-move toggle)
-- Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)
+- Polish
+  - Gallery screen
+    - Improve visual presentation
+  - Drones
+    - switch to synth pads with on/off attacks and random gain LFOs
+  - Revisit directional exploration node cues
+  - Cue when switching between turbo states (like soundStrider auto-move toggle)
+  - Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)
+  - Revisit surface mix

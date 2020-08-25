@@ -74,14 +74,16 @@ content.system.soundtrack = (() => {
     ].sort((a, b) => a - b)
   }
 
-  function updateHarmonics(present) {
+  function updateHarmonics() {
     harmonics.length = 0
 
-    for (const multiple of multiples) {
-      for (const frequency of frequencies) {
+    for (const frequency of frequencies) {
+      for (const multiple of multiples) {
         harmonics.push(frequency * multiple)
       }
     }
+
+    harmonics = harmonics.sort((a, b) => a - b)
   }
 
   return {
@@ -98,7 +100,7 @@ content.system.soundtrack = (() => {
       }
 
       updateFrequencies(present)
-      updateHarmonics(present)
+      updateHarmonics()
 
       return this
     },

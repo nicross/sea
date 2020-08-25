@@ -8,6 +8,10 @@ content.system.audio.underwater.music = (() => {
   bus.gain.value = gain
   bus.connect(reverbMix)
 
+  // TODO: Turn notes into synth pads
+  // 4s attack and decay, they'll naturally crossfade
+  // random am depth/frequency with each note, try 1/prime seconds
+
   return {
     activate: function () {
       content.system.audio.reverb.from(reverbMix)

@@ -1,6 +1,8 @@
 content.system.audio.underwater.drones = (() => {
   const context = engine.audio.context(),
-    mix = context.createGain()
+    mix = context.createGain(),
+    synthFade = 4,
+    synthGain = engine.utility.fromDb(-19.5)
 
   const angles = [
     Math.PI * 3/6, // North
@@ -10,32 +12,45 @@ content.system.audio.underwater.drones = (() => {
 
   const binaurals = angles.map(() => engine.audio.binaural.create().to(mix))
 
-  const frequencyRampDuration = 4
-
   let frequencyCache = [],
     synths = [],
     wasAbove = false,
     wasBelow = false
 
-  // TODO: Turn notes into synth pads
-  // 4s attack and decay, they'll naturally crossfade
-  // random am depth/frequency with each note, try 1/prime seconds
+  function createSynth(frequency, binaural, instant = false) {
+    const amDepth = engine.utility.random.float(1/8, 1/4)
+
+    const synth = engine.audio.synth.createMod({
+      amodDepth: amDepth,
+      amodFrequency: engine.utility.random.float(1/16, 1/4),
+      carrierGain: 1 - amDepth,
+      carrierFrequency: frequency,
+      fmodDepth: frequency / 2,
+      fmodFrequency: frequency,
+      gain: instant ? synthGain : engine.const.zeroGain,
+    }).filtered({
+      frequency,
+    })
+
+    binaural.from(synth.output)
+
+    if (!instant) {
+      engine.audio.ramp.linear(synth.param.gain, synthGain, synthFade)
+    }
+
+    synth.off = () => {
+      engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, synthFade)
+      synth.stop(engine.audio.time(synthFade))
+    }
+
+    return synth
+  }
 
   function createSynths() {
     const frequencies = content.system.soundtrack.frequencies()
 
     for (let i = 0; i < binaurals.length; i += 1) {
-      const binaural = binaurals[i]
-
-      const synth = engine.audio.synth.createAm({
-        carrierGain: 1,
-        carrierFrequency: frequencies[i],
-        gain: engine.utility.fromDb(-21),
-        modDepth: 0,
-        modFrequency: 0,
-      })
-
-      binaural.from(synth.output)
+      const synth = createSynth(frequencies[i], binaurals[i], true)
       synths.push(synth)
     }
 
@@ -89,11 +104,10 @@ content.system.audio.underwater.drones = (() => {
 
     synths.forEach((synth, i) => {
       if (frequencies[i] != frequencyCache[i]) {
-        engine.audio.ramp.exponential(synth.param.frequency, frequencies[i], frequencyRampDuration)
+        synth.off()
+        synths[i] = createSynth(frequencies[i], binaurals[i])
         frequencyCache[i] = frequencies[i]
       }
-
-      // TODO: Update AM frequency/depth
     })
   }
 

@@ -3,6 +3,7 @@ content.system.audio.treasure = (() => {
     context = engine.audio.context(),
     f1 = engine.utility.midiToFrequency(69),
     f2 = engine.utility.midiToFrequency(76),
+    gain = engine.utility.fromDb(-3),
     output = context.createGain(),
     props = new Set()
 
@@ -10,7 +11,7 @@ content.system.audio.treasure = (() => {
     synth,
     timer
 
-  output.gain.value = engine.utility.fromDb(-3)
+  output.gain.value = gain
 
   function createSynth() {
     synth = engine.audio.synth.createFm({
@@ -95,6 +96,19 @@ content.system.audio.treasure = (() => {
 
       return this
     },
+    duck: function () {
+      engine.audio.ramp.exponential(output.gain, gain/32, 1/2)
+      return this
+    },
+    unduck: function () {
+      const duration = content.const.scanCooldown/1000,
+        now = engine.audio.time()
+
+      output.gain.setValueAtTime(gain/32, now + duration/2)
+      output.gain.exponentialRampToValueAtTime(gain, now + duration)
+
+      return this
+    },
     getFrequency: () => f1,
     output: () => output,
     remove: function (prop) {
@@ -115,3 +129,9 @@ content.system.audio.treasure = (() => {
 })()
 
 engine.state.on('reset', () => content.system.audio.treasure.reset())
+
+// HACK: Essentially app.once('activate')
+engine.loop.once('frame', () => {
+  content.system.scan.on('trigger', () => content.system.audio.treasure.duck())
+  content.system.scan.on('complete', () => content.system.audio.treasure.unduck())
+})

@@ -4,6 +4,7 @@ content.system.treasure = (() => {
     collected = [],
     collectedThreed = content.utility.threed.create(),
     pubsub = engine.utility.pubsub.create(),
+    spawned = [],
     spawnedThreed = content.utility.threed.create()
 
   function decrementSpawned({x, y, z}) {
@@ -72,6 +73,25 @@ content.system.treasure = (() => {
     }
   }
 
+  function importSpawned(items = []) {
+    for (const item of items) {
+      spawned.push(item)
+
+      incrementSpawned({
+        x: scale(item.x),
+        y: scale(item.y),
+        z: scale(item.z),
+      })
+
+      content.system.streamer.registerProp(content.prop.treasure, {
+        radius: content.const.treasurePickupRadius,
+        x: item.x,
+        y: item.y,
+        z: item.z,
+      })
+    }
+  }
+
   function incrementCollected({x, y, z}) {
     if (!collectedThreed.has(x, y, z)) {
       return collectedThreed.set(x, y, z, 1)
@@ -132,6 +152,12 @@ content.system.treasure = (() => {
     */
 
     incrementSpawned(chunk)
+
+    spawned.push({
+      x: location.x,
+      y: location.y,
+      z: location.z,
+    })
   }
 
   return engine.utility.pubsub.decorate({
@@ -162,7 +188,7 @@ content.system.treasure = (() => {
     export: function () {
       return {
         collected: [...collected],
-        // TODO: Export spawned
+        spawned: [...spawned],
       }
     },
     getCurrentChunk: function () {
@@ -173,7 +199,7 @@ content.system.treasure = (() => {
     getCollected: () => [...collected],
     import: function (data = {}) {
       importCollected(data.collected || [])
-      // TODO: Import spawned
+      importSpawned(data.spawned || [])
       return this
     },
     onScan: function (scan) {
@@ -221,6 +247,7 @@ content.system.treasure = (() => {
     },
     reset: function () {
       collected.length = 0
+      spawned.length = 0
       return this
     },
   }, pubsub)

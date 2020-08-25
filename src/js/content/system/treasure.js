@@ -130,7 +130,9 @@ content.system.treasure = (() => {
       scan.reverseLeftDown,
       scan.reverseRightDown,
       scan.right,
-    ].filter((trace) => trace && trace.isSolid).sort((a, b) => b.distance - a.distance)
+    ].filter((trace) => {
+      return trace && trace.isSolid && (trace.distance > content.const.treasurePickupRadius * 2)
+    }).sort((a, b) => b.distance - a.distance)
 
     // Bias towards farther scans, e.g. to prevent automatic acquisition
     const location = engine.utility.choose(locations, Math.random() ** 2)

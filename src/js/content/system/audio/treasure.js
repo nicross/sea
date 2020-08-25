@@ -1,28 +1,38 @@
 content.system.audio.treasure = (() => {
-  const baseGain = engine.utility.fromDb(-15),
+  const baseGain = engine.utility.fromDb(-12),
     context = engine.audio.context(),
     f1 = engine.utility.midiToFrequency(69),
     f2 = engine.utility.midiToFrequency(76),
     output = context.createGain(),
     props = new Set()
 
-  let synth,
+  let lfo,
+    synth,
     timer
 
   output.gain.value = engine.utility.fromDb(-3)
 
   function createSynth() {
-    // TODO: More complexity
-    synth = engine.audio.synth.createSimple({
-
+    synth = engine.audio.synth.createFm({
+      carrierType: 'triangle',
+      modDepth: f2 / 2,
+      modFrequency: f1 * 8.13,
+      modType: 'triangle',
+    }).filtered({
+      frequency: f1 * 6,
     }).connect(output)
+
+    lfo = engine.audio.synth.createLfo({
+      depth: f1 * 3,
+      frequency: 4,
+    }).connect(synth.filter.frequency)
   }
 
   function pulse() {
     const d1 = engine.utility.random.float(-12.5, 12.5),
       d2 = engine.utility.random.float(-12.5, 12.5)
 
-    const attack = 1/32,
+    const attack = 1/64,
       decay = 1/2,
       release = 1
 
@@ -42,7 +52,7 @@ content.system.audio.treasure = (() => {
 
     synth.param.gain.setValueAtTime(baseGain, now)
     synth.param.gain.exponentialRampToValueAtTime(1, now + attack)
-    synth.param.gain.exponentialRampToValueAtTime(baseGain, now + attack + decay)
+    synth.param.gain.exponentialRampToValueAtTime(baseGain * 2, now + attack + decay)
     synth.param.gain.exponentialRampToValueAtTime(1, now + attack + decay + attack)
     synth.param.gain.exponentialRampToValueAtTime(baseGain, now + attack + decay + attack + release)
 
@@ -58,8 +68,13 @@ content.system.audio.treasure = (() => {
   }
 
   function stop() {
+    if (lfo) {
+      lfo.stop()
+      lfo = null
+    }
+
     if (synth) {
-      destroySynth()
+      synth.stop()
       synth = null
     }
 

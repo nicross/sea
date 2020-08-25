@@ -182,6 +182,13 @@ content.system.treasure = (() => {
       treasure.y = prop.y
       treasure.z = prop.z
 
+      // Remove from tracked spawns
+      spawned.forEach((item, i) => {
+        if (item.x == treasure.x && item.y == treasure.y && item.z == treasure.z) {
+          spawned.splice(i, 1)
+        }
+      })
+
       collected.push(treasure)
       pubsub.emit('collect', treasure)
 

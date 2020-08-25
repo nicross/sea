@@ -23,9 +23,14 @@ content.prop.treasure = content.prop.base.invent({
       return this.collect()
     }
 
-    // TODO: Adjust a filter based on heading/proximity
-    // SEE: exploration node glitter
-    engine.audio.ramp.set(this.filter.frequency, engine.const.maxFrequency)
+    const {angle} = engine.position.get()
+    const distanceRatio = 1 - (this.distance / engine.const.streamerRadius),
+      facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1)
+
+    const color = engine.utility.lerp(1, 8, distanceRatio * facingRatio),
+      filterFrequency = color * content.system.audio.treasure.getFrequency()
+
+    engine.audio.ramp.set(this.filter.frequency, filterFrequency)
   },
   collect: function () {
     this.isCollected = true

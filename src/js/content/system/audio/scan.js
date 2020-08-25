@@ -39,12 +39,12 @@ content.system.audio.scan = ((undefined) => {
 
     const now = engine.audio.time()
 
-    const attack = now + (content.const.scanCooldown / 1000) - 1/16,
+    const attack = now + (content.const.scanCooldown / 1000) - 1/32,
       release = now + (content.const.scanCooldown / 1000)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.linearRampToValueAtTime(1/16, attack)
-    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
+    synth.param.gain.linearRampToValueAtTime(1/32, attack)
+    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, release)
 
     synth.param.mod.depth.setValueAtTime(0, now)
     synth.param.mod.depth.linearRampToValueAtTime(5, release)

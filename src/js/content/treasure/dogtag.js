@@ -16,14 +16,14 @@ content.system.treasures.register('dogtag', 5, (srand) => {
       weight: 2,
     },
     {
-      modifier: (value) => value,
-      name: 'Pristine',
-      weight: 1,
-    },
-    {
       modifier: (value) => value * 0.5,
       name: 'Rusty',
       weight: 2,
+    },
+    {
+      modifier: (value) => value,
+      name: 'Spotless',
+      weight: 1,
     },
   ]
 

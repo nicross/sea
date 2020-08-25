@@ -11,7 +11,7 @@ content.system.treasures.register('trash', 20, (srand) => {
       weight: 4,
     },
     {
-      name: 'Pristine',
+      name: 'Useless',
       modifier: (value) => value * 2,
       weight: 1,
     },

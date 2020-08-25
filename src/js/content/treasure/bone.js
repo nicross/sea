@@ -20,64 +20,64 @@ content.system.treasures.register('bone', 10, (srand) => {
   const animals = [
     {
       name: 'Human',
-      value: 1,
+      value: 2,
       weight: 1,
     },
     {
       name: 'Icthyosaur',
-      value: 6,
+      value: 12,
       weight: 2,
     },
     {
       name: 'Megalodon',
-      value: 10,
+      value: 20,
       weight: 1,
     },
     {
       name: 'Plesiosaur',
-      value: 6,
+      value: 12,
       weight: 2,
     },
     {
       name: 'Pterosaur',
-      value: 5,
+      value: 10,
       weight: 1,
     },
     {
       name: 'Orca',
-      value: 3,
+      value: 6,
       weight: 2,
     },
     {
       name: 'Turtle',
-      value: 2,
+      value: 4,
       weight: 2,
     },
     {
       name: 'Whale',
-      value: 4,
+      value: 8,
       weight: 2,
     },
   ]
 
   const types = [
     {
-      modifier: (value) => value * 4,
+      modifier: (value) => value * 5,
       name: 'Femur',
       weight: 3,
     },
     {
-      modifier: (value) => value * 4,
+      modifier: (value) => value * 5,
       name: 'Humerus',
       weight: 3,
     },
     {
-      modifier: (value) => value * 3,
+      modifier: (value) => value * 4,
       name: 'Jawbone',
       weight: 2,
     },
     {
-      modifier: (value) => value * 2,
+      modifier: (value) => value * 3,
       name: 'Rib',
       weight: 3,
     },
@@ -87,7 +87,7 @@ content.system.treasures.register('bone', 10, (srand) => {
       weight: 1,
     },
     {
-      modifier: (value) => value,
+      modifier: (value) => value * 2,
       name: 'Tooth',
       weight: 5,
     },

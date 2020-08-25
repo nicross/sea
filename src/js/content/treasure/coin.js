@@ -1,7 +1,7 @@
 content.system.treasures.register('coin', 5, (srand) => {
   const adjectives = [
     {
-      modifier: (value) => value * 5,
+      modifier: (value) => value * 4,
       name: 'Ancient',
       weight: 1,
     },
@@ -18,6 +18,11 @@ content.system.treasures.register('coin', 5, (srand) => {
     {
       modifier: (value) => value * 0.5,
       name: 'Encrusted',
+      weight: 2,
+    },
+    {
+      modifier: (value) => value,
+      name: 'Flawless',
       weight: 2,
     },
     {

@@ -12,7 +12,7 @@ content.system.treasures.register('uxo', 5, (srand) => {
     },
     {
       modifier: (value) => value,
-      name: 'Pristine',
+      name: 'Polished',
       weight: 1,
     },
     {

@@ -3,7 +3,7 @@ content.system.audio.treasure = (() => {
     context = engine.audio.context(),
     f1 = engine.utility.midiToFrequency(69),
     f2 = engine.utility.midiToFrequency(76),
-    gain = engine.utility.fromDb(-3),
+    gain = engine.utility.fromDb(-6),
     output = context.createGain(),
     props = new Set()
 
@@ -115,7 +115,7 @@ content.system.audio.treasure = (() => {
       props.delete(prop)
 
       if (!props.size) {
-        start()
+        stop()
       }
 
       return this

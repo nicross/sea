@@ -19,10 +19,9 @@ content.system.treasure = (() => {
   function generateChunk(x, y, z) {
     const srand = engine.utility.srand('chunk', x, y, z)
 
-    // TODO: Possibly a modifier value for different archetypes
     return {
-      density: Math.round((srand() ** 2) * 3),
-      difficulty: srand(0.25, 0.75),
+      density: Math.round((srand() ** 1.5) * 3),
+      difficulty: srand(0.25, 0.5),
       x,
       y,
       z,

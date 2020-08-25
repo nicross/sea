@@ -47,7 +47,7 @@ app.screen.gallery = (() => {
   }
 
   function updateItems() {
-    const treasures = app.storage.getTreasures()
+    const treasures = app.storage.getTreasures().reverse()
 
     for (const treasure of treasures) {
       if (uuids.has(treasure.uuid)) {

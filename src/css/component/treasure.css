@@ -1,1 +1,7 @@
 .c-treasure {}
+  .c-treasure--details {
+    font-size: 0.75em;
+  }
+  .c-treasure--name {
+    font-size: 1.25em;
+  }

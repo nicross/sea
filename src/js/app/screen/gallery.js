@@ -74,6 +74,7 @@ app.screen.gallery = (() => {
     root.querySelector('.a-gallery--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(items)
   })
 
   return {}

@@ -1,14 +1,7 @@
 # ROADMAP
-- Treasure prop
-  - Better cue
-- Treasure collection
-  - Reward cue
 - Polish
-  - Gallery screen
-    - Improve visual presentation
   - Drones
     - switch to synth pads with on/off attacks and random gain LFOs
-  - Revisit directional exploration node cues
   - Cue when switching between turbo states (like soundStrider auto-move toggle)
   - Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)
   - Revisit surface mix

@@ -12,7 +12,10 @@ content.prop.treasure = content.prop.base.invent({
   },
   onDestroy: function () {
     content.system.audio.treasure.remove(this)
-    content.system.audio.treasure.output().disconnect(this.filter)
+
+    try {
+      content.system.audio.treasure.output().disconnect(this.filter)
+    } catch (e) {}
   },
   onUpdate: function () {
     if (this.isCollected) {

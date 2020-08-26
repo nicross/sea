@@ -61,7 +61,7 @@ content.system.audio.surface.glitter = (() => {
       wet: engine.utility.fromDb(-3),
     })
 
-    feedbackDelay.param.gain.value = engine.utility.fromDb(-16.5)
+    feedbackDelay.param.gain.value = engine.utility.fromDb(-15)
     feedbackDelay.output.connect(filter)
     feedbackDelays.push(feedbackDelay)
   }

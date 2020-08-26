@@ -2,10 +2,5 @@
 
 const content  = {
   prop: {},
-  system: {
-    audio: {
-      surface: {},
-      underwater: {},
-    },
-  },
+  system: {},
 }

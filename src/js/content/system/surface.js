@@ -1,5 +1,5 @@
 content.system.surface = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 4),
+  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 8),
     momentumX = -10, // Moves westward N m/s
     scaleX = 60, // Nodes are N m apart
     scaleY = 300, // Nodes are N m apart

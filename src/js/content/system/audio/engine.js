@@ -72,7 +72,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate) {
-      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / content.const.underwaterTurboMaxVelocity
+      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / 100
 
       points.push({
         x: Math.abs(rotate),

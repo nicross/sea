@@ -57,3 +57,4 @@ engine.loop.once('frame', () => {
 
 engine.state.on('export', (data) => data.exploration = content.system.exploration.export())
 engine.state.on('import', (data) => content.system.exploration.import(data.exploration))
+engine.state.on('reset', () => content.system.exploration.reset())

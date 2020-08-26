@@ -1,7 +1,8 @@
 # ROADMAP
 - Polish
-  - Drones
-    - switch to synth pads with on/off attacks and random gain LFOs
-  - Cue when switching between turbo states (like soundStrider auto-move toggle)
+  - Simplify movement collision detection as cube that never turns so players are less likely to get stuck
+  - Cues when passing compass rose points while turning
   - Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)
-  - Revisit surface mix
+  - Look into any other directional cues treasure can provide
+  - Add seeded offsets to terrain fields so they're more random
+  - Revisit mix

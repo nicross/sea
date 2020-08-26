@@ -2,7 +2,7 @@ content.system.audio.underwater.drones = (() => {
   const context = engine.audio.context(),
     mix = context.createGain(),
     synthFade = 4,
-    synthGain = engine.utility.fromDb(-19.5)
+    synthGain = engine.utility.fromDb(-18)
 
   const angles = [
     Math.PI * 3/6, // North

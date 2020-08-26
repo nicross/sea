@@ -10,7 +10,7 @@ content.prop.exploration = content.prop.base.invent({
 
     const duration = engine.utility.lerp(1, 2, strength),
       frequency = engine.utility.choose(content.system.soundtrack.harmonics(), frequencyRoll),
-      gain = engine.utility.fromDb(engine.utility.lerp(-24, -18, strength))
+      gain = engine.utility.fromDb(engine.utility.lerp(-21, -15, strength))
 
     const synth = engine.audio.synth.createSimple({
       frequency,

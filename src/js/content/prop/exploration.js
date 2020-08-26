@@ -6,7 +6,7 @@ content.prop.exploration = content.prop.base.invent({
 
     const distanceRatio = 1 - (this.distance / engine.const.streamerRadius),
       facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1),
-      frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], distanceRatio * facingRatio)
+      frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], Math.max(0, distanceRatio * facingRatio))
 
     const duration = engine.utility.lerp(1, 2, strength),
       frequency = engine.utility.choose(content.system.soundtrack.harmonics(), frequencyRoll),

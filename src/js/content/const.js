@@ -22,7 +22,7 @@ content.const = {
   surfaceNormalMaxVelocity: 10,
   surfaceTurboAcceleration: engine.const.gravity,
   surfaceTurboMaxVelocity: 30,
-  treasurePickupRadius: 4,
+  treasurePickupRadius: 5,
   underwaterNormalAcceleration: 1,
   underwaterNormalMaxVelocity: 2,
   underwaterSpeedOfSound: 1450,

@@ -20,7 +20,7 @@ content.system.treasure = (() => {
     const srand = engine.utility.srand('chunk', x, y, z)
 
     return {
-      density: Math.round((srand() ** 1.5) * 3),
+      density: Math.round(srand() * 3),
       difficulty: srand(0.25, 0.5),
       x,
       y,

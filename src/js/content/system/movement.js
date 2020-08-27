@@ -5,6 +5,7 @@ content.system.movement = (() => {
   let isTurbo = false,
     isCatchingAir = false,
     isUnderwater = false,
+    previousMovement,
     zVelocity = 0
 
   function checkMovementCollision() {
@@ -100,20 +101,20 @@ content.system.movement = (() => {
     }
 
     if (isCatchingAir) {
-      const movement = engine.movement.get(),
-        position = engine.position.get()
-
       // Maintain momentum
-      return engine.movement.update({
+      return updateMovement({
         rotate: 0,
         translate: {
           radius: engine.const.zero,
-          theta: movement.angle - position.angle,
+          theta: previousMovement.translate.theta,
         },
       })
     }
 
-    engine.movement.update({
+    // TODO: Fix bug where momentum isn't preserved if previously catching air in an X direction
+    // e.g. calculate theta based on sum of previous theta and current controls
+
+    updateMovement({
       rotate: controls.rotate,
       translate: {
         radius: Math.abs(controls.y),
@@ -136,7 +137,7 @@ content.system.movement = (() => {
     }
 
     // Update to see target vector for this frame, see checkMovementCollision()
-    engine.movement.update({
+    updateMovement({
       rotate: controls.rotate,
       translate: {
         radius: engine.utility.clamp(engine.utility.distanceOrigin(controls.x, controls.y), 0, 1),
@@ -211,9 +212,11 @@ content.system.movement = (() => {
           // Intending to dive
           // Allow momentum to persist
         } else {
-          if (zVelocity < -1 && velocity) {
+          if (zVelocity < -1/4 && velocity) {
             // Skip like a stone
             zVelocity *= -reflectionRate
+            // Don't lose direction in handleSurface()
+            setCatchingAir(true)
           } else {
             // Eventually rest
             zVelocity = 0
@@ -325,6 +328,11 @@ content.system.movement = (() => {
 
     engine.const.movementAcceleration = content.const.underwaterNormalAcceleration
     engine.const.movementMaxVelocity = content.const.underwaterNormalMaxVelocity
+  }
+
+  function updateMovement(values) {
+    previousMovement = values
+    engine.movement.update(values)
   }
 
   return engine.utility.pubsub.decorate({

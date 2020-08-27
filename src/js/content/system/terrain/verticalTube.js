@@ -50,6 +50,9 @@ content.system.terrain.verticalTube = (() => {
   }
 
   return {
+    getMix,
+    getRange,
+    getValue,
     isSolid: (x, y, z) => {
       const mix = getMix(x, y, z),
         range = getRange(x, y, z),

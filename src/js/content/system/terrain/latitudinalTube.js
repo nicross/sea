@@ -13,9 +13,19 @@ content.system.terrain.latitudinalTube = (() => {
   const maxRange = 0.1,
     minRange = 0.05
 
+  let mixOffsetX = 0,
+    mixOffsetY = 0,
+    mixOffsetZ = 0,
+    rangeOffsetX = 0,
+    rangeOffsetY = 0,
+    rangeOffsetZ = 0,
+    tubeOffsetX = 0,
+    tubeOffsetY = 0,
+    tubeOffsetZ = 0
+
   function getMix(x, y, z) {
     // Scales the width of the tube at (x, y, z)
-    let value = mix.value(x / mixScale, y / mixScale, z / mixScale)
+    let value = mix.value((x / mixScale) + mixOffsetX, (y / mixScale) + mixOffsetY, (z / mixScale) + mixOffsetZ)
 
     // Normalize vertices around zero
     value = 1 - engine.utility.wrapAlternate(2 * value, 0, 1)
@@ -28,7 +38,7 @@ content.system.terrain.latitudinalTube = (() => {
 
   function getRange(x, y, z) {
     // The width of the tube at (x, y, z)
-    let value = range.value(x / rangeScale, y / rangeScale, z / rangeScale)
+    let value = range.value((x / rangeScale) + rangeOffsetX, (y / rangeScale) + rangeOffsetY, (z / rangeScale) + rangeOffsetZ)
 
     // Scale down values to prefer narrower widths
     return engine.utility.lerpExp(minRange, maxRange, value, 2)
@@ -36,7 +46,7 @@ content.system.terrain.latitudinalTube = (() => {
 
   function getValue(x, y, z) {
     // Whether the tube is solid or liquid at (x, y, z)
-    return tube.value(x / tubeScaleX, y / tubeScaleY, z / tubeScaleZ)
+    return tube.value((x / tubeScaleX) + tubeOffsetX, (y / tubeScaleY) + tubeOffsetY, (z / tubeScaleZ) + tubeOffsetZ)
   }
 
   return {
@@ -51,6 +61,21 @@ content.system.terrain.latitudinalTube = (() => {
 
       return !engine.utility.between(value, lowerBound, upperBound)
     },
+    import: function () {
+      const srand = engine.utility.srand('terrain', 'latitudinalTube', 'init')
+
+      mixOffsetX = srand(-1, 1)
+      mixOffsetY = srand(-1, 1)
+      mixOffsetZ = srand(-1, 1)
+      rangeOffsetX = srand(-1, 1)
+      rangeOffsetY = srand(-1, 1)
+      rangeOffsetZ = srand(-1, 1)
+      tubeOffsetX = srand(-1, 1)
+      tubeOffsetY = srand(-1, 1)
+      tubeOffsetZ = srand(-1, 1)
+
+      return this
+    },
     reset: function () {
       tube.reset()
       mix.reset()
@@ -60,4 +85,5 @@ content.system.terrain.latitudinalTube = (() => {
   }
 })()
 
+engine.state.on('import', () => content.system.terrain.latitudinalTube.import())
 engine.state.on('reset', () => content.system.terrain.latitudinalTube.reset())

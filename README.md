@@ -8,6 +8,8 @@ There's no land for days.
 It's just you and the sounds of the open sea.
 Your mission is to test its capabilities.
 
+S.E.A. is an audio game best experienced with headphones.
+
 The ocean is endless.
 Listen and relax.
 Surf the waves.
@@ -160,7 +162,6 @@ Experiment.
     <tr>
       <th>Turbo</th>
       <td>Mouse 2 (Wheel)</td>
-    </tr>
     </tr>
   </tbody>
 </table>

@@ -1,3 +1,6 @@
+// TODO: Switch to a Vector3D model for controls, movement, and thrust
+// This would simplify calculations and make then more sensible
+
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
     reflectionRate = 1/2
@@ -111,14 +114,38 @@ content.system.movement = (() => {
       })
     }
 
-    // TODO: Fix bug where momentum isn't preserved if previously catching air in an X direction
-    // e.g. calculate theta based on sum of previous theta and current controls
+    let radius = Math.abs(controls.y),
+      theta = controls.y >= 0 ? 0 : Math.PI
+
+    if (previousMovement && (previousMovement.translate.radius != radius) && (previousMovement.translate.theta != theta)) {
+      // Retain momentum, e.g. apply thrust to current movement, i.e. maintain bouncing sideways
+      const delta = (engine.const.gravity * engine.loop.delta()) ** 0.5
+
+      const points = [
+        {
+          x: Math.cos(previousMovement.translate.theta) * previousMovement.translate.radius,
+          y: Math.sin(previousMovement.translate.theta) * previousMovement.translate.radius,
+        },
+        {
+          x: controls.y,
+          y: 0,
+        },
+      ]
+
+      const point = {
+        x: engine.utility.lerp(points[0].x, points[1].x, delta),
+        y: engine.utility.lerp(points[0].y, points[1].y, delta),
+      }
+
+      radius = engine.utility.distanceOrigin(point.x, point.y)
+      theta = Math.atan2(point.y, point.x)
+    }
 
     updateMovement({
       rotate: controls.rotate,
       translate: {
-        radius: Math.abs(controls.y),
-        theta: controls.y >= 0 ? 0 : Math.PI,
+        radius,
+        theta,
       },
     })
   }
@@ -215,8 +242,6 @@ content.system.movement = (() => {
           if (zVelocity < -1/4 && velocity) {
             // Skip like a stone
             zVelocity *= -reflectionRate
-            // Don't lose direction in handleSurface()
-            setCatchingAir(true)
           } else {
             // Eventually rest
             zVelocity = 0

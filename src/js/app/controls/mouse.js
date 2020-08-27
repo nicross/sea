@@ -27,12 +27,14 @@ app.controls.mouse = (() => {
   function onEnterGame() {
     document.addEventListener('pointerlockchange', onPointerlockchange)
 
-    if (app.utility.escape.is()) {
-      // XXX: Eventually Chrome seems to ignore pointerlock requests if player cancels it 2 times without clicking mouse
-      // TODO: Look into better solution
-      app.utility.escape.once('up', requestPointerLock)
-    } else {
-      requestPointerLock()
+    if (!app.debug) {
+      if (app.utility.escape.is()) {
+        // XXX: Eventually Chrome seems to ignore pointerlock requests if player cancels it 2 times without clicking mouse
+        // TODO: Look into better solution
+        app.utility.escape.once('up', requestPointerLock)
+      } else {
+        requestPointerLock()
+      }
     }
   }
 
@@ -88,7 +90,7 @@ app.controls.mouse = (() => {
   }
 
   function onPointerlockchange() {
-    if (!isPointerLock()) {
+    if (!isPointerLock() && !app.debug) {
       pause()
     }
   }

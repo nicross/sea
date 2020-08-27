@@ -33,7 +33,7 @@ gulp.task('build-js', () => {
   ).pipe(
     footer(`;app.version=()=>'${package.version + (isDebug ? '-debug' : '')}';`)
   ).pipe(
-    gulpif(!isDebug, iife())
+    gulpif(isDebug, footer('app.debug=true;'), iife())
   ).pipe(
     gulp.dest('public')
   ).pipe(

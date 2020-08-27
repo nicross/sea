@@ -73,27 +73,37 @@ content.system.audio.surface.glitter = (() => {
     let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
 
     const {x, y} = engine.position.get()
-    const surface = content.system.surface.value(x, y)
+
+    const isCatchingAir = content.system.movement.isCatchingAir(),
+      surface = content.system.surface.value(x, y)
+
     zBias *= surface ** 0.5
 
-    if (content.system.movement.isCatchingAir()) {
+    if (isCatchingAir) {
       const height = content.system.surface.height(x, y)
-      zBias = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, zBias, 1), 0, 1) ** 0.5
+      zBias = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, zBias, 1), 0, 1)
     }
 
     const feedbackDelay = engine.utility.choose(feedbackDelays, Math.random()),
       panner = context.createStereoPanner()
 
+    const frequencyRoll = isCatchingAir
+      ? (Math.random() * zBias) ** 0.5
+      : Math.random() * zBias
+
     const synth = engine.audio.synth.createSimple({
-      frequency: engine.utility.choose(frequencies, Math.random() * zBias),
+      frequency: engine.utility.choose(frequencies, frequencyRoll),
     }).connect(panner)
 
     panner.pan.value = engine.utility.random.float(-1, 1)
     panner.connect(feedbackDelay.input)
 
     const attack = engine.utility.random.float(1/32, 1/4),
-      decay = engine.utility.random.float(1/4, 1),
-      gain = engine.utility.fromDb(engine.utility.random.float(-12, -6))
+      decay = engine.utility.random.float(1/4, 1)
+
+    const gain = isCatchingAir
+      ? engine.utility.fromDb(engine.utility.lerp(-12, -6, frequencyRoll))
+      : engine.utility.fromDb(engine.utility.random.float(-12, -6))
 
     const now = engine.audio.time()
 

@@ -27,10 +27,10 @@ content.prop.treasure = content.prop.base.invent({
     }
 
     const {angle} = engine.position.get()
-    const distanceRatio = 1 - (this.distance / engine.const.streamerRadius),
+    const distanceRatio = Math.max(0, 1 - (this.distance / engine.const.streamerRadius)),
       facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1)
 
-    const color = engine.utility.lerp(1, 8, Math.max(0, distanceRatio * facingRatio)),
+    const color = engine.utility.lerp(1, 8, engine.utility.clamp(distanceRatio * facingRatio, 0, 1)),
       filterFrequency = color * content.system.audio.treasure.getFrequency()
 
     engine.audio.ramp.set(this.filter.frequency, filterFrequency)

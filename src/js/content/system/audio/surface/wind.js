@@ -41,8 +41,8 @@ content.system.audio.surface.wind = (() => {
 
     const sum = [
       {
-        x: Math.cos(position.angle) * windValue,
-        y: Math.sin(position.angle) * windValue,
+        x: Math.cos(position.angle - Math.PI) * windValue,
+        y: Math.sin(position.angle - Math.PI) * windValue,
       },
       [
         {
@@ -79,8 +79,6 @@ content.system.audio.surface.wind = (() => {
       x,
       y,
     })
-
-    //console.log(engine.utility.radiansToDegrees(angle))
 
     const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, radius, frequencyDropoff),
       gain = engine.utility.fromDb(engine.utility.scale(radius, 0, 10, -6, -10.5))

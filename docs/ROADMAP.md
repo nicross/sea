@@ -4,5 +4,4 @@
   - Cues when passing compass rose points while turning
   - Mouse controls (left/right look, sensitivity slider, click to move, hook turning into engine sounds)
   - Look into any other directional cues treasure can provide
-  - Add seeded offsets to terrain fields so they're more random
   - Revisit mix

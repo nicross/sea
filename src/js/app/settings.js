@@ -6,6 +6,10 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,
     },
+    mouseSensitivity: {
+      compute: (rawValue) => engine.utility.lerp(1/15, 1, rawValue),
+      default: 0.5,
+    },
     musicVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,

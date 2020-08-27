@@ -24,6 +24,7 @@ app.controls = (() => {
         ...gameDefaults,
         ...this.gamepad.game(),
         ...this.keyboard.game(),
+        ...this.mouse.game(),
       }
 
       return this
@@ -32,6 +33,7 @@ app.controls = (() => {
       const values = {
         ...this.gamepad.ui(),
         ...this.keyboard.ui(),
+        ...this.mouse.ui(),
       }
 
       uiDelta = {}

@@ -46,6 +46,7 @@ app.screen.settings = (() => {
   function hydrateSliders() {
     [
       ['.a-settings--masterVolume', app.settings.raw.masterVolume, app.settings.setMasterVolume],
+      ['.a-settings--mouseSensitivity', app.settings.raw.mouseSensitivity, app.settings.setMouseSensitivity],
       ['.a-settings--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)

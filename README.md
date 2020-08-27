@@ -136,6 +136,66 @@ Experiment.
   </table>
 </details>
 
+### Mouse controls
+<table>
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Button</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Forward</th>
+      <td>Mouse 1 (Primary)</td>
+    </tr>
+    <tr>
+      <th>Reverse</th>
+      <td>Mouse 3 (Secondary)</td>
+    </tr>
+    <tr>
+      <th>Turning</th>
+      <td>Mouse X-Axis</td>
+    </tr>
+    <tr>
+      <th>Turbo</th>
+      <td>Mouse 2 (Wheel)</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>
+
+<details>
+  <summary>Light Spoiler Warning</summary>
+  <p>The S.E.A. may have undocumented capabilities. Try to experiment with its controls.</p>
+</details>
+
+<details>
+  <summary>Heavy Spoiler Warning</summary>
+  <p>The S.E.A. has additional controls for navigating below the surface:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Button</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Scan Area</th>
+        <td>Scroll (Wheel)</td>
+      </tr>
+      <tr>
+        <th>Ascend</th>
+        <td>Mouse 5 (Forward)</td>
+      <tr>
+        <th>Descend</th>
+        <td>Mouse 4 (Back)</td>
+      </tr>
+    </tbody>
+  </table>
+</details>
+
 ### Gamepad controls
 <table>
   <thead>

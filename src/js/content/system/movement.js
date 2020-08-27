@@ -117,7 +117,9 @@ content.system.movement = (() => {
     let radius = Math.abs(controls.y),
       theta = controls.y >= 0 ? 0 : Math.PI
 
-    if (previousMovement && (previousMovement.translate.radius != radius) && (previousMovement.translate.theta != theta)) {
+    const shouldLerp = previousMovement && (previousMovement.translate.radius != radius) && (previousMovement.translate.theta != theta)
+
+    if (shouldLerp) {
       // Retain momentum, e.g. apply thrust to current movement, i.e. maintain bouncing sideways
       const delta = (engine.const.gravity * engine.loop.delta()) ** 0.5
 
@@ -148,6 +150,20 @@ content.system.movement = (() => {
         theta,
       },
     })
+
+    if (shouldLerp) {
+      // XXX: Prevent endless hops
+      // TODO: Investigate why velocity becomes negative with lerping
+      const movement = engine.movement.get()
+
+      if (movement.velocity < 0) {
+        engine.movement.set({
+          ...movement,
+          deltaVelocity: 0,
+          velocity: 0,
+        })
+      }
+    }
   }
 
   function handleUnderwater(controls) {
@@ -239,7 +255,7 @@ content.system.movement = (() => {
           // Intending to dive
           // Allow momentum to persist
         } else {
-          if (zVelocity < -1/4 && velocity) {
+          if (zVelocity < -1 && velocity) {
             // Skip like a stone
             zVelocity *= -reflectionRate
           } else {

@@ -2,7 +2,7 @@ content.system.audio.underwater.drones = (() => {
   const context = engine.audio.context(),
     mix = context.createGain(),
     synthFade = 4,
-    synthGain = engine.utility.fromDb(-18)
+    synthGain = engine.utility.fromDb(-15)
 
   const angles = [
     Math.PI * 3/6, // North
@@ -18,7 +18,7 @@ content.system.audio.underwater.drones = (() => {
     wasBelow = false
 
   function createSynth(frequency, binaural, instant = false) {
-    const amDepth = engine.utility.random.float(1/8, 1/4)
+    const amDepth = engine.utility.fromDb(engine.utility.random.float(-6, -4.5))
 
     const synth = engine.audio.synth.createMod({
       amodDepth: amDepth,

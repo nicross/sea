@@ -4,6 +4,7 @@ content.system.audio.engine = (() => {
 
   const fadeDuration = 1/6,
     rootFrequency = engine.utility.midiToFrequency(33),
+    rotationStrength = 1/100,
     turboDetune = 1200
 
   let synth
@@ -42,7 +43,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate && !isCatchingAir) {
-      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / content.const.surfaceTurboMaxVelocity
+      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation * rotationStrength
 
       points.push({
         x: Math.abs(rotate),
@@ -72,7 +73,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate) {
-      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation / 100
+      const rotate = controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation * rotationStrength
 
       points.push({
         x: Math.abs(rotate),

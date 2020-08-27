@@ -66,10 +66,14 @@ app.controls.mouse = (() => {
       return
     }
 
+    if (content.system.movement.isCatchingAir()) {
+      return
+    }
+
     const scaled = engine.utility.scale(e.movementX, -window.innerWidth, window.innerWidth, 1, -1)
     engine.position.turn(scaled * app.settings.computed.mouseSensitivity * Math.PI)
 
-    // TODO: Hook into engine sounds?
+    content.system.audio.engine.setFakeTurn(scaled)
   }
 
   function onMouseup(e) {

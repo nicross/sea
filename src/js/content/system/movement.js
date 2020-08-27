@@ -103,11 +103,11 @@ content.system.movement = (() => {
       const movement = engine.movement.get(),
         position = engine.position.get()
 
-      // Maintain momentum, allow spinning
+      // Maintain momentum
       return engine.movement.update({
         rotate: 0,
         translate: {
-          radius: movement.rotation,
+          radius: engine.const.zero,
           theta: movement.angle - position.angle,
         },
       })
@@ -129,6 +129,10 @@ content.system.movement = (() => {
       } else {
         switchToUnderwaterNormal()
       }
+    }
+
+    if (isCatchingAir) {
+      setCatchingAir(false)
     }
 
     // Update to see target vector for this frame, see checkMovementCollision()
@@ -266,6 +270,10 @@ content.system.movement = (() => {
       engine.const.movementDeceleration = isCatchingAir
         ? content.const.dragDeceleration
         : content.const.normalDeceleration
+
+      engine.const.movementRotationalDeceleration = isCatchingAir
+        ? content.const.dragRotationalDeceleration
+        : content.const.normalRotationalDeceleration
     }
   }
 
@@ -321,7 +329,7 @@ content.system.movement = (() => {
 
   return engine.utility.pubsub.decorate({
     import: function ({z}) {
-      isCatchingAir = false
+      setCatchingAir(false)
       isTurbo = false
       isUnderwater = z < 0
       zVelocity = 0

@@ -2,7 +2,6 @@ engine.const.distancePower = 1.25
 engine.const.movementDeceleration = engine.const.gravity
 engine.const.movementMaxRotation = Math.PI / 2
 engine.const.movementRotationalAcceleration = Math.PI
-engine.const.movementRotationalDeceleration = engine.const.gravity
 engine.const.positionRadius = 0.5
 engine.const.propFadeDuration = 1/16
 engine.const.streamerRadius = 50
@@ -11,11 +10,13 @@ engine.const.streamerRadius = 50
 
 content.const = {
   dragDeceleration: 1,
+  dragRotationalDeceleration: 0,
   explorationNodeRadius: 1,
-  normalDeceleration: engine.const.gravity,
   lightZone: -1000,
   midnightZoneMin: -750,
   midnightZoneMax: -1250,
+  normalDeceleration: engine.const.gravity,
+  normalRotationalDeceleration: engine.const.gravity,
   propLimit: 30,
   scanCooldown: 2 * 1000,
   surfaceNormalAcceleration: engine.const.gravity / 2,

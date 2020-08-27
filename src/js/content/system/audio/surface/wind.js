@@ -30,27 +30,59 @@ content.system.audio.surface.wind = (() => {
     synth = null
   }
 
-  function updateSynth() {
+  function getVector() {
     const movement = engine.movement.get(),
-      position = engine.position.get()
+      position = engine.position.get(),
+      windValue = content.system.wind.value(),
+      zVelocity = content.system.movement.zVelocity()
 
-    const value = content.system.wind.value(),
-      velocity = movement.velocity + content.system.movement.zVelocity()
+    const velocityRatio = movement.velocity / content.const.surfaceNormalMaxVelocity
 
-    const x = (Math.cos(position.angle) * value) + (Math.cos(movement.angle) * velocity),
-      y = (Math.sin(position.angle) * value) + (Math.sin(movement.angle) * velocity)
+    const sum = [
+      {
+        x: Math.cos(position.angle) * windValue,
+        y: Math.sin(position.angle) * windValue,
+      },
+      [
+        {
+          x: Math.cos(movement.angle) * velocityRatio,
+          y: Math.sin(movement.angle) * velocityRatio,
+        },
+        {
+          x: Math.abs(zVelocity) / content.const.surfaceNormalMaxVelocity,
+          y: 0,
+        },
+      ].reduce((max, point) => ({
+        x: Math.max(max.x, point.x),
+        y: Math.max(max.y, point.y),
+      }), {x: 0, y: 0}),
+    ].reduce((sum, point) => ({
+      x: sum.x + point.x,
+      y: sum.y + point.y,
+    }), {x: 0, y: 0})
 
-    const theta = Math.atan2(y, x)
+    const angle = Math.atan2(sum.y, sum.x)
+
+    return {
+      angle,
+      radius: engine.utility.distanceOrigin(sum.x, sum.y),
+      x: Math.cos(angle),
+      y: Math.sin(angle),
+    }
+  }
+
+  function updateSynth() {
+    const {angle, x, y, radius} = getVector()
 
     binaural.update({
-      x: Math.cos(theta),
-      y: Math.sin(theta),
+      x,
+      y,
     })
 
-    const strength = engine.utility.distanceOrigin(x, y)
+    //console.log(engine.utility.radiansToDegrees(angle))
 
-    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff),
-      gain = engine.utility.fromDb(engine.utility.scale(strength, 0, content.const.surfaceTurboMaxVelocity, -6, -9))
+    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, radius, frequencyDropoff),
+      gain = engine.utility.fromDb(engine.utility.scale(radius, 0, content.const.surfaceTurboMaxVelocity, -6, -9))
 
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)

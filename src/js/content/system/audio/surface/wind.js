@@ -2,7 +2,7 @@ content.system.audio.surface.wind = (() => {
   const binaural = engine.audio.binaural.create(),
     bus = engine.audio.mixer.createBus()
 
-  const frequencyDropoff = 1,
+  const frequencyDropoff = 1.5,
     maxFrequency = 80,
     minFrequency = 20
 
@@ -18,6 +18,7 @@ content.system.audio.surface.wind = (() => {
       buffer: engine.audio.buffer.noise.brown(),
     }).filtered({
       frequency: engine.const.minFrequency,
+      type: 'bandpass',
     })
 
     engine.audio.ramp.linear(bus.gain, 1, engine.const.zeroTime)
@@ -82,7 +83,7 @@ content.system.audio.surface.wind = (() => {
     //console.log(engine.utility.radiansToDegrees(angle))
 
     const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, radius, frequencyDropoff),
-      gain = engine.utility.fromDb(engine.utility.scale(radius, 0, content.const.surfaceTurboMaxVelocity, -6, -9))
+      gain = engine.utility.fromDb(engine.utility.scale(radius, 0, 10, -6, -10.5))
 
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)

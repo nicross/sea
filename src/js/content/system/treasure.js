@@ -258,6 +258,21 @@ content.system.treasure = (() => {
       spawned.length = 0
       return this
     },
+    test: function (count = 1) {
+      const {x, y} = engine.position.get()
+      const z = content.system.z.get()
+
+      for (let i = 0; i <= count; i += 1) {
+        content.system.streamer.registerProp(content.prop.treasure, {
+          radius: content.const.treasurePickupRadius,
+          x: x + engine.utility.random.float(-10, 10),
+          y: y + engine.utility.random.float(-10, 10),
+          z: z + engine.utility.random.float(-10, 10),
+        })
+      }
+
+      return this
+    },
   }, pubsub)
 })()
 

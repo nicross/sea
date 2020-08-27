@@ -208,7 +208,7 @@ content.system.movement = (() => {
         // Splash when moving toward higher water
         pubsub.emit('surface-splash', {
           size: (height - z) / content.const.waveHeight,
-          velocity: velocity / content.const.surfaceTurboMaxVelocity,
+          velocity: engine.utility.clamp(velocity / content.const.surfaceTurboMaxVelocity, 0, 1),
         })
 
         z = height

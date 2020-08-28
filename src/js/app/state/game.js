@@ -67,3 +67,13 @@ app.state.game.on('enter-running', () => {
   app.autosave.enable()
   engine.loop.resume()
 })
+
+content.system.scan.on('trigger', () => {
+  engine.loop.pause()
+})
+
+content.system.scan.on('recharge', () => {
+  if (app.state.game.is('running')) {
+    engine.loop.resume()
+  }
+})

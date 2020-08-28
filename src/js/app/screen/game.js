@@ -10,6 +10,10 @@ app.screen.game = (() => {
       app.state.screen.dispatch('pause')
     }
 
+    if (content.system.scan.isCooldown()) {
+      return
+    }
+
     if (ui.turbo) {
       turboState = !turboState
     }

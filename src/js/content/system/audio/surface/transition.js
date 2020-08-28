@@ -1,5 +1,5 @@
 content.system.audio.surface.transition = (() => {
-  const bus = engine.audio.mixer.createBus(),
+  const bus = content.system.audio.createBus(),
     context = engine.audio.context()
 
   let input = context.createGain()

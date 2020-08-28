@@ -83,6 +83,7 @@ content.system.treasure = (() => {
       })
 
       content.system.streamer.registerProp(content.prop.treasure, {
+        output: content.system.audio.bus(),
         radius: content.const.treasurePickupRadius,
         x: item.x,
         y: item.y,

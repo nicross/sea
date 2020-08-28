@@ -1,7 +1,5 @@
-// TODO: throttle to prevent audio hiccups
-
 content.system.audio.surface.splash = (() => {
-  const bus = engine.audio.mixer.createBus(),
+  const bus = content.system.audio.createBus(),
     context = engine.audio.context(),
     filter = context.createBiquadFilter(),
     throttleRate = 1000/10

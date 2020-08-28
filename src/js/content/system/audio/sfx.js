@@ -1,5 +1,5 @@
 content.system.audio.sfx = (() => {
-  const bus = engine.audio.mixer.createBus()
+  const bus = content.system.audio.createBus()
 
   bus.gain.value = engine.utility.fromDb(-6)
 

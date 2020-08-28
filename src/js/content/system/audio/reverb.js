@@ -26,8 +26,6 @@ content.system.audio.reverb = (() => {
     },
   })
 
-  let isCave = false
-
   send.update({
     x: 0,
     y: 0,

@@ -1,5 +1,5 @@
 content.system.audio.scan = ((undefined) => {
-  const bus = engine.audio.mixer.createBus(),
+  const bus = content.system.audio.createBypass(),
     context = engine.audio.context()
 
   bus.gain.value = engine.utility.fromDb(-3)

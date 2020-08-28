@@ -99,12 +99,12 @@ app.controls.mouse = (() => {
     }
   }
 
-  function onWheel() {
+  function onWheel(e) {
     if (!isPointerLock()) {
       return
     }
 
-    wheel = true
+    wheel = engine.utility.sign(-e.deltaY)
   }
 
   function pause() {
@@ -163,14 +163,17 @@ app.controls.mouse = (() => {
     ui: function () {
       const state = {}
 
-      if (wheel) {
-        state.scan = true
-        wheel = false
+      if (wheel > 0) {
+        state.scanForward = true
+      } else if (wheel < 0) {
+        state.scanReverse = true
       }
 
       if (buttons[1] && app.settings.computed.toggleTurbo) {
         state.turbo = true
       }
+
+      wheel = 0
 
       return state
     },

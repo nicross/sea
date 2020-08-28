@@ -134,7 +134,7 @@ app.controls.gamepad = {
       }
     }
 
-    if ((buttons[1] || buttons[10]) && app.settings.computed.toggleTurbo) {
+    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleTurbo) {
       state.turbo = true
     }
 
@@ -146,8 +146,12 @@ app.controls.gamepad = {
       state.confirm = true
     }
 
-    if (buttons[0] || buttons[11]) {
-      state.scan = true
+    if (buttons[0]) {
+      state.scanForward = true
+    }
+
+    if (buttons[1]) {
+      state.scanReverse = true
     }
 
     if (buttons[8]) {

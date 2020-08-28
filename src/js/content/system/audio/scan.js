@@ -70,9 +70,9 @@ content.system.audio.scan = ((undefined) => {
     // up
     renderGroup([
       scan.leftUp,
-      scan.forwardLeftUp,
-      scan.forwardUp,
-      scan.forwardRightUp,
+      scan.forwardLeftUp || scan.reverseLeftUp,
+      scan.forwardUp || scan.reverseUp,
+      scan.forwardRightUp || scan.reverseRightUp,
       scan.rightUp,
     ], {
       octave: 1,
@@ -82,9 +82,9 @@ content.system.audio.scan = ((undefined) => {
     // level
     renderGroup([
       scan.left,
-      scan.forwardLeft,
-      scan.forward,
-      scan.forwardRight,
+      scan.forwardLeft || scan.reverseLeft,
+      scan.forward || scan.reverse,
+      scan.forwardRight || scan.reverseRight,
       scan.right,
     ], {
       octave: 0,
@@ -94,9 +94,9 @@ content.system.audio.scan = ((undefined) => {
     // down
     renderGroup([
       scan.leftDown,
-      scan.forwardLeftDown,
-      scan.forwardDown,
-      scan.forwardRightDown,
+      scan.forwardLeftDown || scan.reverseLeftDown,
+      scan.forwardDown || scan.reverseDown,
+      scan.forwardRightDown || scan.reverseRightDown,
       scan.rightDown,
     ], {
       octave: -1,

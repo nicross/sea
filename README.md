@@ -117,21 +117,27 @@ Experiment.
         <td>Numpad 6</td>
       </tr>
       <tr>
-        <th>Scan Area</th>
-        <td>F</td>
-        <td>Alt</td>
-        <td></td>
-      </tr>
-      <tr>
         <th>Ascend</th>
         <td>Space</td>
-        <td>V</td>
+        <td></td>
         <td></td>
       </tr>
       <tr>
         <th>Descend</th>
         <td>Control</td>
         <td>C</td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>Scan Area Ahead</th>
+        <td>F</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>Scan Area Behind</th>
+        <td>R</td>
+        <td>V</td>
         <td></td>
       </tr>
     </tbody>
@@ -183,15 +189,19 @@ Experiment.
     </thead>
     <tbody>
       <tr>
-        <th>Scan Area</th>
-        <td>Scroll (Wheel)</td>
-      </tr>
-      <tr>
         <th>Ascend</th>
         <td>Mouse 5 (Forward)</td>
       <tr>
         <th>Descend</th>
         <td>Mouse 4 (Back)</td>
+      </tr>
+      <tr>
+        <th>Scan Area Ahead</th>
+        <td>Scroll Up (Wheel)</td>
+      </tr>
+      <tr>
+        <th>Scan Area Behind</th>
+        <td>Scroll Down (Wheel)</td>
       </tr>
     </tbody>
   </table>
@@ -234,8 +244,8 @@ Experiment.
     </tr>
     <tr>
       <th>Turbo</th>
-      <td>B</td>
-      <td>Press Left Stick</td>
+      <td>Press Any Stick</td>
+      <td></td>
       <td></td>
     </tr>
     <tr>
@@ -282,11 +292,6 @@ Experiment.
         <td></td>
       </tr>
       <tr>
-        <th>Scan Area</th>
-        <td>A</td>
-        <td>Press Right Stick</td>
-      </tr>
-      <tr>
         <th>Ascend</th>
         <td>Y</td>
         <td>Right Bumper</td>
@@ -295,6 +300,16 @@ Experiment.
         <th>Descend</th>
         <td>X</td>
         <td>Left Bumper</td>
+      </tr>
+      <tr>
+        <th>Scan Area Ahead</th>
+        <td>A</td>
+        <td></td>
+      </tr>
+      <tr>
+        <th>Scan Area Behind</th>
+        <td>B</td>
+        <td></td>
       </tr>
     </tbody>
   </table>

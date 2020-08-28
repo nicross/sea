@@ -2,8 +2,6 @@
 
 app.controls.keyboard = (() => {
   const controls = {
-    AltLeft: false,
-    AltRight: false,
     ArrowDown: false,
     ArrowLeft: false,
     ArrowRight: false,
@@ -18,6 +16,7 @@ app.controls.keyboard = (() => {
     KeyE: false,
     KeyF: false,
     KeyQ: false,
+    KeyR: false,
     KeyS: false,
     KeyV: false,
     KeyW: false,
@@ -52,7 +51,7 @@ app.controls.keyboard = (() => {
 
   return {
     game: () => {
-      const ascend = controls.KeyV || controls.Space,
+      const ascend = controls.Space,
         descend = controls.ControlLeft || controls.ControlRight || controls.KeyC,
         moveBackward = controls.ArrowDown || controls.KeyS || controls.Numpad5,
         moveForward = controls.ArrowUp || controls.KeyW || controls.Numpad8,
@@ -137,8 +136,12 @@ app.controls.keyboard = (() => {
         state.up = true
       }
 
-      if (controls.AltLeft || controls.AltRight || controls.KeyF) {
-        state.scan = true
+      if (controls.KeyF) {
+        state.scanForward = true
+      }
+
+      if (controls.KeyR || controls.KeyV) {
+        state.scanReverse = true
       }
 
       if ((controls.ShiftLeft || controls.ShiftRight) && app.settings.computed.toggleTurbo) {

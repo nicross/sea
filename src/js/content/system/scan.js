@@ -42,16 +42,9 @@ content.system.scan = (() => {
     }
   }
 
-  async function scan() {
+  async function scanForward() {
     const {angle, x, y} = engine.position.get()
     const z = content.system.z.get()
-
-    if (z >= engine.const.lightZone) {
-      // Empty results
-      // Don't bother hurting the frame rate at the surface
-      // But allow its use like a "honk"
-      return {}
-    }
 
     const position = {
       angle,
@@ -71,6 +64,29 @@ content.system.scan = (() => {
       forwardRightDown: await scheduleRaytrace(position, {x: unit3, y: unit3, z: -unit3}),
       forwardRightUp: await scheduleRaytrace(position, {x: unit3, y: unit3, z: unit3}),
       forwardUp: await scheduleRaytrace(position, {x: unit2, z: unit2}),
+      left: await scheduleRaytrace(position, {y: -1}),
+      leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
+      leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
+      right: await scheduleRaytrace(position, {y: 1}),
+      rightDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
+      rightUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
+      up: await scheduleRaytrace(position, {z: 1}),
+    }
+  }
+
+  async function scanReverse() {
+    const {angle, x, y} = engine.position.get()
+    const z = content.system.z.get()
+
+    const position = {
+      angle,
+      x,
+      y,
+      z,
+    }
+
+    return {
+      down: await scheduleRaytrace(position, {z: -1}),
       left: await scheduleRaytrace(position, {y: -1}),
       leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
       leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
@@ -105,21 +121,55 @@ content.system.scan = (() => {
       return performance.now() - start
     },
     isCooldown: () => isCooldown,
-    trigger: async function () {
+    triggerForward: async function () {
       if (isCooldown) {
         return this
       }
 
       const z = content.system.z.get()
 
+      // Disallow use on surface
       if (z >= 0) {
         return this
       }
 
       isCooldown = true
-      pubsub.emit('trigger')
+      pubsub.emit('trigger', {forward: true})
 
-      const results = await scan()
+      // Don't bother hurting the frame rate if nothing to see
+      const results = z >= engine.const.lightZone
+        ? {}
+        : await scanForward()
+
+      pubsub.emit('complete', results)
+
+      engine.utility.timing.promise(content.const.scanCooldown).then(() => {
+        isCooldown = false
+        pubsub.emit('recharge', results)
+      })
+
+      return this
+    },
+    triggerReverse: async function () {
+      if (isCooldown) {
+        return this
+      }
+
+      const z = content.system.z.get()
+
+      // Disallow use on surface
+      if (z >= 0) {
+        return this
+      }
+
+      isCooldown = true
+      pubsub.emit('trigger', {reverse: true})
+
+      // Don't bother hurting the frame rate if nothing to see
+      const results = z >= engine.const.lightZone
+        ? {}
+        : await scanReverse()
+
       pubsub.emit('complete', results)
 
       engine.utility.timing.promise(content.const.scanCooldown).then(() => {

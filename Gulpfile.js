@@ -69,6 +69,7 @@ gulp.task('dist-electron', async () => {
       'README.md',
       'src',
     ],
+    name: 'SEA',
     out: 'dist',
     overwrite: true,
     platform: platforms,
@@ -106,7 +107,7 @@ gulp.task('dist-html5', () => {
     'public/scripts.min.js',
     'public/styles.min.css',
   ], {base: 'public'}).pipe(
-    zip(package.name + '-html5.zip')
+    zip('SEA-html5.zip')
   ).pipe(
     gulp.dest('dist')
   )

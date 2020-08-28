@@ -22,12 +22,16 @@ app.controls.mouse = (() => {
   function onClick(e) {
     e.preventDefault()
     e.stopPropagation()
+
+    if (!isPointerLock()) {
+      requestPointerLock()
+    }
   }
 
   function onEnterGame() {
     document.addEventListener('pointerlockchange', onPointerlockchange)
 
-    if (!app.debug) {
+    if (app.isElectron()) {
       if (app.utility.escape.is()) {
         // XXX: Eventually Chrome seems to ignore pointerlock requests if player cancels it 2 times without clicking mouse
         // TODO: Look into better solution
@@ -55,7 +59,7 @@ app.controls.mouse = (() => {
     e.stopPropagation()
 
     if (!isPointerLock()) {
-      requestPointerLock()
+      return
     }
 
     if (button in buttons) {
@@ -90,7 +94,7 @@ app.controls.mouse = (() => {
   }
 
   function onPointerlockchange() {
-    if (!isPointerLock() && !app.debug) {
+    if (!isPointerLock() && app.isElectron()) {
       pause()
     }
   }

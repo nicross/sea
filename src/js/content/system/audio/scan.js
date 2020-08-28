@@ -4,8 +4,10 @@ content.system.audio.scan = ((undefined) => {
 
   bus.gain.value = engine.utility.fromDb(-3)
 
-  function honk() {
-    const root = engine.utility.midiToFrequency(69)
+  function honk(isForward = false) {
+    const root = isForward
+      ? engine.utility.midiToFrequency(69)
+      : engine.utility.midiToFrequency(64)
 
     const synth = engine.audio.synth.createFm({
       carrierFrequency: root,
@@ -187,8 +189,10 @@ content.system.audio.scan = ((undefined) => {
       recharge()
       return this
     },
-    trigger: function () {
-      honk()
+    trigger: function ({
+      forward = false,
+    } = {}) {
+      honk(forward)
       return this
     },
   }
@@ -197,5 +201,5 @@ content.system.audio.scan = ((undefined) => {
 // HACK: Essentially app.once('activate')
 engine.loop.once('frame', () => {
   content.system.scan.on('complete', (scan) => content.system.audio.scan.complete(scan))
-  content.system.scan.on('trigger', () => content.system.audio.scan.trigger())
+  content.system.scan.on('trigger', (e) => content.system.audio.scan.trigger(e))
 })

@@ -7,12 +7,27 @@ app.crashFixer = (() => {
 
   const analyzerTimeData = new Uint8Array(analyzer.frequencyBinCount)
 
+  function fixFilters() {
+    engine.props.forEach((prop) => {
+      if (prop.troubleshoot) {
+        prop.troubleshoot()
+      }
+    })
+
+    engine.audio.mixer.rebuildFilters()
+  }
+
+  function isFubar() {
+    return !analyzerTimeData[0] || isNaN(analyzerTimeData[0]) || !isFinite(analyzerTimeData[0])
+  }
+
   return {
     update: function () {
       analyzer.getByteTimeDomainData(analyzerTimeData)
 
-      if (isNaN(analyzerTimeData[0]) || !isFinite(analyzerTimeData[0])) {
-        engine.audio.mixer.rebuildFilters()
+      if (isFubar()) {
+        fixFilters()
+        console.error('BiquadFilterNode: bad state fix attempted')
       }
 
       return this
@@ -20,4 +35,10 @@ app.crashFixer = (() => {
   }
 })()
 
-engine.loop.on('frame', () => app.crashFixer.update())
+engine.loop.on('frame', ({paused}) => {
+  if (paused) {
+    return
+  }
+
+  app.crashFixer.update()
+})

@@ -34,11 +34,12 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
 
     this.output = {
       binaural: engine.audio.binaural.create(),
+      destination: output,
       input: context.createGain(),
     }
 
     this.output.binaural.from(this.output.input)
-    this.output.binaural.to(output)
+    this.output.binaural.to(this.output.destination)
 
     this.output.input.gain.value = engine.const.zeroGain
     engine.audio.ramp.linear(this.output.input.gain, 1, engine.const.propFadeDuration)
@@ -94,5 +95,16 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
       y: this.y - this.radius,
       y: this.z - this.radius,
     }
+  },
+  rebuildBinaural: function () {
+    this.output.binaural.destroy()
+
+    this.output.binaural = engine.audio.binaural.create()
+    this.output.binaural.from(this.output.input)
+    this.output.binaural.to(this.output.destination)
+
+    this.recalculate()
+
+    return this
   },
 }))

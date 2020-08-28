@@ -5,8 +5,10 @@ const footer = require('gulp-footer')
 const gulp = require('gulp')
 const gulpif = require('gulp-if')
 const iife = require('gulp-iife')
+const merge = require('merge-stream')
 const package = require('./package.json')
 const packager = require('electron-packager')
+const rename = require('gulp-rename')
 const uglify = require('gulp-uglify-es').default
 const zip = require('gulp-zip')
 
@@ -63,6 +65,7 @@ gulp.task('dist-electron', async () => {
       'Gulpfile.js',
       'node_modules',
       'package-lock.json',
+      'public/manual.html',
       'README.md',
       'src',
     ],
@@ -73,7 +76,19 @@ gulp.task('dist-electron', async () => {
 
   // XXX: Archives have no root directory
   paths.forEach((path) => {
-    gulp.src(path + '/**/*').pipe(
+    const build = gulp.src(path + '/**/*')
+
+    const manual = gulp.src([
+      'public/favicon.png',
+      'public/font/*',
+      'public/manual.html'
+    ], {base: 'public'}).pipe(
+      rename((path) => {
+        path.dirname = '/documentation/' + path.dirname
+      })
+    )
+
+    merge(build, manual).pipe(
       zip(path.replace('dist\\', '') + '.zip')
     ).pipe(
       gulp.dest('dist')
@@ -87,6 +102,7 @@ gulp.task('dist-html5', () => {
     'public/favicon.png',
     'public/font/*.woff',
     'public/index.html',
+    'public/manual.html',
     'public/scripts.min.js',
     'public/styles.min.css',
   ], {base: 'public'}).pipe(

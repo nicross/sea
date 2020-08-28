@@ -7,7 +7,8 @@ content.system.audio.treasure = (() => {
     output = context.createGain(),
     props = new Set()
 
-  let lfo,
+  let count = 0,
+    lfo,
     synth,
     timer
 
@@ -38,32 +39,59 @@ content.system.audio.treasure = (() => {
       release = 1
 
     const duration = 2,
+      isFirstCount = count % 4 == 0,
+      isLastCount = count % 4 == 3,
       now = engine.audio.time()
 
     synth.param.detune.setValueAtTime(0, now)
     synth.param.detune.exponentialRampToValueAtTime(d1, now + attack)
-    synth.param.detune.linearRampToValueAtTime(0, now + attack + decay)
-    synth.param.detune.exponentialRampToValueAtTime(d2, now + attack + decay)
-    synth.param.detune.linearRampToValueAtTime(0, now + attack + decay + attack)
+    synth.param.detune.linearRampToValueAtTime(0, now + decay)
+    synth.param.detune.exponentialRampToValueAtTime(d2, now + decay + attack)
+    synth.param.detune.linearRampToValueAtTime(0, now + decay + release)
 
-    synth.param.frequency.setValueAtTime(f2, now)
+    if (isLastCount) {
+      const d3 = engine.utility.random.float(-12.5, 12.5)
+      synth.param.detune.exponentialRampToValueAtTime(d3, now + decay + release + attack)
+      synth.param.detune.linearRampToValueAtTime(0, now + duration)
+    }
+
+    if (isFirstCount) {
+      synth.param.frequency.setValueAtTime(f1 * 2, now)
+    } else {
+      synth.param.frequency.setValueAtTime(f2, now)
+    }
+
     synth.param.frequency.exponentialRampToValueAtTime(f1, now + attack)
-    synth.param.frequency.setValueAtTime(f1, now + attack + decay)
-    synth.param.frequency.exponentialRampToValueAtTime(f2, now + attack + decay + attack)
+    synth.param.frequency.setValueAtTime(f1, now + decay)
+    synth.param.frequency.exponentialRampToValueAtTime(f2, now + decay + attack)
+
+    if (isLastCount) {
+      synth.param.frequency.setValueAtTime(f2, now + decay + release)
+      synth.param.frequency.exponentialRampToValueAtTime(f1 * 2, now + decay + release + attack)
+    }
 
     synth.param.gain.setValueAtTime(baseGain, now)
     synth.param.gain.exponentialRampToValueAtTime(1, now + attack)
     synth.param.gain.exponentialRampToValueAtTime(baseGain * 2, now + attack + decay)
-    synth.param.gain.exponentialRampToValueAtTime(1, now + attack + decay + attack)
-    synth.param.gain.exponentialRampToValueAtTime(baseGain, now + attack + decay + attack + release)
+    synth.param.gain.exponentialRampToValueAtTime(1, now + decay + attack)
+    synth.param.gain.exponentialRampToValueAtTime(baseGain, now + decay + release)
+
+    if (isLastCount) {
+      synth.param.gain.exponentialRampToValueAtTime(1/4, now + decay + release + attack)
+      synth.param.gain.exponentialRampToValueAtTime(baseGain, now + duration)
+    }
 
     timer = context.createConstantSource()
     timer.start()
     timer.onended = pulse
     timer.stop(now + duration)
+
+    count += 1
   }
 
   function start() {
+    count = 1
+
     createSynth()
     pulse()
   }

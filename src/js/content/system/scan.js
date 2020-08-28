@@ -110,6 +110,12 @@ content.system.scan = (() => {
         return this
       }
 
+      const z = content.system.z.get()
+
+      if (z >= 0) {
+        return this
+      }
+
       isCooldown = true
       pubsub.emit('trigger')
 

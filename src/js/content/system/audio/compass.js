@@ -24,7 +24,7 @@ content.system.audio.compass = (() => {
 
   let previousAngle = 0
 
-  bus.gain.value = engine.utility.fromDb(-24)
+  bus.gain.value = engine.const.zeroGain
 
   function getRoseStrength(angle) {
     const max = Math.max(angle, previousAngle),
@@ -48,7 +48,7 @@ content.system.audio.compass = (() => {
       frequency,
       type: 'square',
     }).filtered({
-      frequency: engine.utility.choose([0.5, 2, 4], strength) * frequency,
+      frequency: engine.utility.choose([1, 2, 4], strength) * frequency,
     }).connect(bus)
 
     const now = engine.audio.time()
@@ -69,16 +69,34 @@ content.system.audio.compass = (() => {
     synth.stop(now + 0.25)
   }
 
+  function updateGain(z) {
+    const zRatio = z >= 0
+      ? 1
+      : (
+        z >= content.const.lightZone
+          ? (1 - Math.min(1, Math.min(z, 0) / content.const.lightZone)) / 2
+          : 0
+      )
+
+    const gain = engine.utility.fromDb(engine.utility.lerp(-24, -15, zRatio))
+    engine.audio.ramp.set(bus.gain, gain)
+  }
+
   return {
-    import: function ({position}) {
+    import: function ({position, z}) {
       previousAngle = position && position.angle
         ? position.angle
         : 0
+
+      updateGain(z)
 
       return this
     },
     update: function () {
       const {angle} = engine.position.get()
+      const z = content.system.z.get()
+
+      updateGain(z)
 
       if (angle == previousAngle) {
         return this

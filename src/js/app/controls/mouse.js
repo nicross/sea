@@ -94,7 +94,7 @@ app.controls.mouse = (() => {
   }
 
   function onPointerlockchange() {
-    if (!isPointerLock() && app.isElectron()) {
+    if (!isPointerLock() && app.isElectron() && app.utility.escape.is()) {
       pause()
     }
   }

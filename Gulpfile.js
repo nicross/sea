@@ -2,6 +2,7 @@ const cleancss = require('gulp-clean-css')
 const concat = require('gulp-concat')
 const electron = require('gulp-run-electron')
 const footer = require('gulp-footer')
+const header = require('gulp-header')
 const gulp = require('gulp')
 const gulpif = require('gulp-if')
 const iife = require('gulp-iife')
@@ -35,7 +36,7 @@ gulp.task('build-js', () => {
   ).pipe(
     footer(`;app.version=()=>'${package.version + (isDebug ? '-debug' : '')}';`)
   ).pipe(
-    gulpif(isDebug, footer('app.debug=true;'), iife())
+    gulpif(!isDebug, iife(), header("'use strict';\n\n"))
   ).pipe(
     gulp.dest('public')
   ).pipe(
@@ -161,7 +162,6 @@ function getAppJs() {
 function getContentJs() {
   const srcs = [
     'src/js/content.js',
-    'src/js/content/utility.js',
     'src/js/content/utility/*.js',
     'src/js/content/prop/base.js',
     'src/js/content/system/treasures.js',

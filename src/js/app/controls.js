@@ -1,5 +1,3 @@
-'use strict'
-
 app.controls = (() => {
   const gameDefaults = {
     rotate: 0,

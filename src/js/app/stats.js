@@ -15,6 +15,6 @@ app.stats = engine.utility.pubsub.decorate({
   },
 })
 
-app.on('activate', () => app.stats.import(
+engine.ready(() => app.stats.import(
   app.storage.getStats()
 ))

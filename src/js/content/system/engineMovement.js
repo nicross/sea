@@ -25,33 +25,33 @@ content.system.engineMovement = (() => {
     update: function ({rotate, translate}) {
       const delta = engine.loop.delta()
 
-      const maxRotation = Math.min(Math.abs(engine.const.movementMaxRotation * rotate), engine.const.movementMaxRotation),
-        maxVelocity = Math.min(engine.const.movementMaxVelocity * translate.radius, engine.const.movementMaxVelocity)
+      const maxRotation = Math.min(Math.abs(content.const.movementMaxRotation * rotate), content.const.movementMaxRotation),
+        maxVelocity = Math.min(content.const.movementMaxVelocity * translate.radius, content.const.movementMaxVelocity)
 
       if (translate.radius > 0) {
-        if (state.velocity <= maxVelocity - (delta * engine.const.movementAcceleration)) {
-          state.velocity += delta * engine.const.movementAcceleration
+        if (state.velocity <= maxVelocity - (delta * content.const.movementAcceleration)) {
+          state.velocity += delta * content.const.movementAcceleration
         } else if (state.velocity > maxVelocity) {
-          state.velocity -= delta * engine.const.movementDeceleration
+          state.velocity -= delta * content.const.movementDeceleration
         }
-      } else if (state.velocity >= delta * engine.const.movementDeceleration) {
-        state.velocity -= delta * engine.const.movementDeceleration
+      } else if (state.velocity >= delta * content.const.movementDeceleration) {
+        state.velocity -= delta * content.const.movementDeceleration
       } else if (state.velocity != 0) {
         state.velocity = 0
       }
 
       if (rotate > 0) {
         if (state.rotation < maxRotation) {
-          state.rotation += delta * engine.const.movementRotationalAcceleration * rotate
+          state.rotation += delta * content.const.movementRotationalAcceleration * rotate
         }
       } else if (rotate < 0) {
         if (state.rotation > -maxRotation) {
-          state.rotation += delta * engine.const.movementRotationalAcceleration * rotate
+          state.rotation += delta * content.const.movementRotationalAcceleration * rotate
         }
-      } else if (state.rotation >= engine.const.movementRotationalDeceleration) {
-        state.rotation -= delta * engine.const.movementRotationalDeceleration
-      } else if (state.rotation <= -engine.const.movementRotationalDeceleration) {
-        state.rotation += delta * engine.const.movementRotationalDeceleration
+      } else if (state.rotation >= content.const.movementRotationalDeceleration) {
+        state.rotation -= delta * content.const.movementRotationalDeceleration
+      } else if (state.rotation <= -content.const.movementRotationalDeceleration) {
+        state.rotation += delta * content.const.movementRotationalDeceleration
       } else if (state.rotation != 0) {
         state.rotation = 0
       }

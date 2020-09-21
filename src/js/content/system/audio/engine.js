@@ -43,7 +43,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate && !isCatchingAir) {
-      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation, -1, 1) * rotationStrength
+      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / content.const.movementMaxRotation, -1, 1) * rotationStrength
 
       points.push({
         x: Math.abs(rotate),
@@ -54,7 +54,7 @@ content.system.audio.engine = (() => {
     if (controls.y) {
       if (isCatchingAir) {
         points.push({
-          x: controls.y * engine.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity,
+          x: controls.y * content.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity,
           y: 0,
         })
       } else {
@@ -73,7 +73,7 @@ content.system.audio.engine = (() => {
       points = []
 
     if (controls.rotate) {
-      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation, -1, 1) * rotationStrength
+      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / content.const.movementMaxRotation, -1, 1) * rotationStrength
 
       points.push({
         x: Math.abs(rotate),

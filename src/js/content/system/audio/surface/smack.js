@@ -20,7 +20,7 @@ content.system.audio.surface.smack = (() => {
 
     // Position based on turning
     const movement = content.system.engineMovement.get(),
-      rotation = engine.utility.scale(-movement.rotation, -engine.const.movementMaxRotation, engine.const.movementMaxRotation, 0, 1)
+      rotation = engine.utility.scale(-movement.rotation, -content.const.movementMaxRotation, content.const.movementMaxRotation, 0, 1)
 
     panner.pan.value = rotation == 0.5
       ? 0

@@ -1,7 +1,4 @@
 engine.const.distancePower = 1.25
-engine.const.movementDeceleration = engine.const.gravity
-engine.const.movementMaxRotation = Math.PI / 2
-engine.const.movementRotationalAcceleration = Math.PI
 engine.const.positionRadius = 0.5
 engine.const.propFadeDuration = 1/16
 
@@ -14,6 +11,9 @@ content.const = {
   lightZone: -1000,
   midnightZoneMin: -750,
   midnightZoneMax: -1250,
+  movementDeceleration: engine.const.gravity,
+  movementMaxRotation: Math.PI / 2,
+  movementRotationalAcceleration: Math.PI,
   normalDeceleration: engine.const.gravity,
   normalRotationalDeceleration: engine.const.gravity,
   propLimit: 30,

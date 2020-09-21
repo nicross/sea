@@ -273,17 +273,17 @@ content.system.movement = (() => {
     }
 
     if (zInput) {
-      if (zVelocity > engine.const.movementMaxVelocity) {
-        zVelocity -= delta * engine.const.movementDeceleration
-      } else if (zVelocity < -engine.const.movementMaxVelocity) {
-        zVelocity += delta * engine.const.movementDeceleration
+      if (zVelocity > content.const.movementMaxVelocity) {
+        zVelocity -= delta * content.const.movementDeceleration
+      } else if (zVelocity < -content.const.movementMaxVelocity) {
+        zVelocity += delta * content.const.movementDeceleration
       } else {
-        zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * engine.const.movementAcceleration), -engine.const.movementMaxVelocity, engine.const.movementMaxVelocity)
+        zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * content.const.movementAcceleration), -content.const.movementMaxVelocity, content.const.movementMaxVelocity)
       }
     } else if (zVelocity > 0) {
-      zVelocity = Math.max(0, zVelocity - (delta * engine.const.movementDeceleration))
+      zVelocity = Math.max(0, zVelocity - (delta * content.const.movementDeceleration))
     } else if (zVelocity < 0) {
-      zVelocity = Math.min(0, zVelocity + (delta * engine.const.movementDeceleration))
+      zVelocity = Math.min(0, zVelocity + (delta * content.const.movementDeceleration))
     }
 
     if (!zVelocity) {
@@ -310,11 +310,11 @@ content.system.movement = (() => {
     if (isCatchingAir != state) {
       isCatchingAir = state
 
-      engine.const.movementDeceleration = isCatchingAir
+      content.const.movementDeceleration = isCatchingAir
         ? content.const.dragDeceleration
         : content.const.normalDeceleration
 
-      engine.const.movementRotationalDeceleration = isCatchingAir
+      content.const.movementRotationalDeceleration = isCatchingAir
         ? content.const.dragRotationalDeceleration
         : content.const.normalRotationalDeceleration
     }
@@ -342,32 +342,32 @@ content.system.movement = (() => {
     setTurbo(true)
     setUnderwater(false)
 
-    engine.const.movementAcceleration = content.const.surfaceTurboAcceleration
-    engine.const.movementMaxVelocity = content.const.surfaceTurboMaxVelocity
+    content.const.movementAcceleration = content.const.surfaceTurboAcceleration
+    content.const.movementMaxVelocity = content.const.surfaceTurboMaxVelocity
   }
 
   function switchToSurfaceNormal() {
     setTurbo(false)
     setUnderwater(false)
 
-    engine.const.movementAcceleration = content.const.surfaceNormalAcceleration
-    engine.const.movementMaxVelocity = content.const.surfaceNormalMaxVelocity
+    content.const.movementAcceleration = content.const.surfaceNormalAcceleration
+    content.const.movementMaxVelocity = content.const.surfaceNormalMaxVelocity
   }
 
   function switchToUnderwaterTurbo() {
     setTurbo(true)
     setUnderwater(true)
 
-    engine.const.movementAcceleration = content.const.underwaterTurboAcceleration
-    engine.const.movementMaxVelocity = content.const.underwaterTurboMaxVelocity
+    content.const.movementAcceleration = content.const.underwaterTurboAcceleration
+    content.const.movementMaxVelocity = content.const.underwaterTurboMaxVelocity
   }
 
   function switchToUnderwaterNormal() {
     setTurbo(false)
     setUnderwater(true)
 
-    engine.const.movementAcceleration = content.const.underwaterNormalAcceleration
-    engine.const.movementMaxVelocity = content.const.underwaterNormalMaxVelocity
+    content.const.movementAcceleration = content.const.underwaterNormalAcceleration
+    content.const.movementMaxVelocity = content.const.underwaterNormalMaxVelocity
   }
 
   function updateMovement(values) {

@@ -17,7 +17,7 @@ content.system.audio.surface.splash = (() => {
 
     // Position based on turning
     const movement = content.system.engineMovement.get(),
-      rotation = engine.utility.scale(movement.rotation, -engine.const.movementMaxRotation, engine.const.movementMaxRotation, 0, 1)
+      rotation = engine.utility.scale(movement.rotation, -content.const.movementMaxRotation, content.const.movementMaxRotation, 0, 1)
 
     panner.pan.value = engine.utility.clamp(engine.utility.lerpRandom([-1, 0], [0, 1], rotation), -1, 1)
     panner.connect(filter)

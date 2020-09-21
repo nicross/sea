@@ -4,8 +4,8 @@ content.prop.exploration = content.prop.base.invent({
     const {angle} = engine.position.get()
     const strength = Math.random()
 
-    const distanceRatio = 1 - (this.distance / engine.const.streamerRadius),
       facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1),
+    const distanceRatio = 1 - (this.distance / engine.streamer.getRadius()),
       frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], Math.max(0, distanceRatio * facingRatio))
 
     const duration = engine.utility.lerp(1, 2, strength),

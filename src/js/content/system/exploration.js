@@ -6,8 +6,7 @@ content.system.exploration = (() => {
     list.push(node)
     tree.insert(node)
 
-    content.system.streamer.registerProp(content.prop.exploration, {
-      output: content.system.audio.underwater.music.bus(),
+    engine.streamer.registerProp(content.prop.exploration, {
       x: node.x,
       y: node.y,
       z: node.z,

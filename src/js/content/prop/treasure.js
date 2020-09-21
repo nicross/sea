@@ -32,8 +32,8 @@ content.prop.treasure = content.prop.base.invent({
   },
   calculateFilterFrequency: function () {
     const {angle} = engine.position.get()
-    const distanceRatio = Math.max(0, 1 - (this.distance / engine.const.streamerRadius)),
       facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1)
+    const distanceRatio = Math.max(0, 1 - (this.distance / engine.streamer.getRadius())),
 
     const color = engine.utility.lerp(1, 8, engine.utility.clamp(distanceRatio * facingRatio, 0, 1))
 

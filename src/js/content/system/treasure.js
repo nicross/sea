@@ -82,8 +82,7 @@ content.system.treasure = (() => {
         z: scale(item.z),
       })
 
-      content.system.streamer.registerProp(content.prop.treasure, {
-        output: content.system.audio.bus(),
+      engine.streamer.registerProp(content.prop.treasure, {
         radius: content.const.treasurePickupRadius,
         x: item.x,
         y: item.y,
@@ -141,7 +140,7 @@ content.system.treasure = (() => {
       return
     }
 
-    content.system.streamer.registerProp(content.prop.treasure, {
+    engine.streamer.registerProp(content.prop.treasure, {
       radius: content.const.treasurePickupRadius,
       x: location.x,
       y: location.y,
@@ -173,8 +172,8 @@ content.system.treasure = (() => {
       decrementSpawned(chunkCoordinates)
       incrementCollected(chunkCoordinates)
 
-      content.system.streamer.deregisterProp(prop.token)
-      content.system.streamer.destroyStreamedProp(prop.token)
+      engine.streamer.deregisterProp(prop.token)
+      engine.streamer.destroyStreamedProp(prop.token)
 
       const treasure = content.system.treasures.generate()
 
@@ -264,7 +263,7 @@ content.system.treasure = (() => {
       const z = content.system.z.get()
 
       for (let i = 0; i <= count; i += 1) {
-        content.system.streamer.registerProp(content.prop.treasure, {
+        engine.streamer.registerProp(content.prop.treasure, {
           radius: content.const.treasurePickupRadius,
           x: x + engine.utility.random.float(-10, 10),
           y: y + engine.utility.random.float(-10, 10),

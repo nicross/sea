@@ -4,7 +4,6 @@ engine.const.movementMaxRotation = Math.PI / 2
 engine.const.movementRotationalAcceleration = Math.PI
 engine.const.positionRadius = 0.5
 engine.const.propFadeDuration = 1/16
-engine.const.streamerRadius = 50
 
 // NOTE: Max velocity and acceleration are handled via movement module, i.e. different movement models based on z-value
 
@@ -32,3 +31,15 @@ content.const = {
   unit2: Math.sqrt(2) / 2,
   waveHeight: 8,
 }
+
+engine.streamer.setLimit(30).setRadius(50).setSort((a, b) => {
+  if (content.prop.treasure.isPrototypeOf(a)) {
+    return -1
+  }
+
+  if (content.prop.treasure.isPrototypeOf(b)) {
+    return 1
+  }
+
+  return a.distance - b.distance
+})

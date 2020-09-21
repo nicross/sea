@@ -1,5 +1,3 @@
-'use strict'
-
 engine.audio.mixer = (() => {
   const context = engine.audio.context()
 

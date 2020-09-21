@@ -1,5 +1,3 @@
-'use strict'
-
 engine.audio.ramp = {}
 
 engine.audio.ramp.createMachine = function (audioParam, rampFn) {
@@ -45,8 +43,8 @@ engine.audio.ramp.exponential = function (audioParam, value, duration = engine.c
 }
 
 engine.audio.ramp.hold = function (audioParam) {
+  audioParam.value = audioParam.value
   audioParam.cancelScheduledValues(0)
-  audioParam.setValueAtTime(audioParam.value, engine.audio.time())
   return this
 }
 
@@ -57,15 +55,6 @@ engine.audio.ramp.linear = function (audioParam, value, duration = engine.const.
 }
 
 engine.audio.ramp.set = function (audioParam, value) {
-  const currentValue = audioParam.value
-
-  if (currentValue == value) {
-    return this
-  }
-
-  audioParam.cancelScheduledValues(0)
-  audioParam.setValueAtTime(currentValue, engine.audio.time())
-  audioParam.linearRampToValueAtTime(value, engine.audio.zeroTime())
-
+  engine.audio.ramp.linear(audioParam, value, engine.performance.delta())
   return this
 }

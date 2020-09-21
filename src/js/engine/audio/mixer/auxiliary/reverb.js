@@ -1,19 +1,17 @@
-'use strict'
-
 engine.audio.mixer.auxiliary.reverb = (() => {
   const context = engine.audio.context(),
     input = context.createGain(),
     output = engine.audio.mixer.createBus(),
     pubsub = engine.utility.pubsub.create()
 
-  let active = engine.const.reverbActive,
+  let active = true,
     convolver = context.createConvolver()
 
   if (active) {
     input.connect(convolver)
   }
 
-  convolver.buffer = engine.audio.buffer.impulse[engine.const.reverbImpulse]()
+  convolver.buffer = engine.audio.buffer.impulse.large()
   convolver.connect(output)
 
   return engine.utility.pubsub.decorate({
@@ -24,12 +22,12 @@ engine.audio.mixer.auxiliary.reverb = (() => {
     },
     isActive: () => active,
     output: () => output,
-    refreshActive: function () {
-      if (active == engine.const.reverbActive) {
+    setActive: function (state) {
+      if (active == state) {
         return this
       }
 
-      active = engine.const.reverbActive
+      active = Boolean(state)
 
       if (active) {
         input.connect(convolver)

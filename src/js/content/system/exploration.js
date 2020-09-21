@@ -1,6 +1,6 @@
 content.system.exploration = (() => {
   const list = [],
-    tree = content.utility.octree.create()
+    tree = engine.utility.octree.create()
 
   function addNode(node) {
     list.push(node)

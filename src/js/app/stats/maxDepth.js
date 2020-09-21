@@ -10,7 +10,7 @@ app.stats.maxDepth = (() => {
       return this
     },
     update: function () {
-      const z = -content.system.z.get()
+      const z = -engine.position.getVector().z
 
       if (z > maxDepth) {
         maxDepth = z

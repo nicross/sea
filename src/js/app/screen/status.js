@@ -1,6 +1,18 @@
 app.screen.status = (() => {
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-status')
+
+    app.state.screen.on('enter-status', onEnter)
+    app.state.screen.on('exit-status', onExit)
+
+    root.querySelector('.a-status--back').addEventListener('click', onBackClick)
+
+    app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(root.querySelector('.a-status--data'))
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -69,18 +81,6 @@ app.screen.status = (() => {
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
     root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-status')
-
-    app.state.screen.on('enter-status', onEnter)
-    app.state.screen.on('exit-status', onExit)
-
-    root.querySelector('.a-status--back').addEventListener('click', onBackClick)
-
-    app.utility.focus.trap(root)
-    app.utility.input.preventScrolling(root.querySelector('.a-status--data'))
-  })
 
   return {}
 })()

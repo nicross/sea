@@ -16,9 +16,6 @@ content.system.time = (() => {
   }
 })()
 
-engine.state.on('import', ({time}) => content.system.time.set(time))
-engine.state.on('export', (data) => data.time = content.system.time.get())
-
 engine.loop.on('frame', ({delta, paused}) => {
   if (paused) {
     return
@@ -26,3 +23,6 @@ engine.loop.on('frame', ({delta, paused}) => {
 
   content.system.time.increment(delta)
 })
+
+engine.state.on('import', ({time}) => content.system.time.set(time))
+engine.state.on('export', (data) => data.time = content.system.time.get())

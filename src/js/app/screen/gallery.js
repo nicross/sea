@@ -4,6 +4,19 @@ app.screen.gallery = (() => {
   let items,
     root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-gallery')
+    items = root.querySelector('.a-gallery--items')
+
+    app.state.screen.on('enter-gallery', onEnter)
+    app.state.screen.on('exit-gallery', onExit)
+
+    root.querySelector('.a-gallery--back').addEventListener('click', onBackClick)
+
+    app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(items)
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -63,19 +76,6 @@ app.screen.gallery = (() => {
       uuids.add(treasure.uuid)
     }
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-gallery')
-    items = root.querySelector('.a-gallery--items')
-
-    app.state.screen.on('enter-gallery', onEnter)
-    app.state.screen.on('exit-gallery', onExit)
-
-    root.querySelector('.a-gallery--back').addEventListener('click', onBackClick)
-
-    app.utility.focus.trap(root)
-    app.utility.input.preventScrolling(items)
-  })
 
   return {}
 })()

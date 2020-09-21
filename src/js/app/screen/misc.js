@@ -1,6 +1,24 @@
 app.screen.misc = (() => {
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-misc')
+
+    app.state.screen.on('enter-misc', onEnter)
+    app.state.screen.on('exit-misc', onExit)
+
+    Object.entries({
+      back: root.querySelector('.a-misc--back'),
+      gallery: root.querySelector('.a-misc--gallery'),
+      settings: root.querySelector('.a-misc--settings'),
+      stats: root.querySelector('.a-misc--stats'),
+    }).forEach(([event, element]) => {
+      element.addEventListener('click', () => app.state.screen.dispatch(event))
+    })
+
+    app.utility.focus.trap(root)
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -38,24 +56,6 @@ app.screen.misc = (() => {
   function onExit() {
     engine.loop.off('frame', onEngineLoopFrame)
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-misc')
-
-    app.state.screen.on('enter-misc', onEnter)
-    app.state.screen.on('exit-misc', onExit)
-
-    Object.entries({
-      back: root.querySelector('.a-misc--back'),
-      gallery: root.querySelector('.a-misc--gallery'),
-      settings: root.querySelector('.a-misc--settings'),
-      stats: root.querySelector('.a-misc--stats'),
-    }).forEach(([event, element]) => {
-      element.addEventListener('click', () => app.state.screen.dispatch(event))
-    })
-
-    app.utility.focus.trap(root)
-  })
 
   return {}
 })()

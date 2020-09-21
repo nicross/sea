@@ -277,8 +277,7 @@ content.system.treasure = (() => {
   }, pubsub)
 })()
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.scan.on('recharge', (scan) => content.system.treasure.onScan(scan))
 })
 

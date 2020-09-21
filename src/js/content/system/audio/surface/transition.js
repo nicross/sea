@@ -75,8 +75,7 @@ content.system.audio.surface.transition = (() => {
   }
 })()
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.movement.on('transition-surface', (velocity) => content.system.audio.surface.transition.surface(velocity))
   content.system.movement.on('transition-underwater', (velocity) => content.system.audio.surface.transition.underwater(velocity))
 })

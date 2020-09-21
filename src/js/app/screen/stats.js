@@ -1,6 +1,18 @@
 app.screen.stats = (() => {
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-stats')
+
+    app.state.screen.on('enter-stats', onEnter)
+    app.state.screen.on('exit-stats', onExit)
+
+    root.querySelector('.a-stats--back').addEventListener('click', onBackClick)
+
+    app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(root.querySelector('.a-stats--data'))
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -65,18 +77,6 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.format.time(totalTime)
     root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-stats')
-
-    app.state.screen.on('enter-stats', onEnter)
-    app.state.screen.on('exit-stats', onExit)
-
-    root.querySelector('.a-stats--back').addEventListener('click', onBackClick)
-
-    app.utility.focus.trap(root)
-    app.utility.input.preventScrolling(root.querySelector('.a-stats--data'))
-  })
 
   return {}
 })()

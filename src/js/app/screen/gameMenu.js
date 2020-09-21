@@ -1,6 +1,27 @@
 app.screen.gameMenu = (() => {
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-gameMenu')
+
+    app.state.screen.on('enter-gameMenu', onEnter)
+    app.state.screen.on('exit-gameMenu', onExit)
+
+    Object.entries({
+      mainMenu: root.querySelector('.a-gameMenu--mainMenu'),
+      misc: root.querySelector('.a-gameMenu--misc'),
+      quit: root.querySelector('.a-gameMenu--quit'),
+      resume: root.querySelector('.a-gameMenu--resume'),
+      status: root.querySelector('.a-gameMenu--status'),
+    }).forEach(([event, element]) => {
+      element.addEventListener('click', () => app.state.screen.dispatch(event))
+    })
+
+    root.querySelector('.a-gameMenu--action-quit').hidden = !app.isElectron()
+
+    app.utility.focus.trap(root)
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -37,27 +58,6 @@ app.screen.gameMenu = (() => {
   function onExit() {
     engine.loop.off('frame', onEngineLoopFrame)
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-gameMenu')
-
-    app.state.screen.on('enter-gameMenu', onEnter)
-    app.state.screen.on('exit-gameMenu', onExit)
-
-    Object.entries({
-      mainMenu: root.querySelector('.a-gameMenu--mainMenu'),
-      misc: root.querySelector('.a-gameMenu--misc'),
-      quit: root.querySelector('.a-gameMenu--quit'),
-      resume: root.querySelector('.a-gameMenu--resume'),
-      status: root.querySelector('.a-gameMenu--status'),
-    }).forEach(([event, element]) => {
-      element.addEventListener('click', () => app.state.screen.dispatch(event))
-    })
-
-    root.querySelector('.a-gameMenu--action-quit').hidden = !app.isElectron()
-
-    app.utility.focus.trap(root)
-  })
 
   return {}
 })()

@@ -51,7 +51,7 @@ content.system.exploration = (() => {
   }
 })()
 
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.scan.on('recharge', (scan) => content.system.exploration.onScan(scan))
 })
 

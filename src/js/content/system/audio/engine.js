@@ -217,10 +217,9 @@ content.system.audio.engine = (() => {
   }
 })()
 
-engine.state.on('reset', () => content.system.audio.engine.reset())
-
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.movement.on('transition-normal', () => content.system.audio.engine.onNormal())
   content.system.movement.on('transition-turbo', () => content.system.audio.engine.onTurbo())
 })
+
+engine.state.on('reset', () => content.system.audio.engine.reset())

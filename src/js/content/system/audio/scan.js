@@ -198,8 +198,7 @@ content.system.audio.scan = ((undefined) => {
   }
 })()
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.scan.on('complete', (scan) => content.system.audio.scan.complete(scan))
   content.system.scan.on('trigger', (e) => content.system.audio.scan.trigger(e))
 })

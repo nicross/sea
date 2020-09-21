@@ -25,7 +25,7 @@ app.state.game = engine.utility.machine.create({
   },
 })
 
-app.on('activate', () => {
+engine.ready(() => {
   engine.audio.ramp.set(engine.audio.mixer.master.param.gain, engine.const.zeroGain)
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
   app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))

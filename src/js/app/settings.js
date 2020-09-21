@@ -1,5 +1,3 @@
-'use strict'
-
 app.settings = (() => {
   const settings = {
     masterVolume: {
@@ -99,6 +97,6 @@ app.settings = (() => {
   }
 })()
 
-app.once('activate', () => app.settings.import(
+engine.ready(() => app.settings.import(
   app.storage.getSettings()
 ))

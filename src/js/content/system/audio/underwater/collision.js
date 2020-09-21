@@ -52,8 +52,6 @@ content.system.audio.underwater.collision = (() => {
   }
 })()
 
-
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.movement.on('underwater-collision', (e) => content.system.audio.underwater.collision.trigger(e))
 })

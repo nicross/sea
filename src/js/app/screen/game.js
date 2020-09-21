@@ -2,6 +2,18 @@ app.screen.game = (() => {
   let root,
     turboState = false
 
+  engine.ready(() => {
+    root = document.querySelector('.a-game')
+    app.utility.focus.trap(root)
+
+    app.state.screen.on('enter-game', onEnter)
+    app.state.screen.on('exit-game', onExit)
+
+    engine.state.on('reset', onEngineStateReset)
+
+    return this
+  })
+
   function handleControls() {
     const game = app.controls.game(),
       ui = app.controls.ui()
@@ -50,19 +62,5 @@ app.screen.game = (() => {
     handleControls(e)
   }
 
-  return {
-    activate: function () {
-      root = document.querySelector('.a-game')
-      app.utility.focus.trap(root)
-
-      app.state.screen.on('enter-game', onEnter)
-      app.state.screen.on('exit-game', onExit)
-
-      engine.state.on('reset', onEngineStateReset)
-
-      return this
-    },
-  }
+  return {}
 })()
-
-app.once('activate', () => app.screen.game.activate())

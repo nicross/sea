@@ -85,8 +85,7 @@ content.system.audio.surface.smack = (() => {
 
 engine.state.on('import', (state) => content.system.audio.surface.smack.import(state))
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.movement.on('surface-smack', (e) => content.system.audio.surface.smack.trigger(e))
   content.system.movement.on('transition-surface', () => content.system.audio.surface.smack.surface())
   content.system.movement.on('transition-underwater', () => content.system.audio.surface.smack.underwater())

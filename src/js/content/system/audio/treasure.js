@@ -156,10 +156,9 @@ content.system.audio.treasure = (() => {
   }
 })()
 
-engine.state.on('reset', () => content.system.audio.treasure.reset())
-
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.scan.on('trigger', () => content.system.audio.treasure.duck())
   content.system.scan.on('complete', () => content.system.audio.treasure.unduck())
 })
+
+engine.state.on('reset', () => content.system.audio.treasure.reset())

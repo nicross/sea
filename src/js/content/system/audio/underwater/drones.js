@@ -17,6 +17,10 @@ content.system.audio.underwater.drones = (() => {
     wasAbove = false,
     wasBelow = false
 
+  engine.ready(() => {
+    mix.connect(content.system.audio.underwater.music.bus())
+  })
+
   function createSynth(frequency, binaural, instant = false) {
     const amDepth = engine.utility.fromDb(engine.utility.random.float(-6, -4.5))
 
@@ -112,10 +116,6 @@ content.system.audio.underwater.drones = (() => {
   }
 
   return {
-    activate: function () {
-      mix.connect(content.system.audio.underwater.music.bus())
-      return this
-    },
     import: function ({z}) {
       wasAbove = false
       wasBelow = false
@@ -144,11 +144,6 @@ content.system.audio.underwater.drones = (() => {
     },
   }
 })()
-
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
-  content.system.audio.underwater.drones.activate()
-})
 
 engine.loop.on('frame', ({paused}) => {
   if (paused) {

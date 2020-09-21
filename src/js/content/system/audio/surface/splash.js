@@ -73,8 +73,7 @@ content.system.audio.surface.splash = (() => {
 
 engine.state.on('import', (state) => content.system.audio.surface.splash.import(state))
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.movement.on('surface-splash', (e) => content.system.audio.surface.splash.trigger(e))
   content.system.movement.on('transition-surface', () => content.system.audio.surface.splash.surface())
   content.system.movement.on('transition-underwater', () => content.system.audio.surface.splash.underwater())

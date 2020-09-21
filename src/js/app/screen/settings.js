@@ -3,6 +3,20 @@ app.screen.settings = (() => {
 
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-settings')
+
+    app.state.screen.on('enter-settings', onEnter)
+    app.state.screen.on('exit-settings', onExit)
+
+    root.querySelector('.a-settings--back').addEventListener('click', onBackClick)
+
+    app.utility.focus.trap(root)
+
+    hydrateSliders()
+    hydrateToggles()
+  })
+
   function handleControls() {
     const ui = app.controls.ui()
 
@@ -81,20 +95,6 @@ app.screen.settings = (() => {
     engine.loop.off('frame', onEngineLoopFrame)
     app.settings.save()
   }
-
-  app.once('activate', () => {
-    root = document.querySelector('.a-settings')
-
-    app.state.screen.on('enter-settings', onEnter)
-    app.state.screen.on('exit-settings', onExit)
-
-    root.querySelector('.a-settings--back').addEventListener('click', onBackClick)
-
-    app.utility.focus.trap(root)
-
-    hydrateSliders()
-    hydrateToggles()
-  })
 
   return {}
 })()

@@ -8,8 +8,7 @@ content.system.audio.sfx = (() => {
   }
 })()
 
-// HACK: Essentially app.once('activate')
-engine.loop.once('frame', () => {
+engine.ready(() => {
   content.system.treasure.on('collect', () => content.system.audio.sfx.collectTreasure())
 })
 

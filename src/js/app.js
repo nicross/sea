@@ -1,7 +1,6 @@
-const app = engine.utility.pubsub.decorate({
+const app = {
   activate: function () {
     document.querySelector('.a-app').classList.add('a-app-active')
-    this.pubsub.emit('activate')
     return this
   },
   component: {},
@@ -17,4 +16,4 @@ const app = engine.utility.pubsub.decorate({
   state: {},
   utility: {},
   version: () => '0.0.0', // XXX: Replaced via Gulpfile.js
-})
+}

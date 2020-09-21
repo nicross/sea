@@ -1,6 +1,18 @@
 app.screen.splash = (() => {
   let root
 
+  engine.ready(() => {
+    root = document.querySelector('.a-splash')
+    root.addEventListener('click', onInteract)
+
+    app.utility.focus.trap(root)
+
+    app.state.screen.on('enter-splash', onEnter)
+    app.state.screen.on('exit-splash', onExit)
+
+    root.querySelector('.a-splash--version').innerHTML = `v${app.version()}`
+  })
+
   function onEnter() {
     app.utility.focus.set(root)
     engine.loop.on('frame', onFrame)
@@ -22,21 +34,5 @@ app.screen.splash = (() => {
     app.state.screen.dispatch('start')
   }
 
-  return {
-    activate: function () {
-      root = document.querySelector('.a-splash')
-      root.addEventListener('click', onInteract)
-
-      app.utility.focus.trap(root)
-
-      app.state.screen.on('enter-splash', onEnter)
-      app.state.screen.on('exit-splash', onExit)
-
-      root.querySelector('.a-splash--version').innerHTML = `v${app.version()}`
-
-      return this
-    },
-  }
+  return {}
 })()
-
-app.once('activate', () => app.screen.splash.activate())

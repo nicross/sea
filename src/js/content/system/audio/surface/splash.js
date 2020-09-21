@@ -41,7 +41,9 @@ content.system.audio.surface.splash = (() => {
   }
 
   return {
-    import: function ({z}) {
+    import: function () {
+      const {z} = engine.position.getVector()
+
       if (z >= 0) {
         this.surface()
       } else {
@@ -71,10 +73,10 @@ content.system.audio.surface.splash = (() => {
   }
 })()
 
-engine.state.on('import', (state) => content.system.audio.surface.splash.import(state))
-
 engine.ready(() => {
   content.system.movement.on('surface-splash', (e) => content.system.audio.surface.splash.trigger(e))
   content.system.movement.on('transition-surface', () => content.system.audio.surface.splash.surface())
   content.system.movement.on('transition-underwater', () => content.system.audio.surface.splash.underwater())
 })
+
+engine.state.on('import', () => content.system.audio.surface.splash.import())

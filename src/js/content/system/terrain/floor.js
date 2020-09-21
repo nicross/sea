@@ -52,7 +52,7 @@ content.system.terrain.floor = (() => {
 
   return {
     currentValue: function() {
-      const {x, y} = engine.position.get()
+      const {x, y} = engine.position.getVector()
       return this.value(x, y)
     },
     import: function () {

@@ -101,7 +101,8 @@ content.system.audio.surface.waves = (() => {
     const isSurface = z >= 0
 
     synths.forEach((synth, i) => {
-      let {x, y, angle} = engine.position.get()
+      const angle = engine.position.getEuler().yaw
+      let {x, y} = engine.position.getVector()
 
       x += Math.cos(angle + angles[i]) * distance
       y += Math.sin(angle + angles[i]) * distance
@@ -130,7 +131,7 @@ content.system.audio.surface.waves = (() => {
       return this
     },
     update: function () {
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       if (z < content.const.lightZone) {
         if (synths.length) {

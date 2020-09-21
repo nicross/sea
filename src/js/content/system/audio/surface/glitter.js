@@ -70,7 +70,7 @@ content.system.audio.surface.glitter = (() => {
   function createGrain(z) {
     let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
 
-    const {x, y} = engine.position.get()
+    const {x, y} = engine.position.getVector()
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
       surface = content.system.surface.value(x, y)
@@ -132,7 +132,8 @@ content.system.audio.surface.glitter = (() => {
 
   return {
     bus: () => bus,
-    import: function ({z}) {
+    import: function () {
+      const {z} = engine.position.getVector()
       const isAbove = z >= 0
 
       if (isAbove) {
@@ -148,7 +149,7 @@ content.system.audio.surface.glitter = (() => {
       return this
     },
     update: function () {
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       if (z < content.const.lightZone) {
         return this
@@ -171,4 +172,4 @@ engine.loop.on('frame', ({paused}) => {
   content.system.audio.surface.glitter.update()
 })
 
-engine.state.on('import', (data) => content.system.audio.surface.glitter.import(data))
+engine.state.on('import', () => content.system.audio.surface.glitter.import())

@@ -18,9 +18,8 @@ content.system.movement = (() => {
       return false
     }
 
-    const position = engine.position.get(),
-      radius = engine.const.positionRadius,
-      z = content.system.z.get()
+    const position = engine.position.getVector(),
+      radius = engine.const.positionRadius
 
     const cos = Math.cos(movement.angle + position.angle),
       sin = Math.sin(movement.angle + position.angle)
@@ -32,22 +31,22 @@ content.system.movement = (() => {
       {
         x: position.x + deltaCos + radius,
         y: position.y + deltaSin + radius,
-        z: z + radius,
+        z: position.z + radius,
       },
       {
         x: position.x + deltaCos - radius,
         y: position.y + deltaSin + radius,
-        z: z + radius,
+        z: position.z + radius,
       },
       {
         x: position.x + deltaCos + radius,
         y: position.y + deltaSin - radius,
-        z: z - radius,
+        z: position.z - radius,
       },
       {
         x: position.x + deltaCos - radius,
         y: position.y + deltaSin - radius,
-        z: z - radius,
+        z: position.z - radius,
       },
     ]
 
@@ -61,7 +60,7 @@ content.system.movement = (() => {
   }
 
   function checkZCollision(z) {
-    const position = engine.position.get(),
+    const position = engine.position.getVector(),
       radius = engine.const.positionRadius
 
     const points = [
@@ -210,8 +209,8 @@ content.system.movement = (() => {
       shouldSubmerge = zInput < 0 && z >= 0 && !isCatchingAir
 
     if (z >= 0 && !shouldSubmerge) {
-      const {x, y} = engine.position.get()
-      const {velocity} = engine.movement.get()
+      const {x, y} = engine.position.getVector()
+      const {velocity} = content.system.engineMovement.get()
       const surface = content.system.surface.value(x, y)
       const height = surface * content.const.waveHeight
 
@@ -390,7 +389,7 @@ content.system.movement = (() => {
     isSurface: () => !isUnderwater,
     isUnderwater: () => isUnderwater,
     update: function (controls = {}) {
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       handleZ(z, controls.z)
 

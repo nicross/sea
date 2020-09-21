@@ -56,10 +56,13 @@ app.screen.status = (() => {
   }
 
   function updateStatus() {
-    const depth = Math.max(0, -content.system.z.get()),
-      position = engine.position.get(),
+    const {x, y, z} = engine.position.getVector()
+
+    const coordinates = {x, y},
+      depth = Math.max(0, -z),
       treasures = content.system.treasure.getCollected(),
-      time = content.system.time.get()
+      time = content.system.time.get(),
+      yaw = engine.position.getEuler().yaw
 
     const earnings = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),
       treasuresCollected = treasures.length
@@ -73,10 +76,10 @@ app.screen.status = (() => {
     root.querySelector('.a-status--row-lastTreasure').hidden = !treasuresCollected
     root.querySelector('.a-status--row-treasures').hidden = !treasuresCollected
 
-    root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(position)
+    root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(coordinates)
     root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
     root.querySelector('.a-status--metric-earnings').innerHTML = app.utility.format.number(earnings)
-    root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(position.angle)
+    root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(yaw)
     root.querySelector('.a-status--metric-lastTreasure').innerHTML = lastTreasure
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
     root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)

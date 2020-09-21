@@ -83,18 +83,17 @@ content.system.audio.compass = (() => {
   }
 
   return {
-    import: function ({position, z}) {
-      previousAngle = position && position.angle
-        ? position.angle
-        : 0
+    import: function () {
+      const {z} = engine.position.getVector()
 
+      previousAngle = engine.utility.normalizeAngle(engine.position.getEuler().yaw)
       updateGain(z)
 
       return this
     },
     update: function () {
-      const {angle} = engine.position.get()
-      const z = content.system.z.get()
+      const angle = engine.utility.normalizeAngle(engine.position.getEuler().yaw)
+      const {z} = engine.position.getVector()
 
       updateGain(z)
 
@@ -123,4 +122,4 @@ engine.loop.on('frame', ({paused}) => {
   content.system.audio.compass.update()
 })
 
-engine.state.on('import', (data) => content.system.audio.compass.import(data))
+engine.state.on('import', () => content.system.audio.compass.import())

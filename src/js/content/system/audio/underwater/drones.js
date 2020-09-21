@@ -71,7 +71,7 @@ content.system.audio.underwater.drones = (() => {
   }
 
   function updateBinaurals() {
-    const {angle} = engine.position.get()
+    const angle = engine.position.getEuler().yaw
 
     binaurals.forEach((binaural, i) => {
       binaural.update({
@@ -116,14 +116,18 @@ content.system.audio.underwater.drones = (() => {
   }
 
   return {
-    import: function ({z}) {
+    import: function () {
+      const {z} = engine.position.getVector()
+
       wasAbove = false
       wasBelow = false
+
       updateGain(z)
+
       return this
     },
     update: function () {
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       if (z >= content.const.midnightZoneMin) {
         if (synths.length) {
@@ -153,4 +157,4 @@ engine.loop.on('frame', ({paused}) => {
   content.system.audio.underwater.drones.update()
 })
 
-engine.state.on('import', (data) => content.system.audio.underwater.drones.import(data))
+engine.state.on('import', () => content.system.audio.underwater.drones.import())

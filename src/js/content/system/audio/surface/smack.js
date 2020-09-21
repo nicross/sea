@@ -53,7 +53,9 @@ content.system.audio.surface.smack = (() => {
   }
 
   return {
-    import: function ({z}) {
+    import: function () {
+      const {z} = engine.position.getVector()
+
       if (z >= 0) {
         this.surface()
       } else {
@@ -83,10 +85,10 @@ content.system.audio.surface.smack = (() => {
   }
 })()
 
-engine.state.on('import', (state) => content.system.audio.surface.smack.import(state))
-
 engine.ready(() => {
   content.system.movement.on('surface-smack', (e) => content.system.audio.surface.smack.trigger(e))
   content.system.movement.on('transition-surface', () => content.system.audio.surface.smack.surface())
   content.system.movement.on('transition-underwater', () => content.system.audio.surface.smack.underwater())
 })
+
+engine.state.on('import', () => content.system.audio.surface.smack.import())

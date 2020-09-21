@@ -78,8 +78,8 @@ content.system.audio.underwater.momentum = (() => {
     update: function () {
       const {velocity} = content.system.engineMovement.get()
 
-      const z = content.system.z.get(),
-        zVelocity = content.system.movement.zVelocity()
+      const {z} = engine.position.getVector()
+      const zVelocity = content.system.movement.zVelocity()
 
       const shouldUpdate = z < 0 && (velocity || zVelocity)
 

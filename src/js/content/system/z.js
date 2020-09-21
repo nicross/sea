@@ -1,20 +1,19 @@
-content.system.z = (() => {
-  let z = 0
+// XXX: Proxy for engine.position
+// TODO: Remove and replace with engine.position
+// TODO: Update script that converts data.z to data.position.z
 
+content.system.z = (() => {
   return {
-    get: function () {
-      return z
-    },
-    increment: function (value) {
-      z += value
-      return this
-    },
     set: function (value) {
-      z = Number(value) || 0
+      const vector = engine.position.getVector()
+
+      engine.position.setVector({
+        x: vector.x,
+        y: vector.y,
+        z: value,
+      })
+
       return this
     },
   }
 })()
-
-engine.state.on('import', ({z}) => content.system.z.set(z))
-engine.state.on('export', (data) => data.z = content.system.z.get())

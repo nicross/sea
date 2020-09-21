@@ -1,7 +1,6 @@
 content.system.terrain = {
   debug: function () {
-    const {x, y} = engine.position.get()
-    const z = content.system.z.get()
+    const {x, y, z} = engine.position.getVector()
 
     const now = performance.now()
 

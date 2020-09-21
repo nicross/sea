@@ -111,15 +111,13 @@ content.system.soundtrack = (() => {
     update: function () {
       // TODO: Possibly a frame limiter
 
-      const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
 
       if (z > content.const.midnightZoneMin + 1) {
         // Don't waste frames when not audible
         // Some leeway to prevent race conditions
         return this
       }
-
-      const {x, y} = engine.position.get()
 
       const present = {
         time: content.system.time.get(),

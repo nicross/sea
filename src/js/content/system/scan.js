@@ -43,8 +43,8 @@ content.system.scan = (() => {
   }
 
   async function scanForward() {
-    const {angle, x, y} = engine.position.get()
-    const z = content.system.z.get()
+    const {x, y, z} = engine.position.getVector()
+    const angle = engine.position.getEuler().yaw
 
     const position = {
       angle,
@@ -75,8 +75,8 @@ content.system.scan = (() => {
   }
 
   async function scanReverse() {
-    const {angle, x, y} = engine.position.get()
-    const z = content.system.z.get()
+    const {x, y, z} = engine.position.getVector()
+    const angle = engine.position.getEuler().yaw
 
     const position = {
       angle,
@@ -126,7 +126,7 @@ content.system.scan = (() => {
         return this
       }
 
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       // Disallow use on surface
       if (z >= 0) {
@@ -155,7 +155,7 @@ content.system.scan = (() => {
         return this
       }
 
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       // Disallow use on surface
       if (z >= 0) {

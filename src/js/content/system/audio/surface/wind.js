@@ -34,14 +34,15 @@ content.system.audio.surface.wind = (() => {
   function getVector() {
     const movement = content.system.engineMovement.get(),
       windValue = content.system.wind.value() ** 4,
+      yaw = engine.position.getEuler().yaw,
       zVelocity = content.system.movement.zVelocity()
 
     const velocityRatio = movement.velocity / content.const.surfaceNormalMaxVelocity
 
     const sum = [
       {
-        x: Math.cos(position.angle - Math.PI) * windValue,
-        y: Math.sin(position.angle - Math.PI) * windValue,
+        x: Math.cos(yaw - Math.PI) * windValue,
+        y: Math.sin(yaw - Math.PI) * windValue,
       },
       [
         {
@@ -72,7 +73,7 @@ content.system.audio.surface.wind = (() => {
   }
 
   function updateSynth() {
-    const {angle, x, y, radius} = getVector()
+    const {x, y, radius} = getVector()
 
     binaural.update({
       x,
@@ -88,7 +89,7 @@ content.system.audio.surface.wind = (() => {
 
   return {
     update: function () {
-      const z = content.system.z.get()
+      const {z} = engine.position.getVector()
 
       if (z < 0) {
         if (synth) {

@@ -51,24 +51,20 @@ content.system.audio.reverb = (() => {
       return this
     },
     import: function () {
-      // Wait for next event loop so everything has reset
-      setTimeout(() => {
-        const {x, y} = engine.position.get()
-        const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
 
-        if (z >= 0) {
-          machine.change('surface')
-        } else if (z >= content.system.terrain.floor.value(x, y)) {
-          machine.change('underwater')
-        } else {
-          machine.change('cave')
-        }
-      })
+      if (z >= 0) {
+        machine.change('surface')
+      } else if (z >= content.system.terrain.floor.value(x, y)) {
+        machine.change('underwater')
+      } else {
+        machine.change('cave')
+      }
+
       return this
     },
     update: function () {
-      const {x, y} = engine.position.get()
-      const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
 
       if (machine.is('surface')) {
         if (z < 0) {
@@ -105,4 +101,4 @@ engine.loop.on('frame', ({frame, paused}) => {
   content.system.audio.reverb.update()
 })
 
-engine.state.on('import', (data) => content.system.audio.reverb.import(data))
+engine.state.on('import', () => content.system.audio.reverb.import())

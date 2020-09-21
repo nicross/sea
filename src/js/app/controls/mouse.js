@@ -1,15 +1,13 @@
 app.controls.mouse = (() => {
-  const buttons = {
-    0: false,
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  }
+  let gameScreen
 
-  let gameScreen,
-    wheel
+  engine.ready(() => {
+    gameScreen = document.querySelector('.a-game')
+    gameScreen.addEventListener('click', onClick)
+
+    app.state.screen.on('exit-game', onExitGame)
+    app.state.screen.on('enter-game', onEnterGame)
+  })
 
   function exitPointerLock() {
     document.exitPointerLock()
@@ -19,10 +17,7 @@ app.controls.mouse = (() => {
     return document.pointerLockElement === gameScreen
   }
 
-  function onClick(e) {
-    e.preventDefault()
-    e.stopPropagation()
-
+  function onClick() {
     if (!isPointerLock()) {
       requestPointerLock()
     }
@@ -48,63 +43,12 @@ app.controls.mouse = (() => {
     if (isPointerLock()) {
       exitPointerLock()
     }
-
-    reset()
-  }
-
-  function onMousedown(e) {
-    const button = e.button
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    if (!isPointerLock()) {
-      return
-    }
-
-    if (button in buttons) {
-      buttons[button] = true
-    }
-  }
-
-  function onMousemove(e) {
-    if (!isPointerLock()) {
-      return
-    }
-
-    if (content.system.movement.isCatchingAir()) {
-      return
-    }
-
-    const scaled = engine.utility.scale(e.movementX, -window.innerWidth, window.innerWidth, 1, -1)
-    engine.position.turn(scaled * app.settings.computed.mouseSensitivity * Math.PI)
-
-    content.system.audio.engine.setFakeTurn(scaled)
-  }
-
-  function onMouseup(e) {
-    const button = e.button
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    if (button in buttons) {
-      buttons[button] = false
-    }
   }
 
   function onPointerlockchange() {
     if (!isPointerLock() && app.isElectron() && app.utility.escape.is()) {
       pause()
     }
-  }
-
-  function onWheel(e) {
-    if (!isPointerLock()) {
-      return
-    }
-
-    wheel = engine.utility.sign(-e.deltaY)
   }
 
   function pause() {
@@ -115,65 +59,50 @@ app.controls.mouse = (() => {
     gameScreen.requestPointerLock()
   }
 
-  function reset() {
-    for (const button in buttons) {
-      buttons[button] = false
-    }
-  }
-
-  app.once('activate', () => {
-    gameScreen = document.querySelector('.a-game')
-
-    gameScreen.addEventListener('click', onClick)
-    gameScreen.addEventListener('mousedown', onMousedown)
-    gameScreen.addEventListener('mousemove', onMousemove)
-    gameScreen.addEventListener('mouseup', onMouseup)
-    gameScreen.addEventListener('wheel', onWheel)
-
-    app.state.screen.on('exit-game', onExitGame)
-    app.state.screen.on('enter-game', onEnterGame)
-  })
-
   return {
     game: function () {
-      const state = {}
+      const mouse = engine.input.mouse.get(),
+        state = {}
 
-      if (buttons[0] && !buttons[2]) {
+      if (mouse.button[0] && !mouse.button[2]) {
         state.y = 1
       }
 
-      if (buttons[2] && !buttons[0]) {
+      if (mouse.button[2] && !mouse.button[0]) {
         state.y = -1
       }
 
-      if (buttons[3] && !buttons[4]) {
+      if (mouse.button[3] && !mouse.button[4]) {
         state.z = -1
       }
 
-      if (buttons[4] && !buttons[3]) {
+      if (mouse.button[4] && !mouse.button[3]) {
         state.z = 1
       }
 
-      if (buttons[1] && !app.settings.computed.toggleTurbo) {
+      if (mouse.button[1] && !app.settings.computed.toggleTurbo) {
         state.turbo = true
+      }
+
+      if (mouse.moveX) {
+        state.rotate = engine.utility.scale(mouse.moveX, -window.innerWidth, window.innerWidth, 1, -1) * app.settings.computed.mouseSensitivity
       }
 
       return state
     },
     ui: function () {
-      const state = {}
+      const mouse = engine.input.mouse.get(),
+        state = {}
 
-      if (wheel > 0) {
+      if (mouse.wheelY < 0) {
         state.scanForward = true
-      } else if (wheel < 0) {
+      } else if (mouse.wheelY > 0) {
         state.scanReverse = true
       }
 
-      if (buttons[1] && app.settings.computed.toggleTurbo) {
+      if (mouse.button[1] && app.settings.computed.toggleTurbo) {
         state.turbo = true
       }
-
-      wheel = 0
 
       return state
     },

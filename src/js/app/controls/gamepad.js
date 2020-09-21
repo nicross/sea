@@ -1,70 +1,38 @@
 app.controls.gamepad = {
-  deadzone: (input, threshold = 0.1875) => {
-    const ratio = (Math.abs(input) - threshold) / (1 - threshold),
-      sign = input > 0 ? 1 : -1
-
-    return ratio > 0 ? sign * ratio : 0
-  },
   game: function () {
-    const gamepads = navigator.getGamepads()
-
-    if (!gamepads.length) {
-      return {}
-    }
-
-    const buttons = {},
-      state = {}
+    const {digital} = engine.input.gamepad.get()
+    const state = {}
 
     let rotate = 0,
       x = 0,
       y = 0,
       z = 0
 
-    for (let i = 0; i < gamepads.length; i += 1) {
-      const gamepad = gamepads[i]
-
-      if (!gamepad) {
-        continue
-      }
-
-      const hasLeftStick = 0 in gamepad.axes && 1 in gamepad.axes,
-        hasRightStick = 2 in gamepad.axes && 3 in gamepad.axes
-
-      if (hasLeftStick && hasRightStick) {
-        rotate -= this.deadzone(gamepad.axes[2])
-        x += this.deadzone(gamepad.axes[0])
-        y -= this.deadzone(gamepad.axes[1])
-      } else if (hasLeftStick) {
-        rotate -= this.deadzone(gamepad.axes[0])
-        y -= this.deadzone(gamepad.axes[1])
-      }
-
-      gamepad.buttons.forEach((button, i) => {
-        buttons[i] |= button.pressed
-      })
-
-      if (6 in gamepad.buttons) {
-        y -= gamepad.buttons[6].value
-      }
-
-      if (7 in gamepad.buttons) {
-        y += gamepad.buttons[7].value
-      }
+    if (engine.input.gamepad.hasAxis(0, 1, 2)) {
+      rotate += engine.input.gamepad.getAxis(2, true)
+      x += engine.input.gamepad.getAxis(0)
+      y += engine.input.gamepad.getAxis(1, true)
+    } else if (engine.input.gamepad.hasAxis(0, 1)) {
+      rotate += engine.input.gamepad.getAxis(0, true)
+      y += engine.input.gamepad.getAxis(1, true)
     }
 
-    if (buttons[12]) {
-      x = 1
+    y -= engine.input.gamepad.getAnalog(6)
+    y += engine.input.gamepad.getAnalog(7)
+
+    if (digital[12]) {
+      y = 1
     }
 
-    if (buttons[13]) {
-      x = -1
+    if (digital[13]) {
+      y = -1
     }
 
-    if (buttons[14]) {
+    if (digital[14]) {
       rotate = 1
     }
 
-    if (buttons[15]) {
+    if (digital[15]) {
       rotate = -1
     }
 
@@ -85,8 +53,9 @@ app.controls.gamepad = {
       state.y = y
     }
 
-    const isAscend = buttons[3] || buttons[5],
-      isDescend = buttons[2] || buttons[4]
+    const isAscend = digital[3] || digital[5],
+      isDescend = digital[2] || digital[4],
+      isTurbo = digital[10] || digital[11]
 
     if (isAscend && !isDescend) {
       state.z = 1
@@ -94,85 +63,65 @@ app.controls.gamepad = {
       state.z = -1
     }
 
-    if ((buttons[1] || buttons[10]) && !app.settings.computed.toggleTurbo) {
+    if (isTurbo && !app.settings.computed.toggleTurbo) {
       state.turbo = true
     }
 
     return state
   },
   ui: function () {
-    const gamepads = navigator.getGamepads()
-
-    if (!gamepads.length) {
-      return {}
-    }
-
-    const buttons = {},
-      state = {}
+    const {digital} = engine.input.gamepad.get()
+    const state = {}
 
     let x = 0,
       y = 0
 
-    for (let i = 0; i < gamepads.length; i += 1) {
-      const gamepad = gamepads[i]
-
-      if (!gamepad) {
-        continue
-      }
-
-      gamepad.buttons.forEach((button, i) => {
-        buttons[i] |= button.pressed
-      })
-
-      const hasLeftStick = 0 in gamepad.axes && 1 in gamepad.axes
-
-      if (hasLeftStick) {
-        x += this.deadzone(gamepad.axes[0])
-        y -= this.deadzone(gamepad.axes[1])
-      }
+    if (engine.input.gamepad.hasAxis(0, 1)) {
+      x += engine.input.gamepad.getAxis(0)
+      y += engine.input.gamepad.getAxis(1, true)
     }
 
-    if ((buttons[10] || buttons[11]) && app.settings.computed.toggleTurbo) {
+    if ((digital[10] || digital[11]) && app.settings.computed.toggleTurbo) {
       state.turbo = true
     }
 
-    if (buttons[1] || buttons[8]) {
+    if (digital[1] || digital[8]) {
       state.cancel = true
     }
 
-    if (buttons[0] || buttons[9]) {
+    if (digital[0] || digital[9]) {
       state.confirm = true
     }
 
-    if (buttons[0]) {
+    if (digital[0]) {
       state.scanForward = true
     }
 
-    if (buttons[1]) {
+    if (digital[1]) {
       state.scanReverse = true
     }
 
-    if (buttons[8]) {
+    if (digital[8]) {
       state.select = true
     }
 
-    if (buttons[9]) {
+    if (digital[9]) {
       state.start = true
     }
 
-    if (buttons[12]) {
+    if (digital[12]) {
       y = 1
     }
 
-    if (buttons[13]) {
+    if (digital[13]) {
       y = -1
     }
 
-    if (buttons[14]) {
+    if (digital[14]) {
       x = -1
     }
 
-    if (buttons[15]) {
+    if (digital[15]) {
       x = 1
     }
 

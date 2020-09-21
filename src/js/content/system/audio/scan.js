@@ -1,4 +1,4 @@
-content.system.audio.scan = ((undefined) => {
+content.system.audio.scan = (() => {
   const bus = content.system.audio.createBypass(),
     context = engine.audio.context()
 

@@ -31,7 +31,7 @@ content.system.audio.underwater.momentum = (() => {
 
   function updateSynth() {
     const isTurbo = content.system.movement.isTurbo(),
-      movement = engine.movement.get(),
+      movement = content.system.engineMovement.get(),
       zVelocity = content.system.movement.zVelocity()
 
     const vectors = []
@@ -76,7 +76,7 @@ content.system.audio.underwater.momentum = (() => {
 
   return {
     update: function () {
-      const {velocity} = engine.movement.get()
+      const {velocity} = content.system.engineMovement.get()
 
       const z = content.system.z.get(),
         zVelocity = content.system.movement.zVelocity()

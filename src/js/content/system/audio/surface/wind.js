@@ -32,8 +32,7 @@ content.system.audio.surface.wind = (() => {
   }
 
   function getVector() {
-    const movement = engine.movement.get(),
-      position = engine.position.get(),
+    const movement = content.system.engineMovement.get(),
       windValue = content.system.wind.value() ** 4,
       zVelocity = content.system.movement.zVelocity()
 

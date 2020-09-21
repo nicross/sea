@@ -21,10 +21,9 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  const {deltaVelocity} = engine.movement.get()
-  const deltaVelocityZ = Math.abs(content.system.movement.zVelocity() * delta)
+  const velocity = engine.position.getVelocity().distance()
 
-  if (deltaVelocity || deltaVelocityZ) {
-    app.stats.totalDistance.increment(deltaVelocity + deltaVelocityZ)
+  if (velocity) {
+    app.stats.totalDistance.increment(delta * velocity)
   }
 })

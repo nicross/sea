@@ -12,7 +12,7 @@ content.system.movement = (() => {
     zVelocity = 0
 
   function checkMovementCollision() {
-    const movement = engine.movement.get()
+    const movement = content.system.engineMovement.get()
 
     if (!movement.velocity) {
       return false
@@ -154,10 +154,10 @@ content.system.movement = (() => {
     if (shouldLerp) {
       // XXX: Prevent endless hops
       // TODO: Investigate why velocity becomes negative with lerping
-      const movement = engine.movement.get()
+      const movement = content.system.engineMovement.get()
 
       if (movement.velocity < 0) {
-        engine.movement.set({
+        content.system.engineMovement.set({
           ...movement,
           deltaVelocity: 0,
           velocity: 0,
@@ -190,9 +190,9 @@ content.system.movement = (() => {
 
     if (checkMovementCollision()) {
       // Bounce off and prevent movement
-      const movement = engine.movement.get()
+      const movement = content.system.engineMovement.get()
 
-      engine.movement.set({
+      content.system.engineMovement.set({
         angle: engine.utility.normalizeAngle(movement.angle + Math.PI),
         rotation: movement.rotation,
         velocity: movement.velocity * reflectionRate,
@@ -373,7 +373,7 @@ content.system.movement = (() => {
 
   function updateMovement(values) {
     previousMovement = values
-    engine.movement.update(values)
+    content.system.engineMovement.update(values)
   }
 
   return engine.utility.pubsub.decorate({

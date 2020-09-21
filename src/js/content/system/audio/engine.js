@@ -40,7 +40,7 @@ content.system.audio.engine = (() => {
 
   function calculateSurfacePoints(controls) {
     const isCatchingAir = content.system.movement.isCatchingAir(),
-      movement = engine.movement.get(),
+      movement = content.system.engineMovement.get(),
       points = []
 
     if ((controls.rotate || fakeTurn) && !isCatchingAir) {
@@ -70,7 +70,7 @@ content.system.audio.engine = (() => {
   }
 
   function calculateUnderwaterPoints(controls) {
-    const movement = engine.movement.get(),
+    const movement = content.system.engineMovement.get(),
       points = []
 
     if (controls.rotate || fakeTurn) {

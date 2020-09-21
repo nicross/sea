@@ -7,8 +7,7 @@ content.system.audio.engine = (() => {
     rotationStrength = 1/100,
     turboDetune = 1200
 
-  let fakeTurn = 0,
-    synth
+  let synth
 
   // XXX: Compensate for engine.const.distancePower = 1 (was -4.5 at 2)
   bus.gain.value = engine.utility.fromDb(-6)
@@ -43,8 +42,8 @@ content.system.audio.engine = (() => {
       movement = content.system.engineMovement.get(),
       points = []
 
-    if ((controls.rotate || fakeTurn) && !isCatchingAir) {
-      const rotate = ((controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation) || fakeTurn) * rotationStrength
+    if (controls.rotate && !isCatchingAir) {
+      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation, -1, 1) * rotationStrength
 
       points.push({
         x: Math.abs(rotate),
@@ -73,8 +72,8 @@ content.system.audio.engine = (() => {
     const movement = content.system.engineMovement.get(),
       points = []
 
-    if (controls.rotate || fakeTurn) {
-      const rotate = ((controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation) || fakeTurn) * rotationStrength
+    if (controls.rotate) {
+      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / engine.const.movementMaxRotation, -1, 1) * rotationStrength
 
       points.push({
         x: Math.abs(rotate),
@@ -142,8 +141,8 @@ content.system.audio.engine = (() => {
 
   function shouldHaveSynth(controls) {
     return content.system.movement.isSurface()
-      ? controls.rotate || controls.y || fakeTurn
-      : controls.rotate || controls.x || controls.y || controls.z || fakeTurn
+      ? controls.rotate || controls.y
+      : controls.rotate || controls.x || controls.y || controls.z
   }
 
   function updateSynth(controls) {
@@ -196,10 +195,6 @@ content.system.audio.engine = (() => {
       }
       return this
     },
-    setFakeTurn: function (value) {
-      fakeTurn = engine.utility.sign(value)
-      return this
-    },
     update: function (controls = {}) {
       if (shouldHaveSynth(controls)) {
         if (!synth) {
@@ -209,8 +204,6 @@ content.system.audio.engine = (() => {
       } else if (synth) {
         destroySynth()
       }
-
-      fakeTurn = 0
 
       return this
     },

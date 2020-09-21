@@ -65,7 +65,7 @@ content.system.audio.surface.wind = (() => {
 
     return {
       angle,
-      radius: engine.utility.distanceOrigin(sum.x, sum.y),
+      radius: engine.utility.distance(sum),
       x: Math.cos(angle),
       y: Math.sin(angle),
     }

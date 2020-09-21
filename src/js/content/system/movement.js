@@ -139,7 +139,7 @@ content.system.movement = (() => {
         y: engine.utility.lerp(points[0].y, points[1].y, delta),
       }
 
-      radius = engine.utility.distanceOrigin(point.x, point.y)
+      radius = engine.utility.distance(point)
       theta = Math.atan2(point.y, point.x)
     }
 
@@ -183,7 +183,7 @@ content.system.movement = (() => {
     updateMovement({
       rotate: controls.rotate,
       translate: {
-        radius: engine.utility.clamp(engine.utility.distanceOrigin(controls.x, controls.y), 0, 1),
+        radius: engine.utility.clamp(engine.utility.distance(controls), 0, 1),
         theta: Math.atan2(-controls.x, controls.y),
       },
     })

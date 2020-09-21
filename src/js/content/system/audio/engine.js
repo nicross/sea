@@ -27,7 +27,7 @@ content.system.audio.engine = (() => {
       x = Math.cos(angle),
       y = Math.sin(angle)
 
-    const radius = engine.utility.clamp(engine.utility.distanceOrigin(sum.x, sum.y), 0, 1)
+    const radius = engine.utility.clamp(engine.utility.distance(sum), 0, 1)
 
     return {
       angle,

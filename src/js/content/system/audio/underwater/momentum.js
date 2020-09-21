@@ -62,7 +62,7 @@ content.system.audio.underwater.momentum = (() => {
       y: Math.sin(angle),
     })
 
-    const strength = engine.utility.clamp(engine.utility.distanceOrigin(sum.x, sum.y), 0, 1)
+    const strength = engine.utility.clamp(engine.utility.distance(sum), 0, 1)
 
     const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff)
 

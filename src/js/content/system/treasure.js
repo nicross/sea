@@ -83,6 +83,7 @@ content.system.treasure = (() => {
       })
 
       engine.streamer.registerProp(content.prop.treasure, {
+        destination: content.system.audio.bus(),
         radius: content.const.treasurePickupRadius,
         x: item.x,
         y: item.y,
@@ -141,6 +142,7 @@ content.system.treasure = (() => {
     }
 
     engine.streamer.registerProp(content.prop.treasure, {
+      destination: content.system.audio.bus(),
       radius: content.const.treasurePickupRadius,
       x: location.x,
       y: location.y,
@@ -200,8 +202,7 @@ content.system.treasure = (() => {
       }
     },
     getCurrentChunk: function () {
-      const {x, y} = engine.position.get()
-      const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
       return getChunk(x, y, z)
     },
     getCollected: () => [...collected],
@@ -213,14 +214,13 @@ content.system.treasure = (() => {
     onScan: function (scan) {
       // TODO: Improve this by rolling chunk for each individual scan point
 
-      const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
 
       if (z > content.const.lightZone) {
         // Treasure absolutely will not spawn
         return
       }
 
-      const {x, y} = engine.position.get()
       const floor = content.system.terrain.floor.value(x, y)
 
       if (scale(floor) < scale(z)) {
@@ -259,11 +259,11 @@ content.system.treasure = (() => {
       return this
     },
     test: function (count = 1) {
-      const {x, y} = engine.position.get()
-      const z = content.system.z.get()
+      const {x, y, z} = engine.position.getVector()
 
       for (let i = 0; i <= count; i += 1) {
         engine.streamer.registerProp(content.prop.treasure, {
+          destination: content.system.audio.bus(),
           radius: content.const.treasurePickupRadius,
           x: x + engine.utility.random.float(-10, 10),
           y: y + engine.utility.random.float(-10, 10),

@@ -1,11 +1,11 @@
 content.prop.exploration = content.prop.base.invent({
   name: 'Exploration Node',
   glitter: function () {
-    const {angle} = engine.position.get()
+    const angle = this.relative.euler().yaw
     const strength = Math.random()
 
-      facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1),
     const distanceRatio = 1 - (this.distance / engine.streamer.getRadius()),
+      facingRatio = engine.utility.scale(Math.cos(angle), -1, 1, 0, 1),
       frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], Math.max(0, distanceRatio * facingRatio))
 
     const duration = engine.utility.lerp(1, 2, strength),
@@ -14,7 +14,7 @@ content.prop.exploration = content.prop.base.invent({
 
     const synth = engine.audio.synth.createSimple({
       frequency,
-    }).connect(this.output.input)
+    }).connect(this.output)
 
     const now = engine.audio.time()
 

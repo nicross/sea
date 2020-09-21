@@ -26,14 +26,15 @@ content.prop.treasure = content.prop.base.invent({
     this.filter.frequency.value = this.calculateFilterFrequency()
 
     content.system.audio.treasure.output().connect(this.filter)
-    this.filter.connect(this.output.input)
+    this.filter.connect(this.output)
 
     return this
   },
   calculateFilterFrequency: function () {
-    const {angle} = engine.position.get()
-      facingRatio = engine.utility.scale(Math.cos(this.atan2 - angle), -1, 1, 0, 1)
+    const angle = this.relative.euler().yaw
+
     const distanceRatio = Math.max(0, 1 - (this.distance / engine.streamer.getRadius())),
+      facingRatio = engine.utility.scale(Math.cos(angle), -1, 1, 0, 1)
 
     const color = engine.utility.lerp(1, 8, engine.utility.clamp(distanceRatio * facingRatio, 0, 1))
 
@@ -41,7 +42,7 @@ content.prop.treasure = content.prop.base.invent({
   },
   collect: function () {
     this.isCollected = true
-    engine.audio.ramp.exponential(this.output.input.gain, engine.const.zeroGain, 1/4)
+    engine.audio.ramp.exponential(this.output.gain, engine.const.zeroGain, 1/4)
     content.system.treasure.collect(this)
     return this
   },

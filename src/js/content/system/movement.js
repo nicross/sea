@@ -15,13 +15,20 @@ content.system.movement = (() => {
     isUnderwater,
     lateralThrust = engine.utility.vector3d.create()
 
+  let angularAcceleration = 0,
+    angularDeceleration = 0,
+    angularMaxVelocity = 0,
+    lateralAcceleration = 0,
+    lateralDeceleration = 0,
+    lateralMaxVelocity = 0
+
   function applyAngularThrust() {
     if (!angularThrust) {
       return engine.position.setAngularVelocityEuler({
         yaw: content.utility.accelerate.value(
           engine.position.getAngularVelocityEuler().yaw,
           0,
-          content.const.movementRotationalDeceleration
+          angularDeceleration
         ),
       })
     }
@@ -29,8 +36,8 @@ content.system.movement = (() => {
     engine.position.setAngularVelocityEuler({
       yaw: content.utility.accelerate.value(
         engine.position.getAngularVelocityEuler().yaw,
-        angularThrust * content.const.movementMaxRotation,
-        content.const.movementRotationalAcceleration
+        angularThrust * angularMaxVelocity,
+        angularAcceleration
       ),
     })
   }
@@ -41,17 +48,17 @@ content.system.movement = (() => {
         content.utility.accelerate.vector(
           engine.position.getVelocity(),
           engine.utility.vector3d.create(),
-          content.const.movementDeceleration
+          lateralDeceleration
         )
       )
     }
 
     const currentVelocity = engine.position.getVelocity(),
-      targetVelocity = lateralThrust.scale(content.const.movementMaxVelocity).rotateQuaternion(engine.position.getQuaternion())
+      targetVelocity = lateralThrust.scale(lateralMaxVelocity).rotateQuaternion(engine.position.getQuaternion())
 
     const rate = currentVelocity.distance() <= targetVelocity.distance()
-      ? content.const.movementAcceleration
-      : content.const.movementDeceleration
+      ? lateralAcceleration
+      : lateralDeceleration
 
     engine.position.setVelocity(
       content.utility.accelerate.vector(
@@ -339,13 +346,13 @@ content.system.movement = (() => {
     if (isCatchingAir !== state) {
       isCatchingAir = state
 
-      content.const.movementDeceleration = isCatchingAir
-        ? content.const.airDeceleration
-        : content.const.normalDeceleration
-
-      content.const.movementRotationalDeceleration = isCatchingAir
+      angularDeceleration = isCatchingAir
         ? content.const.airRotationalDeceleration
         : content.const.normalRotationalDeceleration
+
+      lateralDeceleration = isCatchingAir
+        ? content.const.airDeceleration
+        : content.const.normalDeceleration
     }
   }
 
@@ -371,35 +378,43 @@ content.system.movement = (() => {
     setTurbo(true)
     setUnderwater(false)
 
-    content.const.movementAcceleration = content.const.surfaceTurboAcceleration
-    content.const.movementMaxVelocity = content.const.surfaceTurboMaxVelocity
+    lateralAcceleration = content.const.surfaceTurboAcceleration
+    lateralMaxVelocity = content.const.surfaceTurboMaxVelocity
   }
 
   function switchToSurfaceNormal() {
     setTurbo(false)
     setUnderwater(false)
 
-    content.const.movementAcceleration = content.const.surfaceNormalAcceleration
-    content.const.movementMaxVelocity = content.const.surfaceNormalMaxVelocity
+    lateralAcceleration = content.const.surfaceNormalAcceleration
+    lateralMaxVelocity = content.const.surfaceNormalMaxVelocity
   }
 
   function switchToUnderwaterTurbo() {
     setTurbo(true)
     setUnderwater(true)
 
-    content.const.movementAcceleration = content.const.underwaterTurboAcceleration
-    content.const.movementMaxVelocity = content.const.underwaterTurboMaxVelocity
+    lateralAcceleration = content.const.underwaterTurboAcceleration
+    lateralMaxVelocity = content.const.underwaterTurboMaxVelocity
   }
 
   function switchToUnderwaterNormal() {
     setTurbo(false)
     setUnderwater(true)
 
-    content.const.movementAcceleration = content.const.underwaterNormalAcceleration
-    content.const.movementMaxVelocity = content.const.underwaterNormalMaxVelocity
+    lateralAcceleration = content.const.underwaterNormalAcceleration
+    lateralMaxVelocity = content.const.underwaterNormalMaxVelocity
   }
 
   return engine.utility.pubsub.decorate({
+    getAngularAcceleration: () => angularAcceleration,
+    getAngularDeceleration: () => angularDeceleration,
+    getAngularMaxVelocity: () => angularMaxVelocity,
+    getAngularThrust: () => angularThrust,
+    getLateralAcceleration: () => lateralAcceleration,
+    getLateralDeceleration: () => lateralDeceleration,
+    getLateralMaxVelocity: () => lateralMaxVelocity,
+    getLateralThrust: () => lateralThrust.clone(),
     import: function () {
       const {z} = engine.position.getVector()
 

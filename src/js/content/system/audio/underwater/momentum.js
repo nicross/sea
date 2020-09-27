@@ -39,7 +39,7 @@ content.system.audio.underwater.momentum = (() => {
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)
 
-    binaural.update(sum.normalize())
+    binaural.update(sum.inverse().normalize())
   }
 
   return {

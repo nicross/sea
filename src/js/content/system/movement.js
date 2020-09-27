@@ -311,11 +311,11 @@ content.system.movement = (() => {
       isCatchingAir = state
 
       content.const.movementDeceleration = isCatchingAir
-        ? content.const.dragDeceleration
+        ? content.const.airDeceleration
         : content.const.normalDeceleration
 
       content.const.movementRotationalDeceleration = isCatchingAir
-        ? content.const.dragRotationalDeceleration
+        ? content.const.airRotationalDeceleration
         : content.const.normalRotationalDeceleration
     }
   }

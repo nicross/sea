@@ -5,8 +5,8 @@ engine.const.propFadeDuration = 1/16
 // NOTE: Max velocity and acceleration are handled via movement module, i.e. different movement models based on z-value
 
 content.const = {
-  dragDeceleration: 1,
-  dragRotationalDeceleration: 0,
+  airDeceleration: 1,
+  airRotationalDeceleration: 0,
   explorationNodeRadius: 1,
   lightZone: -1000,
   midnightZoneMin: -750,

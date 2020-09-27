@@ -3,7 +3,7 @@ content.system.audio.underwater.momentum = (() => {
     bus = content.system.audio.createBus()
 
   const frequencyDropoff = 1/4,
-    gainDropoff = 1/2,
+    gainDropoff = 1/4,
     maxFrequency = 200,
     minFrequency = 80
 
@@ -30,58 +30,21 @@ content.system.audio.underwater.momentum = (() => {
   }
 
   function updateSynth() {
-    const isTurbo = content.system.movement.isTurbo(),
-      movement = content.system.engineMovement.get(),
-      zVelocity = content.system.movement.zVelocity()
+    const sum = engine.position.getVelocity().scale(1 / content.const.underwaterTurboMaxVelocity)
+    const strength = engine.utility.clamp(sum.distance(), 0, 1)
 
-    const vectors = []
-
-    if (movement.velocity) {
-      vectors.push({
-        x: Math.cos(movement.angle) * movement.velocity / content.const.underwaterTurboMaxVelocity,
-        y: Math.sin(movement.angle) * movement.velocity / content.const.underwaterTurboMaxVelocity,
-      })
-    }
-
-    if (zVelocity) {
-      vectors.push({
-        x: Math.abs(zVelocity) / content.const.underwaterTurboMaxVelocity,
-        y: 0,
-      })
-    }
-
-    const sum = vectors.reduce((sum, vector) => ({
-      x: sum.x + vector.x,
-      y: sum.y + vector.y,
-    }), {x: 0, y: 0})
-
-    const angle = Math.atan2(sum.y, sum.x)
-
-    binaural.update({
-      x: Math.cos(angle),
-      y: Math.sin(angle),
-    })
-
-    const strength = engine.utility.clamp(engine.utility.distance(sum), 0, 1)
-
-    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff)
-
-    const gain = isTurbo
-      ? strength ** gainDropoff
-      : Math.min(1, (strength * (content.const.underwaterTurboMaxVelocity / content.const.underwaterNormalMaxVelocity))) ** gainDropoff
+    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff),
+      gain = strength ** gainDropoff
 
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)
+
+    binaural.update(sum.normalize())
   }
 
   return {
     update: function () {
-      const {velocity} = content.system.engineMovement.get()
-
-      const {z} = engine.position.getVector()
-      const zVelocity = content.system.movement.zVelocity()
-
-      const shouldUpdate = z < 0 && (velocity || zVelocity)
+      const shouldUpdate = engine.position.getVector().z < 0 && !engine.position.getVelocity().isZero()
 
       if (!shouldUpdate) {
         if (synth) {

@@ -61,6 +61,10 @@ app.controls.mouse = (() => {
 
   return {
     game: function () {
+      if (!isPointerLock()) {
+        return {}
+      }
+
       const mouse = engine.input.mouse.get(),
         state = {}
 

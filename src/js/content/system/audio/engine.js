@@ -38,6 +38,9 @@ content.system.audio.engine = (() => {
   }
 
   function calculateSurfacePoints(controls) {
+    // TODO: Rework
+    return []
+
     const isCatchingAir = content.system.movement.isCatchingAir(),
       movement = content.system.engineMovement.get(),
       points = []
@@ -69,6 +72,9 @@ content.system.audio.engine = (() => {
   }
 
   function calculateUnderwaterPoints(controls) {
+    // TODO: Rework
+    return []
+
     const movement = content.system.engineMovement.get(),
       points = []
 

@@ -32,6 +32,14 @@ content.system.audio.surface.wind = (() => {
   }
 
   function getVector() {
+    // TODO: Rework
+    return {
+      angle: 0,
+      radius: 0,
+      x: 0,
+      y: 0,
+    }
+
     const movement = content.system.engineMovement.get(),
       windValue = content.system.wind.value() ** 4,
       yaw = engine.position.getEuler().yaw,

@@ -10,6 +10,9 @@ content.system.audio.surface.splash = (() => {
   filter.connect(bus)
 
   function trigger({size, velocity}) {
+    // TODO: Rework
+    return
+
     const color = engine.utility.lerpExp(100, 1000, velocity, 2.5),
       duration = engine.utility.lerp(1/2, 1, size),
       gain = engine.utility.lerp(1, 1/2, velocity),

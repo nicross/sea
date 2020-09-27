@@ -10,6 +10,9 @@ content.system.audio.surface.smack = (() => {
   filter.connect(bus)
 
   function trigger({velocity}) {
+    // TODO: Rework
+    return
+
     const isTurbo = content.system.movement.isTurbo()
 
     const color = engine.utility.lerpExp(200, 4000, velocity, 3),

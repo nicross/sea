@@ -192,7 +192,13 @@ engine.utility.quaternion.prototype = {
     })
   },
   normalize: function () {
-    return this.scale(1 / this.distance())
+    const distance = this.distance()
+
+    if (!distance) {
+      return this.clone()
+    }
+
+    return this.scale(1 / distance)
   },
   right: function () {
     return engine.utility.vector3d.unitY().rotateQuaternion(this)

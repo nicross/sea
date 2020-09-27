@@ -17,11 +17,10 @@ engine.position = (() => {
     getAngularVelocityEuler: () => engine.utility.euler.fromQuaternion(proxy.angularVelocity),
     getEuler: () => proxy.euler(),
     getQuaternion: () => proxy.quaternion.clone(),
-    getThrust: () => proxy.thrust.clone(),
     getVector: () => proxy.vector(),
     getVelocity: () => proxy.velocity.clone(),
     import: function ({
-      quaternion,
+      quaternion = {w: 1},
       x = 0,
       y = 0,
       z = 0,
@@ -30,13 +29,8 @@ engine.position = (() => {
       proxy.y = y
       proxy.z = z
 
-      if (quaternion) {
-        proxy.quaternion.set(quaternion)
-      }
-
-      proxy.angularVelocity.set()
-      proxy.thrust.set()
-      proxy.velocity.set()
+      proxy.quaternion.set(quaternion)
+      proxy.resetPhysics()
 
       return this
     },
@@ -104,19 +98,6 @@ engine.position = (() => {
     } = {}) {
       proxy.quaternion.set({
         w,
-        x,
-        y,
-        z,
-      })
-
-      return this
-    },
-    setThrust: function ({
-      x = 0,
-      y = 0,
-      z = 0,
-    } = {}) {
-      proxy.thrust.set({
         x,
         y,
         z,

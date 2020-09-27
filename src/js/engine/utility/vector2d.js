@@ -71,11 +71,23 @@ engine.utility.vector2d.prototype = {
   } = {}) {
     return (this.x == x) && (this.y == y)
   },
+  inverse: function () {
+    return engine.utility.vector2d.create({
+      x: -this.x,
+      y: -this.y,
+    })
+  },
   isZero: function () {
     return !this.x && !this.y
   },
   normalize: function () {
-    return this.divide(this.distance())
+    const distance = this.distance()
+
+    if (!distance) {
+      return this.clone()
+    }
+
+    return this.scale(1 / distance)
   },
   rotate: function (angle = 0) {
     const cos = Math.cos(angle),

@@ -15,7 +15,6 @@ engine.utility.physical.decorate = function (target = {}) {
 
   target.angularVelocity = engine.utility.quaternion.create()
   target.quaternion = engine.utility.quaternion.create()
-  target.thrust = engine.utility.vector3d.create()
   target.velocity = engine.utility.vector3d.create()
 
   Object.keys(this.decoration).forEach((key) => {
@@ -29,18 +28,17 @@ engine.utility.physical.decoration = {
   euler: function () {
     return engine.utility.euler.fromQuaternion(this.quaternion)
   },
+  resetPhysics: function () {
+    this.angularVelocity.set({w: 1})
+    this.velocity.set()
+    return this
+  },
   updatePhysics: function () {
     const delta = engine.loop.delta()
 
     if (!this.angularVelocity.isZero()) {
       this.quaternion = this.quaternion.multiply(
         this.angularVelocity.lerpFrom({w: 1}, delta)
-      )
-    }
-
-    if (!this.thrust.isZero()) {
-      this.velocity = this.velocity.add(
-        this.thrust.rotateQuaternion(this.quaternion).scale(delta)
       )
     }
 

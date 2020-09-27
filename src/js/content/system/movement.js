@@ -5,86 +5,93 @@ content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
     reflectionRate = 1/2
 
-  let isTurbo = false,
-    isCatchingAir = false,
-    isUnderwater = false,
-    previousMovement,
-    zVelocity = 0
+  const gravity = engine.utility.vector3d.create({
+    z: engine.const.gravity,
+  })
 
-  function checkMovementCollision() {
-    const movement = content.system.engineMovement.get()
+  let angularThrust = 0,
+    isTurbo,
+    isCatchingAir,
+    isUnderwater,
+    lateralThrust = engine.utility.vector3d.create()
 
-    if (!movement.velocity) {
+  function applyAngularThrust() {
+    if (!angularThrust) {
+      return engine.position.setAngularVelocityEuler({
+        yaw: content.utility.accelerate.value(
+          engine.position.getAngularVelocityEuler().yaw,
+          0,
+          content.const.movementRotationalDeceleration
+        ),
+      })
+    }
+
+    engine.position.setAngularVelocityEuler({
+      yaw: content.utility.accelerate.value(
+        engine.position.getAngularVelocityEuler().yaw,
+        angularThrust * content.const.movementMaxRotation,
+        content.const.movementRotationalAcceleration
+      ),
+    })
+  }
+
+  function applyLateralThrust() {
+    if (lateralThrust.isZero()) {
+      return engine.position.setVelocity(
+        content.utility.accelerate.vector(
+          engine.position.getVelocity(),
+          engine.utility.vector3d.create(),
+          content.const.movementDeceleration
+        )
+      )
+    }
+
+    const currentVelocity = engine.position.getVelocity(),
+      targetVelocity = lateralThrust.scale(content.const.movementMaxVelocity).rotateQuaternion(engine.position.getQuaternion())
+
+    const rate = currentVelocity.distance() <= targetVelocity.distance()
+      ? content.const.movementAcceleration
+      : content.const.movementDeceleration
+
+    engine.position.setVelocity(
+      content.utility.accelerate.vector(
+        currentVelocity,
+        targetVelocity,
+        rate
+      )
+    )
+  }
+
+  function checkCollision() {
+    const position = engine.position.getVector()
+    const delta = engine.loop.delta()
+
+    if (position.z > content.const.lightZone) {
       return false
     }
 
-    const position = engine.position.getVector(),
-      radius = engine.const.positionRadius
+    const deltaVelocity = engine.position.getVelocity().scale(delta)
 
-    const cos = Math.cos(movement.angle + position.angle),
-      sin = Math.sin(movement.angle + position.angle)
-
-    const deltaCos = cos * movement.deltaVelocity,
-      deltaSin = sin * movement.deltaVelocity
-
-    const points = [
-      {
-        x: position.x + deltaCos + radius,
-        y: position.y + deltaSin + radius,
-        z: position.z + radius,
-      },
-      {
-        x: position.x + deltaCos - radius,
-        y: position.y + deltaSin + radius,
-        z: position.z + radius,
-      },
-      {
-        x: position.x + deltaCos + radius,
-        y: position.y + deltaSin - radius,
-        z: position.z - radius,
-      },
-      {
-        x: position.x + deltaCos - radius,
-        y: position.y + deltaSin - radius,
-        z: position.z - radius,
-      },
-    ]
-
-    for (const {x, y, z} of points) {
-      if (content.system.terrain.isSolid(x, y, z)) {
-        return true
-      }
+    if (deltaVelocity.isZero()) {
+      return false
     }
 
-    return false
-  }
+    const radius = engine.const.positionRadius
 
-  function checkZCollision(z) {
-    const position = engine.position.getVector(),
-      radius = engine.const.positionRadius
-
-    const points = [
-      {
-        x: position.x + radius,
-        y: position.y + radius,
-      },
-      {
-        x: position.x - radius,
-        y: position.y + radius,
-      },
-      {
-        x: position.x + radius,
-        y: position.y - radius,
-      },
-      {
-        x: position.x - radius,
-        y: position.y - radius,
-      },
+    const vertices = [
+      position.add({x: radius, y: radius, z: radius}),
+      position.add({x: radius, y: -radius, z: radius}),
+      position.add({x: radius, y: radius, z: -radius}),
+      position.add({x: radius, y: -radius, z: -radius}),
+      position.add({x: -radius, y: radius, z: radius}),
+      position.add({x: -radius, y: -radius, z: radius}),
+      position.add({x: -radius, y: radius, z: -radius}),
+      position.add({x: -radius, y: -radius, z: -radius}),
     ]
 
-    z += engine.utility.sign(zVelocity) * engine.const.positionRadius
+    for (const vertex of vertices) {
+      const {x, y, z} = vertex.add(deltaVelocity)
 
-    for (const {x, y} of points) {
       if (content.system.terrain.isSolid(x, y, z)) {
         return true
       }
@@ -102,6 +109,8 @@ content.system.movement = (() => {
       }
     }
 
+    // TODO: Rework
+    /*
     if (isCatchingAir) {
       // Maintain momentum
       return updateMovement({
@@ -163,6 +172,7 @@ content.system.movement = (() => {
         })
       }
     }
+    */
   }
 
   function handleUnderwater(controls) {
@@ -172,38 +182,31 @@ content.system.movement = (() => {
       } else {
         switchToUnderwaterNormal()
       }
+
+      if (isCatchingAir) {
+        setCatchingAir(false)
+      }
     }
 
-    if (isCatchingAir) {
-      setCatchingAir(false)
-    }
+    applyAngularThrust()
+    applyLateralThrust()
 
-    // Update to see target vector for this frame, see checkMovementCollision()
-    updateMovement({
-      rotate: controls.rotate,
-      translate: {
-        radius: engine.utility.clamp(engine.utility.distance(controls), 0, 1),
-        theta: Math.atan2(-controls.x, controls.y),
-      },
-    })
+    if (checkCollision()) {
+      const velocity = engine.position.getVelocity()
 
-    if (checkMovementCollision()) {
-      // Bounce off and prevent movement
-      const movement = content.system.engineMovement.get()
-
-      content.system.engineMovement.set({
-        angle: engine.utility.normalizeAngle(movement.angle + Math.PI),
-        rotation: movement.rotation,
-        velocity: movement.velocity * reflectionRate,
-      })
+      engine.position.setVelocity(
+        velocity.scale(-reflectionRate)
+      )
 
       return pubsub.emit('underwater-collision', {
-        angle: movement.angle,
-        velocity: movement.velocity / content.const.underwaterTurboMaxVelocity,
+        normalized: velocity.normalize(),
+        ratio: engine.utility.clamp(velocity.distance() / content.const.underwaterTurboMaxVelocity, 0, 1),
       })
     }
   }
 
+  // TODO: Rework
+  /*
   function handleZ(z, zInput) {
     const delta = engine.loop.delta(),
       shouldSubmerge = zInput < 0 && z >= 0 && !isCatchingAir
@@ -305,9 +308,35 @@ content.system.movement = (() => {
 
     content.system.z.set(z)
   }
+  */
+
+  function updateThrusters(controls) {
+    controls = {...controls}
+
+    if (!isUnderwater) {
+      controls.y = 0
+      controls.z = 0
+    }
+
+    const distance = engine.utility.distance(controls)
+
+    if (distance > 1) {
+      controls.x /= distance
+      controls.y /= distance
+      controls.z /= distance
+    }
+
+    angularThrust = controls.rotate
+
+    lateralThrust.set({
+      x: controls.y,
+      y: controls.x,
+      z: controls.z,
+    })
+  }
 
   function setCatchingAir(state) {
-    if (isCatchingAir != state) {
+    if (isCatchingAir !== state) {
       isCatchingAir = state
 
       content.const.movementDeceleration = isCatchingAir
@@ -321,20 +350,20 @@ content.system.movement = (() => {
   }
 
   function setTurbo(state) {
-    if (isTurbo != state) {
+    if (isTurbo !== state) {
       isTurbo = state
       pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
     }
   }
 
   function setUnderwater(state) {
-    if (isUnderwater != state) {
+    if (isUnderwater !== state) {
       if (state) {
         setCatchingAir(false)
       }
 
       isUnderwater = state
-      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), zVelocity)
+      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), engine.position.getVelocity().z)
     }
   }
 
@@ -370,17 +399,14 @@ content.system.movement = (() => {
     content.const.movementMaxVelocity = content.const.underwaterNormalMaxVelocity
   }
 
-  function updateMovement(values) {
-    previousMovement = values
-    content.system.engineMovement.update(values)
-  }
-
   return engine.utility.pubsub.decorate({
-    import: function ({z}) {
+    import: function () {
+      const {z} = engine.position.getVector()
+
       setCatchingAir(false)
       isTurbo = false
       isUnderwater = z < 0
-      zVelocity = 0
+
       return this
     },
     isCatchingAir: () => isCatchingAir,
@@ -388,21 +414,27 @@ content.system.movement = (() => {
     isTurbo: () => isTurbo,
     isSurface: () => !isUnderwater,
     isUnderwater: () => isUnderwater,
+    reset: function () {
+      return this
+    },
     update: function (controls = {}) {
       const {z} = engine.position.getVector()
 
-      handleZ(z, controls.z)
+      updateThrusters(controls)
+
+      //handleZ(z, controls.z)
 
       if (z < 0) {
         handleUnderwater(controls)
       } else {
-        handleSurface(controls)
+        //handleSurface(controls)
       }
 
       return this
     },
-    zVelocity: () => zVelocity,
+    zVelocity: () => engine.position.getVelocity().z, // TODO: Remove
   }, pubsub)
 })()
 
-engine.state.on('import', (state) => content.system.movement.import(state))
+engine.state.on('import', () => content.system.movement.import())
+engine.state.on('reset', () => content.system.movement.reset())

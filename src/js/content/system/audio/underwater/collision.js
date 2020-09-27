@@ -8,13 +8,13 @@ content.system.audio.underwater.collision = (() => {
   bus.gain.value = engine.utility.fromDb(-3)
 
   function trigger({
-    angle = 0,
-    velocity = 0,
+    normalized = {},
+    ratio = 0,
   } = {}) {
     const synth = engine.audio.synth.createBuffer({
       buffer: engine.audio.buffer.noise.white(),
     }).filtered({
-      frequency: engine.utility.lerpExp(300, 2000, velocity, 2),
+      frequency: engine.utility.lerpExp(300, 2000, ratio, 2),
     })
 
     content.system.audio.reverb.from(synth.output)
@@ -22,12 +22,9 @@ content.system.audio.underwater.collision = (() => {
     const binaural = engine.audio.binaural.create()
       .from(synth.output)
       .to(bus)
-      .update({
-        x: Math.cos(angle),
-        y: Math.sin(angle),
-      })
+      .update(normalized)
 
-    const duration = engine.utility.lerp(1/4, 1, velocity)
+    const duration = engine.utility.lerp(1/4, 1, ratio)
     const now = engine.audio.time()
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)

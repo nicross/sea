@@ -1,7 +1,24 @@
-// Interpolates current vector to target vector at delta rate
-// TODO: Is there a more elegant way to do this with vector math?
+content.utility.accelerate = {}
 
-content.utility.accelerate = (current, target, rate = 1) => {
+content.utility.accelerate.value = (current, target, rate = 1) => {
+  if (current == target) {
+    return target
+  }
+
+  const deltaRate = engine.loop.delta() * rate
+
+  if (current - deltaRate > target) {
+    return current - deltaRate
+  }
+
+  if (current + deltaRate < target) {
+    return current + deltaRate
+  }
+
+  return target
+}
+
+content.utility.accelerate.vector = (current, target, rate = 1) => {
   if (!engine.utility.vector3d.prototype.isPrototypeOf(current)) {
     current = engine.utility.vector3d.create(current)
   }

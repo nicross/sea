@@ -69,6 +69,28 @@ content.system.movement = (() => {
     )
   }
 
+  function calculateModel() {
+    angularAcceleration = Math.PI
+
+    angularDeceleration = isCatchingAir
+      ? content.const.airAngularDeceleration
+      : content.const.normalAngularDeceleration
+
+    angularMaxVelocity = Math.PI / 2
+
+    lateralAcceleration = isUnderwater
+      ? (isTurbo ? content.const.underwaterTurboAcceleration : content.const.underwaterNormalAcceleration)
+      : (isTurbo ? content.const.surfaceTurboAcceleration : content.const.surfaceNormalAcceleration)
+
+    lateralDeceleration = isCatchingAir
+      ? content.const.airDeceleration
+      : content.const.normalDeceleration
+
+    lateralMaxVelocity = isUnderwater
+      ? (isTurbo ? content.const.underwaterTurboMaxVelocity : content.const.underwaterNormalMaxVelocity)
+      : (isTurbo ? content.const.surfaceTurboMaxVelocity : content.const.surfaceNormalMaxVelocity)
+  }
+
   function checkCollision() {
     const position = engine.position.getVector()
     const delta = engine.loop.delta()
@@ -107,15 +129,7 @@ content.system.movement = (() => {
     return false
   }
 
-  function handleSurface(controls) {
-    if (isUnderwater || controls.turbo != isTurbo) {
-      if (controls.turbo) {
-        switchToSurfaceTurbo()
-      } else {
-        switchToSurfaceNormal()
-      }
-    }
-
+  function handleSurface() {
     // TODO: Rework
     /*
     if (isCatchingAir) {
@@ -182,19 +196,7 @@ content.system.movement = (() => {
     */
   }
 
-  function handleUnderwater(controls) {
-    if (!isUnderwater || controls.turbo != isTurbo) {
-      if (controls.turbo) {
-        switchToUnderwaterTurbo()
-      } else {
-        switchToUnderwaterNormal()
-      }
-
-      if (isCatchingAir) {
-        setCatchingAir(false)
-      }
-    }
-
+  function handleUnderwater() {
     applyAngularThrust()
     applyLateralThrust()
 
@@ -252,7 +254,7 @@ content.system.movement = (() => {
       z += zVelocity * delta
       z = Math.max(height, z)
 
-      setCatchingAir(z > height)
+      isCatchingAir = z > height
 
       if (z == height && zVelocity < 0) {
         // Max velocity is fastest player can jump from the water
@@ -317,6 +319,20 @@ content.system.movement = (() => {
   }
   */
 
+  function setTurbo(state) {
+    if (isTurbo !== state) {
+      isTurbo = state
+      pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
+    }
+  }
+
+  function setUnderwater(state) {
+    if (isUnderwater !== state) {
+      isUnderwater = state
+      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), engine.position.getVelocity().z)
+    }
+  }
+
   function updateThrusters(controls) {
     controls = {...controls}
 
@@ -342,70 +358,6 @@ content.system.movement = (() => {
     })
   }
 
-  function setCatchingAir(state) {
-    if (isCatchingAir !== state) {
-      isCatchingAir = state
-
-      angularDeceleration = isCatchingAir
-        ? content.const.airRotationalDeceleration
-        : content.const.normalRotationalDeceleration
-
-      lateralDeceleration = isCatchingAir
-        ? content.const.airDeceleration
-        : content.const.normalDeceleration
-    }
-  }
-
-  function setTurbo(state) {
-    if (isTurbo !== state) {
-      isTurbo = state
-      pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
-    }
-  }
-
-  function setUnderwater(state) {
-    if (isUnderwater !== state) {
-      if (state) {
-        setCatchingAir(false)
-      }
-
-      isUnderwater = state
-      pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), engine.position.getVelocity().z)
-    }
-  }
-
-  function switchToSurfaceTurbo() {
-    setTurbo(true)
-    setUnderwater(false)
-
-    lateralAcceleration = content.const.surfaceTurboAcceleration
-    lateralMaxVelocity = content.const.surfaceTurboMaxVelocity
-  }
-
-  function switchToSurfaceNormal() {
-    setTurbo(false)
-    setUnderwater(false)
-
-    lateralAcceleration = content.const.surfaceNormalAcceleration
-    lateralMaxVelocity = content.const.surfaceNormalMaxVelocity
-  }
-
-  function switchToUnderwaterTurbo() {
-    setTurbo(true)
-    setUnderwater(true)
-
-    lateralAcceleration = content.const.underwaterTurboAcceleration
-    lateralMaxVelocity = content.const.underwaterTurboMaxVelocity
-  }
-
-  function switchToUnderwaterNormal() {
-    setTurbo(false)
-    setUnderwater(true)
-
-    lateralAcceleration = content.const.underwaterNormalAcceleration
-    lateralMaxVelocity = content.const.underwaterNormalMaxVelocity
-  }
-
   return engine.utility.pubsub.decorate({
     getAngularAcceleration: () => angularAcceleration,
     getAngularDeceleration: () => angularDeceleration,
@@ -418,9 +370,8 @@ content.system.movement = (() => {
     import: function () {
       const {z} = engine.position.getVector()
 
-      setCatchingAir(false)
-      isTurbo = false
       isUnderwater = z < 0
+      calculateModel()
 
       return this
     },
@@ -430,19 +381,26 @@ content.system.movement = (() => {
     isSurface: () => !isUnderwater,
     isUnderwater: () => isUnderwater,
     reset: function () {
+      angularThrust = 0
+      isCatchingAir = false
+      isTurbo = false
+
+      lateralThrust.set({x: 0, y: 0, z: 0})
+
       return this
     },
     update: function (controls = {}) {
       const {z} = engine.position.getVector()
 
+      setUnderwater(z < 0)
+      setTurbo(Boolean(controls.turbo))
       updateThrusters(controls)
+      calculateModel()
 
-      //handleZ(z, controls.z)
-
-      if (z < 0) {
-        handleUnderwater(controls)
+      if (isUnderwater) {
+        handleUnderwater()
       } else {
-        //handleSurface(controls)
+        handleSurface()
       }
 
       return this

@@ -352,8 +352,9 @@ content.system.movement = (() => {
     angularThrust = controls.rotate
 
     lateralThrust.set({
+      // XXX: Rotated 270 degrees
       x: controls.y,
-      y: controls.x,
+      y: -controls.x,
       z: controls.z,
     })
   }

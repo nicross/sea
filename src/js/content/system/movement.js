@@ -1,13 +1,6 @@
-// TODO: Switch to a Vector3D model for controls, movement, and thrust
-// This would simplify calculations and make then more sensible
-
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
     reflectionRate = 1/2
-
-  const gravity = engine.utility.vector3d.create({
-    z: engine.const.gravity,
-  })
 
   let angularThrust = 0,
     isTurbo,
@@ -23,10 +16,12 @@ content.system.movement = (() => {
     lateralMaxVelocity = 0
 
   function applyAngularThrust() {
+    const {yaw} = engine.position.getAngularVelocityEuler()
+
     if (!angularThrust) {
       return engine.position.setAngularVelocityEuler({
         yaw: content.utility.accelerate.value(
-          engine.position.getAngularVelocityEuler().yaw,
+          yaw,
           0,
           angularDeceleration
         ),
@@ -35,10 +30,41 @@ content.system.movement = (() => {
 
     engine.position.setAngularVelocityEuler({
       yaw: content.utility.accelerate.value(
-        engine.position.getAngularVelocityEuler().yaw,
+        yaw,
         angularThrust * angularMaxVelocity,
         angularAcceleration
       ),
+    })
+  }
+
+  function applyDrag() {
+    const {yaw} = engine.position.getAngularVelocityEuler()
+    const velocity = engine.position.getVelocity()
+
+    engine.position.setAngularVelocityEuler({
+      yaw: content.utility.accelerate.value(
+        yaw,
+        0,
+        angularDeceleration
+      ),
+    })
+
+    engine.position.setVelocity(
+      content.utility.accelerate.vector(
+        velocity,
+        engine.utility.vector3d.create(),
+        lateralDeceleration
+      )
+    )
+  }
+
+  function applyGravity() {
+    const gravity = engine.const.gravity * engine.loop.delta(),
+      velocity = engine.position.getVelocity()
+
+    engine.position.setVelocity({
+      ...velocity,
+      z: velocity.z - gravity,
     })
   }
 
@@ -80,7 +106,7 @@ content.system.movement = (() => {
 
     lateralAcceleration = isUnderwater
       ? (isTurbo ? content.const.underwaterTurboAcceleration : content.const.underwaterNormalAcceleration)
-      : (isTurbo ? content.const.surfaceTurboAcceleration : content.const.surfaceNormalAcceleration)
+      : (isCatchingAir ? 0 : (isTurbo ? content.const.surfaceTurboAcceleration : content.const.surfaceNormalAcceleration))
 
     lateralDeceleration = isCatchingAir
       ? content.const.airDeceleration
@@ -129,71 +155,96 @@ content.system.movement = (() => {
     return false
   }
 
-  function handleSurface() {
-    // TODO: Rework
-    /*
-    if (isCatchingAir) {
-      // Maintain momentum
-      return updateMovement({
-        rotate: 0,
-        translate: {
-          radius: engine.const.zero,
-          theta: previousMovement.translate.theta,
-        },
-      })
-    }
+  function dive() {
+    setUnderwater(true)
+    calculateModel()
 
-    let radius = Math.abs(controls.y),
-      theta = controls.y >= 0 ? 0 : Math.PI
-
-    const shouldLerp = previousMovement && (previousMovement.translate.radius != radius) && (previousMovement.translate.theta != theta)
-
-    if (shouldLerp) {
-      // Retain momentum, e.g. apply thrust to current movement, i.e. maintain bouncing sideways
-      const delta = (engine.const.gravity * engine.loop.delta()) ** 0.5
-
-      const points = [
-        {
-          x: Math.cos(previousMovement.translate.theta) * previousMovement.translate.radius,
-          y: Math.sin(previousMovement.translate.theta) * previousMovement.translate.radius,
-        },
-        {
-          x: controls.y,
-          y: 0,
-        },
-      ]
-
-      const point = {
-        x: engine.utility.lerp(points[0].x, points[1].x, delta),
-        y: engine.utility.lerp(points[0].y, points[1].y, delta),
-      }
-
-      radius = engine.utility.distance(point)
-      theta = Math.atan2(point.y, point.x)
-    }
-
-    updateMovement({
-      rotate: controls.rotate,
-      translate: {
-        radius,
-        theta,
-      },
+    engine.position.setVector({
+      ...engine.position.getVector(),
+      z: 0,
     })
 
-    if (shouldLerp) {
-      // XXX: Prevent endless hops
-      // TODO: Investigate why velocity becomes negative with lerping
-      const movement = content.system.engineMovement.get()
+    // XXX: Essentially handleWater() without checkCollision()
+    applyAngularThrust()
+    applyLateralThrust()
+  }
 
-      if (movement.velocity < 0) {
-        content.system.engineMovement.set({
-          ...movement,
-          deltaVelocity: 0,
-          velocity: 0,
+  function handleAir(controls = {}) {
+    const {x, y, z} = engine.position.getVector()
+    const surfaceZ = content.system.surface.height(x, y)
+    const isCollision = z <= surfaceZ
+
+    applyDrag()
+    applyGravity()
+
+    if (!isCollision) {
+      return
+    }
+
+    // Max velocity is fastest player can jump from the water
+    pubsub.emit('surface-smack', {
+      velocity: engine.utility.clamp(-engine.position.getVelocity().z / content.const.underwaterTurboMaxVelocity, 0, 1),
+    })
+
+    const shouldDive = controls.z < 0
+
+    if (shouldDive) {
+      isCatchingAir = false
+      return dive()
+    }
+
+    const velocity = engine.position.getVelocity()
+    const shouldSkip = (velocity.z < -1) && (velocity.x || velocity.y)
+
+    if (!shouldSkip) {
+      isCatchingAir = false
+      return
+    }
+
+    engine.position.setVelocity({
+      ...velocity,
+      z: velocity.z * reflectionRate,
+    })
+  }
+
+  function handleSurface() {
+    const {x, y, z} = engine.position.getVector()
+    const surfaceZ = content.system.surface.height(x, y)
+    const shouldSplash = z < surfaceZ
+
+    if (shouldSplash) {
+      pubsub.emit('surface-splash', {
+        size: (surfaceZ - z) / content.const.waveHeight,
+        velocity: engine.utility.clamp(engine.position.getVelocity().distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
+      })
+
+      engine.position.setVector({
+        x,
+        y,
+        z: surfaceZ,
+      })
+    } else {
+      const delta = engine.loop.delta(),
+        nextZ = z + (delta * engine.const.gravity),
+        shouldGlue = nextZ <= surfaceZ
+
+      if (shouldGlue) {
+        engine.position.setVector({
+          x,
+          y,
+          z: surfaceZ,
         })
+      } else {
+        return jump()
       }
     }
-    */
+
+    if (lateralThrust.z) {
+      return dive()
+    }
+
+    applyAngularThrust()
+    applyLateralThrust()
   }
 
   function handleUnderwater() {
@@ -214,110 +265,14 @@ content.system.movement = (() => {
     }
   }
 
-  // TODO: Rework
-  /*
-  function handleZ(z, zInput) {
-    const delta = engine.loop.delta(),
-      shouldSubmerge = zInput < 0 && z >= 0 && !isCatchingAir
+  function jump() {
+    isCatchingAir = true
+    calculateModel()
 
-    if (z >= 0 && !shouldSubmerge) {
-      const {x, y} = engine.position.getVector()
-      const {velocity} = content.system.engineMovement.get()
-      const surface = content.system.surface.value(x, y)
-      const height = surface * content.const.waveHeight
-
-      if (velocity == 0 && zVelocity == 0) {
-        // Move with surface height when stationary
-        z = height
-      }
-
-      if (z < height && zVelocity == 0) {
-        // Splash when moving toward higher water
-        pubsub.emit('surface-splash', {
-          size: (height - z) / content.const.waveHeight,
-          velocity: engine.utility.clamp(velocity / content.const.surfaceTurboMaxVelocity, 0, 1),
-        })
-
-        z = height
-      }
-
-      if (z < height && zVelocity > 0) {
-        // XXX: Cheat so launching into air from water works
-        z = height
-      }
-
-      if (z > height) {
-        // Decelerate from gravity when in the air
-        zVelocity -= delta * engine.const.gravity
-      }
-
-      z += zVelocity * delta
-      z = Math.max(height, z)
-
-      isCatchingAir = z > height
-
-      if (z == height && zVelocity < 0) {
-        // Max velocity is fastest player can jump from the water
-        pubsub.emit('surface-smack', {
-          velocity: engine.utility.clamp(-zVelocity / content.const.underwaterTurboMaxVelocity, 0, 1),
-        })
-
-        if (zInput < 0) {
-          // Intending to dive
-          // Allow momentum to persist
-        } else {
-          if (zVelocity < -1 && velocity) {
-            // Skip like a stone
-            zVelocity *= -reflectionRate
-          } else {
-            // Eventually rest
-            zVelocity = 0
-          }
-        }
-      }
-
-      return content.system.z.set(z)
-    }
-
-    if (z > 0) {
-      // XXX: Cheat so submersion is instantaneous
-      z = 0
-    }
-
-    if (zInput) {
-      if (zVelocity > content.const.movementMaxVelocity) {
-        zVelocity -= delta * content.const.movementDeceleration
-      } else if (zVelocity < -content.const.movementMaxVelocity) {
-        zVelocity += delta * content.const.movementDeceleration
-      } else {
-        zVelocity = engine.utility.clamp(zVelocity + (delta * zInput * content.const.movementAcceleration), -content.const.movementMaxVelocity, content.const.movementMaxVelocity)
-      }
-    } else if (zVelocity > 0) {
-      zVelocity = Math.max(0, zVelocity - (delta * content.const.movementDeceleration))
-    } else if (zVelocity < 0) {
-      zVelocity = Math.min(0, zVelocity + (delta * content.const.movementDeceleration))
-    }
-
-    if (!zVelocity) {
-      return
-    }
-
-    z = z + (delta * zVelocity)
-
-    if (checkZCollision(z)) {
-      // Bounce off and prevent movement
-      pubsub.emit('underwater-collision', {
-        angle: 0,
-        velocity: Math.abs(zVelocity) / content.const.underwaterTurboMaxVelocity,
-      })
-
-      zVelocity *= -reflectionRate
-      return
-    }
-
-    content.system.z.set(z)
+    // XXX: Essentially handleAir() without surface checks
+    applyDrag()
+    applyGravity()
   }
-  */
 
   function setTurbo(state) {
     if (isTurbo !== state) {
@@ -338,7 +293,7 @@ content.system.movement = (() => {
 
     if (!isUnderwater) {
       controls.y = 0
-      controls.z = 0
+      controls.z = isCatchingAir ? 0 : Math.min(0, controls.z)
     }
 
     const distance = engine.utility.distance(controls)
@@ -400,6 +355,8 @@ content.system.movement = (() => {
 
       if (isUnderwater) {
         handleUnderwater()
+      } else if (isCatchingAir) {
+        handleAir(controls)
       } else {
         handleSurface()
       }

@@ -204,37 +204,37 @@ content.system.movement = (() => {
 
   function handleSurface() {
     const {x, y, z} = engine.position.getVector()
-    const surfaceZ = content.system.surface.height(x, y)
-    const shouldSplash = z < surfaceZ
 
-    if (shouldSplash) {
-      splash(surfaceZ)
+    const delta = engine.loop.delta(),
+      surfaceZ = content.system.surface.height(x, y),
+      velocity = engine.position.getVelocity()
 
+    const nextZ = z + (delta * velocity.z) - ((delta ** 2) * engine.const.gravity),
+      shouldGlue = (nextZ <= surfaceZ) || (!velocity.x && !velocity.y),
+      shouldJump = !shouldGlue || (velocity.z > 0)
+
+    if (shouldJump) {
+      return jump()
+    }
+
+    const shouldDive = lateralThrust.z < 0
+
+    if (shouldDive) {
+      return dive()
+    }
+
+    if (shouldGlue) {
       engine.position.setVector({
         x,
         y,
         z: surfaceZ,
       })
-    } else {
-      const delta = engine.loop.delta(),
-        nextZ = z - ((delta ** 2) * engine.const.gravity),
-        velocity = engine.position.getVelocity()
-
-      const shouldGlue = (nextZ <= surfaceZ) || (!velocity.x && !velocity.y)
-
-      if (shouldGlue) {
-        engine.position.setVector({
-          x,
-          y,
-          z: surfaceZ,
-        })
-      } else {
-        return jump()
-      }
     }
 
-    if (lateralThrust.z) {
-      return dive()
+    const shouldSplash = (z < surfaceZ) && (velocity.x || velocity.y)
+
+    if (shouldSplash) {
+      splash(surfaceZ)
     }
 
     applyAngularThrust()

@@ -181,10 +181,7 @@ content.system.movement = (() => {
       return
     }
 
-    // Max velocity is fastest player can jump from the water
-    pubsub.emit('surface-smack', {
-      velocity: engine.utility.clamp(-engine.position.getVelocity().z / content.const.underwaterTurboMaxVelocity, 0, 1),
-    })
+    smack()
 
     const shouldDive = controls.z < 0
 
@@ -213,10 +210,7 @@ content.system.movement = (() => {
     const shouldSplash = z < surfaceZ
 
     if (shouldSplash) {
-      pubsub.emit('surface-splash', {
-        size: (surfaceZ - z) / content.const.waveHeight,
-        velocity: engine.utility.clamp(engine.position.getVelocity().distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
-      })
+      splash(surfaceZ)
 
       engine.position.setVector({
         x,
@@ -286,6 +280,36 @@ content.system.movement = (() => {
       isUnderwater = state
       pubsub.emit('transition-' + (isUnderwater ? 'underwater' : 'surface'), engine.position.getVelocity().z)
     }
+  }
+
+  function smack() {
+    const velocity = engine.position.getVelocity()
+    const {yaw} = engine.position.getAngularVelocityEuler()
+
+    const lateralVelocity = engine.utility.distance({
+      x: velocity.x,
+      y: velocity.y,
+    })
+
+    // Max gravitational velocity is fastest player can jump from the water
+
+    pubsub.emit('surface-smack', {
+      gravity: engine.utility.clamp(Math.abs(velocity.z) / content.const.underwaterTurboMaxVelocity, 0, 1),
+      lateral: engine.utility.clamp(lateralVelocity / lateralMaxVelocity, 0, 1),
+      pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 1, 0), 0, 1),
+    })
+  }
+
+  function splash(surfaceZ) {
+    const velocity = engine.position.getVelocity()
+    const {yaw} = engine.position.getAngularVelocityEuler()
+    const {z} = engine.position.getVector()
+
+    pubsub.emit('surface-splash', {
+      pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 0, 1), 0, 1),
+      size: (surfaceZ - z) / content.const.waveHeight,
+      velocity: engine.utility.clamp(velocity.distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
+    })
   }
 
   function updateThrusters(controls) {

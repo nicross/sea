@@ -9,20 +9,17 @@ content.system.audio.surface.splash = (() => {
   bus.gain.value = engine.utility.fromDb(-9)
   filter.connect(bus)
 
-  function trigger({size, velocity}) {
-    // TODO: Rework
-    return
-
+  function trigger({
+    pan = 0.5,
+    size = 0,
+    velocity = 0,
+  } = {}) {
     const color = engine.utility.lerpExp(100, 1000, velocity, 2.5),
       duration = engine.utility.lerp(1/2, 1, size),
       gain = engine.utility.lerp(1, 1/2, velocity),
       panner = context.createStereoPanner()
 
-    // Position based on turning
-    const movement = content.system.engineMovement.get(),
-      rotation = engine.utility.scale(movement.rotation, -content.const.movementMaxRotation, content.const.movementMaxRotation, 0, 1)
-
-    panner.pan.value = engine.utility.clamp(engine.utility.lerpRandom([-1, 0], [0, 1], rotation), -1, 1)
+    panner.pan.value = engine.utility.lerpRandom([-1, 0], [0, 1], pan)
     panner.connect(filter)
 
     const synth = engine.audio.synth.createAmBuffer({

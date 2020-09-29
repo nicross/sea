@@ -156,6 +156,7 @@ content.system.movement = (() => {
   }
 
   function dive() {
+    isCatchingAir = false
     setUnderwater(true)
     calculateModel()
 
@@ -164,7 +165,6 @@ content.system.movement = (() => {
       z: 0,
     })
 
-    // XXX: Essentially handleWater() without checkCollision()
     applyAngularThrust()
     applyLateralThrust()
   }
@@ -186,7 +186,6 @@ content.system.movement = (() => {
     const shouldDive = controls.z < 0
 
     if (shouldDive) {
-      isCatchingAir = false
       return dive()
     }
 
@@ -194,8 +193,7 @@ content.system.movement = (() => {
     const shouldSkip = (velocity.z < -1) && (velocity.x || velocity.y)
 
     if (!shouldSkip) {
-      isCatchingAir = false
-      return
+      return land(surfaceZ)
     }
 
     engine.position.setVelocity({
@@ -219,8 +217,10 @@ content.system.movement = (() => {
       })
     } else {
       const delta = engine.loop.delta(),
-        nextZ = z + (delta * engine.const.gravity),
-        shouldGlue = nextZ <= surfaceZ
+        nextZ = z - ((delta ** 2) * engine.const.gravity),
+        velocity = engine.position.getVelocity()
+
+      const shouldGlue = (nextZ <= surfaceZ) || (!velocity.x && !velocity.y)
 
       if (shouldGlue) {
         engine.position.setVector({
@@ -263,9 +263,23 @@ content.system.movement = (() => {
     isCatchingAir = true
     calculateModel()
 
-    // XXX: Essentially handleAir() without surface checks
     applyDrag()
     applyGravity()
+  }
+
+  function land(surfaceZ = 0) {
+    isCatchingAir = false
+    calculateModel()
+
+    engine.position.setVelocity({
+      ...engine.position.getVelocity(),
+      z: 0,
+    })
+
+    engine.position.setVector({
+      ...engine.position.getVector(),
+      z: surfaceZ,
+    })
   }
 
   function setTurbo(state) {
@@ -316,7 +330,9 @@ content.system.movement = (() => {
     controls = {...controls}
 
     if (!isUnderwater) {
-      controls.y = 0
+      controls.x = 0
+
+      // XXX: Required for dive() to work
       controls.z = isCatchingAir ? 0 : Math.min(0, controls.z)
     }
 

@@ -32,67 +32,30 @@ content.system.audio.surface.wind = (() => {
   }
 
   function getVector() {
-    // TODO: Rework
-    return {
-      angle: 0,
-      radius: 0,
-      x: 0,
-      y: 0,
-    }
+    const movement = engine.position.getVelocity()
+      .scale(1 / content.const.surfaceNormalMaxVelocity)
+      .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
-    const movement = content.system.engineMovement.get(),
-      windValue = content.system.wind.value() ** 4,
-      yaw = engine.position.getEuler().yaw,
-      zVelocity = content.system.movement.zVelocity()
+    const wind = engine.utility.vector3d.create({x: -1})
+      .scale(content.system.wind.value() ** 4)
+      .rotateQuaternion(engine.position.getQuaternion())
 
-    const velocityRatio = movement.velocity / content.const.surfaceNormalMaxVelocity
-
-    const sum = [
-      {
-        x: Math.cos(yaw - Math.PI) * windValue,
-        y: Math.sin(yaw - Math.PI) * windValue,
-      },
-      [
-        {
-          x: Math.cos(movement.angle) * velocityRatio,
-          y: Math.sin(movement.angle) * velocityRatio,
-        },
-        {
-          x: Math.abs(zVelocity) / content.const.surfaceNormalMaxVelocity,
-          y: 0,
-        },
-      ].reduce((max, point) => ({
-        x: Math.max(max.x, point.x),
-        y: Math.max(max.y, point.y),
-      }), {x: 0, y: 0}),
-    ].reduce((sum, point) => ({
-      x: sum.x + point.x,
-      y: sum.y + point.y,
-    }), {x: 0, y: 0})
-
-    const angle = Math.atan2(sum.y, sum.x)
-
-    return {
-      angle,
-      radius: engine.utility.distance(sum),
-      x: Math.cos(angle),
-      y: Math.sin(angle),
-    }
+    return movement.add(wind)
   }
 
   function updateSynth() {
-    const {x, y, radius} = getVector()
+    const vector = getVector()
+    const strength = vector.distance()
 
-    binaural.update({
-      x,
-      y,
-    })
-
-    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, radius, frequencyDropoff),
-      gain = engine.utility.fromDb(engine.utility.scale(radius, 0, 10, -6, -10.5))
+    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff),
+      gain = engine.utility.fromDb(engine.utility.scale(strength, 0, 10, -6, -10.5))
 
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)
+
+    binaural.update(
+      vector.scale(1 / strength)
+    )
   }
 
   return {

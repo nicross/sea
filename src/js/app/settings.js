@@ -5,7 +5,7 @@ app.settings = (() => {
       default: 1,
     },
     mouseSensitivity: {
-      compute: (rawValue) => engine.utility.lerp(1/15, 1/4, rawValue),
+      compute: (rawValue) => engine.utility.lerp(10, 100, rawValue),
       default: 0.5,
     },
     musicVolume: {

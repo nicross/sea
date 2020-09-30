@@ -27,7 +27,7 @@ engine.streamer = (() => {
 
     const prop = streamed.get(token)
 
-    prop.destroy()
+    engine.props.destroy(prop)
     streamed.delete(token)
   }
 

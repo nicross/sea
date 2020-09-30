@@ -36,7 +36,6 @@ app.screen.game = (() => {
     }
 
     content.system.movement.update(controls)
-    content.system.audio.engine.update(controls)
 
     if (ui.scanForward) {
       content.system.scan.triggerForward()

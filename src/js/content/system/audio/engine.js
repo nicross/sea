@@ -13,102 +13,37 @@ content.system.audio.engine = (() => {
   bus.gain.value = engine.utility.fromDb(-6)
   binaural.to(bus)
 
-  function calculateParams(controls) {
-    const points = content.system.movement.isUnderwater()
-      ? calculateUnderwaterPoints(controls)
-      : calculateSurfacePoints(controls)
+  function calculateParams() {
+    const angularThrust = content.system.movement.getAngularThrust()
 
-    const sum = points.reduce((sum, point) => ({
-      x: sum.x + point.x,
-      y: sum.y + point.y,
-    }), {x: 0, y: 0})
+    // TODO: Model the work the thrusters are doing, e.g. consider the diference between thrust and velocity
+    let vector = content.system.movement.getLateralThrust()
+      .rotateEuler({yaw: Math.PI})
+      .scale(content.system.movement.getLateralMaxVelocity())
 
-    const angle = Math.atan2(sum.y, sum.x),
-      x = Math.cos(angle),
-      y = Math.sin(angle)
+    let radius = vector.distance()
 
-    const radius = engine.utility.clamp(engine.utility.distance(sum), 0, 1)
+    if (angularThrust) {
+      const {yaw} = engine.position.getAngularVelocityEuler()
+      const rotate = engine.utility.clamp(angularThrust * Math.abs(yaw) / content.system.movement.getAngularMaxVelocity(), -1, 1) * rotationStrength
+
+      vector = vector.add({
+        x: Math.abs(rotate),
+        y: -rotate,
+      })
+
+      radius = vector.distance()
+    }
+
+    if (radius > 1) {
+      vector = vector.scale(1 / radius)
+      radius = 1
+    }
 
     return {
-      angle,
       radius,
-      x,
-      y,
+      ...vector,
     }
-  }
-
-  function calculateSurfacePoints(controls) {
-    // TODO: Rework
-    return []
-
-    const isCatchingAir = content.system.movement.isCatchingAir(),
-      movement = content.system.engineMovement.get(),
-      points = []
-
-    if (controls.rotate && !isCatchingAir) {
-      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / content.const.movementMaxRotation, -1, 1) * rotationStrength
-
-      points.push({
-        x: Math.abs(rotate),
-        y: -rotate,
-      })
-    }
-
-    if (controls.y) {
-      if (isCatchingAir) {
-        points.push({
-          x: controls.y * content.const.movementMaxVelocity / content.const.surfaceTurboMaxVelocity,
-          y: 0,
-        })
-      } else {
-        points.push({
-          x: controls.y * movement.velocity / content.const.surfaceTurboMaxVelocity,
-          y: 0,
-        })
-      }
-    }
-
-    return points
-  }
-
-  function calculateUnderwaterPoints(controls) {
-    // TODO: Rework
-    return []
-
-    const movement = content.system.engineMovement.get(),
-      points = []
-
-    if (controls.rotate) {
-      const rotate = engine.utility.clamp(controls.rotate * Math.abs(movement.rotation) / content.const.movementMaxRotation, -1, 1) * rotationStrength
-
-      points.push({
-        x: Math.abs(rotate),
-        y: -rotate,
-      })
-    }
-
-    if (controls.y) {
-      points.push({
-        x: controls.y * movement.velocity / content.const.underwaterTurboMaxVelocity,
-        y: 0,
-      })
-    }
-
-    if (controls.x) {
-      points.push({
-        x: 0,
-        y: controls.x * movement.velocity / content.const.underwaterTurboMaxVelocity,
-      })
-    }
-
-    if (controls.z) {
-      points.push({
-        x: Math.abs(controls.z * content.system.movement.zVelocity()) / content.const.underwaterTurboMaxVelocity,
-        y: 0,
-      })
-    }
-
-    return points
   }
 
   function createSynth() {
@@ -145,18 +80,13 @@ content.system.audio.engine = (() => {
     synth = null
   }
 
-  function shouldHaveSynth(controls) {
-    return content.system.movement.isSurface()
-      ? controls.rotate || controls.y
-      : controls.rotate || controls.x || controls.y || controls.z
-  }
-
-  function updateSynth(controls) {
+  function updateSynth() {
     const {
       radius,
       x,
       y,
-    } = calculateParams(controls)
+      z,
+    } = calculateParams()
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
       isSurface = content.system.movement.isSurface(),
@@ -173,6 +103,7 @@ content.system.audio.engine = (() => {
     binaural.update({
       x,
       y,
+      z,
     })
 
     engine.audio.ramp.set(synth.filter.frequency, rootFrequency * color)
@@ -201,12 +132,19 @@ content.system.audio.engine = (() => {
       }
       return this
     },
-    update: function (controls = {}) {
-      if (shouldHaveSynth(controls)) {
+    update: function () {
+      const angularThrust = content.system.movement.getAngularThrust(),
+        lateralThrust = content.system.movement.getLateralThrust()
+
+      const shouldHaveSynth = content.system.movement.isSurface()
+        ? angularThrust || lateralThrust.x
+        : angularThrust || lateralThrust.x || lateralThrust.y || lateralThrust.z
+
+      if (shouldHaveSynth) {
         if (!synth) {
           createSynth()
         }
-        updateSynth(controls)
+        updateSynth()
       } else if (synth) {
         destroySynth()
       }
@@ -221,4 +159,5 @@ engine.ready(() => {
   content.system.movement.on('transition-turbo', () => content.system.audio.engine.onTurbo())
 })
 
+engine.loop.on('frame', () => content.system.audio.engine.update())
 engine.state.on('reset', () => content.system.audio.engine.reset())

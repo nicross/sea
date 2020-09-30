@@ -4,7 +4,7 @@ content.system.audio.engine = (() => {
 
   const fadeDuration = 1/6,
     rootFrequency = engine.utility.midiToFrequency(33),
-    rotationStrength = 1/100,
+    rotationStrength = 1/25,
     turboDetune = 1200
 
   let synth
@@ -14,26 +14,11 @@ content.system.audio.engine = (() => {
   binaural.to(bus)
 
   function calculateParams() {
-    const angularThrust = content.system.movement.getAngularThrust()
-
-    // TODO: Model the work the thrusters are doing, e.g. consider the diference between thrust and velocity
-    let vector = content.system.movement.getLateralThrust()
-      .rotateEuler({yaw: Math.PI})
-      .scale(content.system.movement.getLateralMaxVelocity())
+    const vector = getLateralThrusters().add(
+      getAngularThrusters()
+    )
 
     let radius = vector.distance()
-
-    if (angularThrust) {
-      const {yaw} = engine.position.getAngularVelocityEuler()
-      const rotate = engine.utility.clamp(angularThrust * Math.abs(yaw) / content.system.movement.getAngularMaxVelocity(), -1, 1) * rotationStrength
-
-      vector = vector.add({
-        x: Math.abs(rotate),
-        y: -rotate,
-      })
-
-      radius = vector.distance()
-    }
 
     if (radius > 1) {
       vector = vector.scale(1 / radius)
@@ -78,6 +63,28 @@ content.system.audio.engine = (() => {
     engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, fadeDuration)
     synth.stop(engine.audio.time(fadeDuration))
     synth = null
+  }
+
+  function getAngularThrusters() {
+    const thrust = content.system.movement.getAngularThrust()
+
+    if (!thrust) {
+      return engine.utility.vector3d.create()
+    }
+
+    const ratio = Math.abs(engine.position.getAngularVelocityEuler().yaw) / content.system.movement.getAngularMaxVelocity(),
+      strength = engine.utility.clamp(thrust * ratio, -1, 1) * rotationStrength
+
+    return engine.utility.vector3d.create({
+      x: Math.abs(strength),
+      y: -strength,
+    })
+  }
+
+  function getLateralThrusters() {
+    // TODO: Model the work the thrusters are doing, e.g. consider the diference between thrust and velocity
+    return content.system.movement.getLateralThrust()
+      .rotateEuler({yaw: Math.PI})
   }
 
   function updateSynth() {

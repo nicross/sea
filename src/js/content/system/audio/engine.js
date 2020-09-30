@@ -18,17 +18,39 @@ content.system.audio.engine = (() => {
       getAngularThrusters()
     )
 
-    let radius = vector.distance()
-
-    if (radius > 1) {
-      vector = vector.scale(1 / radius)
-      radius = 1
-    }
+    const strength = vector.distance()
 
     return {
-      radius,
-      ...vector,
+      strength: Math.min(strength, 1),
+      vector: vector.scale(strength ? (1 / strength) : 0),
     }
+  }
+
+  function calculateWork(thrust, velocity) {
+    if (thrust == velocity) {
+      return thrust
+    }
+
+    const thrustSign = engine.utility.sign(thrust),
+      velocitySign = engine.utility.sign(velocity)
+
+    if (thrustSign == velocitySign) {
+      if (Math.abs(velocity) > Math.abs(thrust)) {
+        return thrust
+      }
+
+      if (velocity > 0) {
+        return Math.max(velocity, engine.const.zero)
+      }
+
+      if (velocity < 0) {
+        return Math.min(velocity, -engine.const.zero)
+      }
+
+      return 0
+    }
+
+    return thrust ? thrustSign * engine.const.zero : 0
   }
 
   function createSynth() {
@@ -82,17 +104,31 @@ content.system.audio.engine = (() => {
   }
 
   function getLateralThrusters() {
-    // TODO: Model the work the thrusters are doing, e.g. consider the diference between thrust and velocity
-    return content.system.movement.getLateralThrust()
-      .rotateEuler({yaw: Math.PI})
+    const lateralThrust = content.system.movement.getLateralThrust()
+
+    const velocity = engine.position.getVelocity()
+      .scale(1 / content.system.movement.getLateralMaxVelocity())
+      .rotateQuaternion(engine.position.getQuaternion().conjugate())
+
+    let result = engine.utility.vector3d.create({
+      x: calculateWork(lateralThrust.x, velocity.x),
+      y: calculateWork(lateralThrust.y, velocity.y),
+      z: calculateWork(lateralThrust.z, velocity.z),
+    })
+
+    const radius = result.distance()
+
+    if (radius > 1) {
+      result = result.scale(1 / radius)
+    }
+
+    return result.rotateEuler({yaw: Math.PI})
   }
 
   function updateSynth() {
     const {
-      radius,
-      x,
-      y,
-      z,
+      strength,
+      vector,
     } = calculateParams()
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
@@ -101,21 +137,19 @@ content.system.audio.engine = (() => {
 
     const amodFrequency = isCatchingAir
       ? 27.5
-      : engine.utility.lerp(4, 16, radius)
+      : engine.utility.lerp(4, 16, strength)
 
     const color = isSurface
       ? (isCatchingAir ? 4 : 3)
       : (isTurbo ? 1 : 2)
 
-    binaural.update({
-      x,
-      y,
-      z,
-    })
+    const gain = engine.utility.lerpExp(0.5, 1, strength, 0.5)
 
     engine.audio.ramp.set(synth.filter.frequency, rootFrequency * color)
     engine.audio.ramp.set(synth.param.amod.frequency, amodFrequency)
-    engine.audio.ramp.set(synth.param.gain, radius ** 0.25)
+    engine.audio.ramp.set(synth.param.gain, gain)
+
+    binaural.update(vector)
   }
 
   return {

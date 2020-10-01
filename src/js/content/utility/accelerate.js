@@ -33,13 +33,16 @@ content.utility.accelerate.vector = (current, target, rate = 1) => {
     return next
   }
 
-  const deltaRate = engine.loop.delta() * rate
+  const deltaRate = engine.loop.delta() * rate,
+    normalized = target.subtract(current).normalize()
 
   for (const axis of ['x', 'y', 'z']) {
-    if (current[axis] - deltaRate > target[axis]) {
-      next[axis] -= deltaRate
-    } else if (current[axis] + deltaRate < target[axis]) {
-      next[axis] += deltaRate
+    const axisRate = deltaRate * Math.abs(normalized[axis])
+
+    if (current[axis] - axisRate > target[axis]) {
+      next[axis] -= axisRate
+    } else if (current[axis] + axisRate < target[axis]) {
+      next[axis] += axisRate
     } else {
       next[axis] = target[axis]
     }

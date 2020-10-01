@@ -13,7 +13,7 @@ content.prop.treasure = content.prop.base.invent({
       return this
     }
 
-    if (this.distance <= 0) {
+    if (engine.utility.round(this.distance, 3) <= 0) {
       return this.collect()
     }
 

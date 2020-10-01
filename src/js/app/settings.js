@@ -1,6 +1,6 @@
 app.settings = (() => {
   const settings = {
-    masterVolume: {
+    mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,
     },

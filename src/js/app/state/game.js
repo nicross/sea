@@ -63,7 +63,7 @@ app.state.game.on('enter-paused', () => {
 })
 
 app.state.game.on('enter-running', () => {
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, app.settings.computed.masterVolume, 0.5)
+  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, app.settings.computed.mainVolume, 0.5)
   app.autosave.enable()
   engine.loop.resume()
 })

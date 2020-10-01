@@ -286,7 +286,7 @@ engine.utility.regularPolygonInteriorAngle = (sides) => (sides - 2) * Math.PI / 
 
 engine.utility.round = (x, precision = 0) => {
   precision = 10 ** precision
-  return Math.floor(x * precision) / precision
+  return Math.round(x * precision) / precision
 }
 
 engine.utility.rotatePoint = (x, y, theta) => ({

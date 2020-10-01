@@ -13,7 +13,8 @@ app.storage = (() => {
   const gameKey = 'sea_game',
     settingsKey = 'sea_settings',
     statsKey = 'sea_stats',
-    treasuresKey = 'sea_treasures'
+    treasuresKey = 'sea_treasures',
+    versionKey = 'sea_version'
 
   function get(key) {
     try {
@@ -41,6 +42,7 @@ app.storage = (() => {
     getSettings: () => get(settingsKey) || {},
     getStats: () => get(statsKey) || {},
     getTreasures: () => get(treasuresKey) || [],
+    getVersion: () => get(versionKey) || '0.0.0',
     hasGame: () => Boolean(get(gameKey)),
     hasTreasures: function () {
       return this.getTreasures().length > 0
@@ -59,6 +61,10 @@ app.storage = (() => {
     },
     setTreasures: function (value) {
       set(treasuresKey, value)
+      return this
+    },
+    setVersion: function (value) {
+      set(versionKey, value)
       return this
     },
   }

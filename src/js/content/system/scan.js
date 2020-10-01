@@ -12,7 +12,7 @@ content.system.scan = (() => {
       x: dx,
       y: dy,
       z: dz,
-    } = engine.utility.vector3d.create(direction).rotateQuaternion(position.quaternion.conjugate()).scale(stepDistance)
+    } = engine.utility.vector3d.create(direction).rotateQuaternion(position.quaternion).scale(stepDistance)
 
     let {x, y, z} = position.vector
 
@@ -47,51 +47,46 @@ content.system.scan = (() => {
       down: await scheduleRaytrace(position, {z: -1}),
       forward: await scheduleRaytrace(position, {x: 1}),
       forwardDown: await scheduleRaytrace(position, {x: unit2, z: -unit2}),
-      forwardLeft: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
-      forwardLeftDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      forwardLeftUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      forwardRight: await scheduleRaytrace(position, {x: unit2, y: unit2}),
-      forwardRightDown: await scheduleRaytrace(position, {x: unit3, y: unit3, z: -unit3}),
-      forwardRightUp: await scheduleRaytrace(position, {x: unit3, y: unit3, z: unit3}),
+      forwardLeft: await scheduleRaytrace(position, {x: unit2, y: unit2}),
+      forwardLeftDown: await scheduleRaytrace(position, {x: unit3, y: unit3, z: -unit3}),
+      forwardLeftUp: await scheduleRaytrace(position, {x: unit3, y: unit3, z: unit3}),
+      forwardRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
+      forwardRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
+      forwardRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
       forwardUp: await scheduleRaytrace(position, {x: unit2, z: unit2}),
-      left: await scheduleRaytrace(position, {y: -1}),
-      leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
-      leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
-      right: await scheduleRaytrace(position, {y: 1}),
-      rightDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
-      rightUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
+      left: await scheduleRaytrace(position, {y: 1}),
+      leftDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
+      leftUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
+      right: await scheduleRaytrace(position, {y: -1}),
+      rightDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
+      rightUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
       up: await scheduleRaytrace(position, {z: 1}),
     }
   }
 
   async function scanReverse() {
-    const {x, y, z} = engine.position.getVector()
-    const angle = engine.position.getEuler().yaw
-
     const position = {
-      angle,
-      x,
-      y,
-      z,
+      quaternion: engine.position.getQuaternion(),
+      vector: engine.position.getVector(),
     }
 
     return {
       down: await scheduleRaytrace(position, {z: -1}),
-      left: await scheduleRaytrace(position, {y: -1}),
-      leftDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
-      leftUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
+      left: await scheduleRaytrace(position, {y: 1}),
+      leftDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
+      leftUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
       reverse: await scheduleRaytrace(position, {x: -1}),
       reverseDown: await scheduleRaytrace(position, {x: -unit2, z: -unit2}),
-      reverseLeft: await scheduleRaytrace(position, {x: -unit2, y: -unit2}),
-      reverseLeftDown: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: -unit3}),
-      reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: -unit3, z: unit3}),
+      reverseLeft: await scheduleRaytrace(position, {x: -unit2, y: unit2}),
+      reverseLeftDown: await scheduleRaytrace(position, {x: -unit3, y: unit3, z: -unit3}),
+      reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: unit3, z: unit3}),
       reverseRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
       reverseRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
       reverseRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
       reverseUp: await scheduleRaytrace(position, {x: -unit2, z: unit2}),
-      right: await scheduleRaytrace(position, {y: 1}),
-      rightDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
-      rightUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
+      right: await scheduleRaytrace(position, {y: -1}),
+      rightDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
+      rightUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
       up: await scheduleRaytrace(position, {z: 1}),
     }
   }

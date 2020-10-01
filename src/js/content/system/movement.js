@@ -253,7 +253,7 @@ content.system.movement = (() => {
       )
 
       return pubsub.emit('underwater-collision', {
-        normalized: velocity.normalize(),
+        normalized: velocity.normalize().rotateQuaternion(engine.position.getQuaternion().conjugate()),
         ratio: engine.utility.clamp(velocity.distance() / content.const.underwaterTurboMaxVelocity, 0, 1),
       })
     }

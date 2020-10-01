@@ -7,22 +7,17 @@ content.system.scan = (() => {
 
   let isCooldown = false
 
-  function doRaytrace(position, vector) {
+  function doRaytrace(position, direction) {
     let {
-      x: dx = 0,
-      y: dy = 0,
-    } = engine.utility.rotatePoint(vector.x || 0, vector.y || 0, -position.angle)
+      x: dx,
+      y: dy,
+      z: dz,
+    } = engine.utility.vector3d.create(direction).rotateQuaternion(position.quaternion.conjugate()).scale(stepDistance)
 
-    let dz = vector.z || 0
-
-    let {x, y, z} = position
+    let {x, y, z} = position.vector
 
     let d = 0,
       isSolid
-
-    dx *= stepDistance
-    dy *= stepDistance
-    dz *= stepDistance
 
     do {
       x += dx
@@ -43,14 +38,9 @@ content.system.scan = (() => {
   }
 
   async function scanForward() {
-    const {x, y, z} = engine.position.getVector()
-    const angle = engine.position.getEuler().yaw
-
     const position = {
-      angle,
-      x,
-      y,
-      z,
+      quaternion: engine.position.getQuaternion(),
+      vector: engine.position.getVector(),
     }
 
     return {

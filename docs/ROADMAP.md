@@ -7,3 +7,6 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.2.0
 - Add cues for cave entrances
 - Add some aquatic life
+- Add more treasures
+- Place treasure on first scan
+- Track time in various places

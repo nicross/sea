@@ -1,8 +1,7 @@
 engine.const.distancePower = 1.25
 engine.const.positionRadius = 0.5
-engine.const.propFadeDuration = 1/16
-
-// NOTE: Max velocity and acceleration are handled via movement module, i.e. different movement models based on z-value
+engine.prop.base.fadeInDuration = 1/16
+engine.prop.base.fadeOutDuration = 1/16
 
 content.const = {
   airRotationalDeceleration: 0,

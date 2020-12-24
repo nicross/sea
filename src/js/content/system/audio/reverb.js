@@ -1,5 +1,5 @@
 content.system.audio.reverb = (() => {
-  const send = engine.audio.send.reverb.create()
+  const send = engine.audio.mixer.send.reverb.create()
 
   const machine = engine.utility.machine.create({
     state: 'none',
@@ -32,16 +32,16 @@ content.system.audio.reverb = (() => {
   })
 
   machine.on('enter-cave', () => {
-    engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3), 0.125)
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.utility.fromDb(-3), 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.medium())
   })
 
   machine.on('enter-surface', () => {
-    engine.audio.mixer.auxiliary.reverb.setGain(engine.const.zeroGain, 0.125)
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.const.zeroGain, 0.125)
   })
 
   machine.on('enter-underwater', () => {
-    engine.audio.mixer.auxiliary.reverb.setGain(engine.utility.fromDb(-3), 0.125)
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.utility.fromDb(-3), 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
   })
 

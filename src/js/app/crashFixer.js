@@ -8,7 +8,7 @@ app.crashFixer = (() => {
   const analyzerTimeData = new Uint8Array(analyzer.frequencyBinCount)
 
   function fixFilters() {
-    engine.props.forEach((prop) => {
+    engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
         prop.troubleshoot()
       }

@@ -1,19 +1,17 @@
 app.stats.maxDistance = (() => {
-  let maxDistance = 0
+  let max = 0
 
   return app.stats.invent('maxDistance', {
-    get: function () {
-      return maxDistance
-    },
+    get: () => max,
     set: function (value) {
-      maxDistance = Number(value) || 0
+      max = Number(value) || 0
       return this
     },
     update: function () {
       const distance = engine.position.getVector().distance()
 
-      if (distance > maxDistance) {
-        maxDistance = distance
+      if (distance > max) {
+        max = distance
       }
 
       return this

@@ -417,6 +417,7 @@ content.system.movement = (() => {
       return this
     },
     isCatchingAir: () => medium.is('air'),
+    isMedium: (state) => medium.is(state),
     isNormal: () => !isTurbo,
     isTurbo: () => isTurbo,
     isSurface: () => medium.is('surface'),

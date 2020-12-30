@@ -58,6 +58,10 @@ app.screen.stats = (() => {
   function updateStats() {
     const maxDepth = app.stats.maxDepth.get(),
       maxDistance = app.stats.maxDistance.get(),
+      timeAir = app.stats.timeAir.get(),
+      timeCaving = app.stats.timeCaving.get(),
+      timeSurface = app.stats.timeSurface.get(),
+      timeUnderwater = app.stats.timeUnderwater.get(),
       treasures = app.storage.getTreasures(),
       totalDistance = app.stats.totalDistance.get(),
       totalTime = app.stats.totalTime.get()
@@ -68,11 +72,19 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--row-gallery').hidden = !treasuresCollected
     root.querySelector('.a-stats--row-maxDepth').hidden = !maxDepth
     root.querySelector('.a-stats--row-treasures').hidden = !treasuresCollected
+    root.querySelector('.a-stats--row-timeAir').hidden = !timeAir
+    root.querySelector('.a-stats--row-timeCaving').hidden = !timeCaving
+    root.querySelector('.a-stats--row-timeSurface').hidden = !timeAir && !timeCaving && !timeUnderwater
+    root.querySelector('.a-stats--row-timeUnderwater').hidden = !timeUnderwater
 
     root.querySelector('.a-stats--metric-gallery').innerHTML = app.utility.format.number(galleryValue)
     root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDistance').innerHTML = app.utility.format.number(maxDistance)
+    root.querySelector('.a-stats--metric-timeAir').innerHTML = app.utility.format.time(timeAir)
+    root.querySelector('.a-stats--metric-timeCaving').innerHTML = app.utility.format.time(timeCaving)
+    root.querySelector('.a-stats--metric-timeSurface').innerHTML = app.utility.format.time(timeSurface)
+    root.querySelector('.a-stats--metric-timeUnderwater').innerHTML = app.utility.format.time(timeUnderwater)
     root.querySelector('.a-stats--metric-totalDistance').innerHTML = app.utility.format.number(totalDistance)
     root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.format.time(totalTime)
     root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)

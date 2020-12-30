@@ -11,5 +11,6 @@
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Implemented new collision model</li>
+    <li>Track time statistics in various areas</li>
   </ul>
 </details>

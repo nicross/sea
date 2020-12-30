@@ -1,16 +1,14 @@
 app.stats.totalDistance = (() => {
-  let totalDistance = 0
+  let distance = 0
 
   return app.stats.invent('totalDistance', {
-    get: function () {
-      return totalDistance
-    },
+    get: () => distance,
     increment: function (value) {
-      totalDistance += value
+      distance += value
       return this
     },
     set: function (value) {
-      totalDistance = Number(value) || 0
+      distance = Number(value) || 0
       return this
     },
   })

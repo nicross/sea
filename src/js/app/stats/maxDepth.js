@@ -1,19 +1,17 @@
 app.stats.maxDepth = (() => {
-  let maxDepth = 0
+  let max = 0
 
   return app.stats.invent('maxDepth', {
-    get: function () {
-      return maxDepth
-    },
+    get: () => max,
     set: function (value) {
-      maxDepth = Number(value) || 0
+      max = Number(value) || 0
       return this
     },
     update: function () {
-      const z = -engine.position.getVector().z
+      const depth = -engine.position.getVector().z
 
-      if (z > maxDepth) {
-        maxDepth = z
+      if (depth > max) {
+        max = depth
       }
 
       return this

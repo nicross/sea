@@ -1,7 +1,7 @@
-app.stats.totalTime = (() => {
+app.stats.timeUnderwater = (() => {
   let time = 0
 
-  return app.stats.invent('totalTime', {
+  return app.stats.invent('timeSurface', {
     get: () => time,
     increment: function (value) {
       time += value
@@ -19,5 +19,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  app.stats.totalTime.increment(delta)
+  if (content.system.movement.isMedium('underwater') && !content.system.audio.reverb.is('cave')) {
+    app.stats.timeUnderwater.increment(delta)
+  }
 })

@@ -1,7 +1,7 @@
-app.stats.totalTime = (() => {
+app.stats.timeCaving = (() => {
   let time = 0
 
-  return app.stats.invent('totalTime', {
+  return app.stats.invent('timeCaving', {
     get: () => time,
     increment: function (value) {
       time += value
@@ -19,5 +19,8 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  app.stats.totalTime.increment(delta)
+  // Technically also underwater, but use reverb to split time into separate statistics
+  if (content.system.movement.isMedium('underwater') && content.system.audio.reverb.is('cave')) {
+    app.stats.timeCaving.increment(delta)
+  }
 })

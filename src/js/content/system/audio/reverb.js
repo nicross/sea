@@ -63,6 +63,7 @@ content.system.audio.reverb = (() => {
 
       return this
     },
+    is: (state) => machine.is(state),
     update: function () {
       const {x, y, z} = engine.position.getVector()
 

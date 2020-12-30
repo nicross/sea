@@ -149,11 +149,6 @@ content.system.treasure = (() => {
       z: location.z,
     })
 
-    /*
-      TODO: Better placement, e.g. randomly along the faces defined by scan, e.g.
-      treat 3-4 solid points as a 2d surface and shoot a ray through for solid point
-    */
-
     incrementSpawned(chunk)
 
     spawned.push({
@@ -229,21 +224,25 @@ content.system.treasure = (() => {
       }
 
       const chunk = getChunk(x, y, z),
-        totalCollected = getTotalCollected(chunk)
+        isFirstScan = !collected.length && !spawned.length
 
-      if (totalCollected >= chunk.density) {
-        // All treasures have been collected
-        return
+      if (!isFirstScan) {
+        const totalCollected = getTotalCollected(chunk)
+
+        if (totalCollected >= chunk.density) {
+          // All treasures have been collected
+          return
+        }
+
+        const totalSpawned = getTotalSpawned(chunk)
+
+        if ((totalCollected + totalSpawned) >= chunk.density) {
+          // All treasures have been collected or spawned
+          return
+        }
       }
 
-      const totalSpawned = getTotalSpawned(chunk)
-
-      if ((totalCollected + totalSpawned) >= chunk.density) {
-        // All treasures have been collected or spawned
-        return
-      }
-
-      if (Math.random() <= chunk.difficulty) {
+      if (!isFirstScan && Math.random() <= chunk.difficulty) {
         // Maybe next time
         return
       }

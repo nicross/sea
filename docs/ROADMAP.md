@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 - Add more treasure archetypes
 - New game sound of jet flying away
 - Setting for announcing treasures (default off)
-- Spawn treasure on first successful scan
 
 ## v1.2.0
 - Add cues for cave entrances (breadcrumbs spawned when reverb change detected)

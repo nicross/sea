@@ -11,6 +11,7 @@
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Implemented new collision model</li>
+    <li>Spawn treasure on first successful scan</li>
     <li>Track time statistics in various areas</li>
   </ul>
 </details>

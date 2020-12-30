@@ -290,10 +290,13 @@ content.system.movement = (() => {
   }
 
   function setTurbo(state) {
-    if (isTurbo !== state) {
-      isTurbo = state
-      pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
+    if (isTurbo == state) {
+      return
     }
+
+    isTurbo = state
+    calculateModel()
+    pubsub.emit('transition-' + (isTurbo ? 'turbo' : 'normal'))
   }
 
   function setZ(z) {

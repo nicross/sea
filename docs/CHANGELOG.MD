@@ -4,6 +4,7 @@
 - Upgraded to latest version of syngen
 - Implemented new movement model
 - Improved compass cues
+- Split settings into multiple screens
 - Some sounds and physics may behave differently
 
 <details>

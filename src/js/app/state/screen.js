@@ -1,6 +1,11 @@
 app.state.screen = engine.utility.machine.create({
   state: 'none',
   transition: {
+    controls: {
+      back: function () {
+        this.change('settings')
+      },
+    },
     game: {
       pause: function () {
         this.change('gameMenu')
@@ -60,6 +65,11 @@ app.state.screen = engine.utility.machine.create({
         this.change('stats')
       },
     },
+    mixer: {
+      back: function () {
+        this.change('settings')
+      },
+    },
     none: {
       activate: function () {
         this.change('splash')
@@ -68,6 +78,12 @@ app.state.screen = engine.utility.machine.create({
     settings: {
       back: function () {
         this.change('misc')
+      },
+      mixer: function () {
+        this.change('mixer')
+      },
+      controls: function () {
+        this.change('controls')
       },
     },
     stats: {
@@ -116,11 +132,13 @@ app.state.screen.on('exit', (e) => {
 
 app.state.screen.on('enter', (e) => {
   const selectors = {
+    controls: '.a-app--controls',
     gallery: '.a-app--gallery',
     game: '.a-app--game',
     gameMenu: '.a-app--gameMenu',
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
+    mixer: '.a-app--mixer',
     settings: '.a-app--settings',
     splash: '.a-app--splash',
     stats: '.a-app--stats',

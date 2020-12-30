@@ -1,6 +1,4 @@
 app.screen.settings = (() => {
-  const sliders = []
-
   let root
 
   engine.ready(() => {
@@ -9,19 +7,22 @@ app.screen.settings = (() => {
     app.state.screen.on('enter-settings', onEnter)
     app.state.screen.on('exit-settings', onExit)
 
-    root.querySelector('.a-settings--back').addEventListener('click', onBackClick)
+    Object.entries({
+      back: root.querySelector('.a-settings--back'),
+      controls: root.querySelector('.a-settings--controls'),
+      mixer: root.querySelector('.a-settings--mixer'),
+    }).forEach(([event, element]) => {
+      element.addEventListener('click', () => app.state.screen.dispatch(event))
+    })
 
     app.utility.focus.trap(root)
-
-    hydrateSliders()
-    hydrateToggles()
   })
 
   function handleControls() {
     const ui = app.controls.ui()
 
     if (ui.backspace || ui.cancel || ui.escape) {
-      return onBackClick()
+      return app.state.screen.dispatch('back')
     }
 
     if (ui.confirm) {
@@ -39,47 +40,6 @@ app.screen.settings = (() => {
     if (ui.down) {
       return app.utility.focus.setNextFocusable(root)
     }
-
-    if (ui.left) {
-      for (const slider of sliders) {
-        if (app.utility.focus.isWithin(slider.rootElement)) {
-          return slider.decrement()
-        }
-      }
-    }
-
-    if (ui.right) {
-      for (const slider of sliders) {
-        if (app.utility.focus.isWithin(slider.rootElement)) {
-          return slider.increment()
-        }
-      }
-    }
-  }
-
-  function hydrateSliders() {
-    [
-      ['.a-settings--mainVolume', app.settings.raw.mainVolume, app.settings.setMasterVolume],
-      ['.a-settings--mouseSensitivity', app.settings.raw.mouseSensitivity, app.settings.setMouseSensitivity],
-      ['.a-settings--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
-    ].forEach(([selector, initialValue, setter]) => {
-      const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)
-      component.on('change', () => setter(component.getValueAsFloat()))
-      sliders.push(component)
-    })
-  }
-
-  function hydrateToggles() {
-    [
-      ['.a-settings--toggleTurbo', app.settings.raw.toggleTurbo, app.settings.setToggleTurbo],
-    ].forEach(([selector, initialValue, setter]) => {
-      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
-      component.on('change', () => setter(component.getValue()))
-    })
-  }
-
-  function onBackClick() {
-    app.state.screen.dispatch('back')
   }
 
   function onEngineLoopFrame(e) {
@@ -93,7 +53,6 @@ app.screen.settings = (() => {
 
   function onExit() {
     engine.loop.off('frame', onEngineLoopFrame)
-    app.settings.save()
   }
 
   return {}

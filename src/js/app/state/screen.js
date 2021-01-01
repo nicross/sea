@@ -6,14 +6,19 @@ app.state.screen = engine.utility.machine.create({
         this.change('settings')
       },
     },
+    gallery: {
+      back: function () {
+        this.change('misc')
+      },
+    },
     game: {
       pause: function () {
         this.change('gameMenu')
       },
     },
-    gallery: {
+    gameplay: {
       back: function () {
-        this.change('misc')
+        this.change('settings')
       },
     },
     gameMenu: {
@@ -79,11 +84,14 @@ app.state.screen = engine.utility.machine.create({
       back: function () {
         this.change('misc')
       },
-      mixer: function () {
-        this.change('mixer')
-      },
       controls: function () {
         this.change('controls')
+      },
+      gameplay: function () {
+        this.change('gameplay')
+      },
+      mixer: function () {
+        this.change('mixer')
       },
     },
     stats: {
@@ -136,6 +144,7 @@ app.state.screen.on('enter', (e) => {
     gallery: '.a-app--gallery',
     game: '.a-app--game',
     gameMenu: '.a-app--gameMenu',
+    gameplay: '.a-app--gameplay',
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
     mixer: '.a-app--mixer',

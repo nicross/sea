@@ -16,6 +16,10 @@ app.settings = (() => {
         content.system.audio.underwater.music.setGain(computedValue)
       },
     },
+    notifyTreasure: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: 1,
+    },
     toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
       default: 1,

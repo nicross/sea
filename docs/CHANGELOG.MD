@@ -17,6 +17,11 @@
         <li>Added toggle for Treasure Notifications (on by default)</li>
       </ul>
     </li>
+    <li>Added notifications system
+      <ul>
+        <li>Added treasure notifications</li>
+      </ul>
+    </li>
     <li>Implemented new collision model</li>
     <li>Spawn treasure on first successful scan</li>
     <li>Track time statistics in various areas</li>

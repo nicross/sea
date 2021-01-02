@@ -1,0 +1,43 @@
+.a-game {
+  position: relative;
+}
+  .a-game--notification {
+    animation: a-game--notification--in 0.5s ease 0s 1 normal both;
+  }
+  .a-game--notification[aria-hidden="true"] {
+    animation: a-game--notification--out 0.5s ease 0s 1 normal both;
+    bottom: 0;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+  .a-game--notifications {
+    align-items: center;
+    bottom: 4em;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+
+@keyframes a-game--notification--in {
+  0% {
+    opacity: 0;
+    transform: translateY(2em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes a-game--notification--out {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-2em);
+  }
+}

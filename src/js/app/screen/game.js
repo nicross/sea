@@ -14,7 +14,7 @@ app.screen.game = (() => {
     return this
   })
 
-  function handleControls() {
+  function handleControls({paused}) {
     const game = app.controls.game(),
       ui = app.controls.ui()
 
@@ -22,7 +22,7 @@ app.screen.game = (() => {
       app.state.screen.dispatch('pause')
     }
 
-    if (content.system.scan.isCooldown()) {
+    if (paused) {
       return
     }
 

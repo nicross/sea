@@ -27,7 +27,7 @@ app.component.treasure.prototype = {
 
     const valueContainer = document.createElement('p')
     valueContainer.classList.add('c-treasure--value')
-    valueContainer.innerHTML = `<span class="c-treasure--label">Value:</span> ${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aira-label="gold">g</abbr>`
+    valueContainer.innerHTML = `<span class="c-treasure--label">Value:</span> ${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aria-label="gold">g</abbr>`
     details.appendChild(valueContainer)
 
     return this

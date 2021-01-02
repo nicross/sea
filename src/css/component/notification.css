@@ -1,0 +1,18 @@
+.c-notification {
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #FFFFFF;
+  padding: 1em;
+  text-align: center;
+}
+  .c-notification--body {
+    font-size: 1.5em;
+  }
+  .c-notification--extra {
+    font-size: 0.75em;
+    opacity: 0.75;
+  }
+  .c-notification--title {
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+  }

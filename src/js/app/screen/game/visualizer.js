@@ -1,5 +1,6 @@
 app.screen.game.visualizer = (() => {
-  const drawDistance = 500
+  const drawDistance = 500,
+    explorationNodeColor = engine.utility.perlin4d.create('exploreation', 'node', 'color')
 
   let aspect,
     context,
@@ -47,10 +48,21 @@ app.screen.game.visualizer = (() => {
       const x = (width / 2) - (width * hangle / hfov),
         y = (height / 2) - (height * vangle / vfov)
 
+      const alpha = ((drawDistance - distance) / drawDistance) ** 2
+
       // TODO: Consider assigning colors to each point
-      context.fillStyle = `rgba(255, 255, 255, ${((drawDistance - distance) / drawDistance) ** 2})`
+      context.fillStyle = getExplorationNodeColor(vector, alpha)
       context.fillRect(x, y, 1, 1)
     })
+  }
+
+  function getExplorationNodeColor(vector, alpha) {
+    const t = content.system.time.get(),
+      value = explorationNodeColor.value(vector._nodeX / 10, vector._nodeY / 10, vector._nodeZ / 10, t / 10)
+
+    const hue = engine.utility.lerp(0, 360, value)
+
+    return `hsla(${hue}, 100%, 50%, ${alpha})`
   }
 
   function getExplorationNodes() {
@@ -69,9 +81,15 @@ app.screen.game.visualizer = (() => {
     })
 
     return nodes.map((node) => {
-      return engine.utility.vector3d.create(node)
+      const vector = engine.utility.vector3d.create(node)
         .subtract(positionVector)
         .rotateQuaternion(positionQuaternionConjugate)
+
+      vector._nodeX = node.x
+      vector._nodeY = node.y
+      vector._nodeZ = node.z
+
+      return vector
     })
   }
 

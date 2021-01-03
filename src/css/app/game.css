@@ -1,6 +1,10 @@
 .a-game {
+  max-width: unset !important;
   position: relative;
 }
+  .a-game > * + * {
+    margin: 0 !important;
+  }
   .a-game--notification {
     animation: a-game--notification--in 0.5s ease 0s 1 normal both;
     bottom: 0;
@@ -15,6 +19,14 @@
     bottom: 4em;
     left: 0;
     position: absolute;
+    width: 100%;
+    z-index: 2;
+  }
+  .a-game--visualizer {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 100%;
     z-index: 1;
   }

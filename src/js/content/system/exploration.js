@@ -16,6 +16,7 @@ content.system.exploration = (() => {
 
   return {
     export: () => [...list],
+    find: (...args) => tree.find(...args),
     import: function (nodess = []) {
       for (const nodes of nodess) {
         addNode(nodes)
@@ -48,6 +49,7 @@ content.system.exploration = (() => {
       tree.clear()
       return this
     },
+    retrieve: (...args) => tree.retrieve(...args),
   }
 })()
 

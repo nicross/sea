@@ -1,6 +1,6 @@
 app.screen.game.visualizer = (() => {
   const drawDistance = 500,
-    explorationNodeColor = engine.utility.perlin4d.create('exploreation', 'node', 'color')
+    explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color')
 
   let aspect,
     context,
@@ -22,74 +22,66 @@ app.screen.game.visualizer = (() => {
   })
 
   function drawExplorationNodes() {
-    getExplorationNodes().forEach((vector) => {
-      if (vector.x <= 0) {
+    getExplorationNodes().forEach((node) => {
+      const relative = toRelative(node)
+
+      if (relative.x <= 0) {
         return
       }
 
-      const hangle = Math.atan2(vector.y, vector.x)
+      const hangle = Math.atan2(relative.y, relative.x)
 
       if (Math.abs(hangle) > hfov / 2) {
         return
       }
 
-      const vangle = Math.atan2(vector.z, vector.x)
+      const vangle = Math.atan2(relative.z, relative.x)
 
       if (Math.abs(vangle) > vfov / 2) {
         return
       }
 
-      const distance = vector.distance()
+      const distance = relative.distance()
 
       if (distance > drawDistance) {
         return
       }
 
-      const x = (width / 2) - (width * hangle / hfov),
-        y = (height / 2) - (height * vangle / vfov)
+      const screen = engine.utility.vector3d.create({
+        x: (width / 2) - (width * hangle / hfov),
+        y: (height / 2) - (height * vangle / vfov),
+        z: distance,
+      })
 
-      const alpha = ((drawDistance - distance) / drawDistance) ** 2
+      const alpha = ((drawDistance - distance) / drawDistance) ** 2,
+        hue = getExplorationNodeHue(node)
 
-      // TODO: Consider assigning colors to each point
-      context.fillStyle = getExplorationNodeColor(vector, alpha)
-      context.fillRect(x, y, 1, 1)
+      context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
+      context.fillRect(screen.x, screen.y, 1, 1)
     })
   }
 
-  function getExplorationNodeColor(vector, alpha) {
-    const t = content.system.time.get(),
-      value = explorationNodeColor.value(vector._nodeX / 10, vector._nodeY / 10, vector._nodeZ / 10, t / 10)
-
-    const hue = engine.utility.lerp(0, 360, value)
-
-    return `hsla(${hue}, 100%, 50%, ${alpha})`
+  function getExplorationNodeHue({
+    x = 0,
+    y = 0,
+    z = 0,
+    t = content.system.time.get(),
+  } = {}) {
+    const value = explorationNodeHue.value(x / 10, y / 10, z / 10, t / 10)
+    return engine.utility.lerp(0, 360, value)
   }
 
   function getExplorationNodes() {
     const doubleDraw = drawDistance * 2,
-      positionQuaternionConjugate = syngen.position.getQuaternion().conjugate(),
-      positionVector = syngen.position.getVector()
+      position = syngen.position.getVector()
 
-    // TODO: Optimize geometry
-    const nodes = content.system.exploration.retrieve({
-      x: positionVector.x - drawDistance,
-      y: positionVector.y - drawDistance,
-      z: positionVector.z - drawDistance,
+    return content.system.exploration.retrieve({
+      x: position.x - drawDistance,
+      y: position.y - drawDistance,
+      z: position.z - drawDistance,
       depth: doubleDraw,
       height: doubleDraw,
       width: doubleDraw,
-    })
-
-    return nodes.map((node) => {
-      const vector = engine.utility.vector3d.create(node)
-        .subtract(positionVector)
-        .rotateQuaternion(positionQuaternionConjugate)
-
-      vector._nodeX = node.x
-      vector._nodeY = node.y
-      vector._nodeZ = node.z
-
-      return vector
     })
   }
 
@@ -112,6 +104,27 @@ app.screen.game.visualizer = (() => {
     aspect = width / height
     hfov = Math.PI / 2
     vfov = hfov / aspect
+  }
+
+  function toRelative(vector) {
+    return engine.utility.vector3d.create(vector)
+      .subtract(syngen.position.getVector())
+      .rotateQuaternion(syngen.position.getQuaternion().conjugate())
+  }
+
+  function toScreen(vector) {
+    const relative = toRelative(vector)
+    return toScreenFromRelative(relative)
+  }
+
+  function toScreenFromRelative(relative) {
+    const hangle = Math.atan2(relative.y, relative.x),
+      vangle = Math.atan2(relative.z, relative.x)
+
+    return engine.utility.vector2d.create({
+      x: (width / 2) - (width * hangle / hfov),
+      y: (height / 2) - (height * vangle / vfov),
+    })
   }
 
   return {}

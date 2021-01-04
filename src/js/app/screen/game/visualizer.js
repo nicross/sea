@@ -47,10 +47,9 @@ app.screen.game.visualizer = (() => {
         return
       }
 
-      const screen = engine.utility.vector3d.create({
+      const screen = engine.utility.vector2d.create({
         x: (width / 2) - (width * hangle / hfov),
         y: (height / 2) - (height * vangle / vfov),
-        z: distance,
       })
 
       const alpha = ((drawDistance - distance) / drawDistance) ** 2,
@@ -107,14 +106,15 @@ app.screen.game.visualizer = (() => {
   }
 
   function toRelative(vector) {
-    return engine.utility.vector3d.create(vector)
+    return vector
       .subtract(syngen.position.getVector())
       .rotateQuaternion(syngen.position.getQuaternion().conjugate())
   }
 
   function toScreen(vector) {
-    const relative = toRelative(vector)
-    return toScreenFromRelative(relative)
+    return toScreenFromRelative(
+      toRelative(vector)
+    )
   }
 
   function toScreenFromRelative(relative) {

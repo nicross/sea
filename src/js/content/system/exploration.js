@@ -3,8 +3,10 @@ content.system.exploration = (() => {
     tree = engine.utility.octree.create()
 
   function addNode(node) {
-    list.push(node)
-    tree.insert(node)
+    const vector = engine.utility.vector3d.create(node)
+
+    list.push(vector)
+    tree.insert(vector)
 
     engine.streamer.registerProp(content.prop.exploration, {
       destination: content.system.audio.underwater.music.bus(),
@@ -12,6 +14,8 @@ content.system.exploration = (() => {
       y: node.y,
       z: node.z,
     })
+
+    return vector
   }
 
   return {

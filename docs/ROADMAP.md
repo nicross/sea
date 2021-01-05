@@ -3,19 +3,28 @@ This document outlines upcoming changes for post-jam releases.
 
 ## v1.1.0
 - Add more treasure archetypes
-- New game sound of jet flying away
-- Add colors to scanned points (perhaps a 4D noise field for hue)
-- Add graphics setting screen
+- Add new game sound (jet flying away)
+- Graphics settings screen
   - Horizontal FOV slider
   - Enable graphics toggle
   - Treasure hints toggle
+- Improve visualizer
+  - Connect nodes with lines to nearest neighbors
+  - Draw circles around treasures (radius of treasure)
+  - Draw arrows pointing to offscreen treasures
+- Revisit surface for QA
 
 ## v1.2.0
-- Add cues for cave entrances (breadcrumbs spawned when reverb change detected)
-- Add some aquatic life (gulls, whales, schools of fish)
-- Surface weather patterns (sun, rain, storms)
-- Surface time of day
-- More graphics
+- Aquatic life (gulls, whales, schools of fish)
+- Cave entrance cues (breadcrumbs spawned when reverb change detected)
+- Graphical enhancements
   - Compass along top of screen
   - Depth in bottom-right corner
-  - Water visualizer that responds to light levels, weather, time of day
+  - Water visualizer that responds to light level, weather, time of day
+- Solid material generation
+  - Scanned points can be different types of materials
+  - Materials have their own sonic and visual properties, e.g. albedo (max opacity)
+- Surface weather patterns (sun, rain, storms)
+- Time of day
+  - Sync surface glitter to time of day
+  - Sync tides to time of day (max surface height)

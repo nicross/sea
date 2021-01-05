@@ -6,6 +6,8 @@ engine.prop.base.fadeOutDuration = 1/16
 content.const = {
   airRotationalDeceleration: 0,
   airAngularDeceleration: 1,
+  explorationEdgeCount: 2,
+  explorationEdgeRadius: 10,
   explorationNodeRadius: 1,
   lightZone: -1000,
   midnightZoneMin: -750,

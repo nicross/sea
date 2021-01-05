@@ -112,9 +112,11 @@ app.screen.game.visualizer = (() => {
   }
 
   function getExplorationNodeEdges(...nodes) {
-    // TODO: Query a cached graph for all connections to nodes, e.g. closest two, recalculated efficiently on each scan
-    // TODO: Reduce connections so they're unique and don't overdraw
-    // TODO: Return as [[node, node], ...]
+    const graph = content.system.exploration.graph()
+
+    // TODO: Retrieve connections for nodes from graph
+    // TODO: Reduce connections so they're unique to prevent overdraw
+    // TODO: Return as [[a, b], ...]
 
     return []
   }

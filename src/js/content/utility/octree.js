@@ -45,7 +45,7 @@ engine.utility.octree.prototype.findMany = function (query = {}, radius = Infini
       }
     }
 
-    return result ? [result] : []
+    return []
   }
 
   let result = this.nodes[index].find(query, radius)
@@ -70,5 +70,5 @@ engine.utility.octree.prototype.findMany = function (query = {}, radius = Infini
     }
   }
 
-  return result ? [result] : []
+  return []
 }

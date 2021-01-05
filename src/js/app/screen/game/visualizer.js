@@ -21,7 +21,14 @@ app.screen.game.visualizer = (() => {
     onResize()
   })
 
+  function distanceToAlpha(distance) {
+    return ((drawDistance - distance) / drawDistance) ** 2
+  }
+
   function drawExplorationNodes() {
+    // Caches values for efficiently drawing node edges
+    const cache = new Map()
+
     getExplorationNodes().forEach((node) => {
       const relative = toRelative(node)
 
@@ -52,12 +59,64 @@ app.screen.game.visualizer = (() => {
         y: (height / 2) - (height * vangle / vfov),
       })
 
-      const alpha = ((drawDistance - distance) / drawDistance) ** 2,
+      const alpha = distanceToAlpha(distance),
         hue = getExplorationNodeHue(node)
 
       context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
       context.fillRect(screen.x, screen.y, 1, 1)
+
+      cache.set(node, {
+        alpha,
+        distance,
+        hue,
+        relative,
+        screen,
+      })
     })
+
+    getExplorationNodeEdges(
+      ...cache.keys()
+    ).forEach(([a, b]) => {
+      const aCache = cache.get(a),
+        bCache = cache.get(b)
+
+      const aRelative = aCache ? aCache.relative : toRelative(a),
+        bRelative = bCache ? bCache.relative : toRelative(b)
+
+      const aDistance = aCache ? aCache.distance : aRelative.distance(),
+        bDistance = bCache ? bCache.distance : bRelative.distance()
+
+      if (aDistance > drawDistance || bDistance > drawDistance) {
+        return
+      }
+
+      const aAlpha = aCache ? aCache.alpha : distanceToAlpha(aDistance),
+        bAlpha = bCache ? bCache.alpha : distanceToAlpha(bDistance)
+
+      const aHue = aCache ? aCache.hue : getExplorationNodeHue(a),
+        bHue = bCache ? bCache.hue : getExplorationNodeHue(b)
+
+      const aScreen = aCache ? aCache.screen : toScreenFromRelative(a),
+        bScreen = bCache ? bCache.screen : toScreenFromRelative(b)
+
+      const gradient = context.createLinearGradient(aScreen.x, aScreen.y, bScreen.x, bScreen.y)
+      gradient.addColorStop(0, `hsla(${aHue}, 100%, 50%, ${aAlpha})`)
+      gradient.addColorStop(0, `hsla(${bHue}, 100%, 50%, ${bAlpha})`)
+      context.strokeStyle = gradient
+
+      context.beginPath()
+      context.moveTo(aScreen.x, aScreen.y)
+      context.lineTo(bScreen.x, bScreen.y)
+      context.stroke()
+    })
+  }
+
+  function getExplorationNodeEdges(...nodes) {
+    // TODO: Query a cached graph for all connections to nodes, e.g. closest two, recalculated efficiently on each scan
+    // TODO: Reduce connections so they're unique and don't overdraw
+    // TODO: Return as [[node, node], ...]
+
+    return []
   }
 
   function getExplorationNodeHue({
@@ -120,6 +179,9 @@ app.screen.game.visualizer = (() => {
   function toScreenFromRelative(relative) {
     const hangle = Math.atan2(relative.y, relative.x),
       vangle = Math.atan2(relative.z, relative.x)
+
+    // TODO: Consider points beyond screen edges
+    // TODO: Consider points behind screen
 
     return engine.utility.vector2d.create({
       x: (width / 2) - (width * hangle / hfov),

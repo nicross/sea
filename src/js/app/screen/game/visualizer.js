@@ -112,13 +112,28 @@ app.screen.game.visualizer = (() => {
   }
 
   function getExplorationNodeEdges(...nodes) {
-    const graph = content.system.exploration.graph()
+    const cache = new Map(),
+      graph = content.system.exploration.graph(),
+      lines = []
 
-    // TODO: Retrieve connections for nodes from graph
-    // TODO: Reduce connections so they're unique to prevent overdraw
-    // TODO: Return as [[a, b], ...]
+    nodes.forEach((node) => {
+      const edges = new Set()
 
-    return []
+      graph.get(node).forEach((other) => {
+        if (cache.has(other)) {
+          if (cache.get(other).has(node)) {
+            return
+          }
+        }
+
+        lines.push([node, other])
+        edges.add(other)
+      })
+
+      cache.set(node, edges)
+    })
+
+    return lines
   }
 
   function getExplorationNodeHue({

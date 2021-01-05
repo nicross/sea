@@ -19,14 +19,13 @@ content.system.exploration = (() => {
     return vector
   }
 
-  function findClosest(query, radius = content.const.explorationEdgeRadius, count = content.const.explorationEdgeCount) {
-    // TODO: Reimplement octree.find but with a distance heap and return array
-    // SEE: https://stackoverflow.com/questions/2486093/millions-of-3d-points-how-to-find-the-10-of-them-closest-to-a-given-point
-    return []
+  function findClosest(node) {
+    return tree.findMany(node, content.const.explorationEdgeRadius, content.const.explorationEdgeCount)
   }
 
   function updateGraph(nodes) {
-    const changed = new Set()
+    const added = new Set([...nodes]),
+      changed = new Set()
 
     nodes.forEach((node) => {
       graph.set(node, new Set())
@@ -38,23 +37,22 @@ content.system.exploration = (() => {
 
       closest.forEach((other) => {
         edges.add(other)
-        graph.get(other).add(node)
+
+        if (!added.has(node)) {
+          changed.add(other)
+        }
       })
     })
 
     changed.forEach((node) => {
-      const distances = [],
+      const closest = findClosest(node),
         edges = graph.get(node)
 
-      edges.forEach((other) => {
-        distances.push({
-          distance: node.distance(other),
-          node: other,
-        })
-      })
+      edges.clear()
 
-      distances.sort((a, b) => a.distance - b.distance)
-      distances.slice(content.const.explorationEdgeCount).forEach(({node}) => edges.delete(node))
+      closest.forEach((other) => {
+        edges.add(other)
+      })
     })
   }
 

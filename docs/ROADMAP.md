@@ -9,7 +9,6 @@ This document outlines upcoming changes for post-jam releases.
   - Enable graphics toggle
   - Treasure hints toggle
 - Improve visualizer
-  - Connect nodes with lines to nearest neighbors
   - Draw circles around treasures (radius of treasure)
   - Draw arrows pointing to offscreen treasures
 - Revisit surface for QA

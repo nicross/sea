@@ -26,9 +26,6 @@ app.screen.game.visualizer = (() => {
   }
 
   function drawExplorationNodes() {
-    // Caches values for efficiently drawing node edges
-    const cache = new Map()
-
     getExplorationNodes().forEach((node) => {
       const relative = toRelative(node)
 
@@ -64,76 +61,7 @@ app.screen.game.visualizer = (() => {
 
       context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
       context.fillRect(screen.x, screen.y, 1, 1)
-
-      cache.set(node, {
-        alpha,
-        distance,
-        hue,
-        relative,
-        screen,
-      })
     })
-
-    getExplorationNodeEdges(
-      ...cache.keys()
-    ).forEach(([a, b]) => {
-      const aCache = cache.get(a),
-        bCache = cache.get(b)
-
-      const aRelative = aCache ? aCache.relative : toRelative(a),
-        bRelative = bCache ? bCache.relative : toRelative(b)
-
-      const aDistance = aCache ? aCache.distance : aRelative.distance(),
-        bDistance = bCache ? bCache.distance : bRelative.distance()
-
-      if (aDistance > drawDistance || bDistance > drawDistance) {
-        return
-      }
-
-      const aAlpha = aCache ? aCache.alpha : distanceToAlpha(aDistance),
-        bAlpha = bCache ? bCache.alpha : distanceToAlpha(bDistance)
-
-      const aHue = aCache ? aCache.hue : getExplorationNodeHue(a),
-        bHue = bCache ? bCache.hue : getExplorationNodeHue(b)
-
-      const aScreen = aCache ? aCache.screen : toScreenFromRelative(a),
-        bScreen = bCache ? bCache.screen : toScreenFromRelative(b)
-
-      const gradient = context.createLinearGradient(aScreen.x, aScreen.y, bScreen.x, bScreen.y)
-      gradient.addColorStop(0, `hsla(${aHue}, 100%, 50%, ${aAlpha})`)
-      gradient.addColorStop(0, `hsla(${bHue}, 100%, 50%, ${bAlpha})`)
-      context.strokeStyle = gradient
-
-      context.beginPath()
-      context.moveTo(aScreen.x, aScreen.y)
-      context.lineTo(bScreen.x, bScreen.y)
-      context.stroke()
-    })
-  }
-
-  function getExplorationNodeEdges(...nodes) {
-    const cache = new Map(),
-      graph = content.system.exploration.graph(),
-      lines = []
-
-    nodes.forEach((node) => {
-      const edges = new Set()
-
-      graph.get(node).forEach((other) => {
-        if (cache.has(other)) {
-          if (cache.get(other).has(node)) {
-            return
-          }
-        }
-
-        lines.push([node, other])
-        edges.add(other)
-      })
-
-      cache.set(node, edges)
-    })
-
-    return lines
   }
 
   function getExplorationNodeHue({

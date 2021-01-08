@@ -19,8 +19,33 @@ content.system.exploration = (() => {
     return vector
   }
 
-  function findClosest(node) {
-    return tree.findMany(node, content.const.explorationEdgeRadius, content.const.explorationEdgeCount)
+  function findClosest(target) {
+    const distance2s = new Map(),
+      radius2 = ((content.const.explorationEdgeRadius * (Math.sqrt(3) / 3)) ** 2) * 3
+
+    let nodes = tree.retrieve({
+      ...target,
+      depth: content.const.explorationEdgeRadius,
+      height: content.const.explorationEdgeRadius,
+      width: content.const.explorationEdgeRadius,
+    })
+
+    nodes.filter((node) => {
+      if (node === target) {
+        return false
+      }
+
+      const distance2 = node.distance2(target)
+      distance2s.set(node, distance2)
+
+      return distance2 <= radius2
+    })
+
+    nodes.sort((a, b) => {
+      return distance2s.get(b) - distance2s.get(a)
+    })
+
+    return nodes.slice(0, content.const.explorationEdgeCount)
   }
 
   function updateGraph(nodes) {

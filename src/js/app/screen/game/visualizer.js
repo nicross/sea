@@ -4,6 +4,7 @@ app.screen.game.visualizer = (() => {
 
   let aspect,
     context,
+    explorationNodeRadius,
     height,
     hfov,
     root,
@@ -20,10 +21,6 @@ app.screen.game.visualizer = (() => {
     window.addEventListener('resize', onResize)
     onResize()
   })
-
-  function distanceToAlpha(distance) {
-    return ((drawDistance - distance) / drawDistance) ** 2
-  }
 
   function drawExplorationNodes() {
     getExplorationNodes().forEach((node) => {
@@ -51,16 +48,19 @@ app.screen.game.visualizer = (() => {
         return
       }
 
+      const ratio = engine.utility.scale(distance, 0, drawDistance, 1, 0)
+
       const screen = engine.utility.vector2d.create({
         x: (width / 2) - (width * hangle / hfov),
         y: (height / 2) - (height * vangle / vfov),
       })
 
-      const alpha = distanceToAlpha(distance),
-        hue = getExplorationNodeHue(node)
+      const alpha = ratio ** 2,
+        hue = getExplorationNodeHue(node),
+        radius = engine.utility.lerp(1, explorationNodeRadius, ratio ** 4)
 
       context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
-      context.fillRect(screen.x, screen.y, 1, 1)
+      context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
     })
   }
 
@@ -107,6 +107,8 @@ app.screen.game.visualizer = (() => {
     aspect = width / height
     hfov = Math.PI / 2
     vfov = hfov / aspect
+
+    explorationNodeRadius = (width / 1920) * 3
   }
 
   function toRelative(vector) {

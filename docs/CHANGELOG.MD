@@ -35,10 +35,18 @@
         <li>Added toggle for Treasure Notifications (on by default)</li>
       </ul>
     </li>
+    <li>Improved treasure
+      <ul>
+        <li>Added more adjectives</li>
+        <li>Added more nouns</li>
+        <li>Added more surnames</li>
+        <li>Spawn treasure on first successful scan</li>
+      </ul>
+    </li>
     <li>Miscellaneous
       <ul>
         <li>Implemented new collision model</li>
-        <li>Spawn treasure on first successful scan</li>
+
       </ul>
     </li>
   </ul>

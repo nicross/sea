@@ -1,9 +1,12 @@
-content.system.treasures.register('alien', 1, (srand) => {
+content.system.treasures.register('alien', 2, (srand) => {
   const names = [
+    'Alien Artifact',
     'Alien Black Box',
     'Alien Computational Device',
     'Alien Communications Device',
+    'Alien Exoskeleton',
     'Alien Navigational Device',
+    'Alien Propulsion Device',
     'Alien Translation Device',
     'Unknown Alien Technology',
   ]

@@ -2,7 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.1.0
-- Add more treasure archetypes
 - Add new game sound (jet flying away)
 - Improve visualizer
   - Draw circles around treasures (radius of treasure)

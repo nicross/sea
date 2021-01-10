@@ -19,6 +19,16 @@ content.system.treasures.register('bone', 10, (srand) => {
 
   const animals = [
     {
+      name: 'Alien',
+      value: 50,
+      weight: 1,
+    },
+    {
+      name: 'Gull',
+      value: 1,
+      weight: 2,
+    },
+    {
       name: 'Human',
       value: 2,
       weight: 1,

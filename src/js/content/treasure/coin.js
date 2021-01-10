@@ -41,11 +41,16 @@ content.system.treasures.register('coin', 5, (srand) => {
     {
       name: 'Stone',
       value: 1,
+      weight: 8,
+    },
+    {
+      name: 'Pearl',
+      value: 2,
       weight: 7,
     },
     {
       name: 'Copper',
-      value: 2,
+      value: 3,
       weight: 6,
     },
     {

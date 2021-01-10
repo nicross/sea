@@ -1,5 +1,13 @@
 app.settings = (() => {
   const settings = {
+    graphicsFov: {
+      compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
+      default: 0.5,
+    },
+    graphicsOn: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: 1,
+    },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,

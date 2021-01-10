@@ -22,6 +22,10 @@ app.screen.game.visualizer = (() => {
     onResize()
   })
 
+  function clear() {
+    context.clearRect(0, 0, width, height)
+  }
+
   function drawExplorationNodes() {
     getExplorationNodes().forEach((node) => {
       const relative = toRelative(node)
@@ -89,6 +93,13 @@ app.screen.game.visualizer = (() => {
   }
 
   function onEnterGame() {
+    clear()
+
+    if (!app.settings.computed.graphicsOn) {
+      return
+    }
+
+    onResize()
     engine.loop.on('frame', onFrame)
   }
 
@@ -97,7 +108,7 @@ app.screen.game.visualizer = (() => {
   }
 
   function onFrame() {
-    context.clearRect(0, 0, width, height)
+    clear()
     drawExplorationNodes()
   }
 
@@ -105,7 +116,7 @@ app.screen.game.visualizer = (() => {
     height = root.height = root.clientHeight
     width = root.width = root.clientWidth
     aspect = width / height
-    hfov = Math.PI / 2
+    hfov = app.settings.computed.graphicsFov
     vfov = hfov / aspect
 
     explorationNodeRadius = (width / 1920) * 3

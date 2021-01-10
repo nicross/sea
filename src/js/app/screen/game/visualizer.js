@@ -108,7 +108,10 @@ app.screen.game.visualizer = (() => {
   }
 
   function onFrame() {
-    clear()
+    // TODO: Calculate background color
+    context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsTracers})`
+    context.fillRect(0, 0, width, height)
+
     drawExplorationNodes()
   }
 

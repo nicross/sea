@@ -8,6 +8,10 @@ app.settings = (() => {
       compute: (rawValue) => Boolean(rawValue),
       default: 1,
     },
+    graphicsTracers: {
+      compute: (rawValue) => engine.utility.lerpExp(1, 1/32, rawValue, 1/3),
+      default: 0,
+    },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,

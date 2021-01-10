@@ -1,6 +1,7 @@
 app.screen.game.visualizer = (() => {
   const drawDistance = 500,
-    explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color')
+    explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color'),
+    explorationNodeHueRotateSpeed = 1 / 120
 
   let aspect,
     context,
@@ -74,7 +75,12 @@ app.screen.game.visualizer = (() => {
     z = 0,
     t = content.system.time.get(),
   } = {}) {
-    const value = explorationNodeHue.value(x / 10, y / 10, z / 10, t / 10)
+    const halfT = t / 2
+
+    let value = explorationNodeHue.value((x + halfT) / 10, (y + halfT) / 10, (z + halfT) / 10, t / 10) * 2
+    value += engine.loop.time() * explorationNodeHueRotateSpeed
+    value = engine.utility.wrap(value, 0, 1)
+
     return engine.utility.lerp(0, 360, value)
   }
 

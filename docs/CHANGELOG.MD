@@ -12,18 +12,34 @@
 <details>
   <summary>Spoiler Warning</summary>
   <ul>
-    <li>Added Gameplay settings screen
+    <li>Added graphics
       <ul>
+        <li>Added Graphics settings screen</li>
+        <li>Added toggle for enabling graphics (on by default)</li>
+        <li>Added sliders for Field of View and Motion Blur</li>
+        <li>Added graphical representation of scanned points</li>
+      </ul>
+    </li>
+    <li>Added new statistics
+      <ul>
+        <li>Track time in air</li>
+        <li>Track time in caves</li>
+        <li>Track time on surface</li>
+        <li>Track time underwater</li>
+      </ul>
+    </li>
+    <li>Added treasure collection notifications
+      <ul>
+        <li>Added notifications system</li>
+        <li>Added Gameplay settings screen</li>
         <li>Added toggle for Treasure Notifications (on by default)</li>
       </ul>
     </li>
-    <li>Added notifications system
+    <li>Miscellaneous
       <ul>
-        <li>Added treasure notifications</li>
+        <li>Implemented new collision model</li>
+        <li>Spawn treasure on first successful scan</li>
       </ul>
     </li>
-    <li>Implemented new collision model</li>
-    <li>Spawn treasure on first successful scan</li>
-    <li>Track time statistics in various areas</li>
   </ul>
 </details>

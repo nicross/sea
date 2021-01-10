@@ -38,6 +38,11 @@ app.state.screen = engine.utility.machine.create({
         this.change('status')
       },
     },
+    graphics: {
+      back: function () {
+        this.change('settings')
+      },
+    },
     mainMenu: {
       continue: function () {
         this.change('game')
@@ -89,6 +94,9 @@ app.state.screen = engine.utility.machine.create({
       },
       gameplay: function () {
         this.change('gameplay')
+      },
+      graphics: function () {
+        this.change('graphics')
       },
       mixer: function () {
         this.change('mixer')
@@ -145,6 +153,7 @@ app.state.screen.on('enter', (e) => {
     game: '.a-app--game',
     gameMenu: '.a-app--gameMenu',
     gameplay: '.a-app--gameplay',
+    graphics: '.a-app--graphics',
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
     mixer: '.a-app--mixer',

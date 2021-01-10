@@ -1,0 +1,11 @@
+.a-graphics--onFields {
+  filter: grayscale(0);
+  opacity: 1;
+  transition: all 0.5s ease;
+  transition-property: filter, opacity;
+}
+.a-graphics--onFields[aria-hidden] {
+  filter: grayscale(1);
+  opacity: 0.25;
+  pointer-events: none;
+}

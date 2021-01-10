@@ -4,13 +4,10 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.1.0
 - Add more treasure archetypes
 - Add new game sound (jet flying away)
-- Graphics settings screen
-  - Horizontal FOV slider
-  - Enable graphics toggle
-  - Treasure hints toggle
 - Improve visualizer
   - Draw circles around treasures (radius of treasure)
   - Draw arrows pointing to offscreen treasures
+  - Settings toggle for treasure hints
 - Revisit surface for QA
 
 ## v1.2.0

@@ -11,6 +11,7 @@ app.screen.settings = (() => {
       back: root.querySelector('.a-settings--back'),
       controls: root.querySelector('.a-settings--controls'),
       gameplay: root.querySelector('.a-settings--gameplay'),
+      graphics: root.querySelector('.a-settings--graphics'),
       mixer: root.querySelector('.a-settings--mixer'),
     }).forEach(([event, element]) => {
       element.addEventListener('click', () => app.state.screen.dispatch(event))

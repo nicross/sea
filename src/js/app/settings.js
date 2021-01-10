@@ -8,8 +8,8 @@ app.settings = (() => {
       compute: (rawValue) => Boolean(rawValue),
       default: 1,
     },
-    graphicsTracers: {
-      compute: (rawValue) => engine.utility.lerpExp(1, 1/32, rawValue, 1/3),
+    graphicsMotionBlur: {
+      compute: (rawValue) => engine.utility.lerpExp(1, 1/32, rawValue, 1/2),
       default: 0,
     },
     mainVolume: {

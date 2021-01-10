@@ -61,7 +61,7 @@ app.screen.game.visualizer = (() => {
 
       const alpha = ratio ** 2,
         hue = getExplorationNodeHue(node),
-        radius = engine.utility.lerp(1, explorationNodeRadius, ratio ** 4)
+        radius = engine.utility.lerp(1, explorationNodeRadius, ratio ** 6)
 
       context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
       context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
@@ -109,7 +109,7 @@ app.screen.game.visualizer = (() => {
 
   function onFrame() {
     // TODO: Calculate background color
-    context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsTracers})`
+    context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
     context.fillRect(0, 0, width, height)
 
     drawExplorationNodes()

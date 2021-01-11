@@ -28,44 +28,72 @@ app.screen.game.visualizer = (() => {
   }
 
   function drawExplorationNodes() {
-    getExplorationNodes().forEach((node) => {
+    const position = syngen.position.getVector()
+
+    const nodes = content.system.exploration.retrieve({
+      x: position.x - drawDistance,
+      y: position.y - drawDistance,
+      z: position.z - drawDistance,
+      depth: drawDistance * 2,
+      height: drawDistance * 2,
+      width: drawDistance * 2,
+    }).reduce((nodes, node) => {
+      // Convert to relative space
       const relative = toRelative(node)
 
+      // Filter out nodes behind field of view
       if (relative.x <= 0) {
-        return
+        return nodes
       }
 
       const hangle = Math.atan2(relative.y, relative.x)
 
+      // Filter out nodes beyond horizontal field of view
       if (Math.abs(hangle) > hfov / 2) {
-        return
+        return nodes
       }
 
       const vangle = Math.atan2(relative.z, relative.x)
 
+      // Filter out nodes beyond vertical field of view
       if (Math.abs(vangle) > vfov / 2) {
-        return
+        return nodes
       }
 
       const distance = relative.distance()
 
+      // Filter out nodes beyond draw distance
       if (distance > drawDistance) {
-        return
+        return nodes
       }
 
-      const ratio = engine.utility.scale(distance, 0, drawDistance, 1, 0)
-
-      const screen = engine.utility.vector2d.create({
+      // Convert to screen space
+      // Importantly, z-coordinate represents distance from camera
+      const screen = engine.utility.vector3d.create({
         x: (width / 2) - (width * hangle / hfov),
         y: (height / 2) - (height * vangle / vfov),
+        z: relative.distance(),
       })
 
-      const alpha = ratio ** 2,
-        hue = getExplorationNodeHue(node),
-        radius = engine.utility.lerp(1, explorationNodeRadius, ratio ** 6)
+      // Cache hue before we discard global coordinates
+      screen.hue = getExplorationNodeHue(node)
+      nodes.push(screen)
 
-      context.fillStyle = `hsla(${hue}, 100%, 50%, ${alpha})`
-      context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
+      return nodes
+    }, [])
+
+    // Sort back-to-front
+    nodes.sort((a, b) => b.z - a.z)
+
+    // Draw nodes
+    nodes.forEach((node) => {
+      const distanceRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0)
+
+      const alpha = distanceRatio ** 2,
+        radius = engine.utility.lerp(1, explorationNodeRadius, distanceRatio ** 6)
+
+      context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`
+      context.fillRect(node.x - radius, node.y - radius, radius * 2, radius * 2)
     })
   }
 
@@ -84,20 +112,6 @@ app.screen.game.visualizer = (() => {
     return engine.utility.lerp(0, 360, value)
   }
 
-  function getExplorationNodes() {
-    const doubleDraw = drawDistance * 2,
-      position = syngen.position.getVector()
-
-    return content.system.exploration.retrieve({
-      x: position.x - drawDistance,
-      y: position.y - drawDistance,
-      z: position.z - drawDistance,
-      depth: doubleDraw,
-      height: doubleDraw,
-      width: doubleDraw,
-    })
-  }
-
   function onEnterGame() {
     clear()
 
@@ -114,7 +128,7 @@ app.screen.game.visualizer = (() => {
   }
 
   function onFrame() {
-    // TODO: Calculate background color
+    // TODO: Calculate and fade to background color
     context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
     context.fillRect(0, 0, width, height)
 

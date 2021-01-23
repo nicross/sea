@@ -29,6 +29,12 @@
   src: url('font/roboto-italic.woff') format('woff');
 }
 @font-face {
+  font-family: SuperSubmarine;
+  font-style: normal;
+  font-weight: 400;
+  src: url('font/super-submarine.woff') format('woff');
+}
+@font-face {
   font-family: SuperSubmarineHalf;
   font-style: normal;
   font-weight: 400;

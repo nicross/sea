@@ -17,6 +17,7 @@
         <li>Added Graphics settings screen</li>
         <li>Added toggle for enabling graphics (on by default)</li>
         <li>Added sliders for Field of View and Motion Blur</li>
+        <li>Added depth meter</li>
         <li>Added graphical representation of scanned points</li>
       </ul>
     </li>

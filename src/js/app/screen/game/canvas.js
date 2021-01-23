@@ -41,7 +41,9 @@ app.screen.game.canvas = (() => {
 
   function onFrame() {
     // Drawing order is back-to-front
+    clear()
     app.screen.game.canvas.nodes.draw()
+    app.screen.game.canvas.hud.draw()
   }
 
   function onResize() {

@@ -16,7 +16,13 @@ app.screen.game.canvas.nodes = (() => {
     canvas.width = width
 
     nodeRadius = (width / 1920) * 3
+
+    clear()
   })
+
+  function clear() {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+  }
 
   function drawNodes() {
     const height = main.height(),

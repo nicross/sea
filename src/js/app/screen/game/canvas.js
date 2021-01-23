@@ -1,12 +1,8 @@
 app.screen.game.canvas = (() => {
-  const drawDistance = 500,
-    explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color'),
-    explorationNodeHueRotateSpeed = 1 / 120,
-    pubsub = engine.utility.pubsub.create()
+  const pubsub = engine.utility.pubsub.create()
 
   let aspect,
     context,
-    explorationNodeRadius,
     height,
     hfov,
     root,
@@ -28,91 +24,6 @@ app.screen.game.canvas = (() => {
     context.clearRect(0, 0, width, height)
   }
 
-  function drawExplorationNodes() {
-    const position = syngen.position.getVector()
-
-    const nodes = content.system.exploration.retrieve({
-      x: position.x - drawDistance,
-      y: position.y - drawDistance,
-      z: position.z - drawDistance,
-      depth: drawDistance * 2,
-      height: drawDistance * 2,
-      width: drawDistance * 2,
-    }).reduce((nodes, node) => {
-      // Convert to relative space
-      const relative = toRelative(node)
-
-      // Filter out nodes behind field of view
-      if (relative.x <= 0) {
-        return nodes
-      }
-
-      const hangle = Math.atan2(relative.y, relative.x)
-
-      // Filter out nodes beyond horizontal field of view
-      if (Math.abs(hangle) > hfov / 2) {
-        return nodes
-      }
-
-      const vangle = Math.atan2(relative.z, relative.x)
-
-      // Filter out nodes beyond vertical field of view
-      if (Math.abs(vangle) > vfov / 2) {
-        return nodes
-      }
-
-      const distance = relative.distance()
-
-      // Filter out nodes beyond draw distance
-      if (distance > drawDistance) {
-        return nodes
-      }
-
-      // Convert to screen space
-      // Importantly, z-coordinate represents distance from camera
-      const screen = engine.utility.vector3d.create({
-        x: (width / 2) - (width * hangle / hfov),
-        y: (height / 2) - (height * vangle / vfov),
-        z: relative.distance(),
-      })
-
-      // Cache hue before we discard global coordinates
-      screen.hue = getExplorationNodeHue(node)
-      nodes.push(screen)
-
-      return nodes
-    }, [])
-
-    // Sort back-to-front
-    nodes.sort((a, b) => b.z - a.z)
-
-    // Draw nodes
-    nodes.forEach((node) => {
-      const distanceRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0)
-
-      const alpha = distanceRatio ** 2,
-        radius = engine.utility.lerp(1, explorationNodeRadius, distanceRatio ** 6)
-
-      context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`
-      context.fillRect(node.x - radius, node.y - radius, radius * 2, radius * 2)
-    })
-  }
-
-  function getExplorationNodeHue({
-    x = 0,
-    y = 0,
-    z = 0,
-    t = content.system.time.get(),
-  } = {}) {
-    const halfT = t / 2
-
-    let value = explorationNodeHue.value((x + halfT) / 10, (y + halfT) / 10, (z + halfT) / 10, t / 10) * 2
-    value += engine.loop.time() * explorationNodeHueRotateSpeed
-    value = engine.utility.wrap(value, 0, 1)
-
-    return engine.utility.lerp(0, 360, value)
-  }
-
   function onEnterGame() {
     clear()
 
@@ -129,12 +40,8 @@ app.screen.game.canvas = (() => {
   }
 
   function onFrame() {
-    // TODO: Calculate and fade to background color
-    context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
-    context.fillRect(0, 0, width, height)
-
-    pubsub.emit('frame')
-    drawExplorationNodes()
+    // Drawing order is back-to-front
+    app.screen.game.canvas.nodes.draw()
   }
 
   function onResize() {
@@ -144,32 +51,7 @@ app.screen.game.canvas = (() => {
     hfov = app.settings.computed.graphicsFov
     vfov = hfov / aspect
 
-    explorationNodeRadius = (width / 1920) * 3
-  }
-
-  function toRelative(vector) {
-    return vector
-      .subtract(syngen.position.getVector())
-      .rotateQuaternion(syngen.position.getQuaternion().conjugate())
-  }
-
-  function toScreen(vector) {
-    return toScreenFromRelative(
-      toRelative(vector)
-    )
-  }
-
-  function toScreenFromRelative(relative) {
-    const hangle = Math.atan2(relative.y, relative.x),
-      vangle = Math.atan2(relative.z, relative.x)
-
-    // TODO: Consider points beyond screen edges
-    // TODO: Consider points behind screen
-
-    return engine.utility.vector2d.create({
-      x: (width / 2) - (width * hangle / hfov),
-      y: (height / 2) - (height * vangle / vfov),
-    })
+    pubsub.emit('resize')
   }
 
   return engine.utility.pubsub.decorate({
@@ -177,6 +59,28 @@ app.screen.game.canvas = (() => {
     context: () => context,
     height: () => height,
     hfov: () => hfov,
+    toRelative: (vector) => {
+      return vector
+        .subtract(engine.position.getVector())
+        .rotateQuaternion(engine.position.getQuaternion().conjugate())
+    },
+    toScreenFromGlobal: function (vector) {
+      return this.toScreenFromRelative(
+        this.toRelative(vector)
+      )
+    },
+    toScreenFromRelative: (relative) => {
+      const hangle = Math.atan2(relative.y, relative.x),
+        vangle = Math.atan2(relative.z, relative.x)
+
+      // TODO: Consider points beyond screen edges
+      // TODO: Consider points behind screen
+
+      return engine.utility.vector2d.create({
+        x: (width / 2) - (width * hangle / hfov),
+        y: (height / 2) - (height * vangle / vfov),
+      })
+    },
     vfov: () => vfov,
     width: () => width,
   }, pubsub)

@@ -1,5 +1,7 @@
 app.screen.game.canvas.nodes = (() => {
-  const drawDistance = 500,
+  const canvas = document.createElement('canvas'),
+    context = canvas.getContext('2d'),
+    drawDistance = 500,
     main = app.screen.game.canvas,
     nodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'hue'),
     nodeHueRotateSpeed = 1 / 120
@@ -7,12 +9,17 @@ app.screen.game.canvas.nodes = (() => {
   let nodeRadius
 
   main.on('resize', () => {
-    nodeRadius = (main.width() / 1920) * 3
+    const height = main.height(),
+      width = main.width()
+
+    canvas.height = height
+    canvas.width = width
+
+    nodeRadius = (width / 1920) * 3
   })
 
   function drawNodes() {
-    const context = main.context(),
-      height = main.height(),
+    const height = main.height(),
       hfov = main.hfov(),
       position = syngen.position.getVector(),
       vfov = main.vfov(),
@@ -102,15 +109,16 @@ app.screen.game.canvas.nodes = (() => {
 
   return {
     draw: function () {
-      const context = main.context(),
-        height = main.height(),
-        width = main.width()
+      const mainContext = main.context()
 
       // TODO: Calculate and fade to background color
       context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
-      context.fillRect(0, 0, width, height)
+      context.fillRect(0, 0, canvas.width, canvas.height)
 
       drawNodes()
+
+      // Draw to main canvas, assume identical dimensions
+      mainContext.drawImage(canvas, 0, 0)
 
       return this
     },

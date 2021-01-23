@@ -46,7 +46,6 @@
     <li>Miscellaneous
       <ul>
         <li>Implemented new collision model</li>
-
       </ul>
     </li>
   </ul>

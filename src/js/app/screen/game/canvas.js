@@ -1,4 +1,4 @@
-app.screen.game.visualizer = (() => {
+app.screen.game.canvas = (() => {
   const drawDistance = 500,
     explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color'),
     explorationNodeHueRotateSpeed = 1 / 120
@@ -13,7 +13,7 @@ app.screen.game.visualizer = (() => {
     width
 
   engine.ready(() => {
-    root = document.querySelector('.a-game--visualizer')
+    root = document.querySelector('.a-game--canvas')
     context = root.getContext('2d')
 
     app.state.screen.on('enter-game', onEnterGame)

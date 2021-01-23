@@ -5,6 +5,14 @@
   .a-game > * + * {
     margin: 0 !important;
   }
+  .a-game--canvas {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+  }
   .a-game--notification {
     animation: a-game--notification--in 0.5s ease 0s 1 normal both;
     bottom: 0;
@@ -21,14 +29,6 @@
     position: absolute;
     width: 100%;
     z-index: 2;
-  }
-  .a-game--visualizer {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 1;
   }
 
 @keyframes a-game--notification--in {

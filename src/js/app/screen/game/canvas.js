@@ -1,7 +1,8 @@
 app.screen.game.canvas = (() => {
   const drawDistance = 500,
     explorationNodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'color'),
-    explorationNodeHueRotateSpeed = 1 / 120
+    explorationNodeHueRotateSpeed = 1 / 120,
+    pubsub = engine.utility.pubsub.create()
 
   let aspect,
     context,
@@ -132,6 +133,7 @@ app.screen.game.canvas = (() => {
     context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
     context.fillRect(0, 0, width, height)
 
+    pubsub.emit('frame')
     drawExplorationNodes()
   }
 
@@ -170,5 +172,12 @@ app.screen.game.canvas = (() => {
     })
   }
 
-  return {}
+  return engine.utility.pubsub.decorate({
+    aspect: () => aspect,
+    context: () => context,
+    height: () => height,
+    hfov: () => hfov,
+    vfov: () => vfov,
+    width: () => width,
+  }, pubsub)
 })()

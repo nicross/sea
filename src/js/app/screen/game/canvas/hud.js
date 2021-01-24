@@ -9,7 +9,7 @@ app.screen.game.canvas.hud = (() => {
   let opacity
 
   main.on('enter', () => {
-    opacity = 1
+    opacity = content.system.idle.is() ? 0 : 1
   })
 
   main.on('resize', () => {

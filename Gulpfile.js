@@ -163,7 +163,10 @@ function getAppJs() {
     'src/js/app/const.js',
     'src/js/app/utility/*.js',
     'src/js/app/*.js',
-    'src/js/app/**/*.js',
+    'src/js/app/*/*.js',
+    'src/js/app/*/*/*.js',
+    'src/js/app/*/*/*/*.js',
+    'src/js/app/*/*/*/*/*.js',
   ]
 
   return srcs
@@ -178,7 +181,10 @@ function getContentJs() {
     'src/js/content/treasure/*.js',
     'src/js/content/system/audio.js',
     'src/js/content/*.js',
-    'src/js/content/**/*.js',
+    'src/js/content/*/*.js',
+    'src/js/content/*/*/*.js',
+    'src/js/content/*/*/*/*.js',
+    'src/js/content/*/*/*/*/*.js',
   ]
 
   return srcs

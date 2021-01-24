@@ -7,6 +7,7 @@ content.const = {
   airRotationalDeceleration: 0,
   airAngularDeceleration: 1,
   explorationNodeRadius: 1,
+  idleTimeout: 10,
   lightZone: -1000,
   midnightZoneMin: -750,
   midnightZoneMax: -1250,

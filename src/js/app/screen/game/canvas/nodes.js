@@ -115,8 +115,6 @@ app.screen.game.canvas.nodes = (() => {
 
   return {
     draw: function () {
-      const mainContext = main.context()
-
       // TODO: Calculate and fade to background color
       context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
       context.fillRect(0, 0, canvas.width, canvas.height)
@@ -124,7 +122,7 @@ app.screen.game.canvas.nodes = (() => {
       drawNodes()
 
       // Draw to main canvas, assume identical dimensions
-      mainContext.drawImage(canvas, 0, 0)
+      main.context().drawImage(canvas, 0, 0)
 
       return this
     },

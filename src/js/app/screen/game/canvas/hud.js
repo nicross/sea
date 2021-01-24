@@ -1,7 +1,6 @@
 app.screen.game.canvas.hud = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    hudAlpha = 0.5,
     main = app.screen.game.canvas
 
   main.on('resize', () => {
@@ -13,6 +12,10 @@ app.screen.game.canvas.hud = (() => {
 
     clear()
   })
+
+  function calculateOpacity() {
+    return app.settings.computed.hudOpacity
+  }
 
   function clear() {
     context.clearRect(0, 0, canvas.width, canvas.height)
@@ -27,7 +30,7 @@ app.screen.game.canvas.hud = (() => {
       return
     }
 
-    const alpha = engine.utility.clamp(engine.utility.scale(z, 0, content.const.lightZone, 0, 1)) * hudAlpha,
+    const alpha = engine.utility.clamp(engine.utility.scale(z, 0, content.const.lightZone, 0, 1)),
       depth = app.utility.format.number(-z),
       rem = app.utility.css.rem(),
       x = canvas.width - rem,
@@ -44,14 +47,20 @@ app.screen.game.canvas.hud = (() => {
 
   return {
     draw: function () {
-      const mainContext = main.context()
+      const opacity = calculateOpacity()
+
+      if (!opacity) {
+        return this
+      }
+
+      context.globalAlpha = opacity
 
       clear()
       drawCompass()
       drawDepth()
 
       // Draw to main canvas, assume identical dimensions
-      mainContext.drawImage(canvas, 0, 0)
+      main.context().drawImage(canvas, 0, 0)
 
       return this
     },

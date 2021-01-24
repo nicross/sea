@@ -36,6 +36,9 @@ app.settings = (() => {
       compute: (rawValue) => Boolean(rawValue),
       default: 1,
     },
+    hudOpacity: {
+      default: 0.5,
+    },
   }
 
   const computed = {},

@@ -1,7 +1,7 @@
 app.stats.timeUnderwater = (() => {
   let time = 0
 
-  return app.stats.invent('timeSurface', {
+  return app.stats.invent('timeUnderwater', {
     get: () => time,
     increment: function (value) {
       time += value

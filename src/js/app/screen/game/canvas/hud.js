@@ -1,7 +1,15 @@
 app.screen.game.canvas.hud = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
+    fadeInRate = 4,
+    fadeOutRate = 1,
     main = app.screen.game.canvas
+
+  let opacity
+
+  main.on('enter', () => {
+    opacity = 1
+  })
 
   main.on('resize', () => {
     const height = main.height(),
@@ -14,7 +22,22 @@ app.screen.game.canvas.hud = (() => {
   })
 
   function calculateOpacity() {
-    return app.settings.computed.hudOpacity
+    const scale = app.settings.computed.hudOpacity
+
+    if (!scale) {
+      return 0
+    }
+
+    const delta = engine.loop.delta(),
+      isIdle = content.system.idle.is()
+
+    if (isIdle && opacity > 0) {
+      opacity = engine.utility.clamp(opacity - (delta * fadeOutRate))
+    } else if (!isIdle && opacity < 1) {
+      opacity = engine.utility.clamp(opacity + (delta * fadeInRate))
+    }
+
+    return opacity * scale
   }
 
   function clear() {

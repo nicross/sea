@@ -8,7 +8,6 @@ This document outlines upcoming changes for post-jam releases.
   - Draw circles around treasures (radius of treasure)
   - Draw arrows pointing to offscreen treasures
   - Settings toggle for treasure hints
-  - Fade out HUD after N seconds of inactivity
 - Revisit surface for QA
 
 ## v1.2.0

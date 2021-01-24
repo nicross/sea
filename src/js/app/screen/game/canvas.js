@@ -31,11 +31,14 @@ app.screen.game.canvas = (() => {
       return
     }
 
+    pubsub.emit('enter')
+
     onResize()
     engine.loop.on('frame', onFrame)
   }
 
   function onExitGame() {
+    pubsub.emit('exit')
     engine.loop.off('frame', onFrame)
   }
 

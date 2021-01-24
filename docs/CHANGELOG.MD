@@ -23,6 +23,7 @@
     </li>
     <li>Added new statistics
       <ul>
+        <li>Track time idle</li>
         <li>Track time in air</li>
         <li>Track time in caves</li>
         <li>Track time on surface</li>

@@ -2,23 +2,27 @@
 
 ## v1.1.0
 - Upgraded to latest version of syngen
-- Implemented new movement model
-- Improved compass cues
+  - Implemented new movement model
+  - Some sounds and physics may behave differently
+- Added graphical heads-up-display
+  - Added compass
+  - Fade HUD opacity based on idle state
+- Improved sound design
+  - Added panning to compass cues
 - Split settings into multiple screens
-  - Added Audio Mixer screen
-  - Added Controls screen
-- Some sounds and physics may behave differently
+  - Added Audio Mixer screen with existing settings
+  - Added Controls screen with existing settings
+  - Added Graphics screen
+    - Added toggle for enabling graphics (on by default)
+    - Added sliders for Field of View, HUD Opacity, and Motion Blur
 
 <details>
   <summary>Spoiler Warning</summary>
   <ul>
-    <li>Added graphics
+    <li>Added underwater graphics
       <ul>
-        <li>Added Graphics settings screen</li>
-        <li>Added toggle for enabling graphics (on by default)</li>
-        <li>Added sliders for Field of View and Motion Blur</li>
         <li>Added depth meter</li>
-        <li>Added graphical representation of scanned points</li>
+        <li>Added scanned points</li>
       </ul>
     </li>
     <li>Added new statistics

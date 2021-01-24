@@ -16,7 +16,7 @@ app.screen.game.canvas.hud.compass = (() => {
       points = tree.retrieve(minAngle, fov),
       rem = app.utility.css.rem(),
       width = canvas.width,
-      y = 2 * rem
+      y = rem
 
     for (const point of points) {
       const alpha = point.angle < yaw
@@ -25,81 +25,264 @@ app.screen.game.canvas.hud.compass = (() => {
 
       const x = engine.utility.scale(point.angle, minAngle, maxAngle, 0, width)
 
-      context.fillStyle = `rgba(0, 0, 0, ${alpha})`
-      context.font = `${2 * rem}px SuperSubmarine`
-      context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
-      context.textAlign = 'center'
-
-      context.fillText(point.label, x, y)
-      context.strokeText(point.label, x, y)
+      point.draw({
+        alpha,
+        context,
+        point,
+        rem,
+        x,
+        y,
+      })
     }
+  }
+
+  function drawLine({
+    alpha,
+    context,
+    rem,
+    x,
+    y,
+  }) {
+    const height = rem
+    const halfHeight = height / 2
+
+    y += rem / 2
+
+    context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+
+    context.beginPath()
+    context.moveTo(x, y - halfHeight)
+    context.lineTo(x, y + halfHeight)
+    context.stroke()
+  }
+
+  function drawLineSmall({
+    alpha,
+    context,
+    rem,
+    x,
+    y,
+  }) {
+    const height = rem / 2
+    const halfHeight = height / 2
+
+    y += rem / 2
+
+    context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+
+    context.beginPath()
+    context.moveTo(x, y - halfHeight)
+    context.lineTo(x, y + halfHeight)
+    context.stroke()
+  }
+
+  function drawText({
+    alpha,
+    context,
+    point,
+    rem,
+    x,
+    y,
+  }) {
+    const height = 2 * rem
+    const halfHeight = height / 2
+
+    context.fillStyle = `rgba(0, 0, 0, ${alpha})`
+    context.font = `${height}px/${height}px SuperSubmarine`
+    context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+    context.textAlign = 'center'
+
+    context.fillText(point.label, x, y + halfHeight)
+    context.strokeText(point.label, x, y + halfHeight)
+  }
+
+  function drawTextPrimary({
+    alpha,
+    context,
+    point,
+    rem,
+    x,
+    y,
+  }) {
+    const height = 2 * rem
+    const halfHeight = height / 2
+
+    context.fillStyle = `rgba(255, 255, 255, ${alpha})`
+    context.font = `${height}px/${height}px SuperSubmarine`
+    context.strokeStyle = `rgba(0, 0, 0, ${alpha})`
+    context.textAlign = 'center'
+
+    context.strokeText(point.label, x, y + halfHeight)
+    context.fillText(point.label, x, y + halfHeight)
+  }
+
+  function drawTextSmall({
+    alpha,
+    context,
+    point,
+    rem,
+    x,
+    y,
+  }) {
+    const height = rem * 1.5
+    const halfHeight = height / 2
+
+    y += rem / 6
+
+    context.fillStyle = `rgba(0, 0, 0, ${alpha})`
+    context.font = `${height}px/${height}px SuperSubmarine`
+    context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+    context.textAlign = 'center'
+
+    context.fillText(point.label, x, y + halfHeight)
+    context.strokeText(point.label, x, y + halfHeight)
   }
 
   function generateTree() {
     const points = [
       {
         angle: 0,
+        draw: drawText,
         label: 'E',
       },
       {
-        angle: 1/8 * Math.PI,
+        angle: 1/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 2/16 * Math.PI,
+        draw: drawLine,
         label: 'ENE',
       },
       {
-        angle: 2/8 * Math.PI,
+        angle: 3/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 4/16 * Math.PI,
+        draw: drawTextSmall,
         label: 'NE',
       },
       {
-        angle: 3/8 * Math.PI,
+        angle: 5/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 6/16 * Math.PI,
+        draw: drawLine,
         label: 'NNE',
       },
       {
-        angle: 4/8 * Math.PI,
+        angle: 7/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 8/16 * Math.PI,
+        draw: drawTextPrimary,
         label: 'N',
       },
       {
-        angle: 5/8 * Math.PI,
+        angle: 9/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 10/16 * Math.PI,
+        draw: drawLine,
         label: 'NNW',
       },
       {
-        angle: 6/8 * Math.PI,
+        angle: 11/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 12/16 * Math.PI,
+        draw: drawTextSmall,
         label: 'NW',
       },
       {
-        angle: 7/8 * Math.PI,
+        angle: 13/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 14/16 * Math.PI,
+        draw: drawLine,
         label: 'WNW',
       },
       {
+        angle: 15/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
         angle: Math.PI,
+        draw: drawText,
         label: 'W',
       },
       {
-        angle: 9/8 * Math.PI,
+        angle: 17/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 18/16 * Math.PI,
+        draw: drawLine,
         label: 'WSW',
       },
       {
-        angle: 10/8 * Math.PI,
+        angle: 19/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 20/16 * Math.PI,
+        draw: drawTextSmall,
         label: 'SW',
       },
       {
-        angle: 11/8 * Math.PI,
+        angle: 21/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 22/16 * Math.PI,
+        draw: drawLine,
         label: 'SSW',
       },
       {
-        angle: 12/8 * Math.PI,
+        angle: 23/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 24/16 * Math.PI,
+        draw: drawText,
         label: 'S',
       },
       {
-        angle: 13/8 * Math.PI,
+        angle: 25/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 26/16 * Math.PI,
+        draw: drawLine,
         label: 'SSE',
       },
       {
-        angle: 14/8 * Math.PI,
+        angle: 27/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 28/16 * Math.PI,
+        draw: drawTextSmall,
         label: 'SE',
       },
       {
-        angle: 15/8 * Math.PI,
+        angle: 29/16 * Math.PI,
+        draw: drawLineSmall,
+      },
+      {
+        angle: 30/16 * Math.PI,
+        draw: drawLine,
         label: 'ESE',
+      },
+      {
+        angle: 31/16 * Math.PI,
+        draw: drawLineSmall,
       },
     ]
 

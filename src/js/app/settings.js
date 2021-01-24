@@ -4,13 +4,16 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0.5,
     },
-    graphicsOn: {
-      compute: (rawValue) => Boolean(rawValue),
+    graphicsHudOpacity: {
       default: 1,
     },
     graphicsMotionBlur: {
       compute: (rawValue) => engine.utility.lerpExp(1, 1/32, rawValue, 1/2),
       default: 0,
+    },
+    graphicsOn: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: 1,
     },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
@@ -35,9 +38,6 @@ app.settings = (() => {
     toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
       default: 1,
-    },
-    hudOpacity: {
-      default: 0.5,
     },
   }
 

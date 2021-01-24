@@ -80,7 +80,7 @@ app.screen.graphics = (() => {
   function hydrateSliders() {
     [
       ['.a-graphics--fov', app.settings.raw.graphicsFov, app.settings.setGraphicsFov],
-      ['.a-graphics--hudOpacity', app.settings.raw.hudOpacity, app.settings.setHudOpacity],
+      ['.a-graphics--hudOpacity', app.settings.raw.graphicsHudOpacity, app.settings.setGraphicsHudOpacity],
       ['.a-graphics--motionBlur', app.settings.raw.graphicsMotionBlur, app.settings.setGraphicsMotionBlur],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)

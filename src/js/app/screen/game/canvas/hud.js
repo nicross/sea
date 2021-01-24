@@ -23,7 +23,7 @@ app.screen.game.canvas.hud = (() => {
   })
 
   function calculateOpacity() {
-    const scale = app.settings.computed.hudOpacity
+    const scale = app.settings.computed.graphicsHudOpacity
 
     if (!scale) {
       return 0

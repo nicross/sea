@@ -1,7 +1,9 @@
 app.screen.game.canvas.hud.treasure = (() => {
-  const main = app.screen.game.canvas
+  const arrowAngle = Math.PI / 2,
+    main = app.screen.game.canvas
 
-  let lineWidth,
+  let arrowLength,
+    lineWidth,
     treasureRadius
 
   main.hud.on('draw', draw)
@@ -9,6 +11,7 @@ app.screen.game.canvas.hud.treasure = (() => {
   main.on('resize', () => {
     const width = main.width()
 
+    arrowLength = (width / 1920) * 24
     lineWidth = Math.max(1, (width / 1920) * 3)
     treasureRadius = (width / 1920) * 96
   })
@@ -36,7 +39,28 @@ app.screen.game.canvas.hud.treasure = (() => {
     context,
     drawDistance,
     vector,
-  }) {}
+  }) {
+    const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0),
+      height = main.height(),
+      width = main.width(),
+      x = engine.utility.clamp(vector.x, 0, width),
+      y = engine.utility.clamp(vector.y, 0, height)
+
+    const alpha = distanceRatio ** 2,
+      angle = Math.atan2(y - height/2, x - width/2),
+      maxAngle = angle + arrowAngle/2,
+      minAngle = angle - arrowAngle/2
+
+    context.lineWidth = lineWidth
+    context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+
+    context.beginPath()
+    context.moveTo(x, y)
+    context.lineTo(x - (arrowLength * Math.cos(maxAngle)), y - (arrowLength * Math.sin(maxAngle)))
+    context.moveTo(x, y)
+    context.lineTo(x - (arrowLength * Math.cos(minAngle)), y - (arrowLength * Math.sin(minAngle)))
+    context.stroke()
+  }
 
   function drawOnscreen({
     context,

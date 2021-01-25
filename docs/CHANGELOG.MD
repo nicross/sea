@@ -23,6 +23,12 @@
       <ul>
         <li>Added depth meter</li>
         <li>Added scanned points</li>
+        <li>Added treasure hints</li>
+      </ul>
+    </li>
+    <li>Added Gameplay settings screen
+      <ul>
+        <li>Added toggles for Treasure Hints and Treasure Notifications (on by default)</li>
       </ul>
     </li>
     <li>Added new statistics
@@ -34,13 +40,7 @@
         <li>Track time underwater</li>
       </ul>
     </li>
-    <li>Added treasure collection notifications
-      <ul>
-        <li>Added notifications system</li>
-        <li>Added Gameplay settings screen</li>
-        <li>Added toggle for Treasure Notifications (on by default)</li>
-      </ul>
-    </li>
+    <li>Added treasure collection notifications</li>
     <li>Improved treasure
       <ul>
         <li>Added more adjectives</li>

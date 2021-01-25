@@ -17,7 +17,8 @@ app.screen.game.canvas.hud.treasure = (() => {
   })
 
   function draw({canvas, context}) {
-    const drawDistance = engine.streamer.getRadius()
+    const drawDistance = engine.streamer.getRadius(),
+      margin = app.utility.css.rem(4)
 
     const treasures = engine.streamer.getStreamedProps().filter((prop) => {
       return content.prop.treasure.isPrototypeOf(prop)
@@ -30,7 +31,7 @@ app.screen.game.canvas.hud.treasure = (() => {
       if (isOnscreen(vector)) {
         drawOnscreen({canvas, context, drawDistance, vector})
       } else {
-        drawOffscreen({canvas, context, drawDistance, vector})
+        drawOffscreen({canvas, context, drawDistance, margin, vector})
       }
     }
   }
@@ -38,13 +39,14 @@ app.screen.game.canvas.hud.treasure = (() => {
   function drawOffscreen({
     context,
     drawDistance,
+    margin,
     vector,
   }) {
     const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0),
       height = main.height(),
       width = main.width(),
-      x = engine.utility.clamp(vector.x, 0, width),
-      y = engine.utility.clamp(vector.y, 0, height)
+      x = engine.utility.clamp(vector.x, margin, width - margin),
+      y = engine.utility.clamp(vector.y, margin, height - margin)
 
     const alpha = distanceRatio ** 2,
       angle = Math.atan2(y - height/2, x - width/2),

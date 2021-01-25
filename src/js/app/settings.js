@@ -13,7 +13,7 @@ app.settings = (() => {
     },
     graphicsOn: {
       compute: (rawValue) => Boolean(rawValue),
-      default: 1,
+      default: true,
     },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
@@ -33,11 +33,15 @@ app.settings = (() => {
     },
     notifyTreasure: {
       compute: (rawValue) => Boolean(rawValue),
-      default: 1,
+      default: true,
     },
     toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
-      default: 1,
+      default: true,
+    },
+    treasureHints: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: true,
     },
   }
 

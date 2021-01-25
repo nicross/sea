@@ -4,10 +4,8 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.1.0
 - Add new game sound (jet flying away)
 - Underwater graphics
-  - Draw compass along top of screen
   - Draw circles around treasures (radius of treasure)
   - Draw arrows pointing to offscreen treasures
-  - Settings toggle for treasure hints
 - Revisit surface for QA
 
 ## v1.2.0

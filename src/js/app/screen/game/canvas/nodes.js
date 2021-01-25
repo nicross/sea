@@ -15,7 +15,7 @@ app.screen.game.canvas.nodes = (() => {
     canvas.height = height
     canvas.width = width
 
-    nodeRadius = (width / 1920) * 3
+    nodeRadius = Math.max(1, (width / 1920) * 3)
 
     clear()
   })

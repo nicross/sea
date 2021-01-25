@@ -1,12 +1,16 @@
 app.screen.game.canvas.hud.treasure = (() => {
   const main = app.screen.game.canvas
 
-  let treasureRadius
+  let lineWidth,
+    treasureRadius
 
   main.hud.on('draw', draw)
 
   main.on('resize', () => {
-    treasureRadius = (main.width() / 1920) * 96
+    const width = main.width()
+
+    lineWidth = Math.max(1, (width / 1920) * 3)
+    treasureRadius = (width / 1920) * 96
   })
 
   function draw({canvas, context}) {
@@ -17,31 +21,38 @@ app.screen.game.canvas.hud.treasure = (() => {
     })
 
     for (const treasure of treasures) {
-      const relative = treasure.relative,
-        screen = main.toScreenFromRelative(relative)
+      const vector = main.toScreenFromRelative(treasure.relative)
+      vector.z = treasure.relative.distance()
 
-      if (isOnscreen(screen)) {
-        drawOnscreen({canvas, context, drawDistance, relative, screen})
+      if (isOnscreen(vector)) {
+        drawOnscreen({canvas, context, drawDistance, vector})
       } else {
-        drawOffscreen({canvas, context, drawDistance, relative, screen})
+        drawOffscreen({canvas, context, drawDistance, vector})
       }
     }
   }
 
-  function drawOffscreen({canvas, context, drawDistance, relative, screen}) {
-    // TODO: Draw arrow
-  }
+  function drawOffscreen({
+    context,
+    drawDistance,
+    vector,
+  }) {}
 
-  function drawOnscreen({context, drawDistance, relative, screen}) {
-    const distanceRatio = engine.utility.scale(relative.distance(), 0, drawDistance, 1, 0)
+  function drawOnscreen({
+    context,
+    drawDistance,
+    vector,
+  }) {
+    const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0)
 
     const alpha = distanceRatio ** 2,
       radius = engine.utility.lerpExp(treasureRadius / 4, treasureRadius, distanceRatio, 6)
 
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+    context.lineWidth = engine.utility.lerpExp(1, lineWidth, distanceRatio, 2)
 
     context.beginPath()
-    context.arc(screen.x, screen.y, radius, 0, Math.PI * 2)
+    context.arc(vector.x, vector.y, radius, 0, Math.PI * 2)
     context.stroke()
   }
 

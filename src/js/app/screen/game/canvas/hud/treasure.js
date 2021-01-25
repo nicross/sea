@@ -25,7 +25,7 @@ app.screen.game.canvas.hud.treasure = (() => {
 
     for (const treasure of treasures) {
       const vector = main.toScreenFromRelative(treasure.relative)
-      vector.z = treasure.relative.distance()
+      vector.z = treasure.distance
 
       if (isOnscreen(vector)) {
         drawOnscreen({canvas, context, drawDistance, vector})

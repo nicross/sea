@@ -20,10 +20,10 @@ app.screen.game.canvas.hud.compass = (() => {
 
     for (const point of points) {
       const alpha = point.angle < yaw
-        ? engine.utility.scale(point.angle, minAngle, yaw, 0, 1) ** 0.875
-        : engine.utility.scale(point.angle, yaw, maxAngle, 1, 0) ** 0.875
+        ? engine.utility.scale(point.angle, minAngle, yaw, 0, 1)
+        : engine.utility.scale(point.angle, yaw, maxAngle, 1, 0)
 
-      const x = engine.utility.scale(point.angle, minAngle, maxAngle, 0, width)
+      const x = engine.utility.scale(point.angle, minAngle, maxAngle, width, 0)
 
       point.draw({
         alpha,

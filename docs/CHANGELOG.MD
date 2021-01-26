@@ -41,12 +41,14 @@
     </li>
     <li>Added new statistics
       <ul>
-        <li>Track fast travels</li>
-        <li>Track time idle</li>
-        <li>Track time in air</li>
-        <li>Track time in caves</li>
-        <li>Track time on surface</li>
-        <li>Track time underwater</li>
+        <li>Fast travels</li>
+        <li>Scans</li>
+        <li>Scan results</li>
+        <li>Time idle</li>
+        <li>Time in air</li>
+        <li>Time in caves</li>
+        <li>Time on surface</li>
+        <li>Time underwater</li>
       </ul>
     </li>
     <li>Improved treasure

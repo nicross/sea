@@ -27,11 +27,47 @@ app.state.game = engine.utility.machine.create({
 
 engine.ready(() => {
   engine.audio.ramp.set(engine.audio.mixer.master.param.gain, engine.const.zeroGain)
+
+  // Game state changes
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
   app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))
   app.state.screen.on('before-gameMenu-resume', () => app.state.game.dispatch('resume'))
   app.state.screen.on('before-mainMenu-continue', () => app.state.game.dispatch('load'))
   app.state.screen.on('before-mainMenu-newGame', () => app.state.game.dispatch('new'))
+
+  // Fast travel actions
+  // TODO: Refactor to dispatch events
+  app.state.screen.on('before-fastTravel-floor', () => {
+    const position = syngen.position.export()
+    position.z = content.system.terrain.floor.value(position.x, position.y) + 1
+
+    engine.state.import({
+      ...engine.state.export(),
+      position,
+    })
+  })
+
+  app.state.screen.on('before-fastTravel-origin', () => {
+    const position = syngen.position.export()
+    position.x = 0
+    position.y = 0
+    position.z = 0
+
+    engine.state.import({
+      ...engine.state.export(),
+      position,
+    })
+  })
+
+  app.state.screen.on('before-fastTravel-surface', () => {
+    const position = syngen.position.export()
+    position.z = 0
+
+    engine.state.import({
+      ...engine.state.export(),
+      position,
+    })
+  })
 })
 
 app.state.game.on('before-none-load', () => {

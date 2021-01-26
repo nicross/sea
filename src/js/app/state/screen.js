@@ -6,6 +6,38 @@ app.state.screen = engine.utility.machine.create({
         this.change('settings')
       },
     },
+    fastTravel: {
+      back: function () {
+        this.change('gameMenu')
+      },
+      floor: function () {
+        // XXX: Hack for this.change('game')
+        // TODO: Improve app.state.game
+        this.dispatch('back')
+
+        window.requestAnimationFrame(() => {
+          this.dispatch('resume')
+        })
+      },
+      origin: function () {
+        // XXX: Hack for this.change('game')
+        // TODO: Improve app.state.game
+        this.dispatch('back')
+
+        window.requestAnimationFrame(() => {
+          this.dispatch('resume')
+        })
+      },
+      surface: function () {
+        // XXX: Hack for this.change('game')
+        // TODO: Improve app.state.game
+        this.dispatch('back')
+
+        window.requestAnimationFrame(() => {
+          this.dispatch('resume')
+        })
+      },
+    },
     gallery: {
       back: function () {
         this.change('misc')
@@ -22,6 +54,9 @@ app.state.screen = engine.utility.machine.create({
       },
     },
     gameMenu: {
+      fastTravel: function () {
+        this.change('fastTravel')
+      },
       mainMenu: function () {
         this.change('mainMenu')
       },
@@ -149,6 +184,7 @@ app.state.screen.on('exit', (e) => {
 app.state.screen.on('enter', (e) => {
   const selectors = {
     controls: '.a-app--controls',
+    fastTravel: '.a-app--fastTravel',
     gallery: '.a-app--gallery',
     game: '.a-app--game',
     gameMenu: '.a-app--gameMenu',

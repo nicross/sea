@@ -6,7 +6,7 @@
   - Some sounds and physics may behave differently
 - Added graphical heads-up-display
   - Added compass
-  - Fade HUD opacity based on idle state
+  - Fade opacity based on idle state
 - Improved sound design
   - Added panning to compass cues
 - Split settings into multiple screens
@@ -26,9 +26,17 @@
         <li>Added treasure hints</li>
       </ul>
     </li>
+    <li>Added Fast Travel screen
+      <ul>
+        <li>Added fast travel to floor</li>
+        <li>Added fast travel to origin</li>
+        <li>Added fast travel to surface</li>
+      </ul>
+    </li>
     <li>Added Gameplay settings screen
       <ul>
-        <li>Added toggles for Treasure Hints and Treasure Notifications (on by default)</li>
+        <li>Added toggle for Treasure Hints (on by default)</li>
+        <li>Added toggle for Treasure Notifications (on by default)</li>
       </ul>
     </li>
     <li>Added new statistics
@@ -40,13 +48,14 @@
         <li>Track time underwater</li>
       </ul>
     </li>
-    <li>Added treasure collection notifications</li>
     <li>Improved treasure
       <ul>
         <li>Added more adjectives</li>
         <li>Added more nouns</li>
         <li>Added more surnames</li>
-        <li>Spawn treasure on first successful scan</li>
+        <li>Added treasure collection notifications</li>
+        <li>Guaranteed treasure spawns on first successful scan</li>
+        <li>Unlock fast travel to floor after first pickup</li>
       </ul>
     </li>
     <li>Miscellaneous

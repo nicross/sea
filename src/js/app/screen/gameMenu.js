@@ -8,6 +8,7 @@ app.screen.gameMenu = (() => {
     app.state.screen.on('exit-gameMenu', onExit)
 
     Object.entries({
+      fastTravel: root.querySelector('.a-gameMenu--fastTravel'),
       mainMenu: root.querySelector('.a-gameMenu--mainMenu'),
       misc: root.querySelector('.a-gameMenu--misc'),
       quit: root.querySelector('.a-gameMenu--quit'),
@@ -53,6 +54,8 @@ app.screen.gameMenu = (() => {
   function onEnter() {
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
+
+    root.querySelector('.a-gameMenu--action-fastTravel').hidden = !app.screen.fastTravel.hasOptions()
   }
 
   function onExit() {

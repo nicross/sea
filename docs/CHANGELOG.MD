@@ -6,7 +6,7 @@
   - Some sounds and physics may behave differently
 - Added graphical heads-up-display
   - Added compass
-  - Fade opacity based on idle state
+  - Fade opacity when idle
 - Improved sound design
   - Added panning to compass cues
 - Split settings into multiple screens
@@ -41,6 +41,7 @@
     </li>
     <li>Added new statistics
       <ul>
+        <li>Track fast travels</li>
         <li>Track time idle</li>
         <li>Track time in air</li>
         <li>Track time in caves</li>

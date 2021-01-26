@@ -45,6 +45,8 @@ engine.ready(() => {
       ...engine.state.export(),
       position,
     })
+
+    app.stats.fastTravels.increment()
   })
 
   app.state.screen.on('before-fastTravel-origin', () => {
@@ -57,6 +59,8 @@ engine.ready(() => {
       ...engine.state.export(),
       position,
     })
+
+    app.stats.fastTravels.increment()
   })
 
   app.state.screen.on('before-fastTravel-surface', () => {
@@ -67,6 +71,8 @@ engine.ready(() => {
       ...engine.state.export(),
       position,
     })
+
+    app.stats.fastTravels.increment()
   })
 })
 

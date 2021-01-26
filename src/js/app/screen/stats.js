@@ -56,7 +56,8 @@ app.screen.stats = (() => {
   }
 
   function updateStats() {
-    const maxDepth = app.stats.maxDepth.get(),
+    const fastTravels = app.stats.fastTravels.get(),
+      maxDepth = app.stats.maxDepth.get(),
       maxDistance = app.stats.maxDistance.get(),
       timeAir = app.stats.timeAir.get(),
       timeCaving = app.stats.timeCaving.get(),
@@ -71,6 +72,7 @@ app.screen.stats = (() => {
       treasuresCollected = treasures.length
 
     root.querySelector('.a-stats--row-gallery').hidden = !treasuresCollected
+    root.querySelector('.a-stats--row-fastTravels').hidden = !fastTravels
     root.querySelector('.a-stats--row-maxDepth').hidden = !maxDepth
     root.querySelector('.a-stats--row-treasures').hidden = !treasuresCollected
     root.querySelector('.a-stats--row-timeAir').hidden = !timeAir
@@ -80,6 +82,7 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--row-timeUnderwater').hidden = !timeUnderwater
 
     root.querySelector('.a-stats--metric-gallery').innerHTML = app.utility.format.number(galleryValue)
+    root.querySelector('.a-stats--metric-fastTravels').innerHTML = app.utility.format.number(fastTravels)
     root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDepth').innerHTML = app.utility.format.number(maxDepth)
     root.querySelector('.a-stats--metric-maxDistance').innerHTML = app.utility.format.number(maxDistance)

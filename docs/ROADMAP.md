@@ -3,6 +3,7 @@ This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.0
 - Access hotkeys for Status screen (Alt + first letter, rendered to aria-live region)
+- Light gradient that fades to black on depth
 - Performance settings
   - Max object distance
   - Max object limit
@@ -10,15 +11,37 @@ This document outlines upcoming changes for post-jam releases.
 
 ## v1.3.0
 - Aquatic life (dolphins, gulls, whales, schools of fish)
-- Cave entrance cues (breadcrumbs spawned when reverb change detected)
 - New game sound (jet flying away)
-- Surface graphics
-  - Procedural skybox
-  - Water visualizer that responds to light level, weather, time of day
-- Solid material generation (i.e. biomes)
-  - Scanned points can be different types of materials
-  - Materials have unique sounds
-- Surface weather patterns (sun, rain, storms)
+
+## Wishlist
+### Graphics
+- Procedural skybox with sun, moon, and stars
+- Surface heightmap
+
+### Plot
+- Crashed spaceship to explore
+  - Ovoid or disc, kilometers in scale
+  - Carves out a tunnel
+- Data logs?
+  - Incident reports of UFOs?
+  - Letters home?
+  - Notes from previous S.E.A. players / an alternate reality?
+
+### Quality of Life
+- Cave entrance cues (breadcrumbs spawned when reverb change detected)
+
+### Simulation
+- Light levels influenced by cloud cover, depth, and time of day
+- Surface weather patterns
+  - Clouds
+  - Weather patterns (rain, storm)
 - Time of day
-  - Sync surface glitter to time of day
-  - Sync tides to time of day (max surface height)
+  - Moon phases
+  - Offset time when using fast travel
+  - Sun
+  - Tides
+
+### World generation
+- Biomes
+  - Scanned points can be different props determined by noise fields
+  - Materials have unique sounds and saturation levels

@@ -48,6 +48,7 @@ app.screen.game.canvas.hud.compass = (() => {
 
     y += rem / 2
 
+    context.lineWidth = 1
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
 
     context.beginPath()

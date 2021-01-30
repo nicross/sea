@@ -10,6 +10,7 @@
   <ul>
     <li>Improved treasure hints
       <ul>
+        <li>Fixed glitch affecting compass lines</li>
         <li>Improved opacity easing</li>
       </ul>
     <li>

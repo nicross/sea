@@ -1,5 +1,9 @@
 # S.E.A. changelog
 
+## v1.2.0
+- Miscellaneous
+  - Fixed errors in controls section of manual
+
 ## v1.1.0
 - Upgraded to latest version of syngen
   - Implemented new movement model

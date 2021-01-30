@@ -5,6 +5,17 @@
   - Fixed headings offset by -90 degrees on Status screen
   - Fixed errors in controls section of manual
 
+<details>
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Improved treasure hints
+      <ul>
+        <li>Improved opacity easing</li>
+      </ul>
+    <li>
+  </ul>
+</details>
+
 ## v1.1.0
 - Upgraded to latest version of syngen
   - Implemented new movement model

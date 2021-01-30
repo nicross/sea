@@ -48,7 +48,7 @@ app.screen.game.canvas.hud.treasure = (() => {
       x = engine.utility.clamp(vector.x, margin, width - margin),
       y = engine.utility.clamp(vector.y, margin, height - margin)
 
-    const alpha = distanceRatio ** 2,
+    const alpha = distanceRatio,
       angle = Math.atan2(y - height/2, x - width/2),
       maxAngle = angle + arrowAngle/2,
       minAngle = angle - arrowAngle/2
@@ -71,7 +71,7 @@ app.screen.game.canvas.hud.treasure = (() => {
   }) {
     const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0)
 
-    const alpha = distanceRatio ** 2,
+    const alpha = distanceRatio,
       radius = engine.utility.lerpExp(treasureRadius / 4, treasureRadius, distanceRatio, 6)
 
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`

@@ -8,10 +8,11 @@
 <details>
   <summary>Spoiler Warning</summary>
   <ul>
-    <li>Improved treasure hints
+    <li>Improved HUD
       <ul>
         <li>Fixed glitch affecting compass lines</li>
-        <li>Improved opacity easing</li>
+        <li>Improved compass anti-aliasing</li>
+        <li>Improved treasure hint opacity easing</li>
       </ul>
     <li>
   </ul>

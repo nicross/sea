@@ -44,12 +44,17 @@ app.screen.game.canvas.hud.compass = (() => {
     y,
   }) {
     const height = rem
-    const halfHeight = height / 2
+    let halfHeight = height / 2
 
     y += rem / 2
 
     context.lineWidth = 1
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
+
+    // Avoid anti-aliasing
+    x = Math.round(x) + 0.5
+    y = Math.round(y) + 0.5
+    halfHeight = Math.round(halfHeight)
 
     context.beginPath()
     context.moveTo(x, y - halfHeight)

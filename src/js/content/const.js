@@ -1,8 +1,3 @@
-engine.const.distancePower = 1.25
-engine.const.positionRadius = 0.5
-engine.prop.base.fadeInDuration = 1/16
-engine.prop.base.fadeOutDuration = 1/16
-
 content.const = {
   airRotationalDeceleration: 0,
   airAngularDeceleration: 1,
@@ -29,7 +24,12 @@ content.const = {
   waveHeight: 8,
 }
 
-engine.streamer.setLimit(30).setRadius(50).setSort((a, b) => {
+engine.const.distancePower = 1.25
+engine.const.positionRadius = 0.5
+engine.prop.base.fadeInDuration = 1/16
+engine.prop.base.fadeOutDuration = 1/16
+
+engine.streamer.setSort((a, b) => {
   if (content.prop.treasure.isPrototypeOf(a)) {
     return -1
   }

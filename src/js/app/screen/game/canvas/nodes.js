@@ -1,9 +1,8 @@
 app.screen.game.canvas.nodes = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    drawDistance = 500,
     main = app.screen.game.canvas,
-    nodeHue = engine.utility.perlin4d.create('exploreation', 'node', 'hue'),
+    nodeHue = engine.utility.perlin4d.create('exploration', 'node', 'hue'),
     nodeHueRotateSpeed = 1 / 120
 
   let nodeRadius
@@ -25,7 +24,8 @@ app.screen.game.canvas.nodes = (() => {
   }
 
   function drawNodes() {
-    const height = main.height(),
+    const drawDistance = app.settings.computed.drawDistance,
+      height = main.height(),
       hfov = main.hfov(),
       position = syngen.position.getVector(),
       vfov = main.vfov(),

@@ -11,6 +11,37 @@
     <main class="a-app">
       <canvas class="a-app--overlaySupport"></canvas>
 
+      <div class="a-app--screen a-app--audio">
+        <section class="c-screen a-audio" aria-label="Audio">
+          <h1 class="c-screen--title">Audio</h1>
+          <div class="c-screen--fields">
+            <div class="c-screen--field">
+              <label class="c-screen--label" for="a-audio--mainVolumeInput">Main Volume</label>
+              <div class="c-slider a-audio--mainVolume">
+                <div class="c-slider--input">
+                  <input id="a-audio--mainVolumeInput" max="10" min="0" step="1" type="range" />
+                </div>
+                <div class="c-slider--value"></div>
+              </div>
+            </div>
+            <div class="c-screen--field">
+              <label class="c-screen--label" for="a-audio--musicVolumeInput">Music Volume</label>
+              <div class="c-slider a-audio--musicVolume">
+                <div class="c-slider--input">
+                  <input id="a-audio--musicVolumeInput" max="10" min="0" step="1" type="range" />
+                </div>
+                <div class="c-slider--value"></div>
+              </div>
+            </div>
+          </div>
+          <ul class="c-screen--actions">
+            <li class="c-screen--action">
+              <button class="c-menuButton a-audio--back" type="button">Back</button>
+            </li>
+          </ul>
+        </section>
+      </div>
+
       <div class="a-app--screen a-app--controls">
         <section class="c-screen a-controls" aria-label="Controls">
           <h1 class="c-screen--title">Controls</h1>
@@ -227,43 +258,12 @@
         </section>
       </div>
 
-      <div class="a-app--screen a-app--mixer">
-        <section class="c-screen a-mixer" aria-label="Audio Mixer">
-          <h1 class="c-screen--title">Audio Mixer</h1>
-          <div class="c-screen--fields">
-            <div class="c-screen--field">
-              <label class="c-screen--label" for="a-mixer--mainVolumeInput">Main Volume</label>
-              <div class="c-slider a-mixer--mainVolume">
-                <div class="c-slider--input">
-                  <input id="a-mixer--mainVolumeInput" max="10" min="0" step="1" type="range" />
-                </div>
-                <div class="c-slider--value"></div>
-              </div>
-            </div>
-            <div class="c-screen--field">
-              <label class="c-screen--label" for="a-mixer--musicVolumeInput">Music Volume</label>
-              <div class="c-slider a-mixer--musicVolume">
-                <div class="c-slider--input">
-                  <input id="a-mixer--musicVolumeInput" max="10" min="0" step="1" type="range" />
-                </div>
-                <div class="c-slider--value"></div>
-              </div>
-            </div>
-          </div>
-          <ul class="c-screen--actions">
-            <li class="c-screen--action">
-              <button class="c-menuButton a-mixer--back" type="button">Back</button>
-            </li>
-          </ul>
-        </section>
-      </div>
-
       <div class="a-app--screen a-app--settings">
         <section class="c-screen a-settings" aria-label="Settings">
           <h1 class="c-screen--title">Settings</h1>
           <ul class="c-screen--actions">
             <li class="c-screen--action">
-              <button class="c-menuButton a-settings--mixer" type="button">Audio Mixer</button>
+              <button class="c-menuButton a-settings--audio" type="button">Audio</button>
             </li>
             <li class="c-screen--action">
               <button class="c-menuButton a-settings--controls" type="button">Controls</button>

@@ -1,15 +1,15 @@
-app.screen.mixer = (() => {
+app.screen.audio = (() => {
   const sliders = []
 
   let root
 
   engine.ready(() => {
-    root = document.querySelector('.a-mixer')
+    root = document.querySelector('.a-audio')
 
-    app.state.screen.on('enter-mixer', onEnter)
-    app.state.screen.on('exit-mixer', onExit)
+    app.state.screen.on('enter-audio', onEnter)
+    app.state.screen.on('exit-audio', onExit)
 
-    root.querySelector('.a-mixer--back').addEventListener('click', onBackClick)
+    root.querySelector('.a-audio--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
 
@@ -58,8 +58,8 @@ app.screen.mixer = (() => {
 
   function hydrateSliders() {
     [
-      ['.a-mixer--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
-      ['.a-mixer--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
+      ['.a-audio--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
+      ['.a-audio--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValueAsFloat()))

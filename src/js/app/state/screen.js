@@ -1,6 +1,11 @@
 app.state.screen = engine.utility.machine.create({
   state: 'none',
   transition: {
+    audio: {
+      back: function () {
+        this.change('settings')
+      },
+    },
     controls: {
       back: function () {
         this.change('settings')
@@ -110,17 +115,15 @@ app.state.screen = engine.utility.machine.create({
         this.change('stats')
       },
     },
-    mixer: {
-      back: function () {
-        this.change('settings')
-      },
-    },
     none: {
       activate: function () {
         this.change('splash')
       },
     },
     settings: {
+      audio: function () {
+        this.change('audio')
+      },
       back: function () {
         this.change('misc')
       },
@@ -132,9 +135,6 @@ app.state.screen = engine.utility.machine.create({
       },
       graphics: function () {
         this.change('graphics')
-      },
-      mixer: function () {
-        this.change('mixer')
       },
     },
     stats: {
@@ -183,6 +183,7 @@ app.state.screen.on('exit', (e) => {
 
 app.state.screen.on('enter', (e) => {
   const selectors = {
+    audio: '.a-app--audio',
     controls: '.a-app--controls',
     fastTravel: '.a-app--fastTravel',
     gallery: '.a-app--gallery',
@@ -192,7 +193,6 @@ app.state.screen.on('enter', (e) => {
     graphics: '.a-app--graphics',
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
-    mixer: '.a-app--mixer',
     settings: '.a-app--settings',
     splash: '.a-app--splash',
     stats: '.a-app--stats',

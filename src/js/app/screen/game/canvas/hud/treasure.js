@@ -21,35 +21,40 @@ app.screen.game.canvas.hud.treasure = (() => {
       margin = app.utility.css.rem(4)
 
     const treasures = engine.streamer.getStreamedProps().filter((prop) => {
-      return content.prop.treasure.isPrototypeOf(prop)
+      return content.prop.treasure.isPrototypeOf(prop) && !prop.isCollected
     })
 
     for (const treasure of treasures) {
       const vector = main.toScreenFromRelative(treasure.relative)
       vector.z = treasure.distance
 
+      const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0)
+      let alpha = distanceRatio
+
+      if (vector.z < 1/2) {
+        alpha *= (vector.z * 2) ** 0.5
+      }
+
       if (isOnscreen(vector)) {
-        drawOnscreen({canvas, context, drawDistance, vector})
+        drawOnscreen({alpha, canvas, context, distanceRatio, vector})
       } else {
-        drawOffscreen({canvas, context, drawDistance, margin, vector})
+        drawOffscreen({alpha, canvas, context, margin, vector})
       }
     }
   }
 
   function drawOffscreen({
+    alpha,
     context,
-    drawDistance,
     margin,
     vector,
   }) {
-    const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0),
-      height = main.height(),
+    const height = main.height(),
       width = main.width(),
       x = engine.utility.clamp(vector.x, margin, width - margin),
       y = engine.utility.clamp(vector.y, margin, height - margin)
 
-    const alpha = distanceRatio,
-      angle = Math.atan2(y - height/2, x - width/2),
+    const angle = Math.atan2(y - height/2, x - width/2),
       maxAngle = angle + arrowAngle/2,
       minAngle = angle - arrowAngle/2
 
@@ -65,14 +70,12 @@ app.screen.game.canvas.hud.treasure = (() => {
   }
 
   function drawOnscreen({
+    alpha,
     context,
-    drawDistance,
+    distanceRatio,
     vector,
   }) {
-    const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0)
-
-    const alpha = distanceRatio,
-      radius = engine.utility.lerpExp(treasureRadius / 4, treasureRadius, distanceRatio, 6)
+    const radius = engine.utility.lerpExp(treasureRadius / 4, treasureRadius, distanceRatio, 6)
 
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
     context.lineWidth = engine.utility.lerpExp(1, lineWidth, distanceRatio, 2)

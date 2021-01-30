@@ -1,6 +1,12 @@
 # S.E.A. changelog
 
 ## v1.2.0
+- Added access hotkeys while in-game
+  - Documented access hotkeys in manual
+  - Press <kbd>Alt</kbd>+<kbd>1</kbd> or <kbd>C</kbd> to access current coordinates
+  - Press <kbd>Alt</kbd>+<kbd>2</kbd> or <kbd>H</kbd> to access current heading
+  - Press <kbd>Alt</kbd>+<kbd>X</kbd> to access x-coordinate (East-West)
+  - Press <kbd>Alt</kbd>+<kbd>Y</kbd> to access y-coordinate (North-South)
 - Added performance settings
   - Added Draw Distance slider to Graphics screen
   - Added Enable Reverb toggle to Audio screen
@@ -15,13 +21,18 @@
 <details>
   <summary>Spoiler Warning</summary>
   <ul>
+    <li>Added hidden access hotkeys while in-game
+      <ul>
+        <li>Press <kbd>Alt</kbd>+<kbd>3</kbd> or <kbd>Z</kbd> to access current depth</li>
+      </ul>
+    </li>
     <li>Improved HUD
       <ul>
         <li>Fixed glitch affecting compass lines</li>
         <li>Improved compass anti-aliasing</li>
         <li>Improved treasure hint opacity easing</li>
       </ul>
-    <li>
+    </li>
   </ul>
 </details>
 

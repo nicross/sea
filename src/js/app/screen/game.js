@@ -15,11 +15,19 @@ app.screen.game = (() => {
   })
 
   function handleControls({paused}) {
-    const game = app.controls.game(),
+    const access = app.controls.access(),
+      game = app.controls.game(),
       ui = app.controls.ui()
 
     if (ui.backspace || ui.escape || ui.select || ui.start) {
       app.state.screen.dispatch('pause')
+    }
+
+    if (access) {
+      if (!paused) {
+        content.system.movement.update()
+      }
+      return app.access.handle(access)
     }
 
     if (paused) {

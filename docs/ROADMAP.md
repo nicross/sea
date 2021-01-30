@@ -2,12 +2,7 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.0
-- Access hotkeys for Status screen (Alt + first letter, rendered to aria-live region)
 - Light gradient that fades to black on depth
-- Performance settings
-  - Max object distance
-  - Max object limit
-  - Reverb toggle
 
 ## v1.3.0
 - Aquatic life (dolphins, gulls, whales, schools of fish)

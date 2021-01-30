@@ -337,8 +337,6 @@ content.system.movement = (() => {
   }
 
   function updateThrusters(controls) {
-    controls = {...controls}
-
     if (!medium.is('underwater')) {
       controls.x = 0
       controls.z = 0
@@ -432,10 +430,18 @@ content.system.movement = (() => {
       return this
     },
     update: function (controls = {}) {
-      setTurbo(Boolean(controls.turbo))
-      updateThrusters(controls)
+      controls = {
+        turbo: false,
+        x: 0,
+        y: 0,
+        z: 0,
+        ...controls,
+      }
 
-      mediumHandlers[medium.state](controls)
+      setTurbo(Boolean(controls.turbo))
+      updateThrusters({...controls})
+
+      mediumHandlers[medium.state]({...controls})
 
       return this
     },

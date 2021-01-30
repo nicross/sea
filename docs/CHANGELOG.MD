@@ -1,6 +1,12 @@
 # S.E.A. changelog
 
 ## v1.2.0
+- Added performance settings
+  - Added Draw Distance slider to Graphics screen
+  - Added Enable Reverb toggle to Audio screen
+  - Added Object Limit slider to Audio screen
+  - Added Render Distance slider to Audio screen
+  - Set defaults to match maximum quality values from previous versions
 - Miscellaneous
   - Changed default Field of View to 60 degrees (from 90)
   - Fixed errors in controls section of manual

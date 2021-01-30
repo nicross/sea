@@ -79,6 +79,7 @@ app.screen.graphics = (() => {
 
   function hydrateSliders() {
     [
+      ['.a-graphics--drawDistance', app.settings.raw.drawDistance, app.settings.setDrawDistance],
       ['.a-graphics--fov', app.settings.raw.graphicsFov, app.settings.setGraphicsFov],
       ['.a-graphics--hudOpacity', app.settings.raw.graphicsHudOpacity, app.settings.setGraphicsHudOpacity],
       ['.a-graphics--motionBlur', app.settings.raw.graphicsMotionBlur, app.settings.setGraphicsMotionBlur],

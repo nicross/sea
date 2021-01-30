@@ -14,6 +14,7 @@ app.screen.audio = (() => {
     app.utility.focus.trap(root)
 
     hydrateSliders()
+    hydrateToggles()
   })
 
   function handleControls() {
@@ -60,10 +61,21 @@ app.screen.audio = (() => {
     [
       ['.a-audio--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
       ['.a-audio--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
+      ['.a-audio--streamerLimit', app.settings.raw.streamerLimit, app.settings.setStreamerLimit],
+      ['.a-audio--streamerRadius', app.settings.raw.streamerRadius, app.settings.setStreamerRadius],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValueAsFloat()))
       sliders.push(component)
+    })
+  }
+
+  function hydrateToggles() {
+    [
+      ['.a-audio--reverbOn', app.settings.raw.reverbOn, app.settings.setReverbOn],
+    ].forEach(([selector, initialValue, setter]) => {
+      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
+      component.on('change', () => setter(component.getValue()))
     })
   }
 

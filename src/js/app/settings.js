@@ -2,7 +2,7 @@ app.settings = (() => {
   const settings = {
     drawDistance: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
-      default: engine.utility.scale(500, 100, 1000, 0, 1),
+      default: engine.utility.scale(500, 50, 1000, 0, 1),
     },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
@@ -47,15 +47,15 @@ app.settings = (() => {
       },
     },
     streamerLimit: {
-      compute: (rawValue) => Math.round(engine.utility.lerp(10, 30, rawValue)),
+      compute: (rawValue) => Math.round(engine.utility.lerp(5, 30, rawValue)),
       default: 1,
       update: (computedValue) => {
         engine.streamer.setLimit(computedValue)
       },
     },
     streamerRadius: {
-      compute: (rawValue) => Math.round(engine.utility.lerp(25, 100, rawValue)),
-      default: 1/3,
+      compute: (rawValue) => Math.round(engine.utility.lerp(10, 100, rawValue)),
+      default: 1,
       update: (computedValue) => {
         engine.streamer.setRadius(computedValue)
       },

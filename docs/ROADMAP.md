@@ -18,8 +18,12 @@ This document outlines upcoming changes for post-jam releases.
 - Procedural skybox with sun, moon, and stars
 - Surface heightmap
 
+## Music
+- Add more triads to underwater soundtrack
+- Add oscillator types/colors with a moving 4D noise field
+
 ### Plot
-- Crashed spaceship to explore
+- Crashed spaceships to explore
   - Ovoid or disc, kilometers in scale
   - Carves out a tunnel
 - Data logs?

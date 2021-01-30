@@ -2,8 +2,8 @@
 
 ## v1.2.0
 - Miscellaneous
-  - Fixed headings offset by -90 degrees on Status screen
   - Fixed errors in controls section of manual
+  - Fixed headings offset by -90 degrees on Status screen
 
 <details>
   <summary>Spoiler Warning</summary>

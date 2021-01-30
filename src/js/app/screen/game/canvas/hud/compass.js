@@ -8,12 +8,14 @@ app.screen.game.canvas.hud.compass = (() => {
 
   function draw({canvas, context}) {
     const {yaw} = engine.position.getEuler()
+    const {z} = engine.position.getVector()
 
     const fov = app.settings.computed.graphicsFov,
       halfFov = fov / 2,
       maxAngle = yaw + halfFov,
       minAngle = yaw - halfFov,
       points = tree.retrieve(minAngle, fov),
+      protection = engine.utility.clamp(engine.utility.scale(z, 0, content.const.lightZone, 0.125, 1)),
       rem = app.utility.css.rem(),
       width = canvas.width,
       y = rem
@@ -29,6 +31,7 @@ app.screen.game.canvas.hud.compass = (() => {
         alpha,
         context,
         point,
+        protection,
         rem,
         x,
         y,
@@ -86,6 +89,7 @@ app.screen.game.canvas.hud.compass = (() => {
     alpha,
     context,
     point,
+    protection,
     rem,
     x,
     y,
@@ -93,7 +97,7 @@ app.screen.game.canvas.hud.compass = (() => {
     const height = 2 * rem
     const halfHeight = height / 2
 
-    context.fillStyle = `rgba(0, 0, 0, ${alpha})`
+    context.fillStyle = `rgba(0, 0, 0, ${alpha * protection})`
     context.font = `${height}px/${height}px SuperSubmarine`
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
     context.textAlign = 'center'
@@ -106,6 +110,7 @@ app.screen.game.canvas.hud.compass = (() => {
     alpha,
     context,
     point,
+    protection,
     rem,
     x,
     y,
@@ -115,7 +120,7 @@ app.screen.game.canvas.hud.compass = (() => {
 
     context.fillStyle = `rgba(255, 255, 255, ${alpha})`
     context.font = `${height}px/${height}px SuperSubmarine`
-    context.strokeStyle = `rgba(0, 0, 0, ${alpha})`
+    context.strokeStyle = `rgba(0, 0, 0, ${alpha * protection})`
     context.textAlign = 'center'
 
     context.strokeText(point.label, x, y + halfHeight)
@@ -126,6 +131,7 @@ app.screen.game.canvas.hud.compass = (() => {
     alpha,
     context,
     point,
+    protection,
     rem,
     x,
     y,
@@ -135,7 +141,7 @@ app.screen.game.canvas.hud.compass = (() => {
 
     y += rem / 6
 
-    context.fillStyle = `rgba(0, 0, 0, ${alpha})`
+    context.fillStyle = `rgba(0, 0, 0, ${alpha * protection})`
     context.font = `${height}px/${height}px SuperSubmarine`
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
     context.textAlign = 'center'

@@ -14,7 +14,7 @@ app.screen.game.canvas.hud.depth = (() => {
       x = canvas.width - rem,
       y = canvas.height - rem
 
-    context.fillStyle = `rgba(0, 0, 0, ${alpha})`
+    context.fillStyle = `rgba(0, 0, 0, ${alpha ** 2})`
     context.font = `${2 * rem}px SuperSubmarine`
     context.strokeStyle = `rgba(255, 255, 255, ${alpha})`
     context.textAlign = 'end'

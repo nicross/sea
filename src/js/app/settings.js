@@ -2,7 +2,7 @@ app.settings = (() => {
   const settings = {
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
-      default: 0.5,
+      default: 0,
     },
     graphicsHudOpacity: {
       default: 1,

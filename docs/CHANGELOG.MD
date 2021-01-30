@@ -2,6 +2,7 @@
 
 ## v1.2.0
 - Miscellaneous
+  - Changed default Field of View to 60 degrees (from 90)
   - Fixed errors in controls section of manual
   - Fixed headings offset by -90 degrees on Status screen
 

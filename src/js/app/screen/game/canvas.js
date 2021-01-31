@@ -46,6 +46,7 @@ app.screen.game.canvas = (() => {
     // Drawing order is back-to-front
     clear()
     app.screen.game.canvas.nodes.draw()
+    app.screen.game.canvas.light.draw()
     app.screen.game.canvas.hud.draw()
   }
 

@@ -2,7 +2,7 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.0
-- Light gradient that fades to black on depth
+- Surface heightmap
 
 ## v1.3.0
 - Aquatic life (dolphins, gulls, whales, schools of fish)
@@ -11,7 +11,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Wishlist
 ### Graphics
 - Procedural skybox with sun, moon, and stars
-- Surface heightmap
 
 ## Music
 - Add more triads to underwater soundtrack

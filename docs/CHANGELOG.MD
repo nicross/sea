@@ -13,6 +13,8 @@
   - Added Object Limit slider to Audio screen
   - Added Render Distance slider to Audio screen
   - Set defaults to match maximum quality values from previous versions
+- Graphical enhancements
+  - Added a calming blue sky
 - Miscellaneous
   - Changed default Field of View to 60 degrees (from 90)
   - Fixed errors in controls section of manual
@@ -26,9 +28,14 @@
         <li>Press <kbd>Alt</kbd>+<kbd>3</kbd> or <kbd>Z</kbd> to access current depth</li>
       </ul>
     </li>
+    <li>Graphical enhancements
+      <ul>
+        <li>Added underwater light zones</li>
+      </ul>
+    </li>
     <li>Improved HUD
       <ul>
-        <li>Fixed glitch affecting compass lines</li>
+        <li>Fixed glitch affecting compass line widths</li>
         <li>Improved compass anti-aliasing</li>
         <li>Improved treasure hint opacity easing</li>
       </ul>

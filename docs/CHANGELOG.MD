@@ -18,7 +18,8 @@
 - Miscellaneous
   - Changed default Field of View to 60 degrees (from 90)
   - Fixed errors in controls section of manual
-  - Fixed headings offset by -90 degrees on Status screen
+  - Fixed compass headings offset by -90 degrees on Status screen
+  - Moved Resume Game after Miscellaneous within in-game menu
 
 <details>
   <summary>Spoiler Warning</summary>

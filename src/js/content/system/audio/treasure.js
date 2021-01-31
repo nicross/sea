@@ -8,11 +8,26 @@ content.system.audio.treasure = (() => {
     props = new Set()
 
   let count = 0,
+    filter,
     lfo,
     synth,
     timer
 
   output.gain.value = gain
+
+  function createLfo() {
+    filter = context.createBiquadFilter()
+    filter.frequency.value = f1 * 6
+
+    synth.disconnect(output)
+    synth.connect(filter)
+    filter.connect(output)
+
+    lfo = engine.audio.synth.createLfo({
+      depth: f1 * 3,
+      frequency: 4,
+    }).connect(filter.frequency)
+  }
 
   function createSynth() {
     synth = engine.audio.synth.createFm({
@@ -20,17 +35,18 @@ content.system.audio.treasure = (() => {
       modDepth: f2 / 2,
       modFrequency: f1 * 8.13,
       modType: 'triangle',
-    }).filtered({
-      frequency: f1 * 6,
     }).connect(output)
-
-    lfo = engine.audio.synth.createLfo({
-      depth: f1 * 3,
-      frequency: 4,
-    }).connect(synth.filter.frequency)
   }
 
   function pulse() {
+    if (!synth) {
+      createSynth()
+    }
+
+    if (!lfo) {
+      createLfo()
+    }
+
     const d1 = engine.utility.random.float(-12.5, 12.5),
       d2 = engine.utility.random.float(-12.5, 12.5)
 
@@ -91,12 +107,15 @@ content.system.audio.treasure = (() => {
 
   function start() {
     count = 1
-
-    createSynth()
     pulse()
   }
 
   function stop() {
+    if (filter) {
+      filter.disconnect()
+      filter = null
+    }
+
     if (lfo) {
       lfo.stop()
       lfo = null
@@ -114,6 +133,17 @@ content.system.audio.treasure = (() => {
     }
   }
 
+  function teardownLfo() {
+    synth.disconnect(filter)
+    synth.connect(output)
+
+    filter.disconnect()
+    filter = null
+
+    lfo.stop()
+    lfo = null
+  }
+
   return {
     add: function (prop) {
       if (!props.size) {
@@ -128,15 +158,6 @@ content.system.audio.treasure = (() => {
       engine.audio.ramp.exponential(output.gain, gain/32, 1/2)
       return this
     },
-    unduck: function () {
-      const duration = content.const.scanCooldown/1000,
-        now = engine.audio.time()
-
-      output.gain.setValueAtTime(gain/32, now + duration/2)
-      output.gain.exponentialRampToValueAtTime(gain, now + duration)
-
-      return this
-    },
     getFrequency: () => f1,
     output: () => output,
     remove: function (prop) {
@@ -148,9 +169,25 @@ content.system.audio.treasure = (() => {
 
       return this
     },
+    rebuildFilters: function () {
+      if (synth && lfo) {
+        teardownLfo()
+      }
+
+      return this
+    },
     reset: function () {
       stop()
       props.clear()
+      return this
+    },
+    unduck: function () {
+      const duration = content.const.scanCooldown/1000,
+        now = engine.audio.time()
+
+      output.gain.setValueAtTime(gain/32, now + duration/2)
+      output.gain.exponentialRampToValueAtTime(gain, now + duration)
+
       return this
     },
   }

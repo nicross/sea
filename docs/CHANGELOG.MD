@@ -40,6 +40,11 @@
         <li>Improved treasure hint opacity easing</li>
       </ul>
     </li>
+    <li>Miscellaneous
+      <ul>
+        <li>Tentative fix for audio drops caused by unstable BiquadFilterNodes in treasure audio cues</li>
+      </ul>
+    </li>
   </ul>
 </details>
 

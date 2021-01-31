@@ -8,6 +8,8 @@ app.crashFixer = (() => {
   const analyzerTimeData = new Uint8Array(analyzer.frequencyBinCount)
 
   function fixFilters() {
+    content.system.audio.treasure.rebuildFilters()
+
     engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
         prop.troubleshoot()
@@ -22,6 +24,10 @@ app.crashFixer = (() => {
   }
 
   return {
+    test: function () {
+      fixFilters()
+      return this
+    },
     update: function () {
       analyzer.getByteTimeDomainData(analyzerTimeData)
 

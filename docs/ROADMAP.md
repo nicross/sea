@@ -8,6 +8,10 @@ This document outlines upcoming changes for post-jam releases.
 - Aquatic life (dolphins, gulls, whales, schools of fish)
 - New game sound (jet flying away)
 
+## Known issues
+- Improve collision detection to prevent getting stuck in terrain
+- Improve mouse look, perhaps independent from craft physics
+
 ## Wishlist
 ### Graphics
 - Procedural skybox with sun, moon, and stars

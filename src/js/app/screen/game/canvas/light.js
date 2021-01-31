@@ -15,11 +15,19 @@ app.screen.game.canvas.light = (() => {
   }
 
   function getGradient() {
-    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
     const {z} = engine.position.getVector()
 
-    gradient.addColorStop(0, calculateTopColor(z))
-    gradient.addColorStop(1, calculateBottomColor(z))
+    const stop0 = calculateTopColor(z),
+      stop1 = calculateBottomColor(z)
+
+    if (stop0 == stop1) {
+      return false
+    }
+
+    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
+
+    gradient.addColorStop(0, stop0)
+    gradient.addColorStop(1, stop1)
 
     return gradient
   }
@@ -69,12 +77,15 @@ app.screen.game.canvas.light = (() => {
     draw: function () {
       const gradient = getGradient()
 
-      clear()
-      context.fillStyle = gradient
-      context.fillRect(0, 0, canvas.width, canvas.height)
+      if (gradient) {
+        clear()
 
-      // Draw to main canvas
-      main.context().drawImage(canvas, 0, 0, main.width(), main.height())
+        context.fillStyle = gradient
+        context.fillRect(0, 0, canvas.width, canvas.height)
+
+        // Draw to main canvas
+        main.context().drawImage(canvas, 0, 0, main.width(), main.height())
+      }
 
       return this
     },

@@ -3,6 +3,13 @@ app.screen.game.canvas.light = (() => {
     context = canvas.getContext('2d'),
     main = app.screen.game.canvas
 
+  const zones = {
+    surface: 0,
+    sunlit: content.const.lightZone * 0.1,
+    twilight: content.const.lightZone * 0.8,
+    midnight: content.const.lightZone,
+  }
+
   main.on('resize', () => {
     canvas.height = main.height()
     canvas.width = 1
@@ -10,77 +17,77 @@ app.screen.game.canvas.light = (() => {
     clear()
   })
 
+  function calculateOpacity() {
+    const {z} = engine.position.getVector()
+
+    if (z > zones.twilight) {
+      return 1
+    }
+
+    if (z < zones.midnight) {
+      return 0
+    }
+
+    return engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0) ** 0.5
+  }
+
   function clear() {
     context.clearRect(0, 0, canvas.width, canvas.height)
   }
 
   function getGradient() {
+    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
     const {z} = engine.position.getVector()
 
-    const stop0 = calculateTopColor(z),
-      stop1 = calculateBottomColor(z)
-
-    if (stop0 == stop1) {
-      return false
-    }
-
-    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
-
-    gradient.addColorStop(0, stop0)
-    gradient.addColorStop(1, stop1)
+    gradient.addColorStop(0, getGradientColorTop(z))
+    gradient.addColorStop(1, getGradientColorBottom(z))
 
     return gradient
   }
 
-  function calculateBottomColor(z) {
-    const pov = engine.utility.vector3d.create({x: 1})
+  function getGradientColorBottom(z) {
+    const pov = engine.utility.vector3d.unitX()
       .scale(app.settings.computed.drawDistance)
       .rotateEuler({pitch: main.vfov() / 2})
       .add({z})
 
-    return toColor(pov.z)
+    return toGradientColor(pov.z)
   }
 
-  function calculateTopColor(z) {
-    const pov = engine.utility.vector3d.create({x: 1})
+  function getGradientColorTop(z) {
+    const pov = engine.utility.vector3d.unitX()
       .scale(app.settings.computed.drawDistance)
       .rotateEuler({pitch: -main.vfov() / 2})
       .add({z})
 
-    return toColor(pov.z)
+    return toGradientColor(pov.z)
   }
 
-  function toColor(z) {
-    if (z >= 0) {
-      return 'hsla(240, 100%, 88%, 1)'
+  function toGradientColor(z) {
+    if (z >= zones.surface) {
+      return 'hsla(240, 100%, 88%)'
     }
 
-    if (z <= content.const.lightZone) {
-      return 'hsla(240, 100%, 9%, 0)'
+    if (z <= zones.midnight) {
+      return 'hsla(240, 100%, 9%)'
     }
 
-    const stop1 = content.const.lightZone * 0.1,
-      stop2 = content.const.lightZone * 0.8
+    const l = z > zones.sunlit
+      ? engine.utility.scale(z, 0, zones.sunlit, 88, 75)
+      : engine.utility.scale(Math.max(z, zones.twilight), zones.sunlit, zones.twilight, 75, 9)
 
-    const l = z > stop1
-      ? engine.utility.scale(z, 0, stop1, 88, 75)
-      : engine.utility.scale(Math.max(z, stop2), stop1, stop2, 75, 9)
-
-    const a = z > stop2
-      ? 1
-      : engine.utility.scale(z, stop2, content.const.lightZone, 1, 0) ** 0.5
-
-    return `hsla(240, 100%, ${l}%, ${a})`
+    return `hsla(240, 100%, ${l}%)`
   }
 
   return {
     draw: function () {
-      const gradient = getGradient()
+      const opacity = calculateOpacity()
 
-      if (gradient) {
-        clear()
+      clear()
 
-        context.fillStyle = gradient
+      if (opacity) {
+        context.globalAlpha = opacity
+        context.fillStyle = getGradient()
         context.fillRect(0, 0, canvas.width, canvas.height)
 
         // Draw to main canvas

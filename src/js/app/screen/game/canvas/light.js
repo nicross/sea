@@ -5,8 +5,8 @@ app.screen.game.canvas.light = (() => {
 
   const zones = {
     surface: 0,
-    sunlit: content.const.lightZone * 0.1,
-    twilight: content.const.lightZone * 0.8,
+    sunlit: content.const.lightZone * 0.125,
+    twilight: content.const.lightZone * 0.75,
     midnight: content.const.lightZone,
   }
 
@@ -28,7 +28,7 @@ app.screen.game.canvas.light = (() => {
       return 0
     }
 
-    return engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0) ** 0.5
+    return engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0)
   }
 
   function clear() {
@@ -65,34 +65,36 @@ app.screen.game.canvas.light = (() => {
 
   function toGradientColor(z) {
     if (z >= zones.surface) {
-      return 'hsla(240, 100%, 88%)'
+      return 'hsl(240, 100%, 88%)'
     }
 
-    if (z <= zones.midnight) {
-      return 'hsla(240, 100%, 9%)'
+    if (z <= zones.twilight) {
+      return 'hsl(240, 100%, 9%)'
     }
 
     const l = z > zones.sunlit
-      ? engine.utility.scale(z, 0, zones.sunlit, 88, 75)
-      : engine.utility.scale(Math.max(z, zones.twilight), zones.sunlit, zones.twilight, 75, 9)
+      ? engine.utility.scale(z, zones.surface, zones.sunlit, 88, 75)
+      : engine.utility.scale(z, zones.sunlit, zones.twilight, 75, 9)
 
-    return `hsla(240, 100%, ${l}%)`
+    return `hsl(240, 100%, ${l}%)`
   }
 
   return {
     draw: function () {
       const opacity = calculateOpacity()
 
+      if (!opacity) {
+        return this
+      }
+
       clear()
 
-      if (opacity) {
-        context.globalAlpha = opacity
-        context.fillStyle = getGradient()
-        context.fillRect(0, 0, canvas.width, canvas.height)
+      context.globalAlpha = opacity
+      context.fillStyle = getGradient()
+      context.fillRect(0, 0, canvas.width, canvas.height)
 
-        // Draw to main canvas
-        main.context().drawImage(canvas, 0, 0, main.width(), main.height())
-      }
+      // Draw to main canvas
+      main.context().drawImage(canvas, 0, 0, main.width(), main.height())
 
       return this
     },

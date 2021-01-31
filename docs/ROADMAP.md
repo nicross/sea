@@ -3,7 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.0
 - Advance time when using fast travel
-- Light layer film grain
 - Surface heightmap
 
 ## v1.3.0
@@ -12,7 +11,7 @@ This document outlines upcoming changes for post-jam releases.
 ## Known issues
 - Improve collision detection to prevent getting stuck in terrain
 - Improve mouse look, perhaps independent from craft physics
-- Treasure causes unstable BiquadFilterNode
+- Treasure causes unstable BiquadFilterNode (possibly fixed)
 
 ## Wishlist
 ### Audio

@@ -42,12 +42,13 @@ app.screen.game.canvas = (() => {
     engine.loop.off('frame', onFrame)
   }
 
-  function onFrame() {
+  function onFrame(e) {
     // Drawing order is back-to-front
     clear()
-    app.screen.game.canvas.nodes.draw()
-    app.screen.game.canvas.light.draw()
-    app.screen.game.canvas.hud.draw()
+    app.screen.game.canvas.nodes.draw(e)
+    app.screen.game.canvas.light.draw(e)
+    app.screen.game.canvas.grain.draw(e)
+    app.screen.game.canvas.hud.draw(e)
   }
 
   function onResize() {

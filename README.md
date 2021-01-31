@@ -1,5 +1,6 @@
 # S.E.A.
-An atmospheric audio watercraft simulator submitted to [No Video Jam](https://itch.io/jam/no-video-jam).
+A chill audio watercraft simulator submitted to [No Video Jam](https://itch.io/jam/no-video-jam).
+Developed with [syngen](https://github.com/nicross/syngen).
 
 ## How to Play
 You lie prone in your S.E.A., an experimental military watercraft that's fully enclosed.
@@ -32,9 +33,14 @@ gulp build
 gulp watch
 ```
 
-#### Create distributables
+#### Start web server
 ```sh
-gulp dist
+gulp serve
+```
+
+#### Start web server and build continuously
+```sh
+gulp dev
 ```
 
 #### Open in Electron
@@ -47,14 +53,9 @@ gulp electron
 gulp electron-build
 ```
 
-### Start web server
+#### Create distributables
 ```sh
-gulp serve
-```
-
-### Start web server and build continuously
-```sh
-gulp dev
+gulp dist
 ```
 
 #### Command line flags

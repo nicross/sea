@@ -44,7 +44,7 @@
 </details>
 
 ## v1.1.0
-- Upgraded to latest version of syngen
+- Upgraded to latest version of [syngen](https://github.com/nicross/syngen)
   - Implemented new movement model
   - Some sounds and physics may behave differently
 - Added graphical heads-up-display

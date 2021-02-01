@@ -5,6 +5,7 @@ This document outlines upcoming changes for post-jam releases.
 - Aquatic life (dolphins, gulls, whales, schools of fish)
 
 ## Known issues
+- Acceleration from zero and turning can be slow on the surface
 - Improve collision detection to prevent getting stuck in terrain
 - Improve mouse look, perhaps independent from craft physics
 - Occasional frame drops on surface

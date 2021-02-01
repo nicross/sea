@@ -132,16 +132,16 @@ content.system.audio.engine = (() => {
     } = calculateParams()
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
-      isSurface = content.system.movement.isSurface(),
-      isTurbo = content.system.movement.isTurbo()
+      isTurbo = content.system.movement.isTurbo(),
+      isUnderwater = content.system.movement.isUnderwater()
 
     const amodFrequency = isCatchingAir
       ? 27.5
       : engine.utility.lerp(4, 16, strength)
 
-    const color = isSurface
-      ? (isCatchingAir ? 4 : 3)
-      : (isTurbo ? 1 : 2)
+    const color = isUnderwater
+      ? (isTurbo ? 1 : 2)
+      : (isCatchingAir ? 4 : 2)
 
     const gain = engine.utility.lerpExp(0.5, 1, strength, 0.5)
 

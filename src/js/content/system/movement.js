@@ -181,8 +181,7 @@ content.system.movement = (() => {
   }
 
   function getSurfaceZ() {
-    const {x, y} = engine.position.getVector()
-    return content.system.surface.height(x, y)
+    return content.system.surface.currentHeight()
   }
 
   function handleAir(controls = {}) {
@@ -247,14 +246,13 @@ content.system.movement = (() => {
       return medium.dispatch('dive')
     }
 
-    // Glue to surface if not on it, splash if lateral movement
-    if (z < surfaceZ) {
-      setZ(surfaceZ)
-
-      if (isLateralMovement) {
-        splash(surfaceZ)
-      }
+    // Splash if lateral movement and approaching incline
+    if (z < surfaceZ && isLateralMovement) {
+      splash(surfaceZ)
     }
+
+    // Glue to surface
+    setZ(surfaceZ)
   }
 
   function handleUnderwater() {
@@ -264,7 +262,7 @@ content.system.movement = (() => {
     const {z} = engine.position.getVector()
 
     // Surface when at or above it
-    if (z >= 0) {
+    if (z >= 0 && z >= getSurfaceZ()) {
       return medium.dispatch('surface')
     }
 
@@ -366,7 +364,7 @@ content.system.movement = (() => {
 
   medium.on('before-dive', () => {
     // Just under the surface
-    setZ(-engine.const.zero)
+    setZ(getSurfaceZ() - engine.const.zero)
   })
 
   medium.on('before-jump', () => {
@@ -420,6 +418,7 @@ content.system.movement = (() => {
     isTurbo: () => isTurbo,
     isSurface: () => medium.is('surface'),
     isUnderwater: () => medium.is('underwater'),
+    medium: () => medium.state,
     reset: function () {
       angularThrust = 0
       isTurbo = false

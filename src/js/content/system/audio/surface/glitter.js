@@ -70,15 +70,13 @@ content.system.audio.surface.glitter = (() => {
   function createGrain(z) {
     let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
 
-    const {x, y} = engine.position.getVector()
-
     const isCatchingAir = content.system.movement.isCatchingAir(),
-      surface = content.system.surface.value(x, y)
+      surface = content.system.surface.currentValue()
 
     zBias *= surface ** 0.5
 
     if (isCatchingAir) {
-      const height = content.system.surface.height(x, y)
+      const height = content.system.surface.currentHeight()
       zBias = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, zBias, 1), 0, 1)
     }
 
@@ -113,9 +111,7 @@ content.system.audio.surface.glitter = (() => {
   }
 
   function updateFilter(z) {
-    z = Math.min(0, z)
-
-    const isAbove = z >= 0
+    const isAbove = !content.system.movement.isUnderwater()
 
     if (isAbove && wasAbove) {
       return
@@ -124,7 +120,7 @@ content.system.audio.surface.glitter = (() => {
     if (isAbove) {
       engine.audio.ramp.exponential(filter.frequency, engine.const.maxFrequency, 0.5)
     } else {
-      const zRatio = 1 - (z / content.const.lightZone)
+      const zRatio = engine.utility.scale(z, content.system.surface.currentHeight(), content.const.lightZone, 1, 0)
       const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
       engine.audio.ramp.set(filter.frequency, frequency)
     }
@@ -133,8 +129,7 @@ content.system.audio.surface.glitter = (() => {
   return {
     bus: () => bus,
     import: function () {
-      const {z} = engine.position.getVector()
-      const isAbove = z >= 0
+      const isAbove = !content.system.movement.isUnderwater()
 
       if (isAbove) {
         filter.frequency.value = engine.const.maxFrequency

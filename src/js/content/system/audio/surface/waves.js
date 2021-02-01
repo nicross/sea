@@ -78,9 +78,7 @@ content.system.audio.surface.waves = (() => {
   }
 
   function updateLowpassFilter(z) {
-    z = Math.min(0, z)
-
-    const isAbove = z >= 0
+    const isAbove = !content.system.movement.isUnderwater()
 
     if (isAbove && wasAbove) {
       return
@@ -89,7 +87,7 @@ content.system.audio.surface.waves = (() => {
     if (isAbove) {
       engine.audio.ramp.exponential(lowpassFilter.frequency, engine.const.maxFrequency, 0.5)
     } else {
-      const zRatio = 1 - (z / content.const.lightZone)
+      const zRatio = engine.utility.scale(z, content.system.surface.currentHeight(), content.const.lightZone, 1, 0)
       const frequency = engine.utility.lerpExp(lowpassMinFrequency, lowpassMaxFrequency, zRatio, lowpassDropoffRate)
       engine.audio.ramp.set(lowpassFilter.frequency, frequency)
     }
@@ -98,7 +96,7 @@ content.system.audio.surface.waves = (() => {
   }
 
   function updateSynths(z) {
-    const isSurface = z >= 0
+    const isAbove = !content.system.movement.isUnderwater()
 
     synths.forEach((synth, i) => {
       const angle = engine.position.getEuler().yaw
@@ -111,7 +109,7 @@ content.system.audio.surface.waves = (() => {
 
       const gain = engine.utility.lerpExp(waveMinGain, waveMaxGain, value, waveGainDropoff),
         maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
-        minFrequency = isSurface ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
+        minFrequency = isAbove ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
 
       engine.audio.ramp.set(synth.highpassFilter.frequency, minFrequency)
       engine.audio.ramp.set(synth.lowpassFilter.frequency, maxFrequency)
@@ -122,9 +120,7 @@ content.system.audio.surface.waves = (() => {
   return {
     bus: () => bus,
     import: function ({z}) {
-      const isAbove = z >= 0
-
-      if (isAbove) {
+      if (!content.system.movement.isUnderwater()) {
         lowpassFilter.frequency.value = engine.const.maxFrequency
       }
 

@@ -54,12 +54,10 @@ content.system.audio.surface.smack = (() => {
 
   return {
     import: function () {
-      const {z} = engine.position.getVector()
-
-      if (z >= 0) {
-        this.surface()
-      } else {
+      if (content.system.movement.isUnderwater()) {
         this.underwater()
+      } else {
+        this.surface()
       }
 
       return this

@@ -60,9 +60,7 @@ content.system.audio.surface.wind = (() => {
 
   return {
     update: function () {
-      const {z} = engine.position.getVector()
-
-      if (z < 0) {
+      if (content.system.movement.isUnderwater()) {
         if (synth) {
           destroySynth()
         }

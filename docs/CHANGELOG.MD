@@ -44,6 +44,7 @@
     </li>
     <li>Miscellaneous
       <ul>
+        <li>Improved surface divide and buoyancy</li>
         <li>Tentative fix for audio drops caused by unstable BiquadFilterNodes in treasure audio cues</li>
       </ul>
     </li>

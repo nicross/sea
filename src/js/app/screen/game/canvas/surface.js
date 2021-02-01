@@ -27,7 +27,8 @@ app.screen.game.canvas.surface = (() => {
       hfov = main.hfov(),
       position = syngen.position.getVector(),
       vfov = main.vfov(),
-      width = main.width()
+      width = main.width(),
+      zOffset = engine.const.positionRadius / 2
 
     position.x = Math.round(position.x)
     position.y = Math.round(position.y)
@@ -44,7 +45,7 @@ app.screen.game.canvas.surface = (() => {
           continue
         }
 
-        relative.z = content.system.surface.height(grid.x, grid.y) - position.z
+        relative.z = content.system.surface.height(grid.x, grid.y) - (position.z + zOffset)
 
         const vangle = Math.atan2(relative.z, relative.x)
 

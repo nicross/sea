@@ -1,9 +1,6 @@
 # ROADMAP
 This document outlines upcoming changes for post-jam releases.
 
-## v1.2.0
-- Advance time when using fast travel
-
 ## v1.3.0
 - Aquatic life (dolphins, gulls, whales, schools of fish)
 
@@ -62,6 +59,7 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Simulation
 - Add depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
+- Advance time when using fast travel
 - Light levels influenced by cloud cover, depth, and time of day
 - Surface weather patterns
   - Clouds

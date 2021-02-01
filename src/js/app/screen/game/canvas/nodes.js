@@ -7,6 +7,10 @@ app.screen.game.canvas.nodes = (() => {
 
   let nodeRadius
 
+  engine.state.on('reset', () => {
+    nodeHue.reset()
+  })
+
   main.on('resize', () => {
     const height = main.height(),
       width = main.width()

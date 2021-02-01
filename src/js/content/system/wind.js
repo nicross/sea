@@ -14,4 +14,4 @@ content.system.wind = (() => {
   }
 })()
 
-engine.state.on('reset', () => content.system.surface.reset())
+engine.state.on('reset', () => content.system.wind.reset())

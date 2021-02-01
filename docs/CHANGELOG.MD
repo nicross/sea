@@ -22,6 +22,7 @@
   - Fixed compass headings offset by -90 degrees on Status screen
   - Fixed engine filtering while catching air
   - Fixed errors in controls section of manual
+  - Improved consistency of toggle labels
   - Moved Resume Game after Miscellaneous within in-game menu
 
 <details>

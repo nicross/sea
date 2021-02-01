@@ -57,7 +57,12 @@ content.system.surface = (() => {
       return this
     },
     update: function () {
-      cacheCurrent()
+      const {z} = engine.position.getVector()
+
+      if (z < content.const.lightZone) {
+        cacheCurrent()
+      }
+
       return this
     },
     value: function (x, y) {

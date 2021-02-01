@@ -3,6 +3,7 @@
 ## v1.2.1
 - Performance optimizations
   - Clear all noise fields on game state changes
+  - Only cache surface height when it's nearby
 
 ## v1.2.0
 - Added access hotkeys while in-game

@@ -1,5 +1,7 @@
 # S.E.A. changelog
 
+## v1.2.1
+
 ## v1.2.0
 - Added access hotkeys while in-game
   - Documented access hotkeys in manual

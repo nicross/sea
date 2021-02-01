@@ -15,6 +15,7 @@
   - Set defaults to match maximum quality values from previous versions
 - Graphical enhancements
   - Added a calming blue sky
+  - Added ocean waves
 - Miscellaneous
   - Changed default Field of View to 60 degrees (from 90)
   - Fixed errors in controls section of manual

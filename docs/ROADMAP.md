@@ -3,7 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.0
 - Advance time when using fast travel
-- Surface heightmap
 
 ## v1.3.0
 - Aquatic life (dolphins, gulls, whales, schools of fish)

@@ -208,7 +208,9 @@ content.system.movement = (() => {
 
     // Dive if controls are pressed
     if (controls.z < 0) {
-      return medium.dispatch('land').dispatch('dive')
+      return medium.dispatch('land', {
+        diveImmediately: true,
+      }).dispatch('dive')
     }
 
     // Skip if moving laterally with significant z-velocity
@@ -371,7 +373,11 @@ content.system.movement = (() => {
     setZ(getSurfaceZ())
   })
 
-  medium.on('before-land', () => {
+  medium.on('before-land', (e) => {
+    if (e.diveImmediately) {
+      return
+    }
+
     engine.position.setVelocity({
       ...engine.position.getVelocity(),
       z: 0,

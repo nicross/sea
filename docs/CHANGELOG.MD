@@ -44,6 +44,7 @@
     </li>
     <li>Miscellaneous
       <ul>
+        <li>Fixed diving losing velocity from air</li>
         <li>Improved surface divide and buoyancy</li>
         <li>Tentative fix for audio drops caused by unstable BiquadFilterNodes in treasure audio cues</li>
       </ul>

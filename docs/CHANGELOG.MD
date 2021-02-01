@@ -18,6 +18,7 @@
   - Added ocean waves
 - Miscellaneous
   - Changed default Field of View to 60 degrees (from 90)
+  - Fall from sky when starting a new game
   - Fixed compass headings offset by -90 degrees on Status screen
   - Fixed engine filtering while catching air
   - Fixed errors in controls section of manual

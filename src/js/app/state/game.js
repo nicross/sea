@@ -90,9 +90,9 @@ app.state.game.on('before-none-new', () => {
       angle: Math.PI / 2,
       x: 0,
       y: 0,
+      z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeight / 2),
     },
     seed: Math.random(),
-    z: 0,
   })
 
   app.autosave.trigger()

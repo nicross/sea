@@ -5,26 +5,66 @@ content.system.surface = (() => {
     scaleY = 300, // Nodes are N m apart
     timeScale = 60 // Evolves over N seconds
 
+  let currentHeight,
+    currentValue
+
+  function cacheCurrent() {
+    const position = engine.position.getVector()
+
+    currentValue = getValue(position.x, position.y)
+    currentHeight = toHeight(currentValue)
+  }
+
+  function getValue(x, y) {
+    const time = content.system.time.get(),
+      z = time / timeScale
+
+    x /= scaleX
+    x += time * momentumX / scaleX
+
+    y /= scaleY
+
+    return field.value(x, y, z)
+  }
+
+  function toHeight(value) {
+    return value * content.const.waveHeight
+  }
+
   return {
+    currentHeight: function () {
+      if (!currentHeight) {
+        cacheCurrent()
+      }
+
+      return currentHeight
+    },
+    currentValue: function () {
+      if (!currentValue) {
+        cacheCurrent()
+      }
+
+      return currentValue
+    },
     height: function (x, y) {
-      return this.value(x, y) * content.const.waveHeight
+      const value = this.value(x, y)
+      return toHeight(value)
     },
     reset: function () {
       field.reset()
+      currentHeight = undefined
+      currentValue = undefined
+      return this
+    },
+    update: function () {
+      cacheCurrent()
       return this
     },
     value: function (x, y) {
-      const time = content.system.time.get(),
-        z = time / timeScale
-
-      x /= scaleX
-      x += time * momentumX / scaleX
-
-      y /= scaleY
-
-      return field.value(x, y, z)
+      return getValue(x, y)
     },
   }
 })()
 
+engine.loop.on('frame', () => content.system.surface.update())
 engine.state.on('reset', () => content.system.surface.reset())

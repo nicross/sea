@@ -1,6 +1,8 @@
 # S.E.A. changelog
 
 ## v1.2.2
+- Performance optimizations
+  - Increase throttling of collision sounds
 
 ## v1.2.1
 - Performance optimizations

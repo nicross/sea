@@ -1,6 +1,6 @@
 content.system.audio.underwater.collision = (() => {
   const bus = content.system.audio.createBus(),
-    throttleRate = 1000/60
+    throttleRate = 1000/20
 
   let throttle = 0
 

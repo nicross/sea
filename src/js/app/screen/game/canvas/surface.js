@@ -3,7 +3,8 @@ app.screen.game.canvas.surface = (() => {
     context = canvas.getContext('2d'),
     main = app.screen.game.canvas
 
-  let nodeRadius
+  let drawDistance,
+    nodeRadius
 
   main.on('resize', () => {
     const height = main.height(),
@@ -12,6 +13,7 @@ app.screen.game.canvas.surface = (() => {
     canvas.height = height
     canvas.width = width
 
+    drawDistance = app.settings.computed.drawDistance ** 0.5
     nodeRadius = Math.max(1, (width / 1920) * 3)
 
     clear()
@@ -22,22 +24,12 @@ app.screen.game.canvas.surface = (() => {
   }
 
   function drawNodes() {
-    const drawDistance = app.settings.computed.drawDistance ** 0.5,
-      height = main.height(),
+    const height = main.height(),
       hfov = main.hfov(),
       position = engine.position.getVector(),
-      surfaceHeight = content.system.surface.currentHeight(),
       vfov = main.vfov(),
       width = main.width(),
       zOffset = engine.const.positionRadius / 2
-
-    if (position.z > surfaceHeight) {
-      // TODO: Return early if middle bottom is farther than drawDistance (nothing to draw)
-    }
-
-    if (position.z < surfaceHeight) {
-      // TODO: Return early if middle top is farther than drawDistance (nothing to draw)
-    }
 
     position.x = Math.round(position.x)
     position.y = Math.round(position.y)
@@ -84,8 +76,28 @@ app.screen.game.canvas.surface = (() => {
     }
   }
 
+  function shouldDraw() {
+    const {z} = engine.position.getVector()
+
+    if (z < content.const.lightZone) {
+      return false
+    }
+
+    const surface = content.system.surface.currentHeight()
+
+    if (z > surface) {
+      return z - surface < drawDistance
+    }
+
+    return -z + surface < drawDistance
+  }
+
   return {
     draw: function () {
+      if (!shouldDraw()) {
+        return this
+      }
+
       // TODO: Respect motion blur setting
       clear()
       drawNodes()

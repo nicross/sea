@@ -25,15 +25,24 @@ app.screen.game.canvas.surface = (() => {
     const drawDistance = app.settings.computed.drawDistance ** 0.5,
       height = main.height(),
       hfov = main.hfov(),
-      position = syngen.position.getVector(),
+      position = engine.position.getVector(),
+      surfaceHeight = content.system.surface.currentHeight(),
       vfov = main.vfov(),
       width = main.width(),
       zOffset = engine.const.positionRadius / 2
 
+    if (position.z > surfaceHeight) {
+      // TODO: Return early if middle bottom is farther than drawDistance (nothing to draw)
+    }
+
+    if (position.z < surfaceHeight) {
+      // TODO: Return early if middle top is farther than drawDistance (nothing to draw)
+    }
+
     position.x = Math.round(position.x)
     position.y = Math.round(position.y)
 
-    // TODO: Optimize
+    // TODO: Optimize as rectangle ahead
     for (let x = -drawDistance; x < drawDistance; x += 1) {
       for (let y = -drawDistance; y < drawDistance; y += 1) {
         const grid = position.add({x, y}),

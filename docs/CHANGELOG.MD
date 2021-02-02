@@ -4,6 +4,7 @@
 - Performance optimizations
   - Clear all noise fields on game state changes
   - Only cache surface height when it's nearby
+  - Only draw surface when it's visible
 
 ## v1.2.0
 - Added access hotkeys while in-game

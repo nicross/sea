@@ -33,14 +33,14 @@ content.system.surface = (() => {
 
   return {
     currentHeight: function () {
-      if (!currentHeight) {
+      if (!currentHeight === undefined) {
         cacheCurrent()
       }
 
       return currentHeight
     },
     currentValue: function () {
-      if (!currentValue) {
+      if (!currentValue === undefined) {
         cacheCurrent()
       }
 
@@ -59,7 +59,7 @@ content.system.surface = (() => {
     update: function () {
       const {z} = engine.position.getVector()
 
-      if (z < content.const.lightZone) {
+      if (z > content.const.lightZone) {
         cacheCurrent()
       }
 

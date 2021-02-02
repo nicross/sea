@@ -33,14 +33,14 @@ content.system.surface = (() => {
 
   return {
     currentHeight: function () {
-      if (!currentHeight === undefined) {
+      if (currentHeight === undefined) {
         cacheCurrent()
       }
 
       return currentHeight
     },
     currentValue: function () {
-      if (!currentValue === undefined) {
+      if (currentValue === undefined) {
         cacheCurrent()
       }
 
@@ -49,6 +49,10 @@ content.system.surface = (() => {
     height: function (x, y) {
       const value = this.value(x, y)
       return toHeight(value)
+    },
+    import: function () {
+      cacheCurrent()
+      return this
     },
     reset: function () {
       field.reset()
@@ -72,4 +76,5 @@ content.system.surface = (() => {
 })()
 
 engine.loop.on('frame', () => content.system.surface.update())
+engine.state.on('import', () => content.system.surface.import())
 engine.state.on('reset', () => content.system.surface.reset())

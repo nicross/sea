@@ -1,6 +1,7 @@
 # S.E.A. changelog
 
 ## v1.2.2
+- Fix falling from sky on new game (broken in v1.2.1)
 - Performance optimizations
   - Increase throttling of collision sounds
 

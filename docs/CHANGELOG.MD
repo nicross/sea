@@ -1,5 +1,7 @@
 # S.E.A. changelog
 
+## v1.2.2
+
 ## v1.2.1
 - Performance optimizations
   - Clear all noise fields on game state changes

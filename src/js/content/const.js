@@ -1,6 +1,7 @@
 content.const = {
   airRotationalDeceleration: 0,
   airAngularDeceleration: 1,
+  ephemeralNoiseTimer: 60,
   explorationNodeRadius: 1,
   idleTimeout: 10,
   lightZone: -1000,

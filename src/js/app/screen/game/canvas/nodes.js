@@ -7,6 +7,8 @@ app.screen.game.canvas.nodes = (() => {
 
   let nodeRadius
 
+  content.utility.ephemeralNoise.manage(nodeHue)
+
   engine.state.on('reset', () => {
     nodeHue.reset()
   })

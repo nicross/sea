@@ -8,6 +8,8 @@ content.system.surface = (() => {
   let currentHeight,
     currentValue
 
+  content.utility.ephemeralNoise.manage(field)
+
   function cacheCurrent() {
     const position = engine.position.getVector()
 

@@ -2,6 +2,8 @@ content.system.wind = (() => {
   const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'wind', 4),
     timeScale = 10 // Evolves over 10 seconds
 
+  content.utility.ephemeralNoise.manage(field)
+
   return {
     reset: function () {
       field.reset()

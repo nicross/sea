@@ -4,6 +4,7 @@
 - Fix falling from sky on new game (broken in v1.2.1)
 - Performance optimizations
   - Increase throttling of collision sounds
+  - Manage memory of ephemeral noise generators (e.g. surface and wind)
 
 ## v1.2.1
 - Performance optimizations

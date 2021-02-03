@@ -260,7 +260,7 @@ content.system.treasure = (() => {
     test: function (count = 1) {
       const {x, y, z} = engine.position.getVector()
 
-      for (let i = 0; i <= count; i += 1) {
+      for (let i = 0; i < count; i += 1) {
         engine.streamer.registerProp(content.prop.treasure, {
           destination: content.system.audio.bus(),
           radius: content.const.treasurePickupRadius,

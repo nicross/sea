@@ -75,3 +75,6 @@ This document outlines upcoming changes for post-jam releases.
   - Scanned points can be different props determined by noise fields
   - Represented graphically with a range of saturation levels (i.e. albedo)
   - Different musical colors, patterns (aleotoric, step melody), or behaviors entirely
+
+### Miscellaneous
+- Photograph mode, or pseudo-bookmarks

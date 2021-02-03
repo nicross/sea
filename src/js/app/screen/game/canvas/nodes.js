@@ -2,7 +2,7 @@ app.screen.game.canvas.nodes = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     main = app.screen.game.canvas,
-    nodeHue = engine.utility.perlin4d.create('exploration', 'node', 'hue'),
+    nodeHue = engine.utility.perlin3d.create('exploration', 'node', 'hue'),
     nodeHueRotateSpeed = 1 / 120
 
   let nodeRadius
@@ -104,6 +104,12 @@ app.screen.game.canvas.nodes = (() => {
     })
   }
 
+  /*
+     XXX: See git history at this line.
+          Using 4D noise here was an artistic choice.
+          Changing it for performance not a light decision.
+     TODO: Look into simples or other more performant noise for this.
+   */
   function getNodeHue({
     x = 0,
     y = 0,
@@ -112,7 +118,7 @@ app.screen.game.canvas.nodes = (() => {
   } = {}) {
     const halfT = t / 2
 
-    let value = nodeHue.value((x + halfT) / 10, (y + halfT) / 10, (z + halfT) / 10, t / 10) * 2
+    let value = nodeHue.value((x + halfT) / 10, (y + halfT) / 10, (z + halfT) / 10) * 2
     value += engine.loop.time() * nodeHueRotateSpeed
     value = engine.utility.wrap(value, 0, 1)
 

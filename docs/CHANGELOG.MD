@@ -1,10 +1,11 @@
 # S.E.A. changelog
 
 ## v1.2.2
-- Fix falling from sky on new game (broken in v1.2.1)
+- Fixed falling from sky on new game (broken in v1.2.1)
 - Performance optimizations
-  - Increase throttling of collision sounds
-  - Manage memory of ephemeral noise generators (e.g. surface and wind)
+  - Increased throttling of collision sounds
+  - Managed memory of ephemeral noise generators (e.g. surface and wind)
+  - Switched to a simpler noise algorithm for a certain visual cue
 
 ## v1.2.1
 - Performance optimizations

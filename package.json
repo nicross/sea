@@ -21,7 +21,7 @@
     "gulp-uglify-es": "^1.0.4",
     "gulp-zip": "^5.0.1",
     "merge-stream": "^2.0.0",
-    "syngen": "^0.1.2",
+    "syngen": "^0.1.4",
     "yargs": "^15.3.1"
   }
 }

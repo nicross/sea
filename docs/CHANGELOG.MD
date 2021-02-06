@@ -1,5 +1,7 @@
 # S.E.A. changelog
 
+## v1.2.3
+
 ## v1.2.2
 - Fixed falling from sky on new game (broken in v1.2.1)
 - Performance optimizations

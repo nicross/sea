@@ -19,23 +19,30 @@ app.crashFixer = (() => {
       }
     })
 
-    engine.loop.once('frame', () => {
+    nextFrame(() => {
       content.system.audio.treasure.rebuildFilters()
 
-      engine.props.get().forEach((prop) => {
-        if (prop.troubleshoot) {
-          prop.troubleshoot()
-        }
+      nextFrame(() => {
+        engine.props.get().forEach((prop) => {
+          if (prop.troubleshoot) {
+            prop.troubleshoot()
+          }
+        })
+
+        nextFrame(() => {
+          engine.audio.mixer.rebuildFilters()
+          nextFrame(() => isFixing = false)
+        })
       })
-
-      engine.audio.mixer.rebuildFilters()
-
-      isFixing = false
     })
   }
 
   function isFubar() {
     return !analyzerTimeData[0] || isNaN(analyzerTimeData[0]) || !isFinite(analyzerTimeData[0])
+  }
+
+  function nextFrame(fn) {
+    engine.loop.once('frame', fn)
   }
 
   return {
@@ -45,14 +52,8 @@ app.crashFixer = (() => {
     },
     isFixing: () => isFixing,
     isFubar: () => isFubar(),
-    test: async function (vector) {
+    test: async function () {
       content.system.treasure.off('collect')
-
-      if (vector) {
-        vector = engine.utility.vector3d.create(vector)
-          .rotateQuaternion(engine.position.getQuaternion())
-          .add(engine.position.getVector())
-      }
 
       engine.props.get().forEach((prop) => {
         if (content.prop.treasure.isPrototypeOf(prop)) {
@@ -63,7 +64,7 @@ app.crashFixer = (() => {
       await content.system.scan.triggerForward()
 
       if (!engine.props.get().filter(p => content.prop.treasure.isPrototypeOf(p)).length) {
-        content.system.treasure.test(1, vector)
+        content.system.treasure.test(1)
       }
 
       return this
@@ -73,7 +74,7 @@ app.crashFixer = (() => {
         this.test()
 
         content.system.scan.once('recharge', () => {
-          requestAnimationFrame(() => {
+          nextFrame(() => {
             setTimeout(() => {
               if (!isFubar()) {
                 loop()
@@ -99,8 +100,8 @@ app.crashFixer = (() => {
   }
 })()
 
-engine.loop.on('frame', ({paused}) => {
-  if (paused) {
+engine.loop.on('frame', () => {
+  if (app.state.game.is('none')) {
     return
   }
 

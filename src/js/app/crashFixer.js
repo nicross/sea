@@ -7,16 +7,31 @@ app.crashFixer = (() => {
 
   const analyzerTimeData = new Uint8Array(analyzer.frequencyBinCount)
 
-  function fixFilters() {
-    content.system.audio.treasure.rebuildFilters()
+  let isFixing = false
+
+  function fix() {
+    console.error('BiquadFilterNode: bad state fix attempted')
+    isFixing = true
 
     engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
-        prop.troubleshoot()
+        prop.output.disconnect()
       }
     })
 
-    engine.audio.mixer.rebuildFilters()
+    engine.loop.once('frame', () => {
+      content.system.audio.treasure.rebuildFilters()
+
+      engine.props.get().forEach((prop) => {
+        if (prop.troubleshoot) {
+          prop.troubleshoot()
+        }
+      })
+
+      engine.audio.mixer.rebuildFilters()
+
+      isFixing = false
+    })
   }
 
   function isFubar() {
@@ -24,16 +39,59 @@ app.crashFixer = (() => {
   }
 
   return {
-    test: function () {
-      fixFilters()
+    force: function () {
+      fix()
+      return this
+    },
+    isFixing: () => isFixing,
+    isFubar: () => isFubar(),
+    test: async function (vector) {
+      content.system.treasure.off('collect')
+
+      if (vector) {
+        vector = engine.utility.vector3d.create(vector)
+          .rotateQuaternion(engine.position.getQuaternion())
+          .add(engine.position.getVector())
+      }
+
+      engine.props.get().forEach((prop) => {
+        if (content.prop.treasure.isPrototypeOf(prop)) {
+          prop.collect()
+        }
+      })
+
+      await content.system.scan.triggerForward()
+
+      if (!engine.props.get().filter(p => content.prop.treasure.isPrototypeOf(p)).length) {
+        content.system.treasure.test(1, vector)
+      }
+
+      return this
+    },
+    testLoop: function () {
+      const loop = () => {
+        this.test()
+
+        content.system.scan.once('recharge', () => {
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              if (!isFubar()) {
+                loop()
+              }
+            }, 1000)
+          })
+        })
+      }
+
+      loop()
+
       return this
     },
     update: function () {
       analyzer.getByteTimeDomainData(analyzerTimeData)
 
-      if (isFubar()) {
-        fixFilters()
-        console.error('BiquadFilterNode: bad state fix attempted')
+      if (isFubar() && !isFixing) {
+        fix()
       }
 
       return this

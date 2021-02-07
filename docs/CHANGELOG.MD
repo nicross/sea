@@ -2,6 +2,7 @@
 
 ## v1.2.3
 - Fixed an issue introduced in v1.2.0 where pressing <kbd>Alt</kbd> + <kbd>Tab</kbd> would lock in-game controls
+- Improved audio crash recovery sequence (unfortunately, the root issue still persists)
 
 ## v1.2.2
 - Fixed falling from sky on new game (broken in v1.2.1)

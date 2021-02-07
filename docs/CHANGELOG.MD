@@ -9,6 +9,7 @@
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Allowed toggling turbo while using scanner</li>
+    <li>Always spawn above surface when using fast travel to surface and origin</li>
     <li>Improved rare audio crash recovery when treasure is spawned</li>
   </ul>
 </details>

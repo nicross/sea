@@ -50,10 +50,10 @@ engine.ready(() => {
   })
 
   app.state.screen.on('before-fastTravel-origin', () => {
-    const position = syngen.position.export()
+    const position = engine.position.export()
     position.x = 0
     position.y = 0
-    position.z = 0
+    position.z = content.system.surface.currentHeight() + engine.const.zero
 
     engine.state.import({
       ...engine.state.export(),
@@ -64,8 +64,8 @@ engine.ready(() => {
   })
 
   app.state.screen.on('before-fastTravel-surface', () => {
-    const position = syngen.position.export()
-    position.z = 0
+    const position = engine.position.export()
+    position.z = content.system.surface.currentHeight() + engine.const.zero
 
     engine.state.import({
       ...engine.state.export(),

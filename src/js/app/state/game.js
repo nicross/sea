@@ -38,8 +38,8 @@ engine.ready(() => {
   // Fast travel actions
   // TODO: Refactor to dispatch events
   app.state.screen.on('before-fastTravel-floor', () => {
-    const position = syngen.position.export()
-    position.z = content.system.terrain.floor.value(position.x, position.y) + 1
+    const position = engine.position.export()
+    position.z = content.system.terrain.floor.value(position.x, position.y) + 5
 
     engine.state.import({
       ...engine.state.export(),

@@ -1,14 +1,30 @@
 # ROADMAP
 This document outlines upcoming changes for post-jam releases.
 
+## v1.2.3
+- Add deadzone slider to Controls screen
+- Improve `app.crashFixer` recovery time, if possible
+- Improve surface gluing (more acceleration, less surface time)
+- Revisit `app.utility.format.angle()` (angles offset by 180)
+
 ## v1.3.0
-- Aquatic life (dolphins, gulls, whales, schools of fish)
+- Aquatic life
+  - Dolphins
+  - Gulls
+  - Whales
+- Basic biome generation
+  - Aleotoric
+  - Drone
+  - Tremolo
+- Underwater music enhancements
+  - More colors
+  - More oscillators
+  - More triads
 
 ## Known issues
 - Acceleration from zero and turning can be slow on the surface
 - Improve collision detection to prevent getting stuck in terrain
 - Improve mouse look, perhaps independent from craft physics
-- Occasional frame drops on surface
 - Treasure causes unstable BiquadFilterNode (possibly fixed)
 
 ## Wishlist

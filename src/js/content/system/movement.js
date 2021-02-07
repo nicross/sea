@@ -1,6 +1,7 @@
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
-    reflectionRate = 1/2
+    reflectionRate = 1/2,
+    surfaceLeeway = engine.const.zero + (1 / (engine.const.gravity ** 1.5))
 
   const medium = engine.utility.machine.create({
     transition: {
@@ -199,7 +200,7 @@ content.system.movement = (() => {
     const surfaceZ = getSurfaceZ()
 
     // Remain in air while above surface
-    if (z > surfaceZ) {
+    if (z > surfaceZ + surfaceLeeway) {
       return
     }
 
@@ -236,10 +237,11 @@ content.system.movement = (() => {
     const surfaceZ = getSurfaceZ(),
       velocity = engine.position.getVelocity()
 
-    const isLateralMovement = velocity.x || velocity.y
+    const isLateralMovement = velocity.x || velocity.y,
+      maxSurfaceZ = surfaceZ + surfaceLeeway
 
     // Jump if moving up or not intersecting surface while moving laterally
-    if (velocity.z > 0 || (z > surfaceZ && isLateralMovement)) {
+    if (velocity.z > 0 || (z > maxSurfaceZ && isLateralMovement)) {
       return medium.dispatch('jump')
     }
 
@@ -249,7 +251,7 @@ content.system.movement = (() => {
     }
 
     // Splash if lateral movement and approaching incline
-    if (z < surfaceZ && isLateralMovement) {
+    if (z < maxSurfaceZ && isLateralMovement) {
       splash(surfaceZ)
     }
 

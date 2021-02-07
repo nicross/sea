@@ -4,6 +4,7 @@
 - Added gamepad deadzone slider to Controls screen
 - Fixed an issue introduced in v1.2.0 where pressing <kbd>Alt</kbd> + <kbd>Tab</kbd> would lock in-game controls
 - Fixed compass headings on Status screen using counter-clockwise angles
+- Improved surface gluing for better traction at high velocities
 
 <details>
   <summary>Spoiler Warning</summary>

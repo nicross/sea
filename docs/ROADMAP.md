@@ -1,9 +1,6 @@
 # ROADMAP
 This document outlines upcoming changes for post-jam releases.
 
-## v1.2.3
-- Improve surface gluing (more acceleration, less surface time)
-
 ## v1.3.0
 - Aquatic life
   - Dolphins
@@ -78,6 +75,7 @@ This document outlines upcoming changes for post-jam releases.
 - Advance time when using fast travel
 - Light levels influenced by cloud cover, depth, and time of day
 - Surface weather patterns
+  - Bigger waves
   - Clouds
   - Weather patterns (rain, storm)
 - Time of day

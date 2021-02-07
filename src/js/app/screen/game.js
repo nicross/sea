@@ -30,12 +30,12 @@ app.screen.game = (() => {
       return app.access.handle(access)
     }
 
-    if (paused) {
-      return
-    }
-
     if (ui.turbo) {
       turboState = !turboState
+    }
+
+    if (paused) {
+      return
     }
 
     const controls = {

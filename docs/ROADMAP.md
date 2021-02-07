@@ -2,8 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.3
-- Allow pausing and toggling turbo during scanning
-- Improve `app.crashFixer` recovery time, if possible
 - Improve surface gluing (more acceleration, less surface time)
 
 ## v1.3.0
@@ -24,7 +22,7 @@ This document outlines upcoming changes for post-jam releases.
 - Acceleration from zero and turning can be slow on the surface
 - Improve collision detection to prevent getting stuck in terrain
 - Improve mouse look, perhaps independent from craft physics
-- Treasure causes unstable BiquadFilterNode (possibly fixed)
+- Treasure causes unstable BiquadFilterNode (audio recovers after approximately 4 seconds)
 
 ## Wishlist
 ### Audio

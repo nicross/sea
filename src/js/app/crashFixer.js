@@ -9,8 +9,8 @@ app.crashFixer = (() => {
 
   let isFixing = false
 
-  function fix() {
-    console.error('BiquadFilterNode: bad state fix attempted')
+  async function fix() {
+    console.error('BiquadFilterNode: bad state fix attempted', performance.now())
     isFixing = true
 
     engine.props.get().forEach((prop) => {
@@ -18,31 +18,32 @@ app.crashFixer = (() => {
         prop.output.disconnect()
       }
     })
+    await nextFrame()
 
-    nextFrame(() => {
-      content.system.audio.treasure.rebuildFilters()
+    content.system.audio.treasure.rebuildFilters()
+    await nextFrame()
 
-      nextFrame(() => {
-        engine.props.get().forEach((prop) => {
-          if (prop.troubleshoot) {
-            prop.troubleshoot()
-          }
-        })
-
-        nextFrame(() => {
-          engine.audio.mixer.rebuildFilters()
-          nextFrame(() => isFixing = false)
-        })
-      })
+    engine.props.get().forEach((prop) => {
+      if (prop.troubleshoot) {
+        prop.troubleshoot()
+      }
     })
+    await nextFrame()
+
+    engine.audio.mixer.rebuildFilters()
+    await nextFrame()
+
+    isFixing = false
   }
 
   function isFubar() {
     return !analyzerTimeData[0] || isNaN(analyzerTimeData[0]) || !isFinite(analyzerTimeData[0])
   }
 
-  function nextFrame(fn) {
-    engine.loop.once('frame', fn)
+  function nextFrame() {
+    return new Promise((resolve) => {
+      engine.loop.once('frame', resolve)
+    })
   }
 
   return {
@@ -62,6 +63,7 @@ app.crashFixer = (() => {
       })
 
       await content.system.scan.triggerForward()
+      await nextFrame()
 
       if (!engine.props.get().filter(p => content.prop.treasure.isPrototypeOf(p)).length) {
         content.system.treasure.test(1)
@@ -73,14 +75,13 @@ app.crashFixer = (() => {
       const loop = () => {
         this.test()
 
-        content.system.scan.once('recharge', () => {
-          nextFrame(() => {
-            setTimeout(() => {
-              if (!isFubar()) {
-                loop()
-              }
-            }, 1000)
-          })
+        content.system.scan.once('recharge', async () => {
+          await nextFrame()
+          setTimeout(() => {
+            if (!isFubar()) {
+              loop()
+            }
+          }, 1000)
         })
       }
 

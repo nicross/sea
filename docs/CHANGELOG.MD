@@ -1,6 +1,7 @@
 # S.E.A. changelog
 
 ## v1.2.3
+- Added gamepad deadzone slider to Controls screen
 - Fixed an issue introduced in v1.2.0 where pressing <kbd>Alt</kbd> + <kbd>Tab</kbd> would lock in-game controls
 - Improved audio crash recovery sequence (unfortunately, the root issue still persists)
 

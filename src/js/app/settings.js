@@ -4,6 +4,13 @@ app.settings = (() => {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: engine.utility.scale(500, 50, 1000, 0, 1),
     },
+    gamepadDeadzone: {
+      compute: (rawValue) => engine.utility.lerp(0, 0.3, rawValue),
+      default: 0.5,
+      update: (computedValue) => {
+        engine.input.gamepad.setDeadzone(computedValue)
+      },
+    },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0,

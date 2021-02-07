@@ -2,7 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.3
-- Add deadzone slider to Controls screen
 - Improve `app.crashFixer` recovery time, if possible
 - Improve surface gluing (more acceleration, less surface time)
 - Revisit `app.utility.format.angle()` (angles offset by 180)

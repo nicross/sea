@@ -1,8 +1,8 @@
 # S.E.A. changelog
 
 ## v1.2.3
-- Added gamepad deadzone slider to Controls screen
-- Fixed an issue introduced in v1.2.0 where pressing <kbd>Alt</kbd> + <kbd>Tab</kbd> would lock in-game controls
+- Added Gamepad Deadzone slider to Controls screen
+- Fixed <kbd>Alt</kbd>+<kbd>Tab</kbd> locking in-game controls (introduced in v1.2.0)
 - Fixed compass headings on Status screen using counter-clockwise angles
 - Improved surface gluing for better traction at high velocities
 - Slightly increased contrast of surface
@@ -12,6 +12,7 @@
   <ul>
     <li>Allowed toggling turbo while using scanner</li>
     <li>Always spawn above surface when fast traveling to it</li>
+    <li>Fixed autosaving between collecting treasures</li>
     <li>Improved rare audio crash recovery when treasure is spawned</li>
     <li>Prevent spawning inside floor when fast traveling to it</li>
   </ul>

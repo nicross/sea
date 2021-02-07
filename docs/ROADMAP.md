@@ -9,6 +9,7 @@ This document outlines upcoming changes for post-jam releases.
 - Basic biome generation
   - Aleotoric
   - Drone
+  - Pebble (scanner-like)
   - Tremolo
 - Underwater music enhancements
   - More colors

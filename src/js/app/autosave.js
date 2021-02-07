@@ -12,6 +12,15 @@ app.autosave = (() => {
     )
   }
 
+  function saveLoop() {
+    save()
+    scheduleSaveLoop()
+  }
+
+  function scheduleSaveLoop() {
+    timeout = setTimeout(saveLoop, app.const.autosaveInterval)
+  }
+
   return {
     disable: function () {
       active = false
@@ -28,7 +37,7 @@ app.autosave = (() => {
       }
 
       active = true
-      timeout = setTimeout(save, app.const.autosaveInterval)
+      scheduleSaveLoop()
 
       return this
     },
@@ -40,7 +49,7 @@ app.autosave = (() => {
       save()
 
       if (active) {
-        timeout = setTimeout(save, app.const.autosaveInterval)
+        scheduleSaveLoop()
       }
 
       return this

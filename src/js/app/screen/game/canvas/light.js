@@ -65,7 +65,7 @@ app.screen.game.canvas.light = (() => {
 
   function toGradientColor(z) {
     if (z >= zones.surface) {
-      return 'hsl(240, 100%, 88%)'
+      return 'hsl(240, 100%, 85%)'
     }
 
     if (z <= zones.twilight) {
@@ -73,7 +73,7 @@ app.screen.game.canvas.light = (() => {
     }
 
     const l = z > zones.sunlit
-      ? engine.utility.scale(z, zones.surface, zones.sunlit, 88, 75)
+      ? engine.utility.scale(z, zones.surface, zones.sunlit, 85, 75)
       : engine.utility.scale(z, zones.sunlit, zones.twilight, 75, 9)
 
     return `hsl(240, 100%, ${l}%)`

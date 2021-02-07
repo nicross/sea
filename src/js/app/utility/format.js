@@ -1,8 +1,8 @@
 app.utility.format = {}
 
 app.utility.format.angle = function (radians = 0) {
-  const degrees = engine.utility.radiansToDegrees(
-    engine.utility.normalizeAngle(radians - Math.PI/2)
+  let degrees = engine.utility.radiansToDegrees(
+    (Math.PI * 2) - engine.utility.normalizeAngle(radians - Math.PI/2)
   )
 
   let label = ''
@@ -10,35 +10,35 @@ app.utility.format.angle = function (radians = 0) {
   if (degrees > 348.75 || degrees < 11.25) {
     label += '<abbr aria-label="north">N</abbr>'
   } else if (degrees < 33.75) {
-    label += '<abbr aria-label="north-northwest">NNW</abbr>'
+    label += '<abbr aria-label="north-northeast">NNE</abbr>'
   } else if (degrees < 56.25) {
-    label += '<abbr aria-label="northwest">NW</abbr>'
+    label += '<abbr aria-label="northeast">NE</abbr>'
   } else if (degrees < 78.75) {
-    label += '<abbr aria-label="west-northwest">WNW</abbr>'
+    label += '<abbr aria-label="east-northeast">ENE</abbr>'
   } else if (degrees < 101.25) {
-    label += '<abbr aria-label="west">W</abbr>'
+    label += '<abbr aria-label="east">E</abbr>'
   } else if (degrees < 123.75) {
-    label += '<abbr aria-label="west-southwest">WSW</abbr>'
+    label += '<abbr aria-label="east-southeast">ESE</abbr>'
   } else if (degrees < 146.25) {
-    label += '<abbr aria-label="southwest">SW</abbr>'
+    label += '<abbr aria-label="southeast">SE</abbr>'
   } else if (degrees < 168.75) {
-    label += '<abbr aria-label="south-southwest">SSW</abbr>'
+    label += '<abbr aria-label="south-southeast">SSE</abbr>'
   } else if (degrees < 191.25) {
     label += '<abbr aria-label="south">S</abbr>'
   } else if (degrees < 213.75) {
-    label += '<abbr aria-label="south-southeast">SSE</abbr>'
+    label += '<abbr aria-label="south-southwest">SSW</abbr>'
   } else if (degrees < 236.25) {
-    label += '<abbr aria-label="southeast">SE</abbr>'
+    label += '<abbr aria-label="southwest">SW</abbr>'
   } else if (degrees < 258.75) {
-    label += '<abbr aria-label="east-southeast">ESE</abbr>'
+    label += '<abbr aria-label="west-southwest">WSW</abbr>'
   } else if (degrees < 281.25) {
-    label += '<abbr aria-label="east">E</abbr>'
+    label += '<abbr aria-label="west">W</abbr>'
   } else if (degrees < 303.75) {
-    label += '<abbr aria-label="east-northeast">ENE</abbr>'
+    label += '<abbr aria-label="west-northwest">WNW</abbr>'
   } else if (degrees < 326.25) {
-    label += '<abbr aria-label="northeast">NE</abbr>'
+    label += '<abbr aria-label="northwest">NW</abbr>'
   } else if (degrees < 348.75) {
-    label += '<abbr aria-label="north-northeast">NNE</abbr>'
+    label += '<abbr aria-label="north-northwest">NNW</abbr>'
   }
 
   label += ` (${Math.round(degrees)}<abbr aria-label=" degrees">°</abbr>)`;

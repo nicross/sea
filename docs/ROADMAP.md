@@ -2,9 +2,9 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## v1.2.3
+- Allow pausing and toggling turbo during scanning
 - Improve `app.crashFixer` recovery time, if possible
 - Improve surface gluing (more acceleration, less surface time)
-- Revisit `app.utility.format.angle()` (angles offset by 180)
 
 ## v1.3.0
 - Aquatic life
@@ -30,10 +30,12 @@ This document outlines upcoming changes for post-jam releases.
 ### Audio
 - Compass cue volume slider
 - Dynamic range presets
-- Haptic feedback on certain cues
+- Game paused volume slider
+- Haptic feedback on certain cues (e.g. collisions with surface and terrain)
 
 ### Graphics
 - Procedural skybox with sun, moon, and stars
+- Respect motion blur setting on surface
 
 ### Music
 - Add more triads to underwater soundtrack

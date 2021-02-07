@@ -5,7 +5,8 @@ content.system.treasure = (() => {
     collectedThreed = content.utility.threed.create(),
     pubsub = engine.utility.pubsub.create(),
     spawned = [],
-    spawnedThreed = content.utility.threed.create()
+    spawnedThreed = content.utility.threed.create(),
+    tokens = new Set()
 
   function decrementSpawned({x, y, z}) {
     if (!spawnedThreed.has(x, y, z)) {
@@ -82,13 +83,15 @@ content.system.treasure = (() => {
         z: scale(item.z),
       })
 
-      engine.streamer.registerProp(content.prop.treasure, {
+      const token = engine.streamer.registerProp(content.prop.treasure, {
         destination: content.system.audio.bus(),
         radius: content.const.treasurePickupRadius,
         x: item.x,
         y: item.y,
         z: item.z,
       })
+
+      tokens.add(token)
     }
   }
 
@@ -141,7 +144,7 @@ content.system.treasure = (() => {
       return
     }
 
-    engine.streamer.registerProp(content.prop.treasure, {
+    const token = engine.streamer.registerProp(content.prop.treasure, {
       destination: content.system.audio.bus(),
       radius: content.const.treasurePickupRadius,
       x: location.x,
@@ -149,6 +152,7 @@ content.system.treasure = (() => {
       z: location.z,
     })
 
+    tokens.add(token)
     incrementSpawned(chunk)
 
     spawned.push({
@@ -171,6 +175,7 @@ content.system.treasure = (() => {
 
       engine.streamer.deregisterProp(prop.token)
       engine.streamer.destroyStreamedProp(prop.token)
+      tokens.delete(prop.token)
 
       const treasure = content.system.treasures.generate()
 
@@ -252,6 +257,20 @@ content.system.treasure = (() => {
         scan,
       })
     },
+    rebuildProps: function () {
+      [...tokens].forEach((token) => {
+        const {prototype, options} = engine.streamer.getRegisteredProp(token)
+
+        engine.streamer.deregisterProp(token)
+        engine.streamer.destroyStreamedProp(token)
+        tokens.delete(token)
+
+        let newToken = engine.streamer.registerProp(prototype, options)
+        tokens.add(newToken)
+      })
+
+      return this
+    },
     reset: function () {
       collected.length = 0
       spawned.length = 0
@@ -261,13 +280,15 @@ content.system.treasure = (() => {
       const {x, y, z} = engine.position.getVector()
 
       for (let i = 0; i < count; i += 1) {
-        engine.streamer.registerProp(content.prop.treasure, {
+        const token = engine.streamer.registerProp(content.prop.treasure, {
           destination: content.system.audio.bus(),
           radius: content.const.treasurePickupRadius,
           x: x + engine.utility.random.float(-10, 10),
           y: y + engine.utility.random.float(-10, 10),
           z: z + engine.utility.random.float(-10, 10),
         })
+
+        tokens.add(token)
       }
 
       return this

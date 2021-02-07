@@ -10,9 +10,10 @@ app.crashFixer = (() => {
   let isFixing = false
 
   async function fix() {
-    console.error('BiquadFilterNode: bad state fix attempted', performance.now())
+    console.error('BiquadFilterNode: bad state fix attempted')
     isFixing = true
 
+    // Not sure how this helps, similar logic in prop.troubleshoot(), but without it the fix fails
     engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
         prop.output.disconnect()
@@ -37,6 +38,7 @@ app.crashFixer = (() => {
   }
 
   function isFubar() {
+    analyzer.getByteTimeDomainData(analyzerTimeData)
     return !analyzerTimeData[0] || isNaN(analyzerTimeData[0]) || !isFinite(analyzerTimeData[0])
   }
 
@@ -90,9 +92,7 @@ app.crashFixer = (() => {
       return this
     },
     update: function () {
-      analyzer.getByteTimeDomainData(analyzerTimeData)
-
-      if (isFubar() && !isFixing) {
+      if (!isFixing && isFubar()) {
         fix()
       }
 

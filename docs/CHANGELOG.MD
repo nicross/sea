@@ -1,6 +1,9 @@
 # S.E.A. changelog
 
 ## v1.3.0
+- Movement
+  - Reduced angular deceleration in air for bigger spins
+  - Reduced deceleration in air for bigger jumps
 - Simulation
   - Added solar time to Status screen
   - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>H</kbd> to access solar time
@@ -10,10 +13,8 @@
   <ul>
     <li>Movement
       <ul>
-        <li>Reduced angular deceleration in air for bigger spins</li>
-        <li>Reduced deceleration in air for bigger jumps</li>
         <li>Removed requirement of holding ascend to surface</li>
-        <li>Slightly reduced angular deceleration elsewhere</li>
+        <li>Slightly reduced angular deceleration underwater</li>
       </ul>
     </li>
     <li>Simulation

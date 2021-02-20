@@ -2,7 +2,8 @@
 
 ## v1.3.0
 - Simulation
-  - Added Solar Time to Status screen
+  - Added solar time to Status screen
+  - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>H</kbd> to access solar time
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>

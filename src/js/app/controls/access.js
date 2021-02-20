@@ -17,6 +17,10 @@ app.controls.access = () => {
     return 'z'
   }
 
+  if (keys.Digit4 || keys.KeyT) {
+    return 'time'
+  }
+
   if (keys.KeyX) {
     return 'x'
   }

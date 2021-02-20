@@ -8,6 +8,10 @@ app.access = (() => {
       const {yaw} = engine.position.getEuler()
       return app.utility.format.angle(yaw)
     },
+    time: () => {
+      const clock = content.system.time.clock()
+      return app.utility.format.clock(clock)
+    },
     x: () => {
       const {x} = engine.position.getVector()
 

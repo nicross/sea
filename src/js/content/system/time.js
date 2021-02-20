@@ -1,18 +1,28 @@
 content.system.time = (() => {
-  let time = 0
+  let offset = 0,
+    time = 0
 
   return {
-    get: function () {
-      return time
+    export: () => ({
+      offset,
+      time,
+    }),
+    import: function (data = {}) {
+      offset = Number(data.offset) || 0
+      time = Number(data.time) || 0
+      return this
     },
-    increment: function (value) {
+    incrementOffset: function (value) {
+      offset += value
+      return this
+    },
+    incrementTime: function (value) {
       time += value
       return this
     },
-    set: function (value) {
-      time = Number(value) || 0
-      return this
-    },
+    offset: () => offset,
+    time: () => time,
+    value: () => time + offset,
   }
 })()
 
@@ -21,8 +31,8 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  content.system.time.increment(delta)
+  content.system.time.incrementTime(delta)
 })
 
-engine.state.on('import', ({time}) => content.system.time.set(time))
-engine.state.on('export', (data) => data.time = content.system.time.get())
+engine.state.on('import', ({time}) => content.system.time.import(time))
+engine.state.on('export', (data) => data.time = content.system.time.export())

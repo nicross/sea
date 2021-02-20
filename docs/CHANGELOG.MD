@@ -13,6 +13,11 @@
         <li>Slightly reduced angular deceleration elsewhere</li>
       </ul>
     </li>
+    <li>Simulation
+      <ul>
+        <li>Track time of day</li>
+      </ul>
+    </li>
     <li>Miscellaneous
       <ul>
         <li>Reduced treasure notification duration</li>

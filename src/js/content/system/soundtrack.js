@@ -90,13 +90,13 @@ content.system.soundtrack = (() => {
     frequencies: () => [...frequencies],
     harmonics: () => [...harmonics],
     import: function (data) {
-      const position = data.position || {}
+      const position = engine.position.getVector()
 
       const present = {
-        time: data.time || 0,
-        x: position.x || 0,
-        y: position.y || 0,
-        z: data.z || 0,
+        time: (data.time || {}).time || 0,
+        x: position.x,
+        y: position.y,
+        z: position.z,
       }
 
       updateFrequencies(present)
@@ -120,7 +120,7 @@ content.system.soundtrack = (() => {
       }
 
       const present = {
-        time: content.system.time.get(),
+        time: content.system.time.value(),
         x,
         y,
         z,

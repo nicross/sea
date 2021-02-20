@@ -18,7 +18,7 @@ content.system.surface = (() => {
   }
 
   function getValue(x, y) {
-    const time = content.system.time.get(),
+    const time = content.system.time.value(),
       z = time / timeScale
 
     x /= scaleX

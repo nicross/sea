@@ -10,7 +10,7 @@ content.system.wind = (() => {
       return this
     },
     value: function () {
-      const x = content.system.time.get() / timeScale
+      const x = content.system.time.value() / timeScale
       return field.value(x)
     },
   }

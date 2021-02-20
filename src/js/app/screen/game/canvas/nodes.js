@@ -114,7 +114,7 @@ app.screen.game.canvas.nodes = (() => {
     x = 0,
     y = 0,
     z = 0,
-    t = content.system.time.get(),
+    t = content.system.time.value(),
   } = {}) {
     const halfT = t / 2
 

@@ -61,7 +61,7 @@ app.screen.status = (() => {
     const coordinates = {x, y},
       depth = Math.max(0, -z),
       treasures = content.system.treasure.getCollected(),
-      time = content.system.time.get(),
+      time = content.system.time.time(),
       yaw = engine.position.getEuler().yaw
 
     const earnings = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),

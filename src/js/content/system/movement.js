@@ -221,9 +221,9 @@ content.system.movement = (() => {
       return medium.dispatch('land')
     }
 
-    // Reflect z-velocity while maintaining lateral velocities
+    // Reflect z-velocity and absorb some lateral velocity
     engine.position.setVelocity({
-      ...velocity,
+      ...content.utility.accelerate.vector(velocity, {}, content.const.normalDeceleration),
       z: velocity.z * -reflectionRate,
     })
   }

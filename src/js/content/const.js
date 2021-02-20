@@ -1,5 +1,6 @@
 content.const = {
   airAngularDeceleration: Math.PI / 16,
+  airDeceleration: 0,
   ephemeralNoiseTimer: 60,
   explorationNodeRadius: 1,
   idleTimeout: 10,

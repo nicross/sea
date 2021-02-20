@@ -78,6 +78,21 @@ app.utility.format.coordinates = function ({
   return label
 }
 
+app.utility.format.clock = (value) => {
+  let hour = Math.floor(value * 24)
+  let minute = Math.floor(((value * 24) - hour) * 60)
+
+  if (hour < 10) {
+    hour = '0' + hour
+  }
+
+  if (minute < 10) {
+    minute = '0' + minute
+  }
+
+  return `<time>${hour}:${minute}</time>`
+}
+
 app.utility.format.number = (() => {
   const numberFormat = Intl.NumberFormat('en-US', {
     maximumFractionDigits: 0,

@@ -38,38 +38,72 @@ engine.ready(() => {
   // Fast travel actions
   // TODO: Refactor to dispatch events
   app.state.screen.on('before-fastTravel-floor', () => {
-    const position = engine.position.export()
-    position.z = content.system.terrain.floor.value(position.x, position.y) + 5
+    const position = engine.position.getVector()
+    const floor = content.system.terrain.floor.value(position.x, position.y) + 5
 
+    const distance = Math.abs(position.z - floor),
+      travelTime = distance / content.const.underwaterTurboMaxVelocity
+
+    content.system.time.incrementOffset(travelTime)
+
+    engine.position.setVector({
+      ...position,
+      z: floor,
+    })
+
+    // Force hard reset
     engine.state.import({
       ...engine.state.export(),
-      position,
     })
 
     app.stats.fastTravels.increment()
   })
 
   app.state.screen.on('before-fastTravel-origin', () => {
-    const position = engine.position.export()
-    position.x = 0
-    position.y = 0
-    position.z = content.system.surface.currentHeight() + engine.const.zero
+    const position = engine.position.getVector()
+    const distance = position.distance()
 
+    const velocity = position.z > 0
+      ? content.const.surfaceTurboMaxVelocity
+      : content.const.underwaterTurboMaxVelocity
+
+    const travelTime = distance / velocity
+    content.system.time.incrementOffset(travelTime)
+
+    const surface = content.system.surface.height(0, 0) + engine.const.zero
+
+    engine.position.setVector({
+      x: 0,
+      y: 0,
+      z: surface,
+    })
+
+    // Force hard reset
     engine.state.import({
       ...engine.state.export(),
-      position,
     })
 
     app.stats.fastTravels.increment()
   })
 
   app.state.screen.on('before-fastTravel-surface', () => {
-    const position = engine.position.export()
-    position.z = content.system.surface.currentHeight() + engine.const.zero
+    const position = engine.position.getVector()
 
+    const distance = Math.abs(position.z),
+      travelTime = distance / content.const.underwaterTurboMaxVelocity
+
+    content.system.time.incrementOffset(travelTime)
+
+    const surface = content.system.surface.height(0, 0) + engine.const.zero
+
+    engine.position.setVector({
+      ...position,
+      z: surface,
+    })
+
+    // Force hard reset
     engine.state.import({
       ...engine.state.export(),
-      position,
     })
 
     app.stats.fastTravels.increment()

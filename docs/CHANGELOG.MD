@@ -15,6 +15,7 @@
     </li>
     <li>Simulation
       <ul>
+        <li>Fast-forward time of day on Fast Travel</li>
         <li>Track time of day</li>
       </ul>
     </li>

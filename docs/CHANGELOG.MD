@@ -5,6 +5,11 @@
 <details markdown="1">
   <summary>Spoiler Warning</summary>
   <ul>
+    <li>Movement
+      <ul>
+        <li>Removed requirement of holding ascend to surface</li>
+      </ul>
+    </li>
     <li>Miscellaneous
       <ul>
         <li>Reduced treasure notification duration</li>

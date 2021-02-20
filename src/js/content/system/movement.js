@@ -259,15 +259,16 @@ content.system.movement = (() => {
     setZ(surfaceZ)
   }
 
-  function handleUnderwater(controls) {
+  function handleUnderwater() {
     applyAngularThrust()
     applyLateralThrust()
 
+    const velocity = engine.position.getVelocity()
     const {z} = engine.position.getVector()
 
     // Surface when at or above it, otherwise stick below it
     if (z >= getSurfaceZ()) {
-      if (controls.z > 0) {
+      if (velocity.z > 0) {
         return medium.dispatch('surface')
       }
 
@@ -282,8 +283,6 @@ content.system.movement = (() => {
     if (!checkUnderwaterCollision()) {
       return
     }
-
-    const velocity = engine.position.getVelocity()
 
     engine.position.setVelocity(
       velocity.scale(-reflectionRate)

@@ -9,6 +9,7 @@
       <ul>
         <li>Reduced angular deceleration in air for bigger spins</li>
         <li>Removed requirement of holding ascend to surface</li>
+        <li>Slightly reduced angular deceleration elsewhere</li>
       </ul>
     </li>
     <li>Miscellaneous

@@ -6,7 +6,7 @@ content.const = {
   lightZone: -1000,
   midnightZoneMin: -750,
   midnightZoneMax: -1250,
-  normalAngularDeceleration: engine.const.gravity,
+  normalAngularDeceleration: 2 * Math.PI,
   normalDeceleration: engine.const.gravity,
   propLimit: 30,
   scanCooldown: 2 * 1000,

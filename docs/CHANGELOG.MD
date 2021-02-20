@@ -1,6 +1,8 @@
 # S.E.A. changelog
 
 ## v1.3.0
+- Simulation
+  - Added Solar Time to Status screen
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>
@@ -15,8 +17,7 @@
     </li>
     <li>Simulation
       <ul>
-        <li>Fast-forward time of day on Fast Travel</li>
-        <li>Track time of day</li>
+        <li>Fast-forward solar time on Fast Travel</li>
       </ul>
     </li>
     <li>Miscellaneous

@@ -58,7 +58,8 @@ app.screen.status = (() => {
   function updateStatus() {
     const {x, y, z} = engine.position.getVector()
 
-    const coordinates = {x, y},
+    const clock = content.system.time.clock(),
+      coordinates = {x, y},
       depth = Math.max(0, -z),
       treasures = content.system.treasure.getCollected(),
       time = content.system.time.time(),
@@ -76,6 +77,7 @@ app.screen.status = (() => {
     root.querySelector('.a-status--row-lastTreasure').hidden = !treasuresCollected
     root.querySelector('.a-status--row-treasures').hidden = !treasuresCollected
 
+    root.querySelector('.a-status--metric-clock').innerHTML = app.utility.format.clock(clock)
     root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(coordinates)
     root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
     root.querySelector('.a-status--metric-earnings').innerHTML = app.utility.format.number(earnings)

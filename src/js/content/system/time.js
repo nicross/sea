@@ -3,6 +3,10 @@ content.system.time = (() => {
     time = 0
 
   return {
+    clock: () => {
+      const value = (time + offset) / content.const.dayDuration
+      return value % 1
+    },
     export: () => ({
       offset,
       time,

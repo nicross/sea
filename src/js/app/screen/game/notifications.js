@@ -1,7 +1,7 @@
 // TODO: Create a more modular system for notification types (when more are added)
 
 app.screen.game.notifications = (() => {
-  const stack = []
+  const queue = []
 
   let isActive = false,
     root,
@@ -56,21 +56,21 @@ app.screen.game.notifications = (() => {
       }
     }
 
-    if (!stack.length) {
+    if (!queue.length) {
       return
     }
 
-    root.appendChild(stack.shift())
+    root.appendChild(queue.shift())
     timeout = app.const.notificationTimeout
   }
 
   function onEngineStateReset() {
-    stack.length = 0
+    queue.length = 0
     root.innerHTML = ''
   }
 
   function onTreasureCollect(treasure) {
-    stack.push(
+    queue.push(
       app.utility.dom.toElement(
         `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Treasure Collected</h1><p class="c-notification--body">${treasure.name}</p><div class="c-notification--extra"><span aria-hidden="true" role="presentation">Value:</span> ${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aria-label="gold">g</abbr></div></aside>`
       )

@@ -1,5 +1,7 @@
 # S.E.A. changelog
 
+## v1.3.0
+
 ## v1.2.3
 - Added Gamepad Deadzone slider to Controls screen
 - Fixed <kbd>Alt</kbd>+<kbd>Tab</kbd> locking in-game controls (introduced in v1.2.0)

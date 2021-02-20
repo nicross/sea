@@ -1,5 +1,5 @@
 # S.E.A.
-A chill audio watercraft simulator submitted to [No Video Jam](https://itch.io/jam/no-video-jam).
+A chill audio watercraft simulator originally submitted to [No Video Jam](https://itch.io/jam/no-video-jam).
 Developed with [syngen](https://github.com/nicross/syngen).
 
 ## How to Play
@@ -64,7 +64,9 @@ gulp dist
 | `--debug` | Suppresses minification. |
 
 ## Credits
-The font Fira Mono was created by Mozilla.
-The font Roboto was created by Google.
-The font Super Submarine was created by Iconian Fonts.
-These fonts are free for noncommercial use and not covered by the license of this project.
+These fonts are free for noncommercial use and not covered by the license of this project:
+- **Fira Mono** by Mozilla
+- **Roboto** by Google
+- **Super Submarine** by Iconian Fonts
+
+Thanks for playing!

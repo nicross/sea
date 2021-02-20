@@ -6,7 +6,7 @@
   "main": "electron/main.js",
   "private": true,
   "devDependencies": {
-    "electron": "^11.2.1",
+    "electron": "^11.3.0",
     "electron-packager": "^14.2.1",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
@@ -22,6 +22,6 @@
     "gulp-zip": "^5.0.1",
     "merge-stream": "^2.0.0",
     "syngen": "^0.1.4",
-    "yargs": "^15.3.1"
+    "yargs": "^15.4.1"
   }
 }

@@ -10,7 +10,8 @@ app.screen.game.canvas.light = (() => {
     midnight: content.const.lightZone,
   }
 
-  let scheme
+  let averageColor,
+    scheme
 
   main.on('resize', () => {
     canvas.height = main.height()
@@ -42,18 +43,18 @@ app.screen.game.canvas.light = (() => {
 
     return [
       app.utility.color.lerpHsl(
-        {h: 240, s: 50, l: 20},
-        {h: 240, s: 100, l: 85},
+        {h: 240/360, s: 0.5, l: 0.20},
+        {h: 240/360, s: 1, l: 0.85},
         cycle
       ),
       app.utility.color.lerpHsl(
-        {h: 240, s: 25, l: 10},
-        {h: 240, s: 100, l: 75},
+        {h: 240/360, s: 0.25, l: 0.10},
+        {h: 240/360, s: 1, l: 0.75},
         cycle
       ),
       app.utility.color.lerpHsl(
-        {h: 240, s: 0, l: 0},
-        {h: 240, s: 100, l: 9},
+        {h: 240/360, s: 0, l: 0},
+        {h: 240/360, s: 1, l: 0.09},
         cycle
       ),
     ]
@@ -66,8 +67,14 @@ app.screen.game.canvas.light = (() => {
     // Cache scheme between toGradientColor() calls
     scheme = calculateScheme()
 
-    gradient.addColorStop(0, getGradientColorTop(z))
-    gradient.addColorStop(1, getGradientColorBottom(z))
+    const bottom = getGradientColorBottom(z),
+      top = getGradientColorTop(z)
+
+    // Cache averageColor
+    averageColor = app.utility.color.lerpHsl(top, bottom, 0.5)
+
+    gradient.addColorStop(0, toHsl(top))
+    gradient.addColorStop(1, toHsl(bottom))
 
     return gradient
   }
@@ -97,18 +104,18 @@ app.screen.game.canvas.light = (() => {
 
   function toGradientColor(z) {
     if (z >= zones.surface) {
-      return toHsl(scheme[0])
+      return scheme[0]
     }
 
     if (z <= zones.twilight) {
-      return toHsl(scheme[2])
+      return scheme[2]
     }
 
     const color = z > zones.sunlit
       ? app.utility.color.lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
       : app.utility.color.lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
 
-    return toHsl(color)
+    return color
   }
 
   function toHsl({
@@ -116,10 +123,11 @@ app.screen.game.canvas.light = (() => {
     s = 0,
     l = 0,
   }) {
-    return `hsl(${h}, ${s}%, ${l}%)`
+    return `hsl(${h * 360}, ${s * 100}%, ${l * 100}%)`
   }
 
   return {
+    averageColor: () => averageColor,
     draw: function () {
       const opacity = calculateOpacity()
 

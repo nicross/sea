@@ -12,6 +12,13 @@ app.screen.game.canvas.grain = (() => {
   const patternData = patternContext.createImageData(size, size),
     patternDataLength = 4 * (size ** 2)
 
+  const zones = {
+    surface: 0,
+    sunlit: content.const.lightZone * 0.125,
+    twilight: content.const.lightZone * 0.75,
+    midnight: content.const.lightZone,
+  }
+
   let timer = 0
 
   context.scale(scale, scale)
@@ -30,19 +37,19 @@ app.screen.game.canvas.grain = (() => {
   function getColor() {
     const {z} = engine.position.getVector()
 
-    if (z >= 0) {
-      return {r: 204, g: 204, b: 255}
-    }
-
-    if (z <= content.const.lightZone) {
+    if (z <= zones.midnight) {
       return {r: 0, g: 0, b: 0}
     }
 
-    return app.utility.color.hslToRgb({
-      h: 240/360,
-      s: 1,
-      l: engine.utility.scale(z, 0, content.const.lightZone, 0.9, 0),
-    })
+    const color = app.screen.game.canvas.light.averageColor()
+    color.l **= 0.5
+
+    if (engine.utility.between(z, zones.twilight, zones.midnight)) {
+      const ratio = engine.utility.scale(z, zones.twilight, zones.midnight, 0, 1)
+      color.l = engine.utility.lerp(color.l, 0, ratio)
+    }
+
+    return app.utility.color.hslToRgb(color)
   }
 
   function update() {

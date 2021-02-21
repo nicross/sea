@@ -24,7 +24,8 @@ app.screen.game.canvas.surface = (() => {
   }
 
   function drawNodes() {
-    const height = main.height(),
+    const color = getColor(),
+      height = main.height(),
       hfov = main.hfov(),
       position = engine.position.getVector(),
       vfov = main.vfov(),
@@ -70,10 +71,32 @@ app.screen.game.canvas.surface = (() => {
         const alpha = engine.utility.clamp(distanceRatio ** 0.5, 0.5, 1),
           radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 6)
 
-        context.fillStyle = `rgba(255, 255, 255, ${alpha})`
+        context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${alpha})`
         context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
       }
     }
+  }
+
+  function getColor() {
+    const clock = content.system.time.clock(),
+      cycle = engine.utility.wrapAlternate(clock * 2)
+
+    const color = app.utility.color.lerpHsl(
+      app.screen.game.canvas.celestials.moonColor(),
+      app.screen.game.canvas.celestials.sunColor(),
+      cycle ** 0.5
+    )
+
+    if (cycle <= 0.5) {
+      color.l *= engine.utility.scale(cycle, 0, 0.5, 0.75, 1) ** 2
+    }
+
+    // Optimization: pre-calculate scaled literal values
+    color.h *= 360
+    color.s *= 100
+    color.l *= 100
+
+    return color
   }
 
   function shouldDraw() {

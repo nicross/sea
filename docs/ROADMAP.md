@@ -1,7 +1,15 @@
 # ROADMAP
 This document outlines upcoming changes for post-jam releases.
 
-## v1.3.0
+## Planned versions
+## v1.3.0 - Night update
+- Optimize latest graphical enhancements
+- Correlate more things to day/night cycle
+  - Tides?
+  - Surface glitter color?
+  - Sun and moon synths?
+
+## v1.4.0 - Life update
 - Aquatic life
   - Dolphins
   - Gulls
@@ -30,12 +38,8 @@ This document outlines upcoming changes for post-jam releases.
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
 
 ### Graphics
-- Procedural skybox with sun, moon, and stars
+- Procedural night skybox
 - Respect motion blur setting on surface
-
-### Music
-- Add more triads to underwater soundtrack
-- Add oscillator types/colors with a moving 4D noise field
 
 ### Plot
 - Abandoned alien labs
@@ -62,7 +66,7 @@ This document outlines upcoming changes for post-jam releases.
 <details>
   <summary>Ultimate Spoiler Warning</summary>
   <ul>
-    <li>Alien leaders established a secret base on Earth.</li>
+    <li>Aliens wanted to peacefully immigrate to Earth.</li>
     <li>Alien leaders established a secret base on Earth.</li>
     <li>Convert UXO archetype to munitions, add Resistance side (more prevalent at lower depths) and more nouns.</li>
   </ul>
@@ -73,16 +77,14 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Simulation
 - Add depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
-- Advance time when using fast travel
-- Light levels influenced by cloud cover, depth, and time of day
+- Light levels influenced by cloud cover
+- Moon phases
 - Surface weather patterns
   - Bigger waves
   - Clouds
   - Weather patterns (rain, storm)
-- Time of day
-  - Moon phases
-  - Sun
   - Tides
+- Settings for fixed time of day or dynamic with speeds
 
 ### World generation
 - Biomes

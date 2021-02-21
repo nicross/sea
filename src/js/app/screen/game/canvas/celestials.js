@@ -1,4 +1,4 @@
-app.screen.game.canvas.sun = (() => {
+app.screen.game.canvas.celestials = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     horizonDistance = 5000,
@@ -38,7 +38,17 @@ app.screen.game.canvas.sun = (() => {
     return engine.utility.scale(depth, 0, -100, 1, 0) ** 4
   }
 
-  function calculateColor(pitch, alpha = 1) {
+  function calculateColorMoon(pitch, alpha = 1) {
+    const value = Math.abs(Math.sin(pitch))
+
+    const h = engine.utility.lerpExp(300, 240, value, 0.25)
+    const s = engine.utility.lerpExp(100, 25, value, 0.25)
+    const l = engine.utility.lerpExp(90, 100, value, 0.75)
+
+    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`
+  }
+
+  function calculateColorSun(pitch, alpha = 1) {
     const value = Math.abs(Math.sin(pitch))
 
     const h = engine.utility.lerpExp(30, 60, value, 0.5)
@@ -62,9 +72,9 @@ app.screen.game.canvas.sun = (() => {
     return horizon.y
   }
 
-  function calculatePitch() {
+  function calculatePitch(offset) {
     const clock = content.system.time.clock(),
-      value = (2 * Math.PI * -clock) + (Math.PI / 2)
+      value = (2 * Math.PI * -clock) + offset
 
     return engine.utility.wrap(value, 0, Math.PI * 2)
   }
@@ -94,14 +104,24 @@ app.screen.game.canvas.sun = (() => {
     context.clearRect(0, 0, canvas.width, canvas.height)
   }
 
-  function drawSun() {
+  function drawMoon() {
+    drawObject({
+      calculateColor: calculateColorMoon,
+      offset: -Math.PI / 2,
+    })
+  }
+
+  function drawObject({
+    calculateColor,
+    offset,
+  } = {}) {
     const alpha = calculateAlpha()
 
     if (!alpha) {
       return
     }
 
-    const pitch = calculatePitch(),
+    const pitch = calculatePitch(offset),
       radius = calculateRadius(pitch),
       sun = calculatePosition(pitch)
 
@@ -135,6 +155,13 @@ app.screen.game.canvas.sun = (() => {
     context.fillRect(sun.x - radius, top, radius * 2, height)
   }
 
+  function drawSun() {
+    drawObject({
+      calculateColor: calculateColorSun,
+      offset: Math.PI / 2,
+    })
+  }
+
   function shouldDraw() {
     const {z} = engine.position.getVector()
     // calculateAlpha will always return 0 below this depth
@@ -148,6 +175,7 @@ app.screen.game.canvas.sun = (() => {
       }
 
       clear()
+      drawMoon()
       drawSun()
 
       // Draw to main canvas, assume identical dimensions

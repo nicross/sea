@@ -10,6 +10,8 @@ app.screen.game.canvas.light = (() => {
     midnight: content.const.lightZone,
   }
 
+  let scheme
+
   main.on('resize', () => {
     canvas.height = main.height()
     canvas.width = 1
@@ -35,9 +37,20 @@ app.screen.game.canvas.light = (() => {
     context.clearRect(0, 0, canvas.width, canvas.height)
   }
 
+  function calculateScheme() {
+    return [
+      {h: 240, s: 100, l: 85},
+      {h: 240, s: 100, l: 75},
+      {h: 240, s: 100, l: 9},
+    ]
+  }
+
   function getGradient() {
     const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
     const {z} = engine.position.getVector()
+
+    // Cache scheme between toGradientColor() calls
+    scheme = calculateScheme()
 
     gradient.addColorStop(0, getGradientColorTop(z))
     gradient.addColorStop(1, getGradientColorBottom(z))
@@ -65,18 +78,34 @@ app.screen.game.canvas.light = (() => {
 
   function toGradientColor(z) {
     if (z >= zones.surface) {
-      return 'hsl(240, 100%, 85%)'
+      return toHsl(scheme[0])
     }
 
     if (z <= zones.twilight) {
-      return 'hsl(240, 100%, 9%)'
+      return toHsl(scheme[2])
     }
 
-    const l = z > zones.sunlit
-      ? engine.utility.scale(z, zones.surface, zones.sunlit, 85, 75)
-      : engine.utility.scale(z, zones.sunlit, zones.twilight, 75, 9)
+    const color = z > zones.sunlit
+      ? lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
+      : lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
 
-    return `hsl(240, 100%, ${l}%)`
+    return toHsl(color)
+  }
+
+  function toHsl({
+    h = 0,
+    s = 0,
+    l = 0,
+  }) {
+    return `hsl(${h}, ${s}%, ${l}%)`
+  }
+
+  function lerpHsl(a, b, value) {
+    return {
+      h: engine.utility.lerp(a.h, b.h, value),
+      s: engine.utility.lerp(a.s, b.s, value),
+      l: engine.utility.lerp(a.l, b.l, value),
+    }
   }
 
   return {

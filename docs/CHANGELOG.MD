@@ -1,6 +1,8 @@
 # S.E.A. changelog
 
 ## v1.3.0
+- Graphics
+  - Added a pleasant sun
 - Movement
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps

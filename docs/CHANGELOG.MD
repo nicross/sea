@@ -17,6 +17,7 @@
   <ul>
     <li>Movement
       <ul>
+        <li>Allowed strafe controls in air for applying thrust on skip</li>
         <li>Removed requirement of holding ascend to surface</li>
         <li>Slightly reduced angular deceleration underwater</li>
       </ul>

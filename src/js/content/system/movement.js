@@ -353,8 +353,10 @@ content.system.movement = (() => {
   }
 
   function updateThrusters(controls) {
-    if (!medium.is('underwater')) {
+    if (medium.is('surface')) {
       controls.x = 0
+      controls.z = 0
+    } else if (medium.is('air')) {
       controls.z = 0
     }
 

@@ -4,6 +4,7 @@
 - Graphics
   - Added a pleasant day/night cycle
 - Movement
+  - Increased friction with surface
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps
 - Simulation

@@ -1,7 +1,7 @@
 content.system.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
     reflectionRate = 1/2,
-    surfaceLeeway = engine.const.zero + (1 / (engine.const.gravity ** 1.5))
+    surfaceLeeway = engine.const.zero + (1 / (engine.const.gravity ** 1.25))
 
   const medium = engine.utility.machine.create({
     transition: {

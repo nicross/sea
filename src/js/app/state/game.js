@@ -121,10 +121,13 @@ app.state.game.on('before-none-new', () => {
 
   engine.state.import({
     position: {
-      angle: Math.PI / 2,
+      quaternion: engine.utility.quaternion.fromEuler({yaw: Math.PI / 8}),
       x: 0,
       y: 0,
       z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeight / 2),
+    },
+    time: {
+      offset: 7.45 * 60,
     },
     seed: Math.random(),
   })

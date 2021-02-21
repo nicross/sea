@@ -127,7 +127,7 @@ app.screen.game.canvas.light = (() => {
   }
 
   return {
-    averageColor: () => averageColor,
+    averageColor: () => ({...averageColor}),
     draw: function () {
       const opacity = calculateOpacity()
 

@@ -5,7 +5,9 @@ app.screen.game.canvas.celestials = (() => {
     main = app.screen.game.canvas
 
   let maxRadius,
-    minRadius
+    minRadius,
+    moonColor,
+    sunColor
 
   main.on('resize', () => {
     const height = main.height(),
@@ -41,25 +43,33 @@ app.screen.game.canvas.celestials = (() => {
   function calculateColorMoon(pitch, alpha = 1) {
     const value = Math.abs(Math.sin(pitch))
 
-    const h = engine.utility.lerpExp(300, 240, value, 0.25)
-    const s = engine.utility.lerpExp(100, 25, value, 0.25)
-    const l = engine.utility.lerpExp(90, 100, value, 0.75)
+    // Cache it
+    moonColor = {
+      h: engine.utility.lerpExp(300, 240, value, 0.25) / 360,
+      s: engine.utility.lerpExp(100, 25, value, 0.25) / 100,
+      l: engine.utility.lerpExp(90, 100, value, 0.75) / 100,
+      a: alpha,
+    }
 
-    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`
+    return toHsla(moonColor)
   }
 
   function calculateColorSun(pitch, alpha = 1) {
     const value = Math.abs(Math.sin(pitch))
 
-    const h = engine.utility.lerpExp(30, 60, value, 0.5)
-    const s = engine.utility.lerpExp(100, 50, value, 0.75)
-    const l = engine.utility.lerp(
-      engine.utility.lerpExp(50, 100, value, 0.75),
-      100,
-      (1 - (alpha ** 2))
-    )
+    // Cache it
+    sunColor = {
+      h: engine.utility.lerpExp(30, 60, value, 0.5) / 360,
+      s: engine.utility.lerpExp(100, 50, value, 0.75) / 100,
+      l: engine.utility.lerp(
+        engine.utility.lerpExp(50, 100, value, 0.75),
+        100,
+        (1 - (alpha ** 2))
+      ) / 100,
+      a: alpha,
+    }
 
-    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`
+    return toHsla(sunColor)
   }
 
   function calculateHorizon() {
@@ -121,7 +131,9 @@ app.screen.game.canvas.celestials = (() => {
       return
     }
 
-    const pitch = calculatePitch(offset),
+    const pitch = calculatePitch(offset)
+
+    const color = calculateColor(pitch, alpha),
       radius = calculateRadius(pitch),
       sun = calculatePosition(pitch)
 
@@ -145,8 +157,7 @@ app.screen.game.canvas.celestials = (() => {
       return
     }
 
-    const color = calculateColor(pitch, alpha),
-      top = sun.y - (height / 2)
+    const top = sun.y - (height / 2)
 
     context.shadowBlur = height
     context.shadowColor = color
@@ -168,6 +179,15 @@ app.screen.game.canvas.celestials = (() => {
     return z > -150
   }
 
+  function toHsla({
+    h = 0,
+    s = 0,
+    l = 0,
+    a = 0,
+  }) {
+    return `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`
+  }
+
   return {
     draw: function () {
       if (!shouldDraw()) {
@@ -183,5 +203,7 @@ app.screen.game.canvas.celestials = (() => {
 
       return this
     },
+    moonColor: () => ({...moonColor}),
+    sunColor: () => ({...sunColor}),
   }
 })()

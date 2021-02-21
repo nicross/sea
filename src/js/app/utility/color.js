@@ -32,3 +32,9 @@ app.utility.color.hslToRgb = ({h = 0, s = 0, l = 0} = {}) => {
     b: engine.utility.clamp(Math.floor(b * 256), 0, 255),
   }
 }
+
+app.utility.color.lerpHsl = (a, b, value) => ({
+  h: engine.utility.lerp(a.h, b.h, value),
+  s: engine.utility.lerp(a.s, b.s, value),
+  l: engine.utility.lerp(a.l, b.l, value),
+})

@@ -38,10 +38,24 @@ app.screen.game.canvas.light = (() => {
   }
 
   function calculateScheme() {
+    const cycle = smooth(engine.utility.wrapAlternate(content.system.time.clock() * 2, 0, 1)) ** (1/3)
+
     return [
-      {h: 240, s: 100, l: 85},
-      {h: 240, s: 100, l: 75},
-      {h: 240, s: 100, l: 9},
+      app.utility.color.lerpHsl(
+        {h: 240, s: 50, l: 20},
+        {h: 240, s: 100, l: 85},
+        cycle
+      ),
+      app.utility.color.lerpHsl(
+        {h: 240, s: 25, l: 10},
+        {h: 240, s: 100, l: 75},
+        cycle
+      ),
+      app.utility.color.lerpHsl(
+        {h: 240, s: 0, l: 0},
+        {h: 240, s: 100, l: 9},
+        cycle
+      ),
     ]
   }
 
@@ -76,6 +90,11 @@ app.screen.game.canvas.light = (() => {
     return toGradientColor(pov.z)
   }
 
+  function smooth(value) {
+    // 6x^5 - 15x^4 + 10x^3
+    return (value ** 3) * (value * ((value * 6) - 15) + 10)
+  }
+
   function toGradientColor(z) {
     if (z >= zones.surface) {
       return toHsl(scheme[0])
@@ -86,8 +105,8 @@ app.screen.game.canvas.light = (() => {
     }
 
     const color = z > zones.sunlit
-      ? lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
-      : lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
+      ? app.utility.color.lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
+      : app.utility.color.lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
 
     return toHsl(color)
   }
@@ -98,14 +117,6 @@ app.screen.game.canvas.light = (() => {
     l = 0,
   }) {
     return `hsl(${h}, ${s}%, ${l}%)`
-  }
-
-  function lerpHsl(a, b, value) {
-    return {
-      h: engine.utility.lerp(a.h, b.h, value),
-      s: engine.utility.lerp(a.s, b.s, value),
-      l: engine.utility.lerp(a.l, b.l, value),
-    }
   }
 
   return {

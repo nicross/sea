@@ -43,7 +43,7 @@ content.system.movement = (() => {
     lateralDeceleration = 0,
     lateralMaxVelocity = 0
 
-  function applyAngularThrust() {
+  function applyAngularThrust(scale = 1) {
     const {yaw} = engine.position.getAngularVelocityEuler()
 
     if (!angularThrust) {
@@ -51,7 +51,7 @@ content.system.movement = (() => {
         yaw: content.utility.accelerate.value(
           yaw,
           0,
-          angularDeceleration
+          angularDeceleration * scale
         ),
       })
     }
@@ -60,12 +60,12 @@ content.system.movement = (() => {
       yaw: content.utility.accelerate.value(
         yaw,
         angularThrust * angularMaxVelocity,
-        angularAcceleration
+        angularAcceleration * scale
       ),
     })
   }
 
-  function applyDrag() {
+  function applyDrag(scale = 1) {
     const {yaw} = engine.position.getAngularVelocityEuler()
     const velocity = engine.position.getVelocity()
 
@@ -73,7 +73,7 @@ content.system.movement = (() => {
       yaw: content.utility.accelerate.value(
         yaw,
         0,
-        angularDeceleration
+        angularDeceleration * scale
       ),
     })
 
@@ -81,13 +81,13 @@ content.system.movement = (() => {
       content.utility.accelerate.vector(
         velocity,
         engine.utility.vector3d.create({z: velocity.z}),
-        lateralDeceleration
+        lateralDeceleration * scale
       )
     )
   }
 
-  function applyGravity() {
-    const gravity = engine.const.gravity * engine.loop.delta(),
+  function applyGravity(scale = 1) {
+    const gravity = engine.const.gravity * engine.loop.delta() * scale,
       velocity = engine.position.getVelocity()
 
     engine.position.setVelocity({
@@ -96,13 +96,13 @@ content.system.movement = (() => {
     })
   }
 
-  function applyLateralThrust() {
+  function applyLateralThrust(scale = 1) {
     if (lateralThrust.isZero()) {
       return engine.position.setVelocity(
         content.utility.accelerate.vector(
           engine.position.getVelocity(),
           engine.utility.vector3d.create(),
-          lateralDeceleration
+          lateralDeceleration * scale
         )
       )
     }
@@ -118,7 +118,7 @@ content.system.movement = (() => {
       content.utility.accelerate.vector(
         currentVelocity,
         targetVelocity,
-        rate
+        rate * scale
       )
     )
   }
@@ -137,7 +137,7 @@ content.system.movement = (() => {
 
     lateralAcceleration = isUnderwater
       ? (isTurbo ? content.const.underwaterTurboAcceleration : content.const.underwaterNormalAcceleration)
-      : (isAir ? 0 : (isTurbo ? content.const.surfaceTurboAcceleration : content.const.surfaceNormalAcceleration))
+      : (isTurbo ? content.const.surfaceTurboAcceleration : content.const.surfaceNormalAcceleration)
 
     lateralDeceleration = isAir
       ? content.const.airDeceleration
@@ -226,6 +226,17 @@ content.system.movement = (() => {
       ...content.utility.accelerate.vector(velocity, {}, content.const.normalDeceleration),
       z: velocity.z * -reflectionRate,
     })
+
+    // Apply thrust if available
+    const thrustScale = engine.performance.fps() / 4
+
+    if (angularThrust) {
+      applyAngularThrust(thrustScale)
+    }
+
+    if (!lateralThrust.isZero()) {
+      applyLateralThrust(thrustScale)
+    }
   }
 
   function handleSurface(controls) {

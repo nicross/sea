@@ -93,7 +93,7 @@ content.system.audio.compass = (() => {
           : 0
       )
 
-    const gain = engine.utility.fromDb(engine.utility.lerp(-21, -15, zRatio))
+    const gain = engine.utility.fromDb(engine.utility.lerp(-21, -16.5, zRatio))
     engine.audio.ramp.set(bus.gain, gain)
   }
 

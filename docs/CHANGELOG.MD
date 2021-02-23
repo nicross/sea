@@ -2,6 +2,7 @@
 
 ## v1.3.0
 - Audio
+  - Decreased compass cue volume slightly
   - Decreased engine volume slightly
 - Graphics
   - Added a pleasant day/night cycle

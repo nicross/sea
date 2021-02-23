@@ -84,7 +84,7 @@ app.screen.game.canvas.surface = (() => {
     const color = app.utility.color.lerpHsl(
       app.screen.game.canvas.celestials.moonColor(),
       app.screen.game.canvas.celestials.sunColor(),
-      cycle ** 0.5
+      smooth(cycle)
     )
 
     if (cycle <= 0.5) {
@@ -113,6 +113,12 @@ app.screen.game.canvas.surface = (() => {
     }
 
     return -z + surface < drawDistance
+  }
+
+  function smooth(value) {
+    // generalized logistic function
+    // identical to light
+    return 1 / (1 + (Math.E ** (-25 * (value - 0.5))))
   }
 
   return {

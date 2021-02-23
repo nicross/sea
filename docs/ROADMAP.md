@@ -4,12 +4,14 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.3.0 - Night update
 - Optimize latest graphical enhancements
+  - draw light as a 1px canvas
 - Waves audio
   - Compare heights for frequencies against current height
   - Use unique noise buffers for each wave synth to prevent phasing
 - Fix midnight transition at 1000m
   - glitter abruptly starts/stops in the low end
   - film grain abruptly cuts to black
+  - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle
   - Tides
     - cycling multiplier for wave height

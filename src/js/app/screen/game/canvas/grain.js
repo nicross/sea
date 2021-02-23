@@ -7,7 +7,7 @@ app.screen.game.canvas.grain = (() => {
     period = 1/8,
     scale = 1,
     size = 128,
-    strength = 1/8 * 255
+    strength = 1/16 * 255
 
   const patternData = patternContext.createImageData(size, size),
     patternDataLength = 4 * (size ** 2)

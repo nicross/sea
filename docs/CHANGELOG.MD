@@ -6,6 +6,7 @@
   - Decreased engine volume slightly
 - Graphics
   - Added a pleasant day/night cycle
+  - Tamed the film grain
 - Movement
   - Applied engine thrust when skipping
   - Increased friction with surface

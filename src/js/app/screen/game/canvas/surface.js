@@ -71,7 +71,7 @@ app.screen.game.canvas.surface = (() => {
         const alpha = distanceRatio ** 0.5,
           radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 6)
 
-        context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${alpha})`
+        context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${color.a * alpha})`
         context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
       }
     }
@@ -87,9 +87,9 @@ app.screen.game.canvas.surface = (() => {
       smooth(cycle)
     )
 
-    if (cycle <= 0.5) {
-      color.l *= engine.utility.scale(cycle, 0, 0.5, 0.75, 1) ** 2
-    }
+    color.a = cycle > 0.5
+      ? 1
+      : engine.utility.lerpExp(0.4, 1, engine.utility.scale(cycle, 0, 0.5, 0, 1), 4)
 
     // Optimization: pre-calculate scaled literal values
     color.h *= 360

@@ -98,8 +98,9 @@ app.screen.game.canvas.light = (() => {
   }
 
   function smooth(value) {
-    // 6x^5 - 15x^4 + 10x^3
-    return (value ** 3) * (value * ((value * 6) - 15) + 10)
+    // generalized logistic function
+    // identical to surface
+    return 1 / (1 + (Math.E ** (-25 * (value - 0.5))))
   }
 
   function toGradientColor(z) {

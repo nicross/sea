@@ -45,9 +45,9 @@ app.screen.game.canvas.celestials = (() => {
 
     // Cache it
     moonColor = {
-      h: engine.utility.lerpExp(300, 240, value, 0.25) / 360,
-      s: engine.utility.lerpExp(100, 25, value, 0.25) / 100,
-      l: engine.utility.lerpExp(90, 100, value, 0.75) / 100,
+      h: engine.utility.lerpExp(30, 60, value, 0.25) / 360,
+      s: engine.utility.lerpExp(75, 25, value, 1) / 100,
+      l: engine.utility.lerpExp(75, 100, value, 1) / 100,
       a: alpha,
     }
 
@@ -59,7 +59,7 @@ app.screen.game.canvas.celestials = (() => {
 
     // Cache it
     sunColor = {
-      h: engine.utility.lerpExp(30, 60, value, 0.5) / 360,
+      h: engine.utility.lerpExp(30, 60, value, 2/3) / 360,
       s: engine.utility.lerpExp(100, 50, value, 0.75) / 100,
       l: engine.utility.lerp(
         engine.utility.lerpExp(50, 100, value, 0.75),

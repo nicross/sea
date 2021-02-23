@@ -4,10 +4,25 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.3.0 - Night update
 - Optimize latest graphical enhancements
+- Waves audio
+  - Compare heights for frequencies against current height
+  - Use unique noise buffers for each wave synth to prevent phasing
+- Fix midnight transition at 1000m
+  - glitter abruptly starts/stops in the low end
+  - film grain abruptly cuts to black
 - Correlate more things to day/night cycle
-  - Tides?
-  - Surface glitter color?
-  - Sun and moon synths?
+  - Tides
+    - cycling multiplier for wave height
+    - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
+  - Surface glitter color
+    - filtered triangle wave
+    - highpass frequency relative to cycle
+  - Sun and moon synths
+    - timed musical events
+    - panned to position in sky
+    - sun is a fuzzy major chord
+    - moon is a sub bass and pad, perhaps evoking a minor chord
+    - when one sets it segues into the other rising
 
 ## v1.4.0 - Life update
 - Aquatic life

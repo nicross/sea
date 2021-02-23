@@ -9,8 +9,7 @@ content.system.audio.engine = (() => {
 
   let synth
 
-  // XXX: Compensate for engine.const.distancePower = 1 (was -4.5 at 2)
-  bus.gain.value = engine.utility.fromDb(-6)
+  bus.gain.value = engine.utility.fromDb(-7.5)
   binaural.to(bus)
 
   function calculateParams() {

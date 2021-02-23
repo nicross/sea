@@ -1,10 +1,12 @@
 # S.E.A. changelog
 
 ## v1.3.0
+- Audio
+  - Decreased engine volume slightly
 - Graphics
   - Added a pleasant day/night cycle
 - Movement
-  - Applied enging thrust when skipping
+  - Applied engine thrust when skipping
   - Increased friction with surface
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps
@@ -18,8 +20,8 @@
     <li>Movement
       <ul>
         <li>Allowed strafe controls in air for applying thrust on skip</li>
+        <li>Reduced angular deceleration slightly underwater</li>
         <li>Removed requirement of holding ascend to surface</li>
-        <li>Slightly reduced angular deceleration underwater</li>
       </ul>
     </li>
     <li>Simulation

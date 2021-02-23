@@ -1,6 +1,7 @@
 app.screen.game.canvas.light = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
+    horizonDistance = 1000,
     main = app.screen.game.canvas
 
   const zones = {
@@ -81,7 +82,7 @@ app.screen.game.canvas.light = (() => {
 
   function getGradientColorBottom(z) {
     const pov = engine.utility.vector3d.unitX()
-      .scale(app.settings.computed.drawDistance)
+      .scale(horizonDistance)
       .rotateEuler({pitch: main.vfov() / 2})
       .add({z})
 
@@ -90,7 +91,7 @@ app.screen.game.canvas.light = (() => {
 
   function getGradientColorTop(z) {
     const pov = engine.utility.vector3d.unitX()
-      .scale(app.settings.computed.drawDistance)
+      .scale(horizonDistance)
       .rotateEuler({pitch: -main.vfov() / 2})
       .add({z})
 

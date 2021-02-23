@@ -68,7 +68,7 @@ app.screen.game.canvas.surface = (() => {
 
         const distanceRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0)
 
-        const alpha = engine.utility.clamp(distanceRatio ** 0.5, 0.5, 1),
+        const alpha = distanceRatio ** 0.5,
           radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 6)
 
         context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${alpha})`

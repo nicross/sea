@@ -41,7 +41,12 @@ app.screen.game.canvas.grain = (() => {
       return {r: 0, g: 0, b: 0}
     }
 
-    const color = app.screen.game.canvas.light.averageColor()
+    let color = app.screen.game.canvas.light.averageColor()
+
+    if (z <= -900) {
+      color.l *= engine.utility.scale(z, -900, -1000, 1, 0)
+    }
+
     color.l **= 0.5
 
     if (engine.utility.between(z, zones.twilight, zones.midnight)) {

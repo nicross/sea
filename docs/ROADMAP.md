@@ -10,7 +10,6 @@ This document outlines upcoming changes for post-jam releases.
   - Use unique noise buffers for each wave synth to prevent phasing
 - Fix midnight transition at 1000m
   - glitter abruptly starts/stops in the low end
-  - film grain abruptly cuts to black
   - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle
   - Tides

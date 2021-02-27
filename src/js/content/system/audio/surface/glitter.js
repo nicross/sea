@@ -97,9 +97,13 @@ content.system.audio.surface.glitter = (() => {
     const attack = engine.utility.random.float(1/32, 1/4),
       decay = engine.utility.random.float(1/4, 1)
 
-    const gain = isCatchingAir
+    let gain = isCatchingAir
       ? engine.utility.fromDb(engine.utility.lerp(-12, -6, frequencyRoll))
       : engine.utility.fromDb(engine.utility.random.float(-12, -6))
+
+    if (z <= -900) {
+      gain *= engine.utility.scale(z, -900, -1000, 1, 0) ** 0.75
+    }
 
     const now = engine.audio.time()
 

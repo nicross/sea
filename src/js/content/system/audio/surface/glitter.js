@@ -66,10 +66,9 @@ content.system.audio.surface.glitter = (() => {
   filter.connect(bus)
 
   function calculateGrainChance(z) {
-    const clock = content.system.time.clock(),
-      isCatchingAir = content.system.movement.isCatchingAir()
+    const isCatchingAir = content.system.movement.isCatchingAir()
 
-    let chance = engine.utility.scale(Math.cos(Math.PI * 2 * clock), -1, 1, 1, 0)
+    let chance = content.system.time.cycle()
 
     if (isCatchingAir) {
       const height = content.system.surface.currentHeight()

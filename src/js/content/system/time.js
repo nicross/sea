@@ -7,6 +7,9 @@ content.system.time = (() => {
       const value = (time + offset) / content.const.dayDuration
       return value % 1
     },
+    cycle: function () {
+      return engine.utility.scale(Math.cos(2 * Math.PI * this.clock()), -1, 1, 1, 0)
+    },
     export: () => ({
       offset,
       time,

@@ -16,6 +16,7 @@ app.screen.game.canvas.grain = (() => {
     surface: 0,
     sunlit: content.const.lightZone * 0.125,
     twilight: content.const.lightZone * 0.75,
+    midnightFade: content.const.lightZone * 0.9,
     midnight: content.const.lightZone,
   }
 
@@ -43,8 +44,8 @@ app.screen.game.canvas.grain = (() => {
 
     let color = app.screen.game.canvas.light.averageColor()
 
-    if (z <= -900) {
-      color.l *= engine.utility.scale(z, -900, -1000, 1, 0)
+    if (z <= zones.midnightFade) {
+      color.l *= engine.utility.scale(z, zones.midnightFade, zones.midnight, 1, 0)
     }
 
     color.l **= 0.5

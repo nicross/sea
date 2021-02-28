@@ -4,7 +4,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.3.0 - Night update
 - Optimize latest graphical enhancements
-  - draw light as a 1px canvas
 - Fix midnight transition at 1000m
   - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle

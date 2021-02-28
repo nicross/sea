@@ -10,6 +10,7 @@
   - Reduced wave volume when catching air
 - Graphics
   - Added a pleasant day/night cycle
+  - Made closer objects appear slightly larger
   - Tamed the film grain
 - Movement
   - Applied engine thrust when skipping

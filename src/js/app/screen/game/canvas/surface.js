@@ -14,7 +14,7 @@ app.screen.game.canvas.surface = (() => {
     canvas.width = width
 
     drawDistance = app.settings.computed.drawDistance ** 0.5
-    nodeRadius = Math.max(1, (width / 1920) * 3)
+    nodeRadius = Math.max(1, (width / 1920) * 6)
 
     clear()
   })
@@ -69,7 +69,7 @@ app.screen.game.canvas.surface = (() => {
         const distanceRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0)
 
         const alpha = distanceRatio ** 0.5,
-          radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 6)
+          radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 12)
 
         context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${color.a * alpha})`
         context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)

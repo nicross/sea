@@ -5,6 +5,7 @@
   - Aligned soundtrack texture with day/night cycle
   - Decreased compass cue volume slightly
   - Decreased engine volume slightly
+  - Improved wave frequency calculations
   - Prevented phase cancellation between waves
   - Reduced wave volume when catching air
 - Graphics

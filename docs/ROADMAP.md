@@ -5,8 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.3.0 - Night update
 - Optimize latest graphical enhancements
   - draw light as a 1px canvas
-- Waves audio
-  - Compare heights for frequencies against current height
 - Fix midnight transition at 1000m
   - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle

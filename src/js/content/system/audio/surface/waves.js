@@ -5,17 +5,17 @@ content.system.audio.surface.waves = (() => {
     highpassFilter = context.createBiquadFilter(),
     lowpassFilter = context.createBiquadFilter()
 
-  const distance = 4,
+  const distance = 2,
     highpassFrequency = 40,
     lowpassDropoffRate = 3,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
-    waveFrequencyDropoff = 3,
+    waveFrequencyDropoff = 1,
     waveFrequencyRange = 1/4, // 2 octaves
     waveGainDropoff = 3,
-    waveMaxFrequency = 5000,
+    waveMaxFrequency = 3000,
     waveMaxGain = 1,
-    waveMinFrequency = 500,
+    waveMinFrequency = 750,
     waveMinGain = 1/2
 
   // 0 is forward
@@ -44,7 +44,7 @@ content.system.audio.surface.waves = (() => {
     buffers.push(buffer)
   }
 
-  bus.gain.value = engine.utility.fromDb(-6)
+  bus.gain.value = engine.utility.fromDb(-9)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)
@@ -110,9 +110,10 @@ content.system.audio.surface.waves = (() => {
       x += Math.cos(angle + angles[i]) * distance
       y += Math.sin(angle + angles[i]) * distance
 
-      const value = content.system.surface.value(x, y)
+      const surface = content.system.surface.value(x, y),
+        value = Math.abs((surface * 2) - 1)
 
-      const height = content.system.surface.toHeight(value),
+      const height = content.system.surface.toHeight(surface),
         maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
         minFrequency = isAbove ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
 

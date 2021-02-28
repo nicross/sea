@@ -62,6 +62,7 @@ content.system.surface = (() => {
       currentValue = undefined
       return this
     },
+    toHeight,
     update: function () {
       const {z} = engine.position.getVector()
 

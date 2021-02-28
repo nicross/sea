@@ -5,6 +5,7 @@
   - Aligned soundtrack texture with day/night cycle
   - Decreased compass cue volume slightly
   - Decreased engine volume slightly
+  - Prevent phasing between waves
 - Graphics
   - Added a pleasant day/night cycle
   - Tamed the film grain

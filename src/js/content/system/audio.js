@@ -3,6 +3,7 @@ content.system.audio = (() => {
     context = engine.audio.context()
 
   return {
+    buffer: {},
     bus: () => bus,
     createBus: () => {
       const input = context.createGain()

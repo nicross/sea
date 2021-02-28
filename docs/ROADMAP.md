@@ -7,7 +7,6 @@ This document outlines upcoming changes for post-jam releases.
   - draw light as a 1px canvas
 - Waves audio
   - Compare heights for frequencies against current height
-  - Use unique noise buffers for each wave synth to prevent phasing
 - Fix midnight transition at 1000m
   - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle

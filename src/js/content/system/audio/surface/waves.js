@@ -1,5 +1,6 @@
 content.system.audio.surface.waves = (() => {
-  const bus = content.system.audio.createBus(),
+  const buffers = [],
+    bus = content.system.audio.createBus(),
     context = engine.audio.context(),
     highpassFilter = context.createBiquadFilter(),
     lowpassFilter = context.createBiquadFilter()
@@ -38,7 +39,11 @@ content.system.audio.surface.waves = (() => {
 
   let wasAbove
 
-  // XXX: Compensate for engine.const.distancePower = 1 (was 0 at 2)
+  for (let i = 0; i < angles.length; i += 1) {
+    const buffer = content.system.audio.buffer.pink.create(5)
+    buffers.push(buffer)
+  }
+
   bus.gain.value = engine.utility.fromDb(-6)
 
   lowpassFilter.frequency.value = 0
@@ -53,7 +58,7 @@ content.system.audio.surface.waves = (() => {
       const binaural = binaurals[i]
 
       const synth = engine.audio.synth.createBuffer({
-        buffer: engine.audio.buffer.noise.pink(),
+        buffer: buffers[i],
       })
 
       synth.chainAssign('lowpassFilter', context.createBiquadFilter())
@@ -119,7 +124,7 @@ content.system.audio.surface.waves = (() => {
 
   return {
     bus: () => bus,
-    import: function ({z}) {
+    import: function () {
       if (!content.system.movement.isUnderwater()) {
         lowpassFilter.frequency.value = engine.const.maxFrequency
       }

@@ -3,16 +3,10 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.3.0 - Night update
-- Optimize latest graphical enhancements
-- Fix midnight transition at 1000m
-  - light at night abruptly cuts between shades on descend
 - Correlate more things to day/night cycle
   - Tides
     - cycling multiplier for wave height
     - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
-  - Surface glitter color
-    - filtered triangle wave
-    - highpass frequency relative to cycle
   - Sun and moon synths
     - timed musical events
     - panned to position in sky

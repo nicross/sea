@@ -43,8 +43,6 @@ content.system.audio.surface.glitter = (() => {
     102,
   ].map(engine.utility.midiToFrequency)
 
-  const grainChance = 1/24
-
   const frequencyDropoff = 2.25,
     maxFrequency = engine.utility.midiToFrequency(78),
     minFrequency = engine.utility.midiToFrequency(33)
@@ -66,6 +64,20 @@ content.system.audio.surface.glitter = (() => {
 
   filter.frequency.value = 0
   filter.connect(bus)
+
+  function calculateGrainChance(z) {
+    const clock = content.system.time.clock(),
+      isCatchingAir = content.system.movement.isCatchingAir()
+
+    let chance = engine.utility.scale(Math.cos(Math.PI * 2 * clock), -1, 1, 1, 0)
+
+    if (isCatchingAir) {
+      const height = content.system.surface.currentHeight()
+      chance = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, chance, 1), 0, 1)
+    }
+
+    return engine.utility.lerp(4/engine.performance.fps(), 1/2, chance)
+  }
 
   function createGrain(z) {
     let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
@@ -156,7 +168,7 @@ content.system.audio.surface.glitter = (() => {
 
       updateFilter(z)
 
-      if (Math.random() * grainChance) {
+      if (Math.random() <= calculateGrainChance(z)) {
         createGrain(z)
       }
     },

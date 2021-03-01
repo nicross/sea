@@ -2,6 +2,7 @@
 
 ## v1.3.0
 - Audio
+  - Added dynamic audio cues for sun and moon
   - Aligned soundtrack texture with day/night cycle
   - Decreased compass cue volume slightly
   - Decreased engine volume slightly

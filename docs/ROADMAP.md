@@ -7,12 +7,7 @@ This document outlines upcoming changes for post-jam releases.
   - Tides
     - cycling multiplier for wave height
     - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
-  - Sun and moon synths
-    - timed musical events
-    - panned to position in sky
-    - sun is a fuzzy major chord
-    - moon is a sub bass and pad, perhaps evoking a minor chord
-    - when one sets it segues into the other rising
+  - Revise sun and moon synths
 
 ## v1.4.0 - Life update
 - Aquatic life

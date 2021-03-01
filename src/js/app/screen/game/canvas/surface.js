@@ -94,6 +94,7 @@ app.screen.game.canvas.surface = (() => {
     // Optimization: pre-calculate scaled literal values
     color.h *= 360
     color.s *= 100
+    color.l **= 0.75
     color.l *= 100
 
     return color

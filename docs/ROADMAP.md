@@ -5,6 +5,7 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.3.0 - Night update
 - Improve tides
 - Improve wave audio cue
+- Respect motion blur setting on surface
 
 ## v1.4.0 - Life update
 - Aquatic life
@@ -33,8 +34,8 @@ This document outlines upcoming changes for post-jam releases.
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
 
 ### Graphics
+- Godrays
 - Procedural night skybox
-- Respect motion blur setting on surface
 
 ### Plot
 - Abandoned alien labs

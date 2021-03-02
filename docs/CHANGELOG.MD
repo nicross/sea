@@ -25,6 +25,7 @@
   - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time
 - User interface
   - Added scrollbars to settings pages
+  - Increased speed of screen transitions
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>

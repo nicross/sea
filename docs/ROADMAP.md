@@ -4,7 +4,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.3.0 - Night update
 - Compass cue volume slider
-- Connect sun and moon synths to music volume setting
 - Correlate more things to day/night cycle
   - Tides
     - cycling multiplier for wave height

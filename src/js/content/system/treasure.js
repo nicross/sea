@@ -163,6 +163,7 @@ content.system.treasure = (() => {
   }
 
   return engine.utility.pubsub.decorate({
+    any: () => [...collected, ...spawned],
     collect: function (prop) {
       const chunkCoordinates = {
         x: scale(prop.x),
@@ -195,6 +196,7 @@ content.system.treasure = (() => {
 
       return this
     },
+    collected: () => [...collected],
     export: function () {
       return {
         collected: [...collected],
@@ -276,6 +278,7 @@ content.system.treasure = (() => {
       spawned.length = 0
       return this
     },
+    spawned: () => [...spawned],
     test: function (count = 1) {
       const {x, y, z} = engine.position.getVector()
 

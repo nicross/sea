@@ -1,9 +1,10 @@
 content.system.audio.surface.moon = (() => {
   const bus = content.system.audio.createBus(),
     clockPreRise = 0.725,
-    clockPreSet = 0.2375,
-    clockPostRise = 0.7625,
+    clockPreSet = 0.245,
+    clockPostRise = 0.755,
     clockPostSet = 0.275,
+    cycleFullyVisible = 0.525,
     fadeDepth = 100,
     rootFrequency = engine.utility.midiToFrequency(54),
     thirdFrequency = engine.utility.midiToFrequency(57)
@@ -16,7 +17,7 @@ content.system.audio.surface.moon = (() => {
   let binaural,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-15)
+  bus.gain.value = engine.utility.fromDb(-16.5)
 
   content.utility.ephemeralNoise.manage(rootAmodDepth)
   content.utility.ephemeralNoise.manage(rootAmodFrequency)
@@ -58,10 +59,10 @@ content.system.audio.surface.moon = (() => {
     // Amplitude modulation
     const time = content.system.time.value()
 
-    preset.root.amodDepth = engine.utility.lerp(0.0625, 0.5, rootAmodDepth.value(time / 60))
-    preset.root.amodFrequency = engine.utility.lerpExp(1/16, 4, rootAmodFrequency.value(time / 60), 2)
-    preset.third.amodDepth = engine.utility.lerp(0.0625, 0.5, thirdAmodDepth.value(time / 60))
-    preset.third.amodFrequency = engine.utility.lerpExp(1/16, 4, thirdAmodFrequency.value(time / 60), 2)
+    preset.root.amodDepth = engine.utility.lerp(1/16, 1/2, rootAmodDepth.value(time / 60))
+    preset.root.amodFrequency = engine.utility.lerpExp(1/16, 4, rootAmodFrequency.value(time / 60), 6)
+    preset.third.amodDepth = engine.utility.lerp(1/16, 1/2, thirdAmodDepth.value(time / 60))
+    preset.third.amodFrequency = engine.utility.lerpExp(1/16, 4, thirdAmodFrequency.value(time / 60), 6)
 
     preset.root.carrierGain = 1 - preset.root.amodDepth
     preset.third.carrierGain = 1 - preset.third.amodDepth
@@ -69,8 +70,8 @@ content.system.audio.surface.moon = (() => {
     // Apply color over cycle
     const cycle = 1 - content.system.time.cycle()
 
-    const color = cycle >= 0.5
-      ? engine.utility.lerpLog(1, 8, engine.utility.scale(cycle, 0.5, 1, 1, 0), 0.5)
+    const color = cycle >= cycleFullyVisible
+      ? engine.utility.lerpExp(1, 8, engine.utility.scale(cycle, cycleFullyVisible, 1, 1, 0), 2)
       : 8
 
     preset.root.color = color
@@ -98,7 +99,6 @@ content.system.audio.surface.moon = (() => {
       preset.root.color *= timeFactor
       preset.root.gain *= timeFactor
 
-      preset.third.color *= timeFactor
       preset.third.gain *= timeFactor
     }
 

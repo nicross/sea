@@ -3,12 +3,13 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.3.0 - Night update
+- Compass cue volume slider
+- Connect sun and moon synths to music volume setting
 - Correlate more things to day/night cycle
   - Tides
     - cycling multiplier for wave height
     - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
-  - Revise sun and moon synths
-    - Connect to music volume setting
+- Reveal certain menu things when no treasure collected but one is spawned
 
 ## v1.4.0 - Life update
 - Aquatic life
@@ -26,14 +27,12 @@ This document outlines upcoming changes for post-jam releases.
   - More triads
 
 ## Known issues
-- Acceleration from zero and turning can be slow on the surface
 - Improve collision detection to prevent getting stuck in terrain
 - Improve mouse look, perhaps independent from craft physics
 - Treasure causes unstable BiquadFilterNode (audio recovers after approximately 4 seconds)
 
 ## Wishlist
 ### Audio
-- Compass cue volume slider
 - Dynamic range presets
 - Game paused volume slider
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
@@ -81,10 +80,8 @@ This document outlines upcoming changes for post-jam releases.
 - Light levels influenced by cloud cover
 - Moon phases
 - Surface weather patterns
-  - Bigger waves
   - Clouds
   - Weather patterns (rain, storm)
-  - Tides
 - Settings for fixed time of day or dynamic with speeds
 
 ### World generation

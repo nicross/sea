@@ -1,6 +1,6 @@
 content.system.audio.underwater.drones = (() => {
   const context = engine.audio.context(),
-    mix = context.createGain(),
+    mix = content.system.audio.music.createBus(),
     synthFade = 4,
     synthGain = engine.utility.fromDb(-15)
 
@@ -16,10 +16,6 @@ content.system.audio.underwater.drones = (() => {
     synths = [],
     wasAbove = false,
     wasBelow = false
-
-  engine.ready(() => {
-    mix.connect(content.system.audio.underwater.music.bus())
-  })
 
   function createSynth(frequency, binaural, instant = false) {
     const amDepth = engine.utility.fromDb(engine.utility.random.float(-6, -4.5))

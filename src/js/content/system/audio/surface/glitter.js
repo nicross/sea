@@ -1,5 +1,5 @@
 content.system.audio.surface.glitter = (() => {
-  const bus = content.system.audio.createBus(),
+  const bus = content.system.audio.music.createBus(),
     context = engine.audio.context(),
     feedbackDelays = [],
     filter = context.createBiquadFilter()
@@ -144,7 +144,6 @@ content.system.audio.surface.glitter = (() => {
   }
 
   return {
-    bus: () => bus,
     import: function () {
       const isAbove = !content.system.movement.isUnderwater()
 
@@ -154,10 +153,6 @@ content.system.audio.surface.glitter = (() => {
 
       wasAbove = isAbove
 
-      return this
-    },
-    setGain: function (value) {
-      engine.audio.ramp.set(bus.gain, value)
       return this
     },
     update: function () {

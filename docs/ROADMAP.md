@@ -3,7 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.3.0 - Night update
-- Compass cue volume slider
 - Improve tides
 - Improve wave audio cue
 - Reveal certain menu things when no treasure collected but one is spawned

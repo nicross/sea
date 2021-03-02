@@ -59,6 +59,7 @@ app.screen.audio = (() => {
 
   function hydrateSliders() {
     [
+      ['.a-audio--compassVolume', app.settings.raw.compassVolume, app.settings.setCompassVolume],
       ['.a-audio--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
       ['.a-audio--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
       ['.a-audio--streamerLimit', app.settings.raw.streamerLimit, app.settings.setStreamerLimit],

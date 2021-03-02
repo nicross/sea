@@ -8,6 +8,7 @@ This document outlines upcoming changes for post-jam releases.
     - cycling multiplier for wave height
     - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
   - Revise sun and moon synths
+    - Connect to music volume setting
 
 ## v1.4.0 - Life update
 - Aquatic life

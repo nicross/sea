@@ -215,6 +215,12 @@ content.system.audio.surface.sun = (() => {
   return {
     reset: function () {
       teardown()
+
+      rootAmodDepth.reset()
+      rootAmodFrequency.reset()
+      thirdAmodDepth.reset()
+      thirdAmodFrequency.reset()
+
       return this
     },
     update: function () {

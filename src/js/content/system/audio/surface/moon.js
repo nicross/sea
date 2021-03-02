@@ -211,6 +211,12 @@ content.system.audio.surface.moon = (() => {
   return {
     reset: function () {
       teardown()
+
+      rootAmodDepth.reset()
+      rootAmodFrequency.reset()
+      thirdAmodDepth.reset()
+      thirdAmodFrequency.reset()
+
       return this
     },
     update: function () {
@@ -225,7 +231,6 @@ content.system.audio.surface.moon = (() => {
       const clock = content.system.time.clock()
 
       if (engine.utility.between(clock, clockPostSet, clockPreRise)) {
-        console.log('teardown')
         teardown()
         return this
       }

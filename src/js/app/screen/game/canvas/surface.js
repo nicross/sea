@@ -128,8 +128,21 @@ app.screen.game.canvas.surface = (() => {
         return this
       }
 
-      // TODO: Respect motion blur setting
+      const hasBlur = app.settings.computed.graphicsMotionBlur > 0
+
+      const blur = hasBlur
+        ? context.createPattern(canvas, 'no-repeat')
+        : undefined
+
       clear()
+
+      if (hasBlur) {
+        context.globalAlpha = app.settings.computed.graphicsMotionBlur
+        context.fillStyle = blur
+        context.fillRect(0, 0, main.width(), main.height())
+        context.globalAlpha = 1
+      }
+
       drawNodes()
 
       // Draw to main canvas, assume identical dimensions

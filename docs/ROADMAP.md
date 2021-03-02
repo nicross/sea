@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.3.0 - Night update
 - Improve tides
 - Improve wave audio cue
-- Respect motion blur setting on surface
 
 ## v1.4.0 - Life update
 - Aquatic life

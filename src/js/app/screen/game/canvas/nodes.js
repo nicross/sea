@@ -128,7 +128,7 @@ app.screen.game.canvas.nodes = (() => {
   return {
     draw: function () {
       // TODO: Calculate and fade to background color
-      context.fillStyle = `rgba(0, 0, 0, ${app.settings.computed.graphicsMotionBlur})`
+      context.fillStyle = `rgba(0, 0, 0, ${1 - app.settings.computed.graphicsMotionBlur})`
       context.fillRect(0, 0, canvas.width, canvas.height)
 
       drawNodes()

@@ -23,7 +23,7 @@ app.settings = (() => {
       default: 1,
     },
     graphicsMotionBlur: {
-      compute: (rawValue) => engine.utility.lerpExp(1, 1/32, rawValue, 1/2),
+      compute: (rawValue) => 1 - engine.utility.lerpExp(1, 1/32, rawValue, 1/2),
       default: 0,
     },
     graphicsOn: {

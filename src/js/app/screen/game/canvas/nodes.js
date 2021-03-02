@@ -137,9 +137,20 @@ app.screen.game.canvas.nodes = (() => {
         return this
       }
 
-      // TODO: Calculate and fade to background color
-      context.fillStyle = `rgba(0, 0, 0, ${1 - app.settings.computed.graphicsMotionBlur})`
-      context.fillRect(0, 0, canvas.width, canvas.height)
+      const hasBlur = app.settings.computed.graphicsMotionBlur > 0
+
+      const blur = hasBlur
+        ? context.createPattern(canvas, 'no-repeat')
+        : undefined
+
+      clear()
+
+      if (hasBlur) {
+        context.globalAlpha = app.settings.computed.graphicsMotionBlur
+        context.fillStyle = blur
+        context.fillRect(0, 0, main.width(), main.height())
+        context.globalAlpha = 1
+      }
 
       drawNodes()
 

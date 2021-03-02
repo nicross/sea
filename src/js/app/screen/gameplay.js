@@ -62,8 +62,11 @@ app.screen.gameplay = (() => {
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
 
-    root.querySelector('.a-gameplay--field-notifyTreasure').hidden = !app.storage.getTreasures().length
-    root.querySelector('.a-gameplay--field-treasureHints').hidden = !app.storage.getTreasures().length || !app.settings.computed.graphicsOn
+    const hasTreasures = app.storage.getTreasures().length > 0
+      || content.system.treasure.any().length > 0
+
+    root.querySelector('.a-gameplay--field-notifyTreasure').hidden = !hasTreasures
+    root.querySelector('.a-gameplay--field-treasureHints').hidden = !hasTreasures || !app.settings.computed.graphicsOn
   }
 
   function onExit() {

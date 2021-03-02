@@ -44,6 +44,7 @@
     <li>Miscellaneous
       <ul>
         <li>Unlock fast travel to floor after first successful scan</li>
+        <li>Unlock gameplay settings after first successful scan</li>
         <li>Reduced treasure notification duration</li>
       </ul>
     </li>

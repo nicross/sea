@@ -131,6 +131,25 @@ app.screen.game.canvas.nodes = (() => {
     return z < content.const.lightZone
   }
 
+  function tameAlpha() {
+    // XXX: Huge performance impact
+    // TODO: Look into better solution
+    return
+
+    const image = context.getImageData(0, 0, main.width(), main.height())
+
+    const data = image.data,
+      length = data.length
+
+    for (let i = 4; i < length; i += 4) {
+      if (data[i] > 0) {
+        data[i] -= 1
+      }
+    }
+
+    context.putImageData(image, 0, 0)
+  }
+
   return {
     draw: function () {
       if (!shouldDraw()) {
@@ -138,6 +157,10 @@ app.screen.game.canvas.nodes = (() => {
       }
 
       const hasBlur = app.settings.computed.graphicsMotionBlur > 0
+
+      if (hasBlur) {
+        tameAlpha()
+      }
 
       const blur = hasBlur
         ? context.createPattern(canvas, 'no-repeat')

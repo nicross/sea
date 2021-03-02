@@ -7,6 +7,7 @@ content.system.audio.surface.moon = (() => {
     cycleFullyVisible = 0.525,
     fadeDepth = 100,
     rootFrequency = engine.utility.midiToFrequency(54),
+    subFrequency = engine.utility.midiToFrequency(30),
     thirdFrequency = engine.utility.midiToFrequency(57)
 
   const rootAmodDepth = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'moonRootAmodDepth', 4),
@@ -17,7 +18,7 @@ content.system.audio.surface.moon = (() => {
   let binaural,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-16.5)
+  bus.gain.value = engine.utility.fromDb(-15)
 
   content.utility.ephemeralNoise.manage(rootAmodDepth)
   content.utility.ephemeralNoise.manage(rootAmodFrequency)
@@ -37,22 +38,24 @@ content.system.audio.surface.moon = (() => {
       root: {
         amodDepth: 0,
         amodFrequency: 0,
-        carrierDetune: 0,
-        carrierGain: 0.5,
+        carrierGain: 1,
         color: 1,
         fmodDepth: rootFrequency / 2,
         fmodFrequency: rootFrequency / 2,
-        gain: 0.5,
+        gain: 1/4,
+      },
+      sub: {
+        gain: 1/2,
+        modFrequency: 1,
       },
       third: {
         amodDepth: 0,
         amodFrequency: 0,
-        carrierDetune: 0,
-        carrierGain: 0.5,
+        carrierGain: 1,
         color: 1,
         fmodDepth: rootFrequency / 2,
         fmodFrequency: thirdFrequency * 8,
-        gain: 0.5,
+        gain: 1/4,
       },
     }
 
@@ -77,13 +80,19 @@ content.system.audio.surface.moon = (() => {
     preset.root.color = color
     preset.third.color = color
 
+    // Adjust sub mod rate over cycle
+    preset.sub.modFrequency = engine.utility.lerpExp(6, 4, cycle, 2)
+
     // Apply fade out below surface
     const surface = content.system.surface.currentHeight()
     const {z} = engine.position.getVector()
 
     if (z < surface) {
-      preset.root.color *= engine.utility.scale(z, surface, surface - fadeDepth, 1, 0)
-      preset.third.color *= engine.utility.scale(z, surface, surface - fadeDepth, 1, 0)
+      const depthFactor = engine.utility.scale(z, surface, surface - fadeDepth, 1, 0)
+
+      preset.root.color *= depthFactor
+      preset.sub.gain *= depthFactor
+      preset.third.color *= depthFactor
     }
 
     // Apply fade out below horizon
@@ -94,12 +103,12 @@ content.system.audio.surface.moon = (() => {
         ? engine.utility.scale(clock, clockPreSet, clockPostSet, 1, 0)
         : engine.utility.scale(clock, clockPostRise, clockPreRise, 1, 0)
 
-      timeFactor = engine.utility.clamp(timeFactor, 0, 1) ** 4
+      timeFactor = engine.utility.clamp(timeFactor, 0, 1)
 
       preset.root.color *= timeFactor
-      preset.root.gain *= timeFactor
-
-      preset.third.gain *= timeFactor
+      preset.root.gain *= timeFactor ** 4
+      preset.sub.gain *= timeFactor ** 2
+      preset.third.gain *= timeFactor ** 3
     }
 
     return preset
@@ -113,7 +122,6 @@ content.system.audio.surface.moon = (() => {
     const root = engine.audio.synth.createMod({
       amodDepth: preset.root.amodDepth,
       amodFrequency: preset.root.amodFrequency,
-      carrierDetune: preset.root.carrierDetune,
       carrierFrequency: rootFrequency,
       carrierGain: preset.root.carrierGain,
       carrierType: 'sine',
@@ -127,7 +135,6 @@ content.system.audio.surface.moon = (() => {
     const third = engine.audio.synth.createMod({
       amodDepth: preset.third.amodDepth,
       amodFrequency: preset.third.amodFrequency,
-      carrierDetune: preset.third.carrierDetune,
       carrierFrequency: thirdFrequency,
       carrierGain: preset.third.carrierGain,
       carrierType: 'sine',
@@ -138,15 +145,25 @@ content.system.audio.surface.moon = (() => {
       frequency: thirdFrequency * preset.third.color,
     })
 
-    binaural.from(root).from(third)
+    const sub = engine.audio.synth.createAm({
+      carrierFrequency: subFrequency,
+      carrierGain: 5/8,
+      gain: preset.sub.gain,
+      modDepth: 3/8,
+      modFrequency: preset.sub.modFrequency,
+    })
+
+    binaural.from(root).from(third).from(sub)
 
     synth = {
       root,
       stop: function (...args) {
         root.stop(...args)
         third.stop(...args)
+        sub.stop(...args)
         return this
       },
+      sub,
       third,
     }
   }
@@ -191,7 +208,6 @@ content.system.audio.surface.moon = (() => {
 
     engine.audio.ramp.set(synth.root.param.amod.depth, preset.root.amodDepth)
     engine.audio.ramp.set(synth.root.param.amod.frequency, preset.root.amodFrequency)
-    engine.audio.ramp.set(synth.root.param.detune, preset.root.carrierDetune)
     engine.audio.ramp.set(synth.root.param.carrierGain, preset.root.carrierGain)
     engine.audio.ramp.set(synth.root.param.fmod.depth, preset.root.fmodDepth)
     engine.audio.ramp.set(synth.root.param.fmod.frequency, preset.root.fmodFrequency)
@@ -200,12 +216,14 @@ content.system.audio.surface.moon = (() => {
 
     engine.audio.ramp.set(synth.third.param.amod.depth, preset.third.amodDepth)
     engine.audio.ramp.set(synth.third.param.amod.frequency, preset.third.amodFrequency)
-    engine.audio.ramp.set(synth.third.param.detune, preset.third.carrierDetune)
     engine.audio.ramp.set(synth.third.param.carrierGain, preset.third.carrierGain)
     engine.audio.ramp.set(synth.third.param.fmod.depth, preset.third.fmodDepth)
     engine.audio.ramp.set(synth.third.param.fmod.frequency, preset.third.fmodFrequency)
-    engine.audio.ramp.set(synth.third.filter.frequency, rootFrequency * preset.third.color)
+    engine.audio.ramp.set(synth.third.filter.frequency, thirdFrequency * preset.third.color)
     engine.audio.ramp.set(synth.third.param.gain, preset.third.gain)
+
+    engine.audio.ramp.set(synth.sub.param.gain, preset.sub.gain)
+    engine.audio.ramp.set(synth.sub.param.mod.frequency, preset.sub.modFrequency)
   }
 
   return {

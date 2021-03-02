@@ -125,8 +125,18 @@ app.screen.game.canvas.nodes = (() => {
     return engine.utility.lerp(0, 360, value)
   }
 
+  function shouldDraw() {
+    // TODO: Find better value, e.g. what is the Z at the bottom of screen?
+    const {z} = engine.position.getVector()
+    return z < content.const.lightZone
+  }
+
   return {
     draw: function () {
+      if (!shouldDraw()) {
+        return this
+      }
+
       // TODO: Calculate and fade to background color
       context.fillStyle = `rgba(0, 0, 0, ${1 - app.settings.computed.graphicsMotionBlur})`
       context.fillRect(0, 0, canvas.width, canvas.height)

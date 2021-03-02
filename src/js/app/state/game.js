@@ -124,7 +124,7 @@ app.state.game.on('before-none-new', () => {
       quaternion: engine.utility.quaternion.fromEuler({yaw: Math.PI / 8}),
       x: 0,
       y: 0,
-      z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeight / 2),
+      z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeightMax / 2),
     },
     time: {
       offset: 7.45 * 60,

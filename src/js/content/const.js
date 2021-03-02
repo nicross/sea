@@ -23,7 +23,8 @@ content.const = {
   underwaterTurboAcceleration: engine.const.gravity,
   underwaterTurboMaxVelocity: 20,
   unit2: Math.sqrt(2) / 2,
-  waveHeight: 8,
+  waveHeightMax: 16,
+  waveHeightMin: 8,
 }
 
 engine.const.distancePower = 1.25

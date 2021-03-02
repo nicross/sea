@@ -347,7 +347,7 @@ content.system.movement = (() => {
 
     pubsub.emit('surface-splash', {
       pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 0, 1), 0, 1),
-      size: (surfaceZ - z) / content.const.waveHeight,
+      size: (surfaceZ - z) / content.system.surface.toHeight(1),
       velocity: engine.utility.clamp(velocity.distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
     })
   }

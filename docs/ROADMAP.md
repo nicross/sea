@@ -4,10 +4,8 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.3.0 - Night update
 - Compass cue volume slider
-- Correlate more things to day/night cycle
-  - Tides
-    - cycling multiplier for wave height
-    - mixes in tidal waves (low frequency, high amplitude, narrow peaks)
+- Improve tides
+- Improve wave audio cue
 - Reveal certain menu things when no treasure collected but one is spawned
 
 ## v1.4.0 - Life update

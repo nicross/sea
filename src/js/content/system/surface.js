@@ -6,15 +6,18 @@ content.system.surface = (() => {
     timeScale = 60 // Evolves over N seconds
 
   let currentHeight,
+    currentHeightScale,
     currentValue
 
   content.utility.ephemeralNoise.manage(field)
 
   function cacheCurrent() {
-    const position = engine.position.getVector()
+    const cycle = content.system.time.cycle(),
+      position = engine.position.getVector()
 
     currentValue = getValue(position.x, position.y)
     currentHeight = toHeight(currentValue)
+    currentHeightScale = 1 - engine.utility.wrapAlternate(2 * cycle, 0, 1)
   }
 
   function getValue(x, y) {
@@ -30,7 +33,7 @@ content.system.surface = (() => {
   }
 
   function toHeight(value) {
-    return value * content.const.waveHeight
+    return engine.utility.lerp(content.const.waveHeightMin, content.const.waveHeightMax, currentHeightScale) * value
   }
 
   return {
@@ -41,6 +44,7 @@ content.system.surface = (() => {
 
       return currentHeight
     },
+    currentHeightScale: () => currentHeightScale,
     currentValue: function () {
       if (currentValue === undefined) {
         cacheCurrent()
@@ -59,6 +63,7 @@ content.system.surface = (() => {
     reset: function () {
       field.reset()
       currentHeight = undefined
+      currentHeightScale = undefined
       currentValue = undefined
       return this
     },

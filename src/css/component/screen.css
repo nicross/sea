@@ -8,7 +8,8 @@
   width: 100%;
 }
   .c-screen > * + *,
-  .c-screen--field + .c-screen--field {
+  .c-screen--field + .c-screen--field,
+  .c-screen--fields > * + * {
     margin-top: 1em;
   }
   .c-screen > * + .c-screen--actions {

@@ -23,6 +23,8 @@
   - Added solar time to Status screen
   - Correlated surface turbulence to lunar position
   - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time
+- User interface
+  - Added scrollbars to settings pages
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>

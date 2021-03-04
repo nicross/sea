@@ -1,11 +1,11 @@
 content.system.surface = (() => {
   const momentumX = -10, // Moves westward N m/s
     normalField = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 6),
-    normalScaleX = 80,
+    normalScaleX = 60,
     normalScaleY = 300,
     tidalField = engine.utility.perlin2d.create('surface', 'tidal'),
-    tidalScaleX = 80,
-    tidalScaleY = 300,
+    tidalScaleX = 100,
+    tidalScaleY = 500,
     timeScale = 60 // Evolves over N seconds
 
   let currentHeight,
@@ -37,8 +37,8 @@ content.system.surface = (() => {
     x += time * momentumX / tidalScaleX
     y /= tidalScaleY
 
-    const mix = tidalField.value(y, time) ** 0.75,
-      wave = Math.cos(2 * Math.PI * x) ** 3
+    const mix = tidalField.value(y, time / timeScale) ** 0.75,
+      wave = Math.cos(2 * Math.PI * x) ** 7
 
     return engine.utility.clamp(wave * mix, 0, 1)
   }
@@ -49,7 +49,7 @@ content.system.surface = (() => {
       time = content.system.time.value()
 
     const tidal = cycleFactor
-      ? getTidal(x, y, time / timeScale) * cycleFactor
+      ? getTidal(x, y, time) * cycleFactor
       : 0
 
     const normal = getNormal(x, y, time) * (1 - tidal)

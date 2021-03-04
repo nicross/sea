@@ -3,7 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.3.0 - Night update
-- Improve tides
 - Improve wave audio cue
 
 ## v1.4.0 - Life update

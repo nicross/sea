@@ -21,6 +21,7 @@
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps
 - Simulation
+  - Added tidal waves
   - Added solar time to Status screen
   - Correlated surface turbulence to lunar position
   - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time

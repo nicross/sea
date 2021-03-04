@@ -1,15 +1,17 @@
 content.system.surface = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'surface', 6),
-    momentumX = -10, // Moves westward N m/s
-    scaleX = 60, // Nodes are N m apart
-    scaleY = 300, // Nodes are N m apart
+  const momentumX = -10, // Moves westward N m/s
+    normalField = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 6),
+    scaleX = 80,
+    scaleY = 300,
+    tidalField = engine.utility.perlin2d.create('surface', 'tidal'),
     timeScale = 60 // Evolves over N seconds
 
   let currentHeight,
     currentHeightScale,
     currentValue
 
-  content.utility.ephemeralNoise.manage(field)
+  content.utility.ephemeralNoise.manage(normalField)
+  content.utility.ephemeralNoise.manage(tidalField)
 
   function cacheCurrent() {
     const cycle = content.system.time.cycle(),
@@ -20,16 +22,28 @@ content.system.surface = (() => {
     currentHeightScale = 1 - engine.utility.wrapAlternate(2 * cycle, 0, 1)
   }
 
+  function getTidal(x, y, time) {
+    const mix = tidalField.value(y, time) ** 0.75,
+      wave = Math.cos(2 * Math.PI * x) ** 3
+
+    return engine.utility.clamp(wave * mix, 0, 1)
+  }
+
   function getValue(x, y) {
-    const time = content.system.time.value(),
-      z = time / timeScale
+    const cycle = content.system.time.cycle(),
+      cycleFactor = Math.cos(Math.PI * cycle) ** 8,
+      time = content.system.time.value()
 
     x /= scaleX
     x += time * momentumX / scaleX
-
     y /= scaleY
 
-    return field.value(x, y, z)
+    const tidal = cycleFactor
+      ? getTidal(x, y, time / timeScale) * cycleFactor
+      : 0
+
+    const normal = normalField.value(x, y, time / timeScale) * (1 - tidal)
+    return engine.utility.clamp(normal + tidal, 0, 1)
   }
 
   function toHeight(value) {
@@ -61,10 +75,13 @@ content.system.surface = (() => {
       return this
     },
     reset: function () {
-      field.reset()
+      normalField.reset()
+      tidalField.reset()
+
       currentHeight = undefined
       currentHeightScale = undefined
       currentValue = undefined
+
       return this
     },
     toHeight,

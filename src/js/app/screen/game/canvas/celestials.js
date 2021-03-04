@@ -18,7 +18,7 @@ app.screen.game.canvas.celestials = (() => {
     canvas.width = width
 
     minRadius = 0.125 * width / hfov / Math.PI
-    maxRadius = minRadius * 2
+    maxRadius = minRadius * 4
 
     clear()
   })
@@ -107,7 +107,7 @@ app.screen.game.canvas.celestials = (() => {
 
   function calculateRadius(pitch) {
     const value = Math.abs(Math.sin(pitch))
-    return engine.utility.lerpExp(minRadius, maxRadius, 1 - value, 16)
+    return engine.utility.lerpExp(minRadius, maxRadius, 1 - value, 32)
   }
 
   function clear() {

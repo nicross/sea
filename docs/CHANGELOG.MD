@@ -18,6 +18,7 @@
 - Movement
   - Applied engine thrust when skipping
   - Increased friction with surface
+  - Increased max velocity slightly while turbo is disengaged
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps
 - Simulation

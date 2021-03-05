@@ -49,9 +49,12 @@ app.screen.game.canvas.stars = (() => {
     return horizon.y
   }
 
-  function calculateTwinkle() {
-    // TODO: simple frequency modulation over time with nested Math.sin()
-    return 1
+  function calculateTwinkle(phase) {
+    const time = content.system.time.time()
+    const fmod = Math.sin(Math.PI * 1/20 * time)
+    const f = engine.utility.lerp(2, 6, fmod)
+    const amod = Math.sin((Math.PI * f * time) + phase) ** 2
+    return 0.875 + (amod * 0.125)
   }
 
   function clear() {

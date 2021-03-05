@@ -47,6 +47,7 @@ app.screen.game.canvas = (() => {
     clear()
     app.screen.game.canvas.nodes.draw(e)
     app.screen.game.canvas.light.draw(e)
+    app.screen.game.canvas.stars.draw(e)
     app.screen.game.canvas.celestials.draw(e)
     app.screen.game.canvas.surface.draw(e)
     app.screen.game.canvas.grain.draw(e)

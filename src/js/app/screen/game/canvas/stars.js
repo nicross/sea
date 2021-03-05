@@ -62,7 +62,6 @@ app.screen.game.canvas.stars = (() => {
     const globalAlpha = calculateAlpha(),
         height = main.height(),
         hfov = main.hfov(),
-        horizon = calculateHorizon(),
         radius = 0.5,
         vfov = main.vfov(),
         width = main.width()
@@ -72,7 +71,10 @@ app.screen.game.canvas.stars = (() => {
     }
 
     const conjugate = engine.position.getQuaternion().conjugate(),
-      cycle = 2 * Math.PI * content.system.time.cycle()
+      cycle = 2 * Math.PI * content.system.time.cycle(),
+      horizon = calculateHorizon()
+
+    const horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
 
     for (const star of stars) {
       const relative = engine.utility.vector3d.create({
@@ -113,7 +115,9 @@ app.screen.game.canvas.stars = (() => {
         continue
       }
 
-      // TODO: Fade alpha when close to horizon
+      if (screen.y > horizon - horizonCutoff) {
+        alpha *= engine.utility.scale(screen.y, horizon - horizonCutoff, horizon, 1, 0)
+      }
 
       context.fillStyle = `rgba(255, 255, 255, ${alpha})`
       context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
@@ -128,7 +132,7 @@ app.screen.game.canvas.stars = (() => {
 
       stars.push({
         alpha: srand(1/8, 1),
-        delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),
+        delta: Math.PI / 2 * (delta ** 3),
         phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),
       })

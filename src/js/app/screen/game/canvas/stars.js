@@ -30,7 +30,7 @@ app.screen.game.canvas.stars = (() => {
       return 0
     }
 
-    const cycleFactor = engine.utility.scale(cycle, 0.5, 0, 0, 1) ** (1/3)
+    const cycleFactor = engine.utility.scale(cycle, 0.5, 0, 0, 1) ** 0.25
 
     const surfaceFactor = z >= surface
       ? 1
@@ -74,8 +74,8 @@ app.screen.game.canvas.stars = (() => {
     }
 
     const conjugate = engine.position.getQuaternion().conjugate(),
-      cycle = 2 * Math.PI * content.system.time.cycle(),
-      horizon = calculateHorizon()
+      horizon = calculateHorizon(),
+      rotation = -2 * Math.PI * content.system.time.clock()
 
     const horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
 
@@ -83,7 +83,7 @@ app.screen.game.canvas.stars = (() => {
       const relative = engine.utility.vector3d.create({
         x: firmament,
       }).rotateEuler({
-        pitch: cycle,
+        pitch: rotation,
       }).rotateEuler({
         pitch: star.theta,
         yaw: star.delta,
@@ -134,7 +134,7 @@ app.screen.game.canvas.stars = (() => {
       const delta = srand(-1, 1)
 
       stars.push({
-        alpha: srand(1/8, 1),
+        alpha: srand(1/4, 1),
         delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2.5),
         phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),

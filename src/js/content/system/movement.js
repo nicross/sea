@@ -227,16 +227,10 @@ content.system.movement = (() => {
       z: velocity.z * -reflectionRate,
     })
 
-    // Apply thrust if available
+    // Apply thrust
     const thrustScale = engine.performance.fps() / 4
-
-    if (angularThrust) {
-      applyAngularThrust(thrustScale)
-    }
-
-    if (!lateralThrust.isZero()) {
-      applyLateralThrust(thrustScale)
-    }
+    applyAngularThrust(thrustScale)
+    applyLateralThrust(thrustScale)
   }
 
   function handleSurface(controls) {

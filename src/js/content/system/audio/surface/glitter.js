@@ -112,10 +112,10 @@ content.system.audio.surface.glitter = (() => {
       ? engine.utility.fromDb(engine.utility.lerp(-12, -6, frequencyRoll))
       : engine.utility.fromDb(engine.utility.random.float(-12, -6))
 
-    const fadeBelowZ = content.const.lightZone * 0.9
+    const fadeBelowZ = content.const.midnightZoneMin
 
     if (z <= fadeBelowZ) {
-      gain *= engine.utility.scale(z, fadeBelowZ, content.const.lightZone, 1, 0) ** 0.75
+      gain *= engine.utility.scale(z, fadeBelowZ, content.const.lightZone, 1, 0) ** 0.25
     }
 
     const now = engine.audio.time()

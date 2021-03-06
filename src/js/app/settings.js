@@ -1,8 +1,8 @@
 app.settings = (() => {
   const settings = {
     compassVolume: {
-      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -12, rawValue, 268400000)), // -9 => 23155
-      default: 0.5,
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -15, rawValue, 130000000)),
+      default: 1,
     },
     drawDistance: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),

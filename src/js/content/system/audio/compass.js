@@ -91,7 +91,7 @@ content.system.audio.compass = (() => {
     const surface = content.system.surface.currentHeight(),
       value = engine.utility.clamp(engine.utility.scale(z, surface, content.const.lightZone, 1, 0), 0, 1)
 
-    const gain = engine.utility.fromDb(engine.utility.lerp(-4.5, 0, value)) * gainFactor
+    const gain = engine.utility.fromDb(engine.utility.lerp(-6, 0, value)) * gainFactor
     engine.audio.ramp.set(bus.gain, gain)
   }
 

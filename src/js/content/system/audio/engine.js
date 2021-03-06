@@ -9,7 +9,7 @@ content.system.audio.engine = (() => {
 
   let synth
 
-  bus.gain.value = engine.utility.fromDb(-7)
+  bus.gain.value = engine.utility.fromDb(-6)
   binaural.to(bus)
 
   function calculateParams() {

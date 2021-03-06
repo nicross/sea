@@ -9,6 +9,7 @@
   - Decreased engine volume slightly
   - Improved wave frequency calculations
   - Prevented phase cancellation between waves
+  - Reduced maximum object limit to 25
   - Reduced wave volume when catching air
 - Graphics
   - Added a pleasant day/night cycle

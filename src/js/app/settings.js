@@ -57,7 +57,7 @@ app.settings = (() => {
       },
     },
     streamerLimit: {
-      compute: (rawValue) => Math.round(engine.utility.lerp(5, 30, rawValue)),
+      compute: (rawValue) => Math.round(engine.utility.lerp(5, 25, rawValue)),
       default: 1,
       update: (computedValue) => {
         engine.streamer.setLimit(computedValue)

@@ -22,7 +22,8 @@ content.system.audio.compass = (() => {
     {angle: Math.PI * 1.875, strength: 0},
   ]
 
-  let previousAngle = 0
+  let gainFactor = engine.const.zeroGain,
+    previousAngle = 0
 
   bus.gain.value = engine.const.zeroGain
 
@@ -84,11 +85,13 @@ content.system.audio.compass = (() => {
     synth.stop(now + duration)
   }
 
-  function updateGain(z) {
+  function updateGain() {
+    const {z} = engine.position.getVector()
+
     const surface = content.system.surface.currentHeight(),
       value = engine.utility.clamp(engine.utility.scale(z, surface, content.const.lightZone, 1, 0), 0, 1)
 
-    const gain = engine.utility.fromDb(engine.utility.lerp(-4.5, 0, value)) * app.settings.computed.compassVolume
+    const gain = engine.utility.fromDb(engine.utility.lerp(-4.5, 0, value)) * gainFactor
     engine.audio.ramp.set(bus.gain, gain)
   }
 
@@ -101,15 +104,18 @@ content.system.audio.compass = (() => {
 
       return this
     },
+    setGain: function (value) {
+      gainFactor = value
+      return this
+    },
     update: function () {
       const angle = engine.utility.normalizeAngle(engine.position.getEuler().yaw)
-      const {z} = engine.position.getVector()
-
-      updateGain(z)
 
       if (angle == previousAngle) {
         return this
       }
+
+      updateGain()
 
       triggerRose(angle)
       previousAngle = angle

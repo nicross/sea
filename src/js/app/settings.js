@@ -3,6 +3,9 @@ app.settings = (() => {
     compassVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -15, rawValue, 130000000)),
       default: 1,
+      update: (computedValue) => {
+        content.system.audio.compass.setGain(computedValue)
+      },
     },
     drawDistance: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),

@@ -83,7 +83,7 @@ app.screen.game.canvas.stars = (() => {
       const relative = engine.utility.vector3d.create({
         x: firmament,
       }).rotateEuler({
-        pitch: -cycle,
+        pitch: cycle,
       }).rotateEuler({
         pitch: star.theta,
         yaw: star.delta,

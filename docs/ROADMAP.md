@@ -2,9 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.3.0 - Night update
-- Improve wave audio cue
-
 ## v1.4.0 - Life update
 - Aquatic life
   - Dolphins
@@ -33,7 +30,8 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Graphics
 - Godrays
-- Procedural night skybox
+- Shooting stars
+- Surface shimmer
 
 ### Plot
 - Abandoned alien labs
@@ -77,6 +75,10 @@ This document outlines upcoming changes for post-jam releases.
   - Clouds
   - Weather patterns (rain, storm)
 - Settings for fixed time of day or dynamic with speeds
+
+### User interface
+- Fancier menus / game paused screen
+- Improve treasure gallery
 
 ### World generation
 - Biomes

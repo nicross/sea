@@ -109,6 +109,10 @@ content.system.audio.compass = (() => {
       return this
     },
     update: function () {
+      if (gainFactor <= engine.const.zeroGain) {
+        return this
+      }
+
       const angle = engine.utility.normalizeAngle(engine.position.getEuler().yaw)
 
       if (angle == previousAngle) {

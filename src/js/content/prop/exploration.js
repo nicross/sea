@@ -27,6 +27,10 @@ content.prop.exploration = content.prop.base.invent({
     return engine.utility.timing.promise(duration * 1000)
   },
   onUpdate: function () {
+    if (content.system.scan.isCooldown()) {
+      return
+    }
+
     this.handlePeriodic({
       delay: () => this.hasPeriodic('glitter') ? engine.const.zeroTime : 1,
       key: 'glitter',

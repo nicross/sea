@@ -114,7 +114,7 @@ content.system.scan = (() => {
       const {z} = engine.position.getVector()
 
       // Disallow use on surface
-      if (z >= 0) {
+      if (z >= content.system.surface.currentHeight()) {
         return this
       }
 
@@ -143,7 +143,7 @@ content.system.scan = (() => {
       const {z} = engine.position.getVector()
 
       // Disallow use on surface
-      if (z >= 0) {
+      if (z >= content.system.surface.currentHeight()) {
         return this
       }
 

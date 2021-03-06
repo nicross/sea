@@ -47,9 +47,10 @@
     </li>
     <li>Miscellaneous
       <ul>
+        <li>Fix ability to use scanner between sea level and surface</li>
+        <li>Reduced treasure notification duration</li>
         <li>Unlock fast travel to floor after first successful scan</li>
         <li>Unlock gameplay settings after first successful scan</li>
-        <li>Reduced treasure notification duration</li>
       </ul>
     </li>
   </ul>

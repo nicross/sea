@@ -10,12 +10,12 @@ content.system.audio.surface.waves = (() => {
     lowpassDropoffRate = 3,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
-    waveFrequencyDropoff = 1,
-    waveFrequencyRange = 1/4, // 2 octaves
+    waveFrequencyDropoff = 1.5,
+    waveFrequencyRange = 1/4, // 3 octaves
     waveGainDropoff = 3,
     waveMaxFrequency = 3000,
     waveMaxGain = 1,
-    waveMinFrequency = 750,
+    waveMinFrequency = 500,
     waveMinGain = 1/2
 
   // 0 is forward

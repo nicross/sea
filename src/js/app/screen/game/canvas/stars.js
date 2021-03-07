@@ -26,11 +26,11 @@ app.screen.game.canvas.stars = (() => {
 
     const cycle = content.system.time.cycle()
 
-    if (cycle >= 0.5) {
+    if (cycle >= 0.525) {
       return 0
     }
 
-    const cycleFactor = engine.utility.scale(cycle, 0.5, 0, 0, 1) ** 0.25
+    const cycleFactor = engine.utility.scale(cycle, 0.525, 0, 0, 1) ** 0.25
 
     const surfaceFactor = z >= surface
       ? 1

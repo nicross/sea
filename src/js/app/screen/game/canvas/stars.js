@@ -134,8 +134,8 @@ app.screen.game.canvas.stars = (() => {
       const delta = srand(-1, 1)
 
       stars.push({
-        alpha: srand(1/4, 1),
-        delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2.5),
+        alpha: srand(1/2, 1),
+        delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),
         phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),
       })

@@ -23,13 +23,15 @@
   - Reduced angular deceleration in air for bigger spins
   - Reduced deceleration in air for bigger jumps
 - Simulation
-  - Added tidal waves
+  - Added tidal waves that are strongest at noon and midnight
   - Added solar time to Status screen
   - Correlated surface turbulence to lunar position
-  - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time
+  - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time with a screen reader
 - User interface
   - Added scrollbars to settings pages
   - Increased speed of screen transitions
+- Miscellaneous
+  - Updated desktop builds to Electron v12.0.0 (Chromium 89)
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>
@@ -49,9 +51,9 @@
     <li>Miscellaneous
       <ul>
         <li>Fix ability to use scanner between sea level and surface</li>
-        <li>Reduced treasure notification duration</li>
+        <li>Reduced treasure notification duration from 10 to 3 seconds</li>
         <li>Unlock fast travel to floor after first successful scan</li>
-        <li>Unlock gameplay settings after first successful scan</li>
+        <li>Unlock gameplay settings after first treasure found</li>
       </ul>
     </li>
   </ul>
@@ -158,6 +160,7 @@
   - Added Graphics screen
     - Added toggle for enabling graphics (on by default)
     - Added sliders for Field of View, HUD Opacity, and Motion Blur
+- Updated desktop builds to Electron v11.1.1 (Chromium 87)
 
 <details>
   <summary>Spoiler Warning</summary>

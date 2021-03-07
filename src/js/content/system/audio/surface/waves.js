@@ -16,7 +16,7 @@ content.system.audio.surface.waves = (() => {
     waveMaxFrequency = 5000,
     waveMaxGain = 1,
     waveMinFrequency = 500,
-    waveMinGain = 1/2
+    waveMinGain = 1/4
 
   // 0 is forward
   const angles = [
@@ -116,7 +116,7 @@ content.system.audio.surface.waves = (() => {
         maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
         minFrequency = isAbove ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
 
-      let gain = engine.utility.lerpExp(waveMinGain, waveMaxGain, value, waveGainDropoff)
+      let gain = engine.utility.lerpExp(waveMaxGain, waveMinGain, value, waveGainDropoff)
 
       if (z > height) {
         gain *= engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, 1, 0.75), 0.75, 1)

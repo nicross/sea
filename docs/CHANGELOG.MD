@@ -2,38 +2,42 @@
 
 ## v1.3.0
 - Audio
-  - Added dynamic audio cues for sun and moon
+  - Added persistent audio cues for sun and moon
   - Added volume slider for compass cues
-  - Aligned soundtrack texture with day/night cycle
-  - Decreased compass cue volume slightly
-  - Decreased engine volume slightly
-  - Improved wave frequency calculations
+  - Aligned soundtrack texture with time of day
   - Prevented phase cancellation between waves
   - Reduced maximum object limit to 25
   - Reduced wave volume when catching air
 - Graphics
-  - Added a pleasant day/night cycle
-  - Applied motion blur to surface
+  - Added sun, moon, and stars that rise and set
+  - Aligned light colors with time of day
+  - Applied motion blur setting to surface
   - Made closer objects appear slightly larger
-  - Tamed the film grain
+  - Tamed the film grain effect
 - Movement
-  - Applied engine thrust when skipping
+  - Applied engine thrust and turning when skipping
   - Increased friction with surface
-  - Increased max velocity slightly while turbo is disengaged
-  - Reduced angular deceleration in air for bigger spins
-  - Reduced deceleration in air for bigger jumps
+  - Increased maximum normal velocity
+  - Reduced drag in air for bigger jumps and spins
 - Simulation
-  - Added tidal waves
-  - Added solar time to Status screen
-  - Correlated surface turbulence to lunar position
-  - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time
+  - Added tidal waves that are strongest at noon and midnight
+  - Aligned surface turbulence to time of day
 - User interface
-  - Added scrollbars to settings pages
-  - Increased speed of screen transitions
+  - Added scrollbars to settings screens with several fields
+  - Added solar time to Status screen
+  - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time with a screen reader
+  - Reduced screen transition times
+- Miscellaneous
+  - Updated desktop builds to Electron v12.0.0 (Chromium 89)
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>
   <ul>
+    <li>Audio
+      <ul>
+        <li>Improved transitions between the midnight zone</li>
+      </ul>
+    </li>
     <li>Movement
       <ul>
         <li>Allowed strafe controls in air for applying thrust on skip</li>
@@ -49,9 +53,9 @@
     <li>Miscellaneous
       <ul>
         <li>Fix ability to use scanner between sea level and surface</li>
-        <li>Reduced treasure notification duration</li>
+        <li>Reduced treasure notification duration from 10 to 3 seconds</li>
         <li>Unlock fast travel to floor after first successful scan</li>
-        <li>Unlock gameplay settings after first successful scan</li>
+        <li>Unlock gameplay settings after first treasure found</li>
       </ul>
     </li>
   </ul>
@@ -158,6 +162,7 @@
   - Added Graphics screen
     - Added toggle for enabling graphics (on by default)
     - Added sliders for Field of View, HUD Opacity, and Motion Blur
+- Updated desktop builds to Electron v11.1.1 (Chromium 87)
 
 <details>
   <summary>Spoiler Warning</summary>

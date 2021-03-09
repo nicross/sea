@@ -2,13 +2,43 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.4.0 - Life update
+## v1.3.x
+- Explore performance optimizations
+
+## v1.4.0 - Festival update
+- Audio
+  - Add volume sliders for more channels
+  - Add volume sliders for paused
+  - Reroute sound effects into buses
+- Documentation
+  - Graphical description of surface
+  - Note access hotkey for
+  - Performance notes
+  - Photosensitivity warning
+  - Reword sections based on current marketing
+- Menus
+  - Animated splash screen
+  - Better screen transitions
+  - Improved gallery screen
+  - Overlay menus over graphics layer
+  - Randomized main menu scenes
+  - Revamped menu styles
+- Simulation
+  - Add subtle north-south waves
+  - Increase distance between tidal waves
+  - Increase height variance of tidal waves
+  - Perlin worm caves
+- Miscellaneous
+  - Improve collision detection
+
+## v1.5.0 - Life update
 - Aquatic life
   - Dolphins
   - Gulls
   - Whales
 - Basic biome generation
   - Aleotoric
+  - Caves (indicate worm caves)
   - Drone
   - Pebble (scanner-like)
   - Tremolo
@@ -27,6 +57,7 @@ This document outlines upcoming changes for post-jam releases.
 - Dynamic range presets
 - Game paused volume slider
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
+- Submixes with volume sliders, e.g. to isolate music
 
 ### Graphics
 - Godrays
@@ -69,6 +100,9 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Simulation
 - Add depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
+- Improved surface
+  - quiet noise that oscillates north-south
+  - spread out tidal waves
 - Light levels influenced by cloud cover
 - Moon phases
 - Surface weather patterns
@@ -79,12 +113,20 @@ This document outlines upcoming changes for post-jam releases.
 ### User interface
 - Fancier menus / game paused screen
 - Improve treasure gallery
+- Scene that plays in background of main menu
 
 ### World generation
 - Biomes
   - Scanned points can be different props determined by noise fields
   - Represented graphically with a range of saturation levels (i.e. albedo)
   - Different musical colors, patterns (aleotoric, step melody), or behaviors entirely
+- Cavern generation
+  - Perlin worms carve tunnels out from the terrain
+    - Octree stores points with data like radius
+    - Points are generated at 1/Nm intervals
+    - Start at floor and travel for random distance
+  - Collision detection: is within Nm cube of closest point
+  - Guaranteed treasures
 
 ### Miscellaneous
 - Photograph mode, or pseudo-bookmarks

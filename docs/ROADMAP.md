@@ -3,12 +3,9 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.4.0 - Festival update
-- Audio
-  - Add volume sliders for more channels
-  - Reroute sound effects into buses
 - Documentation
   - Graphical description of surface
-  - Note access hotkey for
+  - Note access hotkey for solar time
   - Performance notes
   - Photosensitivity warning
   - Reword sections based on current marketing
@@ -21,9 +18,11 @@ This document outlines upcoming changes for post-jam releases.
   - Add subtle north-south waves
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
-- Miscellaneous
-  - Improve collision detection
-  - Performance optimizations
+- Chores
+  - Reroute non-music sounds into a bus
+  - Fade non-music sounds as game state changes
+  - Crossfade graphics on scene change
+  - Update graphics as settings are adjusted
 
 ## v1.5.0 - Life update
 - Aquatic life
@@ -50,7 +49,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Wishlist
 ### Audio
 - Dynamic range presets
-- Game paused volume slider
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
 - Submixes with volume sliders, e.g. to isolate music
 
@@ -125,3 +123,9 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Miscellaneous
 - Photograph mode, or pseudo-bookmarks
+
+### Chores
+- Performance optimizations
+- Refactor app state management (e.g. how audio fades, scenes load) for clarity
+- Refactor fast travel as content system
+- Rename content.system.* as content.*

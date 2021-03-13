@@ -10,14 +10,16 @@ app.canvas = (() => {
     width
 
   engine.ready(() => {
-    root = document.querySelector('.a-game--canvas')
+    root = document.querySelector('.a-app--canvas')
     context = root.getContext('2d')
 
     app.state.screen.on('enter-game', onEnterGame)
     app.state.screen.on('exit-game', onExitGame)
 
     window.addEventListener('resize', onResize)
-    onResize()
+
+    // TODO: app.settings.computed.graphicsFov is undefined
+    setTimeout(onResize, 0)
   })
 
   function clear() {
@@ -33,7 +35,8 @@ app.canvas = (() => {
 
     pubsub.emit('enter')
 
-    onResize()
+    //onResize()
+    console.log(height, width, aspect, hfov, vfov)
     engine.loop.on('frame', onFrame)
   }
 

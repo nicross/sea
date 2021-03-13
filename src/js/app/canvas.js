@@ -19,7 +19,6 @@ app.canvas = (() => {
     setTimeout(() => {
       onResize()
       engine.loop.on('frame', onFrame)
-      engine.loop.once('frame', () => engine.loop.pause())
     }, 0)
   })
 
@@ -27,20 +26,23 @@ app.canvas = (() => {
     context.clearRect(0, 0, width, height)
   }
 
-  function onFrame(e) {
-    if (e.paused || !app.settings.computed.graphicsOn) {
+  function draw() {
+    app.canvas.nodes.draw()
+    app.canvas.light.draw()
+    app.canvas.stars.draw()
+    app.canvas.celestials.draw()
+    app.canvas.surface.draw()
+    app.canvas.grain.draw()
+    app.canvas.hud.draw()
+  }
+
+  function onFrame({paused}) {
+    if (paused || !app.settings.computed.graphicsOn) {
       return
     }
 
-    // Drawing order is back-to-front
     clear()
-    app.canvas.nodes.draw(e)
-    app.canvas.light.draw(e)
-    app.canvas.stars.draw(e)
-    app.canvas.celestials.draw(e)
-    app.canvas.surface.draw(e)
-    app.canvas.grain.draw(e)
-    app.canvas.hud.draw(e)
+    draw()
   }
 
   function onResize() {
@@ -51,6 +53,9 @@ app.canvas = (() => {
     vfov = hfov / aspect
 
     pubsub.emit('resize')
+
+    clear()
+    draw()
   }
 
   return engine.utility.pubsub.decorate({

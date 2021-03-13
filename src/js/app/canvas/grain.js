@@ -76,8 +76,8 @@ app.canvas.grain = (() => {
   }
 
   return {
-    draw: function ({delta}) {
-      timer += delta
+    draw: function () {
+      timer += engine.loop.delta()
 
       if (timer >= period) {
         timer = 0

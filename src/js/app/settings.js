@@ -36,6 +36,18 @@ app.settings = (() => {
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,
+      update: () => {
+        if (app.state.screen.is('game')) {
+          return
+        }
+
+        if (app.state.screen.is('splash')) {
+          return
+        }
+
+        const gain = computed.mainVolume * computed.pausedVolume
+        engine.audio.ramp.set(engine.audio.mixer.master.param.gain, gain)
+      },
     },
     mouseSensitivity: {
       compute: (rawValue) => engine.utility.lerp(10, 100, rawValue),
@@ -50,7 +62,19 @@ app.settings = (() => {
     },
     pausedVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
-      default: 0,
+      default: 0.5,
+      update: () => {
+        if (app.state.screen.is('game')) {
+          return
+        }
+
+        if (app.state.screen.is('splash')) {
+          return
+        }
+
+        const gain = computed.mainVolume * computed.pausedVolume
+        engine.audio.ramp.set(engine.audio.mixer.master.param.gain, gain)
+      },
     },
     notifyTreasure: {
       compute: (rawValue) => Boolean(rawValue),
@@ -91,13 +115,16 @@ app.settings = (() => {
     helpers = {},
     raw = {}
 
-  for (const [key] of Object.entries(settings)) {
+  for (const [key, value] of Object.entries(settings)) {
     const name = `set${capitalize(key)}`
 
     helpers[name] = function (value) {
       update(key, value)
       return this
     }
+
+    // Fix undefined values when importing settings that depend on eachother
+    computed[key] = value.default
   }
 
   function capitalize(value) {

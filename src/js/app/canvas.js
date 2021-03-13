@@ -13,34 +13,25 @@ app.canvas = (() => {
     root = document.querySelector('.a-app--canvas')
     context = root.getContext('2d')
 
-    app.state.screen.on('enter-game', onEnterGame)
-    app.state.screen.on('exit-game', onExitGame)
-
     window.addEventListener('resize', onResize)
 
     // TODO: app.settings.computed.graphicsFov is undefined
-    setTimeout(onResize, 0)
+    setTimeout(() => {
+      onResize()
+      engine.loop.on('frame', onFrame)
+      engine.loop.once('frame', () => engine.loop.pause())
+    }, 0)
   })
 
   function clear() {
     context.clearRect(0, 0, width, height)
   }
 
-  function onEnterGame() {
-    if (!app.settings.computed.graphicsOn) {
+  function onFrame(e) {
+    if (e.paused || !app.settings.computed.graphicsOn) {
       return
     }
 
-    pubsub.emit('enter')
-    engine.loop.on('frame', onFrame)
-  }
-
-  function onExitGame() {
-    pubsub.emit('exit')
-    engine.loop.off('frame', onFrame)
-  }
-
-  function onFrame(e) {
     // Drawing order is back-to-front
     clear()
     app.canvas.nodes.draw(e)

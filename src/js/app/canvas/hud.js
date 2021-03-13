@@ -8,7 +8,7 @@ app.canvas.hud = (() => {
 
   let opacity
 
-  main.on('enter', () => {
+  engine.state.on('import', () => {
     opacity = content.system.idle.is() ? 0 : 1
   })
 

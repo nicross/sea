@@ -1,6 +1,12 @@
 engine.ready(() => {
-  engine.loop.start().pause()
+  engine.loop.start()
   app.activate()
+
+  if (app.storage.hasGame()) {
+    engine.state.import(
+      app.storage.getGame()
+    )
+  }
 
   engine.audio.mixer.master.param.limiter.attack.value = 0.003
   engine.audio.mixer.master.param.limiter.gain.value = 1

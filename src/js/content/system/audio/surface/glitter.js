@@ -171,8 +171,8 @@ content.system.audio.surface.glitter = (() => {
   }
 })()
 
-engine.loop.on('frame', ({paused}) => {
-  if (paused && !content.system.scan.isCooldown()) {
+engine.loop.on('frame', () => {
+  if (content.system.scan.isCooldown()) {
     return
   }
 

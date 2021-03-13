@@ -38,5 +38,3 @@ engine.ready(() => {
   content.system.scan.on('complete', () => content.system.audio.onScanComplete())
   content.system.scan.on('trigger', () => content.system.audio.onScanTrigger())
 })
-
-engine.state.on('import', () => content.system.audio.import())

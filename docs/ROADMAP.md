@@ -2,9 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.3.x
-- Explore performance optimizations
-
 ## v1.4.0 - Festival update
 - Audio
   - Add volume sliders for more channels
@@ -27,9 +24,9 @@ This document outlines upcoming changes for post-jam releases.
   - Add subtle north-south waves
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
-  - Perlin worm caves
 - Miscellaneous
   - Improve collision detection
+  - Performance optimizations
 
 ## v1.5.0 - Life update
 - Aquatic life
@@ -42,6 +39,7 @@ This document outlines upcoming changes for post-jam releases.
   - Drone
   - Pebble (scanner-like)
   - Tremolo
+- Perlin worm caves
 - Underwater music enhancements
   - More colors
   - More oscillators

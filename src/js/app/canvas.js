@@ -27,16 +27,11 @@ app.canvas = (() => {
   }
 
   function onEnterGame() {
-    clear()
-
     if (!app.settings.computed.graphicsOn) {
       return
     }
 
     pubsub.emit('enter')
-
-    //onResize()
-    console.log(height, width, aspect, hfov, vfov)
     engine.loop.on('frame', onFrame)
   }
 

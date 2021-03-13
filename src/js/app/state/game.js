@@ -125,7 +125,7 @@ app.state.game.on('before-none-new', () => {
       z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeightMax / 2),
     },
     time: {
-      offset: 7.45 * 60,
+      offset: (content.const.dayDuration * 0.25) - 3,
     },
     seed: Math.random(),
   })

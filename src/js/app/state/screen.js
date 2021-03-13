@@ -210,3 +210,21 @@ app.state.screen.on('enter', (e) => {
     element.classList.add('a-app--screen-active')
   })
 })
+
+app.state.screen.on('enter-game', () => {
+  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, app.settings.computed.mainVolume, 0.5)
+})
+
+app.state.screen.on('exit-game', () => {
+  const gain = app.settings.computed.mainVolume * app.settings.computed.pausedVolume
+  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
+})
+
+app.state.screen.on('enter-splash', () => {
+  engine.audio.ramp.set(engine.audio.mixer.master.param.gain, engine.const.zeroGain)
+})
+
+app.state.screen.on('exit-splash', () => {
+  const gain = app.settings.computed.mainVolume * app.settings.computed.pausedVolume
+  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
+})

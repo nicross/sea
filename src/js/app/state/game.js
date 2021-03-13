@@ -26,8 +26,6 @@ app.state.game = engine.utility.machine.create({
 })
 
 engine.ready(() => {
-  engine.audio.ramp.set(engine.audio.mixer.master.param.gain, engine.const.zeroGain)
-
   // Game state changes
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
   app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))
@@ -136,13 +134,11 @@ app.state.game.on('before-none-new', () => {
 })
 
 app.state.game.on('enter-paused', () => {
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, engine.const.zeroGain, 0.5)
   app.autosave.disable().trigger()
   engine.loop.pause()
 })
 
 app.state.game.on('enter-running', () => {
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, app.settings.computed.mainVolume, 0.5)
   app.autosave.enable()
   engine.loop.resume()
 })

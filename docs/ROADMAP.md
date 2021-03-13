@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.4.0 - Festival update
 - Audio
   - Add volume sliders for more channels
-  - Add volume sliders for paused
   - Reroute sound effects into buses
 - Documentation
   - Graphical description of surface
@@ -14,10 +13,8 @@ This document outlines upcoming changes for post-jam releases.
   - Photosensitivity warning
   - Reword sections based on current marketing
 - Menus
-  - Animated splash screen
   - Better screen transitions
   - Improved gallery screen
-  - Overlay menus over graphics layer
   - Randomized main menu scenes
   - Revamped menu styles
 - Simulation

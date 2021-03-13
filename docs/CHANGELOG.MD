@@ -1,5 +1,13 @@
 # S.E.A. changelog
 
+## v1.4.0
+- Audio
+  - Add slider for volume while game is paused
+- User Interface
+  - Added scenes to splash screen and main menu
+  - Overlaid menus over graphics
+  - Rendered audio while paused
+
 ## v1.3.0
 - Audio
   - Added persistent audio cues for sun and moon

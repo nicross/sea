@@ -44,7 +44,7 @@ content.system.idle = (() => {
 
   engine.state.on('reset', () => {
     changed = false
-    state = false
+    state = true
     timer = content.const.idleTimeout
   })
 

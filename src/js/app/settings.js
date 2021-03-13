@@ -48,6 +48,10 @@ app.settings = (() => {
         content.system.audio.music.setGain(computedValue)
       },
     },
+    pausedVolume: {
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
+      default: 0,
+    },
     notifyTreasure: {
       compute: (rawValue) => Boolean(rawValue),
       default: true,

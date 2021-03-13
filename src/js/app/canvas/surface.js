@@ -1,7 +1,7 @@
-app.screen.game.canvas.surface = (() => {
+app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    main = app.screen.game.canvas
+    main = app.canvas
 
   let drawDistance,
     nodeRadius
@@ -82,8 +82,8 @@ app.screen.game.canvas.surface = (() => {
       cycle = engine.utility.wrapAlternate(clock * 2)
 
     const color = app.utility.color.lerpHsl(
-      app.screen.game.canvas.celestials.moonColor(),
-      app.screen.game.canvas.celestials.sunColor(),
+      app.canvas.celestials.moonColor(),
+      app.canvas.celestials.sunColor(),
       smooth(cycle)
     )
 

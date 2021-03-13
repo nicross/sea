@@ -1,8 +1,8 @@
-app.screen.game.canvas.celestials = (() => {
+app.canvas.celestials = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     horizonDistance = 5000,
-    main = app.screen.game.canvas
+    main = app.canvas
 
   let maxRadius,
     minRadius,

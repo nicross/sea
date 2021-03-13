@@ -1,7 +1,7 @@
-app.screen.game.canvas.grain = (() => {
+app.canvas.grain = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    main = app.screen.game.canvas,
+    main = app.canvas,
     pattern = document.createElement('canvas'),
     patternContext = pattern.getContext('2d'),
     period = 1/8,
@@ -42,7 +42,7 @@ app.screen.game.canvas.grain = (() => {
       return {r: 0, g: 0, b: 0}
     }
 
-    let color = app.screen.game.canvas.light.averageColor()
+    let color = app.canvas.light.averageColor()
 
     if (z <= zones.midnightFade) {
       color.l *= engine.utility.scale(z, zones.midnightFade, zones.midnight, 1, 0)

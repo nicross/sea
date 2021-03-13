@@ -1,10 +1,10 @@
-app.screen.game.canvas.hud.compass = (() => {
+app.canvas.hud.compass = (() => {
   const tree = engine.utility.bitree.create({
     dimension: 'angle',
   })
 
   generateTree()
-  app.screen.game.canvas.hud.on('draw', draw)
+  app.canvas.hud.on('draw', draw)
 
   function draw({canvas, context}) {
     const {yaw} = engine.position.getEuler()

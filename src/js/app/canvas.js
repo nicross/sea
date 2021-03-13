@@ -1,4 +1,4 @@
-app.screen.game.canvas = (() => {
+app.canvas = (() => {
   const pubsub = engine.utility.pubsub.create()
 
   let aspect,
@@ -45,13 +45,13 @@ app.screen.game.canvas = (() => {
   function onFrame(e) {
     // Drawing order is back-to-front
     clear()
-    app.screen.game.canvas.nodes.draw(e)
-    app.screen.game.canvas.light.draw(e)
-    app.screen.game.canvas.stars.draw(e)
-    app.screen.game.canvas.celestials.draw(e)
-    app.screen.game.canvas.surface.draw(e)
-    app.screen.game.canvas.grain.draw(e)
-    app.screen.game.canvas.hud.draw(e)
+    app.canvas.nodes.draw(e)
+    app.canvas.light.draw(e)
+    app.canvas.stars.draw(e)
+    app.canvas.celestials.draw(e)
+    app.canvas.surface.draw(e)
+    app.canvas.grain.draw(e)
+    app.canvas.hud.draw(e)
   }
 
   function onResize() {
@@ -82,9 +82,6 @@ app.screen.game.canvas = (() => {
     toScreenFromRelative: (relative) => {
       const hangle = Math.atan2(relative.y, relative.x),
         vangle = Math.atan2(relative.z, relative.x)
-
-      // TODO: Consider points beyond screen edges
-      // TODO: Consider points behind screen
 
       return engine.utility.vector2d.create({
         x: (width / 2) - (width * hangle / hfov),

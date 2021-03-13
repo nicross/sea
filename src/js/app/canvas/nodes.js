@@ -1,7 +1,7 @@
-app.screen.game.canvas.nodes = (() => {
+app.canvas.nodes = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    main = app.screen.game.canvas,
+    main = app.canvas,
     nodeHue = engine.utility.perlin3d.create('exploration', 'node', 'hue'),
     nodeHueRotateSpeed = 1 / 120
 

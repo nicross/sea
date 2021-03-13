@@ -1,6 +1,6 @@
-app.screen.game.canvas.hud.treasure = (() => {
+app.canvas.hud.treasure = (() => {
   const arrowAngle = Math.PI / 2,
-    main = app.screen.game.canvas
+    main = app.canvas
 
   let arrowLength,
     lineWidth,

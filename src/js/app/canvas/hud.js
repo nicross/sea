@@ -1,9 +1,9 @@
-app.screen.game.canvas.hud = (() => {
+app.canvas.hud = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     fadeInRate = 4,
     fadeOutRate = 1,
-    main = app.screen.game.canvas,
+    main = app.canvas,
     pubsub = engine.utility.pubsub.create()
 
   let opacity

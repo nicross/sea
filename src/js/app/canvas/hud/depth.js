@@ -1,5 +1,5 @@
-app.screen.game.canvas.hud.depth = (() => {
-  app.screen.game.canvas.hud.on('draw', draw)
+app.canvas.hud.depth = (() => {
+  app.canvas.hud.on('draw', draw)
 
   function draw({canvas, context}) {
     const z = engine.position.getVector().z

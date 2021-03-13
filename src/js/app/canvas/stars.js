@@ -1,9 +1,9 @@
-app.screen.game.canvas.stars = (() => {
+app.canvas.stars = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     count = 1000,
     firmament = 5000,
-    main = app.screen.game.canvas,
+    main = app.canvas,
     stars = []
 
   main.on('resize', () => {

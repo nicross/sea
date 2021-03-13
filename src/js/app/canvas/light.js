@@ -1,8 +1,8 @@
-app.screen.game.canvas.light = (() => {
+app.canvas.light = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     horizonDistance = 1000,
-    main = app.screen.game.canvas
+    main = app.canvas
 
   const zones = {
     surface: 0,

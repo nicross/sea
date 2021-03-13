@@ -26,7 +26,7 @@ content.system.audio.surface.sun = (() => {
   content.utility.ephemeralNoise.manage(thirdAmodFrequency)
 
   function calculatePitch() {
-    // via app.screen.game.canvas.celestials, consider refactoring
+    // via app.canvas.celestials, consider refactoring
     const clock = content.system.time.clock(),
       value = (2 * Math.PI * -clock) + (Math.PI / 2)
 

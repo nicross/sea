@@ -1,11 +1,20 @@
 .a-splash {
+  align-items: center;
   text-align: center;
 }
   .a-splash--instruction {
-    animation: a-splash--instruction 2s ease 0s infinite;
+    animation: a-splash--instruction 1s ease-in-out 0s infinite alternate both;
+    background-color: #000000;
+    display: inline-block;
     flex: 0 0 auto;
+    padding: 0.5em 1em;
     text-transform: uppercase;
+    transform: translateY(100%);
+    transition: transform 1s ease;
   }
+    .a-app--screen-active .a-splash--instruction {
+      transform: translateY(0%);
+    }
   .a-splash--logo {
     align-items: center;
     display: flex;
@@ -14,18 +23,17 @@
     letter-spacing: 0;
   }
   .a-splash--row {
-    animation: a-splash--row 4s ease 0s infinite;
-    color: #8080FF;
+    color: #FFFFFF;
     display: flex;
     font-family: FiraMonoRegular, monospace;
     justify-content: space-between;
   }
   .a-splash--title {
-    animation: a-splash--title 4s ease 0s infinite;
+    animation: a-splash--title 4s ease-in-out 0s infinite alternate;
     -webkit-background-clip: text;
     background-clip: text;
-    background-color: #8080FF;
-    background-image: linear-gradient(180deg, #FFFFFF, #8080FF);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 1));
+    background-position: center bottom;
     font-family: SuperSubmarineHalf, sans-serif;
     font-size: 8em;
     line-height: 0.875;
@@ -35,9 +43,6 @@
 
 @keyframes a-splash--instruction {
   0% {
-    opacity: 1;
-  }
-  50% {
     opacity: 0.5;
   }
   100% {
@@ -45,26 +50,23 @@
   }
 }
 
-@keyframes a-splash--row {
+@keyframes a-splash--title {
   0% {
-    color: #8080FF;
-  }
-  50% {
-    color: #C0C0FF;
+    background-size: 100% 100%;
   }
   100% {
-    color: #8080FF;
+    background-size: 200% 200%;
   }
 }
 
-@keyframes a-splash--title {
-  0% {
-    background-size: 87.5% 87.5%;
+@media (min-width: 48em) {
+  .a-splash--title {
+    font-size: 12em;
   }
-  50% {
-    background-size: 175% 175%;
-  }
-  100% {
-    background-size: 87.5% 87.5%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-splash--instruction {
+    transition: none;
   }
 }

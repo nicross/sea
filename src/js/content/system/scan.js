@@ -166,3 +166,13 @@ content.system.scan = (() => {
     },
   }, pubsub)
 })()
+
+content.system.scan.on('trigger', () => {
+  engine.loop.pause()
+})
+
+content.system.scan.on('recharge', () => {
+  if (app.state.game.is('running')) {
+    engine.loop.resume()
+  }
+})

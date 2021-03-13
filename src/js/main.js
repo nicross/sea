@@ -3,9 +3,23 @@ engine.ready(() => {
   app.activate()
 
   if (app.storage.hasGame()) {
-    engine.state.import(
-      app.storage.getGame()
-    )
+    const game = app.storage.getGame()
+
+    if (game.position.z >= 0) {
+      game.position.z = content.const.waveHeightMax / 2
+    }
+
+    engine.state.import(game)
+  } else {
+    engine.state.import({
+      position: {
+        quaternion: engine.utility.quaternion.fromEuler({yaw: Math.PI / 8}),
+        z: content.const.waveHeightMax / 2,
+      },
+      time: {
+        offset: (content.const.dayDuration * 0.775),
+      },
+    })
   }
 
   engine.audio.mixer.master.param.limiter.attack.value = 0.003

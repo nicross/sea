@@ -37,7 +37,7 @@ app.canvas = (() => {
   }
 
   function onFrame({paused}) {
-    if (paused || !app.settings.computed.graphicsOn) {
+    if (paused || !app.settings.computed.graphicsOn || document.visibilityState == 'hidden') {
       return
     }
 

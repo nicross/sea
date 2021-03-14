@@ -12,7 +12,6 @@ This document outlines upcoming changes for post-jam releases.
 - Menus
   - Better screen transitions
   - Improved gallery screen
-  - Randomized main menu scenes
   - Revamped menu styles
 - Simulation
   - Add subtle north-south waves

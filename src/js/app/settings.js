@@ -76,7 +76,7 @@ app.settings = (() => {
     },
     pausedVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
-      default: 0.7,
+      default: 0.5,
       update: () => {
         if (app.state.screen.is('game')) {
           return

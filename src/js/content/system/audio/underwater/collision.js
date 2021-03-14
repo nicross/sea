@@ -1,5 +1,5 @@
 content.system.audio.underwater.collision = (() => {
-  const bus = content.system.audio.mixer.createBus(),
+  const bus = content.system.audio.mixer.bus.misc.createBus(),
     throttleRate = 1000/20
 
   let throttle = 0

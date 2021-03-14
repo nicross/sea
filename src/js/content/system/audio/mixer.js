@@ -13,16 +13,24 @@ content.system.audio.mixer = (() => {
   }
 
   function createChannel() {
-    const sub = createBus()
+    const bypass = createBypass(),
+      sub = createBus()
 
     return {
+      bypass: () => bypass,
       bus: () => sub,
       createBus: () => {
         const input = context.createGain()
         input.connect(sub)
         return input
       },
+      createBypass: () => {
+        const input = context.createGain()
+        input.connect(bypass)
+        return input
+      },
       setGain: function (value) {
+        engine.audio.ramp.set(bypass.gain, value)
         engine.audio.ramp.set(sub.gain, value)
         return this
       },

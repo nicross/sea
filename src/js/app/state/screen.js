@@ -211,20 +211,75 @@ app.state.screen.on('enter', (e) => {
   })
 })
 
-app.state.screen.on('enter-game', () => {
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, app.settings.computed.mainVolume, 0.5)
+// Fast travel actions
+app.state.screen.on('before-fastTravel-floor', () => {
+  const position = engine.position.getVector()
+  const floor = content.system.terrain.floor.value(position.x, position.y) + 5
+
+  const distance = Math.abs(position.z - floor),
+    travelTime = distance / content.const.underwaterTurboMaxVelocity
+
+  content.system.time.incrementOffset(travelTime)
+
+  engine.position.setVector({
+    ...position,
+    z: floor,
+  })
+
+  // Force hard reset
+  engine.state.import({
+    ...engine.state.export(),
+  })
+
+  app.stats.fastTravels.increment()
 })
 
-app.state.screen.on('exit-game', () => {
-  const gain = app.settings.computed.mainVolume * app.settings.computed.pausedVolume
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
+app.state.screen.on('before-fastTravel-origin', () => {
+  const position = engine.position.getVector()
+  const distance = position.distance()
+
+  const velocity = position.z > 0
+    ? content.const.surfaceTurboMaxVelocity
+    : content.const.underwaterTurboMaxVelocity
+
+  const travelTime = distance / velocity
+  content.system.time.incrementOffset(travelTime)
+
+  const surface = content.system.surface.height(0, 0) + engine.const.zero
+
+  engine.position.setVector({
+    x: 0,
+    y: 0,
+    z: surface,
+  })
+
+  // Force hard reset
+  engine.state.import({
+    ...engine.state.export(),
+  })
+
+  app.stats.fastTravels.increment()
 })
 
-app.state.screen.on('enter-splash', () => {
-  engine.audio.ramp.set(engine.audio.mixer.master.param.gain, engine.const.zeroGain)
-})
+app.state.screen.on('before-fastTravel-surface', () => {
+  const position = engine.position.getVector()
 
-app.state.screen.on('exit-splash', () => {
-  const gain = app.settings.computed.mainVolume * app.settings.computed.pausedVolume
-  engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
+  const distance = Math.abs(position.z),
+    travelTime = distance / content.const.underwaterTurboMaxVelocity
+
+  content.system.time.incrementOffset(travelTime)
+
+  const surface = content.system.surface.height(0, 0) + engine.const.zero
+
+  engine.position.setVector({
+    ...position,
+    z: surface,
+  })
+
+  // Force hard reset
+  engine.state.import({
+    ...engine.state.export(),
+  })
+
+  app.stats.fastTravels.increment()
 })

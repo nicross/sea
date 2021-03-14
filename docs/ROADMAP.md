@@ -18,7 +18,6 @@ This document outlines upcoming changes for post-jam releases.
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
 - Chores
-  - Reroute non-music sounds into a bus
   - Fade non-music sounds as game state changes
   - Update graphics as settings are adjusted
 
@@ -48,7 +47,7 @@ This document outlines upcoming changes for post-jam releases.
 ### Audio
 - Dynamic range presets
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
-- Submixes with volume sliders, e.g. to isolate music
+- Submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
 - Godrays

@@ -1,6 +1,6 @@
 content.system.audio.surface.wind = (() => {
   const binaural = engine.audio.binaural.create(),
-    bus = content.system.audio.mixer.createBus()
+    bus = content.system.audio.mixer.bus.environment.createBus()
 
   const frequencyDropoff = 1.5,
     maxFrequency = 80,

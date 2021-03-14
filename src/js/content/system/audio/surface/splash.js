@@ -1,5 +1,5 @@
 content.system.audio.surface.splash = (() => {
-  const bus = content.system.audio.mixer.createBus(),
+  const bus = content.system.audio.mixer.bus.environment.createBus(),
     context = engine.audio.context(),
     filter = context.createBiquadFilter(),
     throttleRate = 1000/10

@@ -31,6 +31,7 @@ content.system.audio.mixer = (() => {
 
   return {
     bus: {
+      environment: createChannel(),
       music: createChannel(),
     },
     createBus,

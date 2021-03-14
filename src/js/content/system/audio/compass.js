@@ -1,5 +1,5 @@
 content.system.audio.compass = (() => {
-  const bus = content.system.audio.createBus(),
+  const bus = content.system.audio.mixer.createBus(),
     frequency = engine.utility.midiToFrequency(81),
     tau = Math.PI * 2
 

@@ -1,6 +1,6 @@
 content.system.audio.surface.waves = (() => {
   const buffers = [],
-    bus = content.system.audio.createBus(),
+    bus = content.system.audio.mixer.createBus(),
     context = engine.audio.context(),
     highpassFilter = context.createBiquadFilter(),
     lowpassFilter = context.createBiquadFilter()

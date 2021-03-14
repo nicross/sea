@@ -57,7 +57,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,
       update: (computedValue) => {
-        content.system.audio.music.setGain(computedValue)
+        content.system.audio.mixer.bus.music.setGain(computedValue)
       },
     },
     pausedVolume: {

@@ -1,5 +1,5 @@
 content.system.audio.surface.moon = (() => {
-  const bus = content.system.audio.music.createBus(),
+  const bus = content.system.audio.mixer.bus.music.createBus(),
     clockPreRise = 0.725,
     clockPreSet = 0.245,
     clockPostRise = 0.755,

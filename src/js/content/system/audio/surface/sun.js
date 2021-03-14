@@ -1,5 +1,5 @@
 content.system.audio.surface.sun = (() => {
-  const bus = content.system.audio.music.createBus(),
+  const bus = content.system.audio.mixer.bus.music.createBus(),
     clockPreRise = 0.225,
     clockPreSet = 0.745,
     clockPostRise = 0.255,

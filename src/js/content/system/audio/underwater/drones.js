@@ -1,6 +1,6 @@
 content.system.audio.underwater.drones = (() => {
   const context = engine.audio.context(),
-    mix = content.system.audio.music.createBus(),
+    mix = content.system.audio.mixer.bus.music.createBus(),
     synthFade = 4,
     synthGain = engine.utility.fromDb(-15)
 

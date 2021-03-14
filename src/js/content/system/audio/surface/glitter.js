@@ -1,5 +1,5 @@
 content.system.audio.surface.glitter = (() => {
-  const bus = content.system.audio.music.createBus(),
+  const bus = content.system.audio.mixer.bus.music.createBus(),
     context = engine.audio.context(),
     feedbackDelays = [],
     filter = context.createBiquadFilter()

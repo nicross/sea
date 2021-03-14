@@ -183,11 +183,13 @@ function getAppJs() {
 function getContentJs() {
   const srcs = [
     'src/js/content.js',
+    'src/js/content/const.js',
     'src/js/content/utility/*.js',
     'src/js/content/prop/base.js',
     'src/js/content/system/treasures.js',
     'src/js/content/treasure/*.js',
     'src/js/content/system/audio.js',
+    'src/js/content/system/audio/mixer.js',
     'src/js/content/*.js',
     'src/js/content/*/*.js',
     'src/js/content/*/*/*.js',

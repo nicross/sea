@@ -9,7 +9,7 @@ content.system.exploration = (() => {
     tree.insert(vector)
 
     engine.streamer.registerProp(content.prop.exploration, {
-      destination: content.system.audio.music.bus(),
+      destination: content.system.audio.mixer.bus.music.bus(),
       x: node.x,
       y: node.y,
       z: node.z,

@@ -1,5 +1,5 @@
 content.system.audio.surface.smack = (() => {
-  const bus = content.system.audio.createBus(),
+  const bus = content.system.audio.mixer.createBus(),
     context = engine.audio.context(),
     filter = context.createBiquadFilter(),
     throttleRate = 1000/10

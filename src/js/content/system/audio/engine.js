@@ -1,6 +1,6 @@
 content.system.audio.engine = (() => {
   const binaural = engine.audio.binaural.create(),
-    bus = content.system.audio.createBus()
+    bus = content.system.audio.mixer.createBus()
 
   const fadeDuration = 1/6,
     rootFrequency = engine.utility.midiToFrequency(33),

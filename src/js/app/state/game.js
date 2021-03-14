@@ -104,7 +104,7 @@ app.state.game.on('enter-none', () => {
       }),
       x: 0,
       y: 0,
-      z: engine.utility.lerp(content.const.waveHeightMin, content.const.waveHeightMax, 0.5) / 2,
+      z: 0,
     },
     seed: Math.random(),
     time: {

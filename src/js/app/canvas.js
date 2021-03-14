@@ -21,7 +21,7 @@ app.canvas = (() => {
       engine.loop.on('frame', onFrame)
     }, 0)
 
-    engine.state.on('import', onImport)
+    engine.state.on('reset', onReset)
   })
 
   function clear() {
@@ -60,7 +60,7 @@ app.canvas = (() => {
     draw()
   }
 
-  function onImport() {
+  function onReset() {
     crossfade()
   }
 

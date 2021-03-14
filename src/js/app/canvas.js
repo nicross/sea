@@ -65,13 +65,18 @@ app.canvas = (() => {
   }
 
   function onResize() {
+    recalculate()
+    pubsub.emit('resize')
+    clear()
+    draw()
+  }
+
+  function recalculate() {
     height = root.height = root.clientHeight
     width = root.width = root.clientWidth
     aspect = width / height
     hfov = app.settings.computed.graphicsFov
     vfov = hfov / aspect
-
-    pubsub.emit('resize')
   }
 
   return engine.utility.pubsub.decorate({

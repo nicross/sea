@@ -46,7 +46,7 @@ This document outlines upcoming changes for post-jam releases.
 ### Audio
 - Dynamic range presets
 - Haptic feedback on certain cues (e.g. collisions with surface and terrain)
-- Submixes with volume sliders for collisions, engine, scanner, treasure
+- Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
 - Godrays

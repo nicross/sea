@@ -62,6 +62,7 @@ app.screen.audio = (() => {
       ['.a-audio--compassVolume', app.settings.raw.compassVolume, app.settings.setCompassVolume],
       ['.a-audio--environmentVolume', app.settings.raw.environmentVolume, app.settings.setEnvironmentVolume],
       ['.a-audio--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
+      ['.a-audio--miscVolume', app.settings.raw.miscVolume, app.settings.setMiscVolume],
       ['.a-audio--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
       ['.a-audio--pausedVolume', app.settings.raw.pausedVolume, app.settings.setPausedVolume],
       ['.a-audio--streamerLimit', app.settings.raw.streamerLimit, app.settings.setStreamerLimit],

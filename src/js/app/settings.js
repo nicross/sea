@@ -56,6 +56,13 @@ app.settings = (() => {
         engine.audio.ramp.set(engine.audio.mixer.master.param.gain, gain)
       },
     },
+    miscVolume: {
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
+      default: 1,
+      update: (computedValue) => {
+        content.system.audio.mixer.bus.misc.setGain(computedValue)
+      },
+    },
     mouseSensitivity: {
       compute: (rawValue) => engine.utility.lerp(10, 100, rawValue),
       default: 0.5,

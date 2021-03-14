@@ -17,6 +17,9 @@
     width: 100%;
     z-index: 0;
   }
+    .a-app--canvas-crossfade {
+      animation: a-app--canvas-crossfade 0.5s ease-in-out 0s 1 normal both;
+    }
   .a-app--overlaySupport {
     height: 100%;
     left: 0;
@@ -54,4 +57,13 @@
 
 .a-app-active {
   opacity: 1;
+}
+
+@keyframes a-app--canvas-crossfade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

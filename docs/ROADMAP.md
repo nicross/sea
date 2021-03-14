@@ -20,7 +20,6 @@ This document outlines upcoming changes for post-jam releases.
 - Chores
   - Reroute non-music sounds into a bus
   - Fade non-music sounds as game state changes
-  - Crossfade graphics on scene change
   - Update graphics as settings are adjusted
 
 ## v1.5.0 - Life update

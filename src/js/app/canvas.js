@@ -20,10 +20,25 @@ app.canvas = (() => {
       onResize()
       engine.loop.on('frame', onFrame)
     }, 0)
+
+    engine.state.on('import', onImport)
   })
 
   function clear() {
     context.clearRect(0, 0, width, height)
+  }
+
+  function crossfade() {
+    const copy = document.createElement('canvas')
+
+    copy.className = 'a-app--canvas a-app--canvas-crossfade'
+    copy.height = height
+    copy.width = width
+
+    copy.getContext('2d').drawImage(root, 0, 0, width, height)
+
+    root.parentNode.appendChild(copy)
+    copy.onanimationend = () => copy.remove()
   }
 
   function draw() {
@@ -43,6 +58,10 @@ app.canvas = (() => {
 
     clear()
     draw()
+  }
+
+  function onImport() {
+    crossfade()
   }
 
   function onResize() {

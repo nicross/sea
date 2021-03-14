@@ -37,8 +37,10 @@
     left: 0;
     position: absolute;
     opacity: 0;
+    transform: translateX(-1em);
     top: 0;
-    transition: opacity 0.5s ease;
+    transition: all 0.5s ease;
+    transition-property: opacity, transform;
     width: 100%;
     z-index: 1;
   }
@@ -48,12 +50,17 @@
     }
     .a-app--screen-active {
       opacity: 1;
+      transform: translateX(0);
       z-index: 3;
     }
     .a-app--screen-inactive {
       opacity: 0;
+      transform: translateX(-1em);
       z-index: 2;
     }
+  .a-app--splash {
+    transform: none !important;
+  }
 
 .a-app-active {
   opacity: 1;
@@ -65,5 +72,11 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-app--screen {
+    transform: none !important;
   }
 }

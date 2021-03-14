@@ -54,7 +54,7 @@ app.state.game.on('before-none-new', () => {
 
   engine.state.import({
     position: {
-      quaternion: engine.utility.quaternion.fromEuler({yaw: Math.PI / 8}),
+      quaternion: engine.utility.quaternion.identity(),
       x: 0,
       y: 0,
       z: content.const.underwaterTurboMaxVelocity + (content.const.waveHeightMax / 2),

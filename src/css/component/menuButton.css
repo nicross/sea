@@ -1,21 +1,18 @@
 .c-menuButton {
-  background-color: transparent;
-  border: 0;
-  border-bottom: 1px solid rgba(128, 128, 255, 0);
-  border-left: 0.25em solid rgba(128, 128, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(96, 96, 255, 0.5);
+  box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.25);
   color: #FFFFFF;
   letter-spacing: inherit;
-  line-height: 1.5;
-  padding: 0 0.5em;
-  transition: all 0.5s ease;
-  transition-property: border-color, opacity;
+  line-height: inherit;
+  padding: 0.5em 0.75em;
+  transition: all 0.25s ease;
+  transition-property: background-color, border-color, box-shadow;
 }
-.c-menuButton:focus {
-  border-color: #8080FF;
-}
+.c-menuButton:active,
+.c-menuButton:focus,
 .c-menuButton:hover {
-  border-color: #C0C0FF;
-}
-.c-menuButton:active {
-  border-color: #8080FF;
+  background-color: rgba(0, 0, 0, 1);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.5);
 }

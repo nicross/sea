@@ -11,12 +11,6 @@
   .c-screen--fields > * + * {
     margin-top: 1em;
   }
-  .c-screen > * + .c-screen--actions {
-    margin-top: 2em;
-  }
-  .c-screen > .c-screen--title + * {
-    margin-top: 2em;
-  }
   .c-screen--action + .c-screen--action {
     margin-top: 1em;
   }
@@ -30,24 +24,35 @@
     list-style-type: none;
   }
   .c-screen--field {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .c-screen--field > .c-screen--label {
-    flex: 1 1 100%;
-  }
-  .c-screen--field > .c-slider {
-    flex: 1 1 auto;
+    line-height: 1;
   }
   .c-screen--label {
     display: block;
-    font-family: RobotoRegular;
-    font-size: 0.75em;
-    font-weight: 400;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.25em;
+  }
+  .c-screen--scrollable {
+    background-color: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(96, 96, 255, 0.5);
+    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.25);
+    padding: 0.75em;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    transition: all 0.25s ease;
+    transition-property: background-color, border-color, box-shadow;
+  }
+  .c-screen--scrollable:hover {
+    background-color: rgba(0, 0, 0, 1);
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.5);
+  }
+  .c-screen--scrollable:focus-within {
+    background-color: rgba(0, 0, 0, 1);
+    border-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.5);
   }
   .c-screen--title {
     font-family: RobotoRegular;
-    font-size: 2em;
+    font-size: 3em;
     font-weight: 400;
+    text-shadow: 0 0 calc(0.5em / 3) rgba(96, 96, 255, 0.5);
   }

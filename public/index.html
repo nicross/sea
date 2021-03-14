@@ -15,7 +15,7 @@
       <div class="a-app--screen a-app--audio">
         <section class="c-screen a-audio" aria-label="Audio">
           <h1 class="c-screen--title">Audio</h1>
-          <div class="a-audio--fields c-screen--fields">
+          <div class="a-audio--fields c-screen--fields c-screen--scrollable">
             <div class="c-screen--field">
               <label class="c-screen--label" for="a-audio--mainVolumeInput">Main Volume</label>
               <div class="c-slider a-audio--mainVolume">
@@ -109,7 +109,7 @@
       <div class="a-app--screen a-app--controls">
         <section class="c-screen a-controls" aria-label="Controls">
           <h1 class="c-screen--title">Controls</h1>
-          <div class="c-screen--fields">
+          <div class="c-screen--fields c-screen--scrollable">
             <div class="c-screen--field">
               <label class="c-screen--label" for="a-controls--gamepadDeadzoneInput">Gamepad Deadzone</label>
               <div class="c-slider a-controls--gamepadDeadzone">
@@ -169,7 +169,7 @@
       <div class="a-app--screen a-app--gallery">
         <section class="c-screen a-gallery" aria-label="Gallery">
           <h1 class="c-screen--title">Gallery</h1>
-          <ul class="a-gallery--items"></ul>
+          <ul class="a-gallery--items c-screen--scrollable"></ul>
           <ul class="c-screen--actions">
             <li class="c-screen--action">
               <button class="c-menuButton a-gallery--back" type="button">Back</button>
@@ -213,7 +213,7 @@
       <div class="a-app--screen a-app--gameplay">
         <section class="c-screen a-gameplay" aria-label="Gameplay">
           <h1 class="c-screen--title">Gameplay</h1>
-          <div class="c-screen--fields">
+          <div class="c-screen--fields c-screen--scrollable">
             <div class="c-screen--field a-gameplay--field-notifyTreasure">
               <div class="c-screen--label" id="a-gameplay--notifyTreasureLabel">Treasure Notifications</div>
               <div class="c-toggle a-gameplay--notifyTreasure">
@@ -244,7 +244,7 @@
       <div class="a-app--screen a-app--graphics">
         <section class="c-screen a-graphics" aria-label="Graphics">
           <h1 class="c-screen--title">Graphics</h1>
-          <div class="c-screen--fields a-graphics--fields">
+          <div class="a-graphics--fields c-screen--fields c-screen--scrollable">
             <div class="c-screen--field a-graphics--onField">
               <div class="c-screen--label" id="a-graphics--onLabel">Enable Graphics</div>
               <div class="c-toggle a-graphics--on">
@@ -254,7 +254,7 @@
                 </button>
               </div>
             </div>
-            <div class="c-screen--fields a-graphics--onFields">
+            <div class="a-graphics--onFields">
               <div class="c-screen--field">
                 <label class="c-screen--label" for="a-graphics--drawDistanceInput">Draw Distance</label>
                 <div class="c-slider a-graphics--drawDistance">
@@ -382,7 +382,7 @@
       <div class="a-app--screen a-app--stats">
         <section class="c-screen a-stats" aria-label="Statistics">
           <h1 class="c-screen--title">Statistics</h1>
-          <div class="a-stats--data">
+          <div class="a-stats--data c-screen--scrollable">
             <table class="a-stats--table">
               <tr tabindex="0">
                 <th>Time Played</th>
@@ -453,7 +453,7 @@
       <div class="a-app--screen a-app--status">
         <section class="c-screen a-status" aria-label="Status">
           <h1 class="c-screen--title">Status</h1>
-          <div class="a-status--data">
+          <div class="a-status--data c-screen--scrollable">
             <table class="a-status--table">
               <tr tabindex="0">
                 <th>Coordinates</th>

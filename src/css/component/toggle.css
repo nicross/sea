@@ -1,31 +1,32 @@
 .c-toggle {}
   .c-toggle--button {
     border: 1px solid currentColor;
-    color: #404080;
+    color: #8080FF;
     display: flex;
+    font-size: inherit;
     transition: all 0.5s ease;
     transition-property: color;
   }
   .c-toggle--button:hover {
-    color: #8080FF;
+    color: #C0C0FF;
   }
   .c-toggle--button:focus {
-    color: #C0C0FF;
+    color: #FFFFFF;
   }
   .c-toggle--off,
   .c-toggle--on {
-    font-size: 0.75em;
-    line-height: 1.333em;
+    font-size: calc(1em - 2px);
+    line-height: 1;
     opacity: 0;
     text-align: center;
     text-transform: uppercase;
     transition: all 0.5s ease;
     transition-property: background-color, opacity;
-    width: 4em;
+    width: 3em;
   }
   .c-toggle--button[aria-checked="false"] .c-toggle--off,
   .c-toggle--button[aria-checked="true"] .c-toggle--on {
-    background-color: #404080;
+    background-color: #8080FF;
     color: #000000;
     font-family: RobotoBold;
     font-weight: 700;
@@ -33,9 +34,9 @@
   }
   .c-toggle--button[aria-checked="false"]:hover .c-toggle--off,
   .c-toggle--button[aria-checked="true"]:hover .c-toggle--on {
-    background-color: #8080FF;
+    background-color: #C0C0FF;
   }
   .c-toggle--button[aria-checked="false"]:focus .c-toggle--off,
   .c-toggle--button[aria-checked="true"]:focus .c-toggle--on {
-    background-color: #C0C0FF;
+    background-color: #FFFFFF;
   }

@@ -1,6 +1,7 @@
 .c-treasure {}
   .c-treasure--details {
     font-size: 0.75em;
+    margin-top: calc(1em / 3);
   }
   .c-treasure--name {
     font-size: 1.25em;

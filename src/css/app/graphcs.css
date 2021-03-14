@@ -1,8 +1,5 @@
 .a-graphics--fields {
-  max-height: calc(4 * 4em - 1em);
-  overflow-y: auto;
-  padding-right: 1em;
-  scroll-behavior: smooth;
+  max-height: calc(4 * 3.25em + 0.5em);
 }
 .a-graphics--onFields {
   filter: grayscale(0);

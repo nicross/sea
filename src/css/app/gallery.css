@@ -1,15 +1,13 @@
 .a-gallery {}
   .a-gallery--item {
-    padding: 0.25em 0;
     transition: opacity 0.5s ease;
+  }
+  .a-gallery--item + .a-gallery--item {
+    margin-top: 1em;
   }
   .a-gallery--items {
     list-style-type: none;
-    margin: -0.25em 0;
-    max-height: calc(3.5em * 4);
-    padding-right: 1.5em;
-    overflow-y: auto;
-    scroll-behavior: smooth;
+    max-height: calc(3.25em * 4 + 0.5em);
   }
   .a-gallery--items:focus-within .a-gallery--item,
   .a-gallery--items:hover .a-gallery--item {

@@ -10,6 +10,7 @@
   - Added randomized scenes to splash screen and menus
   - Fixed inability to tab out from slider inputs
   - Overlaid menus over graphics
+  - Redesigned menu styles
   - Rendered audio while paused
 
 ## v1.3.0

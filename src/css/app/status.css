@@ -1,19 +1,15 @@
 .a-status {}
   .a-status--data {
     list-style-type: none;
-    margin: -0.25em;
-    max-height: calc(2em * 5);
-    padding-right: 1em;
-    overflow-y: auto;
-    scroll-behavior: smooth;
+    max-height: calc(2em * 5 + 0.5em);
   }
   .a-status--table {
     border-collapse: collapse;
     display: block;
-    width: 100%;
+    margin: -0.5em;
   }
   .a-status--table td {
-    padding: 0.25em;
+    padding: 0.5em;
     text-align: right;
     white-space: nowrap;
   }

@@ -76,23 +76,14 @@ app.state.game.on('enter-none', () => {
   engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
 
   // Generate scene
-  const isLeft = Math.random() > 0.5
   const isRise = Math.random() > 0.5
   const isSun = Math.random() > 0.5
 
   const yawNoise = engine.utility.random.float(-1/120, 1/120)
 
   const yaw = isRise
-    ? (
-      isLeft
-        ? Math.PI * (-1/8 + yawNoise)
-        : Math.PI * (1/8 + yawNoise)
-      )
-    : (
-      isLeft
-        ? Math.PI * (7/8 + yawNoise)
-        : Math.PI * (9/8 + yawNoise)
-      )
+    ? Math.PI * (1/8 + yawNoise)
+    : Math.PI * (9/8 + yawNoise)
 
   const offset = isSun
     ? (

@@ -4,8 +4,9 @@
 - Audio
   - Added slider for environmental sound volume
   - Added slider for volume while game is paused
+  - Added music to splash screen and main menu
 - User Interface
-  - Added scenes to splash screen and main menu
+  - Added randomized scenes to splash screen and menus
   - Overlaid menus over graphics
   - Rendered audio while paused
 

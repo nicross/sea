@@ -11,6 +11,13 @@ app.settings = (() => {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: engine.utility.scale(500, 50, 1000, 0, 1),
     },
+    environmentVolume: {
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
+      default: 1,
+      update: (computedValue) => {
+        content.system.audio.mixer.bus.environment.setGain(computedValue)
+      },
+    },
     gamepadDeadzone: {
       compute: (rawValue) => engine.utility.lerp(0, 0.3, rawValue),
       default: 0.5,
@@ -62,7 +69,7 @@ app.settings = (() => {
     },
     pausedVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
-      default: 0.5,
+      default: 0.7,
       update: () => {
         if (app.state.screen.is('game')) {
           return

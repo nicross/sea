@@ -18,7 +18,6 @@ This document outlines upcoming changes for post-jam releases.
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
 - Chores
-  - Fade non-music sounds as game state changes
   - Update graphics as settings are adjusted
 
 ## v1.5.0 - Life update

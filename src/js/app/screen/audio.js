@@ -60,6 +60,7 @@ app.screen.audio = (() => {
   function hydrateSliders() {
     [
       ['.a-audio--compassVolume', app.settings.raw.compassVolume, app.settings.setCompassVolume],
+      ['.a-audio--environmentVolume', app.settings.raw.environmentVolume, app.settings.setEnvironmentVolume],
       ['.a-audio--mainVolume', app.settings.raw.mainVolume, app.settings.setMainVolume],
       ['.a-audio--musicVolume', app.settings.raw.musicVolume, app.settings.setMusicVolume],
       ['.a-audio--pausedVolume', app.settings.raw.pausedVolume, app.settings.setPausedVolume],

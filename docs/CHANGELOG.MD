@@ -2,7 +2,8 @@
 
 ## v1.4.0
 - Audio
-  - Add slider for volume while game is paused
+  - Added slider for environmental sound volume
+  - Added slider for volume while game is paused
 - User Interface
   - Added scenes to splash screen and main menu
   - Overlaid menus over graphics

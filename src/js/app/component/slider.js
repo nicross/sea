@@ -63,6 +63,10 @@ app.component.slider.prototype = {
     return this
   },
   onKeydown: function (e) {
+    if (e.code == 'Tab') {
+      return
+    }
+
     e.preventDefault()
   },
   setAriaLive: function (state) {

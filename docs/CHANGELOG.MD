@@ -8,6 +8,7 @@
   - Added music to splash screen and main menu
 - User Interface
   - Added randomized scenes to splash screen and menus
+  - Fixed inability to tab out from slider inputs
   - Overlaid menus over graphics
   - Rendered audio while paused
 

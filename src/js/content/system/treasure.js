@@ -84,7 +84,7 @@ content.system.treasure = (() => {
       })
 
       const token = engine.streamer.registerProp(content.prop.treasure, {
-        destination: content.system.audio.bus(),
+        destination: content.system.audio.mixer.bus.misc.bus(),
         radius: content.const.treasurePickupRadius,
         x: item.x,
         y: item.y,
@@ -145,7 +145,7 @@ content.system.treasure = (() => {
     }
 
     const token = engine.streamer.registerProp(content.prop.treasure, {
-      destination: content.system.audio.bus(),
+      destination: content.system.audio.mixer.bus.misc.bus(),
       radius: content.const.treasurePickupRadius,
       x: location.x,
       y: location.y,
@@ -284,7 +284,7 @@ content.system.treasure = (() => {
 
       for (let i = 0; i < count; i += 1) {
         const token = engine.streamer.registerProp(content.prop.treasure, {
-          destination: content.system.audio.bus(),
+          destination: content.system.audio.mixer.bus.misc.bus(),
           radius: content.const.treasurePickupRadius,
           x: x + engine.utility.random.float(-10, 10),
           y: y + engine.utility.random.float(-10, 10),

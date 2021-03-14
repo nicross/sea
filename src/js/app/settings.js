@@ -10,6 +10,9 @@ app.settings = (() => {
     drawDistance: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: engine.utility.scale(500, 50, 1000, 0, 1),
+      update: () => {
+        app.canvas.forceResize()
+      },
     },
     environmentVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
@@ -28,6 +31,9 @@ app.settings = (() => {
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0,
+      update: () => {
+        app.canvas.forceResize()
+      },
     },
     graphicsHudOpacity: {
       default: 1,
@@ -39,6 +45,9 @@ app.settings = (() => {
     graphicsOn: {
       compute: (rawValue) => Boolean(rawValue),
       default: true,
+      update: () => {
+        app.canvas.forceUpdate()
+      },
     },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),

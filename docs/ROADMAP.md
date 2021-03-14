@@ -17,8 +17,6 @@ This document outlines upcoming changes for post-jam releases.
   - Add subtle north-south waves
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
-- Chores
-  - Update graphics as settings are adjusted
 
 ## v1.5.0 - Life update
 - Aquatic life
@@ -36,6 +34,12 @@ This document outlines upcoming changes for post-jam releases.
   - More colors
   - More oscillators
   - More triads
+
+## v1.6.0 - Redacted update
+- ???
+
+## v2.0.0 - Gold update
+- ???
 
 ## Known issues
 - Improve collision detection to prevent getting stuck in terrain

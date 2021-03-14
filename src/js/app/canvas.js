@@ -72,14 +72,24 @@ app.canvas = (() => {
     vfov = hfov / aspect
 
     pubsub.emit('resize')
-
-    clear()
-    draw()
   }
 
   return engine.utility.pubsub.decorate({
     aspect: () => aspect,
     context: () => context,
+    forceResize: function () {
+      onResize()
+      return this
+    },
+    forceUpdate: function () {
+      clear()
+
+      if (app.settings.computed.graphicsOn) {
+        draw()
+      }
+
+      return this
+    },
     height: () => height,
     hfov: () => hfov,
     toRelative: (vector) => {

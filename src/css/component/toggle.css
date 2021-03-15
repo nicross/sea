@@ -7,9 +7,7 @@
     transition: all 0.5s ease;
     transition-property: color;
   }
-  .c-toggle--button:hover {
-    color: #C0C0FF;
-  }
+  .c-toggle--button:hover,
   .c-toggle--button:focus {
     color: #FFFFFF;
   }
@@ -33,10 +31,8 @@
     opacity: 1;
   }
   .c-toggle--button[aria-checked="false"]:hover .c-toggle--off,
-  .c-toggle--button[aria-checked="true"]:hover .c-toggle--on {
-    background-color: #C0C0FF;
-  }
   .c-toggle--button[aria-checked="false"]:focus .c-toggle--off,
+  .c-toggle--button[aria-checked="true"]:hover .c-toggle--on,
   .c-toggle--button[aria-checked="true"]:focus .c-toggle--on {
     background-color: #FFFFFF;
   }

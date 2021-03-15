@@ -21,9 +21,7 @@
     transition: all 0.5s ease;
     transition-property: border-color;
   }
-  .c-slider--input input:hover::-webkit-slider-runnable-track {
-    border-color: #C0C0FF;
-  }
+  .c-slider--input input:hover::-webkit-slider-runnable-track,
   .c-slider--input input:focus::-webkit-slider-runnable-track {
     border-color: #FFFFFF;
   }
@@ -38,9 +36,7 @@
     transition-property: background-color;
     width: 1em;
   }
-  .c-slider--input input:hover::-webkit-slider-thumb {
-    background-color: #C0C0FF;
-  }
+  .c-slider--input input:hover::-webkit-slider-thumb,
   .c-slider--input input:focus::-webkit-slider-thumb {
     background-color: #FFFFFF;
   }
@@ -55,9 +51,7 @@
     transition: all 0.5s ease;
     transition-property: border-color;
   }
-  .c-slider--input input:hover::-moz-range-track {
-    border-color: #C0C0FF;
-  }
+  .c-slider--input input:hover::-moz-range-track,
   .c-slider--input input:focus::-moz-range-track {
     border-color: #FFFFFF;
   }
@@ -72,9 +66,7 @@
     transition-property: background-color;
     width: 1em;
   }
-  .c-slider--input input:hover::-moz-range-thumb {
-    background-color: #C0C0FF;
-  }
+  .c-slider--input input:hover::-moz-range-thumb,
   .c-slider--input input:focus::-moz-range-thumb {
     background-color: #FFFFFF;
   }

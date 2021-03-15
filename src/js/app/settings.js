@@ -37,6 +37,9 @@ app.settings = (() => {
     },
     graphicsHudOpacity: {
       default: 1,
+      update: () => {
+        app.canvas.forceUpdate()
+      },
     },
     graphicsMotionBlur: {
       compute: (rawValue) => 1 - engine.utility.lerpExp(1, 1/32, rawValue, 1/2),

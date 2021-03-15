@@ -3,6 +3,8 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.4.0 - Festival update
+- Audio
+  - Cut delay line for glitter when changing scenes to deep underwater
 - Documentation
   - Graphical description of surface
   - Note access hotkey for solar time
@@ -12,10 +14,13 @@ This document outlines upcoming changes for post-jam releases.
 - Menus
   - Better screen transitions
   - Improved gallery screen
+- Movement
+  - Adjust pitch of thrust on surface relative to wave slope
 - Simulation
   - Add subtle north-south waves
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
+  - Increase maximum wave height
 
 ## v1.5.0 - Life update
 - Aquatic life

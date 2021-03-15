@@ -11,15 +11,6 @@
 ::-webkit-scrollbar-track {
   background-color: #000000;
 }
-*:hover {
-  scrollbar-color: #FFFFFF #000000;
-}
-*:focus-within {
-  scrollbar-color: #FFFFFF #000000;
-}
-*:hover::-webkit-scrollbar-thumb {
-  background-color: #FFFFFF;
-}
-*:focus-within::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb:hover {
   background-color: #FFFFFF;
 }

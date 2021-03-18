@@ -10,6 +10,7 @@
   - Added hotkeys <kbd>1</kbd> through <kbd>0</kbd> to focus and click menu items
   - Added randomized scenes to splash screen and menus
   - Fixed tab key not working when sliders were focused
+  - Moved solar time to top of Status screen
   - Overlaid menus over graphics
   - Redesigned menu styles
   - Rendered audio while paused

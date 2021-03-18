@@ -7,7 +7,6 @@ This document outlines upcoming changes for post-jam releases.
   - Cut delay line for glitter when changing scenes to deep underwater
 - Documentation
   - Graphical description of surface
-  - Note access hotkey for solar time
   - Performance notes
   - Photosensitivity warning
   - Reword sections based on current marketing

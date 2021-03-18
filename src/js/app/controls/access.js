@@ -5,20 +5,20 @@ app.controls.access = () => {
     return false
   }
 
-  if (keys.Digit1 || keys.KeyC) {
+  if (keys.Digit1 || keys.KeyT) {
+    return 'time'
+  }
+
+  if (keys.Digit2 || keys.KeyC) {
     return 'coordinates'
   }
 
-  if (keys.Digit2 || keys.KeyH) {
+  if (keys.Digit3 || keys.KeyH) {
     return 'heading'
   }
 
-  if (keys.Digit3 || keys.KeyZ) {
+  if (keys.Digit4 || keys.KeyZ) {
     return 'z'
-  }
-
-  if (keys.Digit4 || keys.KeyT) {
-    return 'time'
   }
 
   if (keys.KeyX) {

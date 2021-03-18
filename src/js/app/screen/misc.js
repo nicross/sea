@@ -34,6 +34,18 @@ app.screen.misc = (() => {
       }
     }
 
+    if ('focus' in ui) {
+      const toFocus = app.utility.focus.selectFocusable(root)[ui.focus]
+
+      if (toFocus) {
+        if (app.utility.focus.is(toFocus)) {
+          return toFocus.click()
+        }
+
+        return app.utility.focus.set(toFocus)
+      }
+    }
+
     if (ui.up) {
       return app.utility.focus.setPreviousFocusable(root)
     }

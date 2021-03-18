@@ -7,8 +7,9 @@
   - Added slider for volume while game is paused
   - Added music to splash screen and main menu
 - User Interface
+  - Added hotkeys <kbd>1</kbd> through <kbd>0</kbd> to focus and click menu items
   - Added randomized scenes to splash screen and menus
-  - Fixed inability to tab out from slider inputs
+  - Fixed tab key not working when sliders were focused
   - Overlaid menus over graphics
   - Redesigned menu styles
   - Rendered audio while paused

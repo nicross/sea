@@ -25,7 +25,7 @@ app.screen.splash = (() => {
   function onFrame(e) {
     const ui = app.controls.ui()
 
-    if (ui.confirm || ui.enter || ui.space || ui.start) {
+    if (ui.confirm || ui.enter || ui.space || ui.start || ui.focus === 0) {
       onInteract()
     }
   }

@@ -99,6 +99,28 @@ app.controls.keyboard = {
       state.turbo = true
     }
 
+    if (keys.Digit1) {
+      state.focus = 0
+    } else if (keys.Digit2) {
+      state.focus = 1
+    } else if (keys.Digit3) {
+      state.focus = 2
+    } else if (keys.Digit4) {
+      state.focus = 3
+    } else if (keys.Digit5) {
+      state.focus = 4
+    } else if (keys.Digit6) {
+      state.focus = 5
+    } else if (keys.Digit7) {
+      state.focus = 6
+    } else if (keys.Digit8) {
+      state.focus = 7
+    } else if (keys.Digit9) {
+      state.focus = 8
+    } else if (keys.Digit0) {
+      state.focus = 9
+    }
+
     return state
   },
 }

@@ -2,7 +2,7 @@ content.system.audio.scan = (() => {
   const bus = content.system.audio.mixer.bus.misc.createBypass(),
     context = engine.audio.context()
 
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-4.5)
 
   function honk(isForward = false) {
     const root = isForward

@@ -48,7 +48,7 @@ content.system.audio.surface.wind = (() => {
     const strength = vector.distance()
 
     const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, strength, frequencyDropoff),
-      gain = engine.utility.fromDb(engine.utility.scale(strength, 0, 10, -6, -10.5))
+      gain = engine.utility.fromDb(engine.utility.scale(strength, 0, 4, -6, -10.5))
 
     engine.audio.ramp.set(synth.filter.frequency, frequency)
     engine.audio.ramp.set(synth.param.gain, gain)

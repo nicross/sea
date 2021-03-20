@@ -4,8 +4,7 @@ content.system.audio.underwater.collision = (() => {
 
   let throttle = 0
 
-  // XXX: Compensate for engine.const.distancePower = 1 (was 0 at 2)
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-6)
 
   function trigger({
     normalized = {},

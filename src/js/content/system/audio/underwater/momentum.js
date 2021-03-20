@@ -9,7 +9,6 @@ content.system.audio.underwater.momentum = (() => {
 
   let synth
 
-  // XXX: Compensate for engine.const.distancePower = 1 (was -6 at 2)
   bus.gain.value = engine.utility.fromDb(-9)
   binaural.to(bus)
 

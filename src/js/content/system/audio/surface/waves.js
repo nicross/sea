@@ -7,7 +7,7 @@ content.system.audio.surface.waves = (() => {
 
   const distance = 2,
     highpassFrequency = 40,
-    lowpassDropoffRate = 3,
+    lowpassDropoffRate = 2,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
     waveFrequencyDropoff = 3,
@@ -44,7 +44,7 @@ content.system.audio.surface.waves = (() => {
     buffers.push(buffer)
   }
 
-  bus.gain.value = engine.utility.fromDb(-9)
+  bus.gain.value = engine.utility.fromDb(-12)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)

@@ -4,7 +4,7 @@ content.system.surface = (() => {
     normalScaleX = 60,
     normalScaleY = 300,
     tidalField = engine.utility.perlin2d.create('surface', 'tidal'),
-    tidalScaleX = 100,
+    tidalScaleX = 500,
     tidalScaleY = 500,
     timeScale = 60 // Evolves over N seconds
 
@@ -37,8 +37,8 @@ content.system.surface = (() => {
     x += time * momentumX / tidalScaleX
     y /= tidalScaleY
 
-    const mix = tidalField.value(y, time / timeScale) ** 0.75,
-      wave = Math.cos(2 * Math.PI * x) ** 7
+    const mix = smooth(tidalField.value(y, time / timeScale) ** 0.5),
+      wave = Math.cos(2 * Math.PI * x) ** 127
 
     return engine.utility.clamp(wave * mix, 0, 1)
   }
@@ -54,6 +54,11 @@ content.system.surface = (() => {
 
     const normal = getNormal(x, y, time) * (1 - tidal)
     return engine.utility.clamp(normal + tidal, 0, 1)
+  }
+
+  function smooth(value) {
+    // generalized logistic function
+    return 1 / (1 + (Math.E ** (-12.5 * (value - 0.5))))
   }
 
   function toHeight(value) {

@@ -11,7 +11,8 @@
 - Documentation
   - Updated documentation to reflect latest changes
 - Simulation
-  - Increase maximum wave height
+  - Increased distance between tidal waves
+  - Increased maximum wave height
 - User interface
   - Added hotkeys <kbd>1</kbd> through <kbd>0</kbd> to focus and click menu items
   - Added randomized scenes to splash screen and menus

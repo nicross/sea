@@ -17,8 +17,6 @@ This document outlines upcoming changes for post-jam releases.
   - Adjust pitch of thrust on surface relative to wave slope
 - Simulation
   - Add subtle north-south waves
-  - Increase distance between tidal waves
-  - Increase height variance of tidal waves
 
 ## v1.5.0 - Life update
 - Aquatic life

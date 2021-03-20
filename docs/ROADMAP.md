@@ -19,7 +19,6 @@ This document outlines upcoming changes for post-jam releases.
   - Add subtle north-south waves
   - Increase distance between tidal waves
   - Increase height variance of tidal waves
-  - Increase maximum wave height
 
 ## v1.5.0 - Life update
 - Aquatic life

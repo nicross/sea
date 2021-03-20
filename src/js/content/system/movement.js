@@ -96,7 +96,7 @@ content.system.movement = (() => {
     })
   }
 
-  function applyLateralThrust(scale = 1) {
+  function applyLateralThrust(scale = 1, pitch = 0) {
     if (lateralThrust.isZero()) {
       return engine.position.setVelocity(
         content.utility.accelerate.vector(
@@ -107,8 +107,12 @@ content.system.movement = (() => {
       )
     }
 
-    const currentVelocity = engine.position.getVelocity(),
-      targetVelocity = lateralThrust.scale(lateralMaxVelocity).rotateQuaternion(engine.position.getQuaternion())
+    const currentVelocity = engine.position.getVelocity()
+    let targetVelocity = lateralThrust.scale(lateralMaxVelocity).rotateQuaternion(engine.position.getQuaternion())
+
+    if (pitch) {
+      targetVelocity = targetVelocity.rotateEuler({pitch})
+    }
 
     const rate = currentVelocity.distance() <= targetVelocity.distance()
       ? lateralAcceleration
@@ -181,6 +185,21 @@ content.system.movement = (() => {
     return false
   }
 
+  function getSurfacePitch() {
+    const {yaw} = engine.position.getEuler()
+
+    const position = engine.position.getVector(),
+      unitX = engine.utility.vector2d.create({x: 0.25}).rotate(yaw)
+
+    const back = position.subtract(unitX),
+      front = position.add(unitX)
+
+    const surfaceBack = content.system.surface.height(back.x, back.y),
+      surfaceFront = content.system.surface.height(front.x, front.y)
+
+    return Math.atan2(surfaceFront - surfaceBack, 0.5)
+  }
+
   function getSurfaceZ() {
     return content.system.surface.currentHeight()
   }
@@ -235,7 +254,7 @@ content.system.movement = (() => {
 
   function handleSurface(controls) {
     applyAngularThrust()
-    applyLateralThrust()
+    applyLateralThrust(1, getSurfacePitch())
 
     const {z} = engine.position.getVector()
 

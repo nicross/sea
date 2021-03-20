@@ -13,8 +13,6 @@ This document outlines upcoming changes for post-jam releases.
 - Menus
   - Better screen transitions
   - Improved gallery screen
-- Movement
-  - Adjust pitch of thrust on surface relative to wave slope
 - Simulation
   - Add subtle north-south waves
 

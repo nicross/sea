@@ -11,6 +11,8 @@
   - Added subtle shimmer to surface
 - Documentation
   - Updated documentation to reflect latest changes
+- Movement
+  - Apply pitch to thrust relative to wave slope
 - Simulation
   - Increased distance between tidal waves
   - Increased maximum wave height

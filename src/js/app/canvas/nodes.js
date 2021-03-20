@@ -9,10 +9,6 @@ app.canvas.nodes = (() => {
 
   content.utility.ephemeralNoise.manage(nodeHue)
 
-  engine.state.on('reset', () => {
-    nodeHue.reset()
-  })
-
   main.on('resize', () => {
     const height = main.height(),
       width = main.width()

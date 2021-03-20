@@ -6,7 +6,6 @@ content.system.wind = (() => {
 
   return {
     reset: function () {
-      field.reset()
       return this
     },
     value: function () {

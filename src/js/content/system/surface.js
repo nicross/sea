@@ -85,9 +85,6 @@ content.system.surface = (() => {
       return this
     },
     reset: function () {
-      normalField.reset()
-      tidalField.reset()
-
       currentHeight = undefined
       currentHeightScale = undefined
       currentValue = undefined

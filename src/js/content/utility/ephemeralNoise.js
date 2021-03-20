@@ -43,6 +43,11 @@ content.utility.ephemeralNoise = (() => {
     },
     reset: function () {
       resetTimer()
+
+      for (const noise of noises) {
+        noise.reset()
+      }
+
       return this
     },
     update: function (delta) {

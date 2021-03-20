@@ -229,12 +229,6 @@ content.system.audio.surface.moon = (() => {
   return {
     reset: function () {
       teardown()
-
-      rootAmodDepth.reset()
-      rootAmodFrequency.reset()
-      thirdAmodDepth.reset()
-      thirdAmodFrequency.reset()
-
       return this
     },
     update: function () {

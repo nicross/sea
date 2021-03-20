@@ -1,10 +1,16 @@
 app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    main = app.canvas
+    main = app.canvas,
+    shimmerField = engine.utility.perlin3d.create('shimmer'),
+    shimmerScaleX = 2,
+    shimmerScaleY = 2,
+    shimmerScaleZ = 0.5
 
   let drawDistance,
     nodeRadius
+
+  content.utility.ephemeralNoise.manage(shimmerField)
 
   main.on('resize', () => {
     const height = main.height(),
@@ -28,6 +34,7 @@ app.canvas.surface = (() => {
       height = main.height(),
       hfov = main.hfov(),
       position = engine.position.getVector(),
+      time = content.system.time.value(),
       vfov = main.vfov(),
       width = main.width(),
       zOffset = engine.const.positionRadius / 2
@@ -66,12 +73,15 @@ app.canvas.surface = (() => {
           y: (height / 2) - (height * vangle / vfov),
         })
 
-        const distanceRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0)
+        const distanceRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
+          radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 12),
+          shimmer = getShimmer(grid.x, grid.y, time)
 
-        const alpha = distanceRatio ** 0.5,
-          radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 12)
+        // Apply shimmer to color
+        const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0.5, 1.5, shimmer), 0, 1) * (distanceRatio ** 0.5),
+          luminance = engine.utility.clamp(color.l * engine.utility.lerp(1.5, 0.5, shimmer), 0, 1)
 
-        context.fillStyle = `hsla(${color.h}, ${color.s}%, ${color.l}%, ${color.a * alpha})`
+        context.fillStyle = `hsla(${color.h}, ${color.s}%, ${luminance * 100}%, ${alpha})`
         context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
       }
     }
@@ -94,10 +104,16 @@ app.canvas.surface = (() => {
     // Optimization: pre-calculate scaled literal values
     color.h *= 360
     color.s *= 100
-    color.l **= 0.75
-    color.l *= 100
 
     return color
+  }
+
+  function getShimmer(x, y, time) {
+    x /= shimmerScaleX
+    y /= shimmerScaleY
+    time /= shimmerScaleZ
+
+    return shimmerField.value(x, y, time)
   }
 
   function shouldDraw() {

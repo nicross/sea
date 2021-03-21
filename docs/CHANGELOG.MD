@@ -14,6 +14,7 @@
   - Updated documentation to reflect latest changes
 - Haptic feedback
   - Added haptic feedback for supported browsers and devices
+  - Added slider for vibration to Controls screen
 - Movement
   - Applied pitch to thrust relative to wave slope
   - Fixed occasionally getting stuck beneath surface

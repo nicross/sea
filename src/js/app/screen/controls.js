@@ -72,6 +72,7 @@ app.screen.controls = (() => {
   function hydrateSliders() {
     [
       ['.a-controls--gamepadDeadzone', app.settings.raw.gamepadDeadzone, app.settings.setGamepadDeadzone],
+      ['.a-controls--gamepadVibration', app.settings.raw.gamepadVibration, app.settings.setGamepadVibration],
       ['.a-controls--mouseSensitivity', app.settings.raw.mouseSensitivity, app.settings.setMouseSensitivity],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)

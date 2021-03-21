@@ -11,9 +11,6 @@ This document outlines upcoming changes for post-jam releases.
   - Performance notes
   - Photosensitivity warning
   - Reword sections based on current marketing
-- Haptic feedback
-  - Strength slider
-  - Optimizations when strength is zero
 
 ## v1.5.0 - Life update
 - Aquatic life

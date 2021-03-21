@@ -28,6 +28,9 @@ app.settings = (() => {
         engine.input.gamepad.setDeadzone(computedValue)
       },
     },
+    gamepadVibration: {
+      default: 1,
+    },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0,

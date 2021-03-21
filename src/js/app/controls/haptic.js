@@ -23,10 +23,16 @@ app.controls.haptic = (() => {
     return actuators
   }
 
+  function isActive() {
+    return app.settings.computed.gamepadVibration > 0
+  }
+
   function trigger(effect) {
     const actuators = getActuators()
 
     effect = {...defaultEffect, ...effect}
+    effect.strongMagnitude *= app.settings.computed.gamepadVibration
+    effect.weakMagnitude *= app.settings.computed.gamepadVibration
 
     for (const actuator of actuators) {
       if (actuator.playEffect && actuator.type) {
@@ -37,7 +43,14 @@ app.controls.haptic = (() => {
 
   return {
     getActuators,
-    trigger,
+    isActive,
+    trigger: function (...args) {
+      if (isActive()) {
+        trigger(...args)
+      }
+
+      return this
+    },
   }
 })()
 

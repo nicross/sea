@@ -9,6 +9,7 @@
   - Remixed various levels for clarity
 - Graphics
   - Added subtle shimmer to surface
+  - Improved surface render performance
 - Documentation
   - Updated documentation to reflect latest changes
 - Movement

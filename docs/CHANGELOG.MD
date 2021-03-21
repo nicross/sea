@@ -17,7 +17,7 @@
   - Fixed occasionally getting stuck beneath surface
 - Simulation
   - Increased distance between tidal waves
-  - Increased maximum wave height
+  - Increased range of wave heights
 - User interface
   - Added hotkeys <kbd>1</kbd> through <kbd>0</kbd> to focus and click menu items
   - Added randomized scenes to splash screen and menus

@@ -24,7 +24,7 @@ content.const = {
   underwaterTurboMaxVelocity: 20,
   unit2: Math.sqrt(2) / 2,
   waveHeightMax: 16,
-  waveHeightMin: 8,
+  waveHeightMin: 4,
 }
 
 engine.const.distancePower = 1.25

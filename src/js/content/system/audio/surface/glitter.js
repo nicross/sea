@@ -49,18 +49,7 @@ content.system.audio.surface.glitter = (() => {
 
   let wasAbove
 
-  for (let i = 0; i < 4; i += 1) {
-    const feedbackDelay = engine.audio.effect.createFeedbackDelay({
-      delay: (i + 1) / 4,
-      dry: 1,
-      feedback: engine.utility.fromDb(-3),
-      wet: engine.utility.fromDb(-3),
-    })
-
-    feedbackDelay.param.gain.value = engine.utility.fromDb(-15)
-    feedbackDelay.output.connect(filter)
-    feedbackDelays.push(feedbackDelay)
-  }
+  createFeedbackDelays()
 
   filter.frequency.value = 0
   filter.connect(bus)
@@ -76,6 +65,21 @@ content.system.audio.surface.glitter = (() => {
     }
 
     return engine.utility.lerp(4/engine.performance.fps(), 1/2, chance)
+  }
+
+  function createFeedbackDelays() {
+    for (let i = 0; i < 4; i += 1) {
+      const feedbackDelay = engine.audio.effect.createFeedbackDelay({
+        delay: (i + 1) / 4,
+        dry: 1,
+        feedback: engine.utility.fromDb(-3),
+        wet: engine.utility.fromDb(-3),
+      })
+
+      feedbackDelay.param.gain.value = engine.utility.fromDb(-15)
+      feedbackDelay.output.connect(filter)
+      feedbackDelays.push(feedbackDelay)
+    }
   }
 
   function createGrain(z) {
@@ -127,6 +131,14 @@ content.system.audio.surface.glitter = (() => {
     synth.stop(now + attack + decay)
   }
 
+  function teardownFeedbackDelays() {
+    for (const feedbackDelay of feedbackDelays) {
+      engine.audio.ramp.linear(feedbackDelay.param.gain, engine.const.zeroGain, 1/8)
+    }
+
+    feedbackDelays.length = 0
+  }
+
   function updateFilter(z) {
     const isAbove = !content.system.movement.isUnderwater()
 
@@ -155,6 +167,11 @@ content.system.audio.surface.glitter = (() => {
 
       return this
     },
+    reset: function () {
+      teardownFeedbackDelays()
+      createFeedbackDelays()
+      return this
+    },
     update: function () {
       const {z} = engine.position.getVector()
 
@@ -180,3 +197,4 @@ engine.loop.on('frame', () => {
 })
 
 engine.state.on('import', () => content.system.audio.surface.glitter.import())
+engine.state.on('reset', () => content.system.audio.surface.glitter.reset())

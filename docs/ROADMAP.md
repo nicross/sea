@@ -3,16 +3,11 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.4.0 - Festival update
-- Audio
-  - Cut delay line for glitter when changing scenes to deep underwater
 - Documentation
   - Graphical description of surface
   - Performance notes
   - Photosensitivity warning
   - Reword sections based on current marketing
-- Menus
-  - Better screen transitions
-  - Improved gallery screen
 
 ## v1.5.0 - Life update
 - Aquatic life
@@ -51,7 +46,6 @@ This document outlines upcoming changes for post-jam releases.
 ### Graphics
 - Godrays
 - Shooting stars
-- Surface shimmer
 
 ### Plot
 - Abandoned alien labs
@@ -89,9 +83,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ### Simulation
 - Add depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
-- Improved surface
-  - quiet noise that oscillates north-south
-  - spread out tidal waves
 - Light levels influenced by cloud cover
 - Moon phases
 - Surface weather patterns
@@ -100,9 +91,8 @@ This document outlines upcoming changes for post-jam releases.
 - Settings for fixed time of day or dynamic with speeds
 
 ### User interface
-- Fancier menus / game paused screen
+- Improve screen transitions
 - Improve treasure gallery
-- Scene that plays in background of main menu
 
 ### World generation
 - Biomes

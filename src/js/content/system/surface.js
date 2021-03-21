@@ -1,6 +1,11 @@
 content.system.surface = (() => {
   const momentumX = -10, // Moves westward N m/s
-    normalField = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 6),
+    noiseAmplitude = 1 / (2 ** 6),
+    noiseField = engine.utility.perlin3d.create('surface', 'noise'),
+    noiseOffset = engine.utility.perlin1d.create('surface', 'noise', 'offset'),
+    noiseScaleX = 2,
+    noiseScaleY = 2,
+    normalField = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 4),
     normalScaleX = 60,
     normalScaleY = 300,
     tidalField = engine.utility.perlin2d.create('surface', 'tidal'),
@@ -12,6 +17,8 @@ content.system.surface = (() => {
     currentHeightScale,
     currentValue
 
+  content.utility.ephemeralNoise.manage(noiseField)
+  content.utility.ephemeralNoise.manage(noiseOffset)
   content.utility.ephemeralNoise.manage(normalField)
   content.utility.ephemeralNoise.manage(tidalField)
 
@@ -22,6 +29,18 @@ content.system.surface = (() => {
     currentValue = getValue(position.x, position.y)
     currentHeight = toHeight(currentValue)
     currentHeightScale = 1 - engine.utility.wrapAlternate(2 * cycle, 0, 1)
+  }
+
+  function getNoise(x, y, time) {
+    const offset = 2 * Math.PI * noiseOffset.value(time / timeScale)
+
+    x += Math.cos(offset)
+    y += Math.sin(offset)
+
+    x /= noiseScaleX
+    y /= noiseScaleY
+
+    return noiseField.value(x, y, time)
   }
 
   function getNormal(x, y, time) {
@@ -52,8 +71,10 @@ content.system.surface = (() => {
       ? getTidal(x, y, time) * cycleFactor
       : 0
 
-    const normal = getNormal(x, y, time) * (1 - tidal)
-    return engine.utility.clamp(normal + tidal, 0, 1)
+    const noise = getNoise(x, y, time) * noiseAmplitude * (1 - tidal),
+      normal = getNormal(x, y, time) * (1 - noiseAmplitude) * (1 - tidal)
+
+    return engine.utility.clamp(noise + normal + tidal, 0, 1)
   }
 
   function smooth(value) {

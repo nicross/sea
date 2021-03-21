@@ -13,8 +13,6 @@ This document outlines upcoming changes for post-jam releases.
 - Menus
   - Better screen transitions
   - Improved gallery screen
-- Simulation
-  - Add subtle north-south waves
 
 ## v1.5.0 - Life update
 - Aquatic life

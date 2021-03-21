@@ -16,6 +16,7 @@
   - Applied pitch to thrust relative to wave slope
   - Fixed occasionally getting stuck beneath surface
 - Simulation
+  - Added localized turbulence to waves
   - Increased distance between tidal waves
   - Increased range of wave heights
 - User interface

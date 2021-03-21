@@ -12,6 +12,8 @@
   - Improved surface render performance
 - Documentation
   - Updated documentation to reflect latest changes
+- Haptic feedback
+  - Added haptic feedback for supported browsers and devices
 - Movement
   - Applied pitch to thrust relative to wave slope
   - Fixed occasionally getting stuck beneath surface

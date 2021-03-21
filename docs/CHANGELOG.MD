@@ -12,7 +12,8 @@
 - Documentation
   - Updated documentation to reflect latest changes
 - Movement
-  - Apply pitch to thrust relative to wave slope
+  - Applied pitch to thrust relative to wave slope
+  - Fixed occasionally getting stuck beneath surface
 - Simulation
   - Increased distance between tidal waves
   - Increased maximum wave height

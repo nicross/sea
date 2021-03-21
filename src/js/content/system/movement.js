@@ -240,11 +240,14 @@ content.system.movement = (() => {
       return medium.dispatch('land')
     }
 
-    // Reflect z-velocity and absorb some lateral velocity
+    // Reflect z-velocity
     engine.position.setVelocity({
-      ...content.utility.accelerate.vector(velocity, {}, content.const.normalDeceleration),
+      ...velocity,
       z: velocity.z * -reflectionRate,
     })
+
+    // Glue to surface
+    setZ(getSurfaceZ())
 
     // Apply thrust
     const thrustScale = engine.performance.fps() / 4

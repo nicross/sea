@@ -1,17 +1,17 @@
 content.system.surface = (() => {
   const momentumX = -10, // Moves westward N m/s
-    noiseAmplitude = 1 / (2 ** 6),
+    noiseAmplitude = 1 / (2 ** 5),
     noiseField = engine.utility.perlin3d.create('surface', 'noise'),
     noiseOffset = engine.utility.perlin1d.create('surface', 'noise', 'offset'),
     noiseScaleX = 2,
     noiseScaleY = 2,
     normalField = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 4),
-    normalScaleX = 60,
-    normalScaleY = 300,
+    normalScaleX = 40,
+    normalScaleY = 200,
     tidalField = engine.utility.perlin2d.create('surface', 'tidal'),
     tidalScaleX = 500,
     tidalScaleY = 500,
-    timeScale = 60 // Evolves over N seconds
+    timeScale = 30 // Evolves over N seconds
 
   let currentHeight,
     currentHeightScale,

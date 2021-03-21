@@ -3,6 +3,9 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.4.0 - Festival update
+- Audio
+  - Improve transitions on state reset
+  - Scale wave parameters on time of day to match height
 - Documentation
   - Graphical description of surface
   - Performance notes
@@ -108,6 +111,7 @@ This document outlines upcoming changes for post-jam releases.
   - Guaranteed treasures
 
 ### Miscellaneous
+- Haptic feedback
 - Photograph mode, or pseudo-bookmarks
 
 ### Chores

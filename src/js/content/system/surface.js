@@ -57,7 +57,7 @@ content.system.surface = (() => {
     y /= tidalScaleY
 
     const mix = smooth(tidalField.value(y, time / timeScale) ** 0.5),
-      wave = Math.cos(2 * Math.PI * x) ** 127
+      wave = Math.cos(2 * Math.PI * x) ** 113
 
     return engine.utility.clamp(wave * mix, 0, 1)
   }

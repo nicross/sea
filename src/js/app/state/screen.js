@@ -245,7 +245,7 @@ app.state.screen.on('before-fastTravel-origin', () => {
   const travelTime = distance / velocity
   content.system.time.incrementOffset(travelTime)
 
-  const surface = content.system.surface.height(0, 0) + engine.const.zero
+  const surface = content.system.surface.value(0, 0) + engine.const.zero
 
   engine.position.setVector({
     x: 0,
@@ -269,7 +269,7 @@ app.state.screen.on('before-fastTravel-surface', () => {
 
   content.system.time.incrementOffset(travelTime)
 
-  const surface = content.system.surface.height(0, 0) + engine.const.zero
+  const surface = content.system.surface.value(0, 0) + engine.const.zero
 
   engine.position.setVector({
     ...position,

@@ -10,7 +10,7 @@ content.system.audio.surface.waves = (() => {
     lowpassDropoffRate = 2,
     lowpassMaxFrequency = 1000,
     lowpassMinFrequency = 20,
-    waveFrequencyDropoff = 3,
+    waveFrequencyDropoff = 1,
     waveFrequencyRange = 1/4, // 2 octaves
     waveGainDropoff = 3,
     waveMaxFrequency = 5000,
@@ -92,7 +92,7 @@ content.system.audio.surface.waves = (() => {
     if (isAbove) {
       engine.audio.ramp.exponential(lowpassFilter.frequency, engine.const.maxFrequency, 0.5)
     } else {
-      const zRatio = engine.utility.scale(z, content.system.surface.currentHeight(), content.const.lightZone, 1, 0)
+      const zRatio = engine.utility.scale(z, content.system.surface.current(), content.const.lightZone, 1, 0)
       const frequency = engine.utility.lerpExp(lowpassMinFrequency, lowpassMaxFrequency, zRatio, lowpassDropoffRate)
       engine.audio.ramp.set(lowpassFilter.frequency, frequency)
     }
@@ -110,13 +110,13 @@ content.system.audio.surface.waves = (() => {
       x += Math.cos(angle + angles[i]) * distance
       y += Math.sin(angle + angles[i]) * distance
 
-      const value = content.system.surface.value(x, y)
+      const height = content.system.surface.value(x, y),
+        ratio = height / content.system.surface.max()
 
-      const height = content.system.surface.toHeight(value),
-        maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, value, waveFrequencyDropoff),
+      const maxFrequency = engine.utility.lerpExp(waveMinFrequency, waveMaxFrequency, ratio, waveFrequencyDropoff),
         minFrequency = isAbove ? maxFrequency * waveFrequencyRange : engine.const.minFrequency
 
-      let gain = engine.utility.lerpExp(waveMaxGain, waveMinGain, value, waveGainDropoff)
+      let gain = engine.utility.lerpExp(waveMaxGain, waveMinGain, ratio, waveGainDropoff)
 
       if (z > height) {
         gain *= engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, 1, 0.75), 0.75, 1)

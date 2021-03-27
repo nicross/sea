@@ -60,7 +60,7 @@ content.system.audio.surface.glitter = (() => {
     let chance = content.system.time.cycle()
 
     if (isCatchingAir) {
-      const height = content.system.surface.currentHeight()
+      const height = content.system.surface.current()
       chance = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, chance, 1), 0, 1)
     }
 
@@ -86,12 +86,12 @@ content.system.audio.surface.glitter = (() => {
     let zBias = 1 - ((Math.min(0, z) / content.const.lightZone) ** 2)
 
     const isCatchingAir = content.system.movement.isCatchingAir(),
-      surface = content.system.surface.currentValue()
+      surface = content.system.surface.current() / content.system.surface.max()
 
-    zBias *= surface ** 0.5
+    zBias *= surface ** (1/6)
 
     if (isCatchingAir) {
-      const height = content.system.surface.currentHeight()
+      const height = content.system.surface.current()
       zBias = engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, zBias, 1), 0, 1)
     }
 
@@ -149,7 +149,7 @@ content.system.audio.surface.glitter = (() => {
     if (isAbove) {
       engine.audio.ramp.exponential(filter.frequency, engine.const.maxFrequency, 0.5)
     } else {
-      const zRatio = engine.utility.scale(z, content.system.surface.currentHeight(), content.const.lightZone, 1, 0)
+      const zRatio = engine.utility.scale(z, content.system.surface.current(), content.const.lightZone, 1, 0)
       const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
       engine.audio.ramp.set(filter.frequency, frequency)
     }

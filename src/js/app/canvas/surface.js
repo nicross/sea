@@ -58,7 +58,7 @@ app.canvas.surface = (() => {
           continue
         }
 
-        relative.z = content.system.surface.height(grid.x, grid.y) - (position.z + zOffset)
+        relative.z = content.system.surface.value(grid.x, grid.y) - (position.z + zOffset)
 
         const vangle = Math.atan2(relative.z, relative.x)
 
@@ -127,7 +127,7 @@ app.canvas.surface = (() => {
       return false
     }
 
-    const surface = content.system.surface.currentHeight()
+    const surface = content.system.surface.current()
 
     if (z > surface) {
       return z - surface < drawDistance

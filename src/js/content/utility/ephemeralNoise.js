@@ -26,7 +26,7 @@ content.utility.ephemeralNoise = (() => {
   }
 
   return {
-    manage: (noise) => {
+    manage: function (noise) {
       if (!noise || !noise.reset) {
         return this
       }

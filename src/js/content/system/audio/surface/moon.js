@@ -84,7 +84,7 @@ content.system.audio.surface.moon = (() => {
     preset.sub.modFrequency = engine.utility.lerpExp(6, 4, cycle, 2)
 
     // Apply fade out below surface
-    const surface = content.system.surface.currentHeight()
+    const surface = content.system.surface.current()
     const {z} = engine.position.getVector()
 
     if (z < surface) {
@@ -232,7 +232,7 @@ content.system.audio.surface.moon = (() => {
       return this
     },
     update: function () {
-      const surface = content.system.surface.currentHeight()
+      const surface = content.system.surface.current()
       const {z} = engine.position.getVector()
 
       if (z <= surface - fadeDepth) {

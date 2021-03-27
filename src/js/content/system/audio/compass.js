@@ -88,7 +88,7 @@ content.system.audio.compass = (() => {
   function updateGain() {
     const {z} = engine.position.getVector()
 
-    const surface = content.system.surface.currentHeight(),
+    const surface = content.system.surface.current(),
       value = engine.utility.clamp(engine.utility.scale(z, surface, content.const.lightZone, 1, 0), 0, 1)
 
     const gain = engine.utility.fromDb(engine.utility.lerp(-6, 0, value)) * gainFactor

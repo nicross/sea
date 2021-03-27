@@ -18,7 +18,7 @@ app.canvas.stars = (() => {
 
   function calculateAlpha() {
     const {z} = engine.position.getVector()
-    const surface = content.system.surface.currentHeight()
+    const surface = content.system.surface.current()
 
     if (z < surface - 2) {
       return 0

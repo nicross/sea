@@ -24,7 +24,7 @@ app.canvas.celestials = (() => {
   })
 
   function calculateAlpha() {
-    const surface = content.system.surface.currentHeight()
+    const surface = content.system.surface.current()
     const {z} = engine.position.getVector()
 
     if (z >= surface) {

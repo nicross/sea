@@ -21,7 +21,7 @@
 - Simulation
   - Added localized turbulence to waves
   - Increased distance between tidal waves
-  - Increased range of wave heights
+  - Reworked surface generation
 - User interface
   - Added hotkeys <kbd>1</kbd> through <kbd>0</kbd> to focus and click menu items
   - Added randomized scenes to splash screen and menus

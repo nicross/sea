@@ -46,7 +46,7 @@ content.system.audio.underwater.momentum = (() => {
 
   return {
     update: function () {
-      const shouldUpdate = !engine.position.getVelocity().isZero() && engine.position.getVector().z < content.system.surface.currentHeight()
+      const shouldUpdate = !engine.position.getVelocity().isZero() && engine.position.getVector().z < content.system.surface.current()
 
       if (!shouldUpdate) {
         if (synth) {

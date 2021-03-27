@@ -194,14 +194,14 @@ content.system.movement = (() => {
     const back = position.subtract(unitX),
       front = position.add(unitX)
 
-    const surfaceBack = content.system.surface.height(back.x, back.y),
-      surfaceFront = content.system.surface.height(front.x, front.y)
+    const surfaceBack = content.system.surface.value(back.x, back.y),
+      surfaceFront = content.system.surface.value(front.x, front.y)
 
     return Math.atan2(surfaceFront - surfaceBack, 0.5)
   }
 
   function getSurfaceZ() {
-    return content.system.surface.currentHeight()
+    return content.system.surface.current()
   }
 
   function handleAir(controls = {}) {
@@ -363,7 +363,7 @@ content.system.movement = (() => {
 
     pubsub.emit('surface-splash', {
       pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 0, 1), 0, 1),
-      size: (surfaceZ - z) / content.system.surface.toHeight(1),
+      size: (surfaceZ - z) / content.system.surface.max(),
       velocity: engine.utility.clamp(velocity.distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
     })
   }

@@ -16,7 +16,7 @@ app.canvas.light = (() => {
 
   main.on('resize', () => {
     canvas.height = main.height()
-    canvas.width = 1
+    canvas.width = main.width()
 
     clear()
   })
@@ -65,7 +65,7 @@ app.canvas.light = (() => {
   }
 
   function getGradient() {
-    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height)
+    const gradient = context.createLinearGradient(0, 0, 0, canvas.height)
     const {z} = engine.position.getVector()
 
     // Cache scheme between toGradientColor() calls

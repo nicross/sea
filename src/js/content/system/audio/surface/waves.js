@@ -70,13 +70,19 @@ content.system.audio.surface.waves = (() => {
 
       binaural.from(synth)
       synths.push(synth)
+
+      // Fade in
+      synth.chainAssign('fader', context.createGain())
+      synth.fader.gain.value = engine.const.zeroGain
+      engine.audio.ramp.linear(synth.fader.gain, 1, 1/32)
     }
   }
 
   function destroySynths() {
     synths.forEach((synth) => {
-      synth.stop()
-      synth.output.disconnect()
+      // Fade out
+      engine.audio.ramp.linear(synth.fader.gain, engine.const.zeroGain, 1/32)
+      synth.stop(engine.audio.time(1/32))
     })
 
     synths.length = 0

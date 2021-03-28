@@ -42,11 +42,12 @@ app.canvas = (() => {
   }
 
   function draw() {
-    app.canvas.nodes.draw()
+    app.canvas.black.draw()
     app.canvas.light.draw()
     app.canvas.stars.draw()
     app.canvas.celestials.draw()
     app.canvas.surface.draw()
+    app.canvas.nodes.draw()
     app.canvas.grain.draw()
     app.canvas.hud.draw()
   }

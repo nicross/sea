@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 ## v1.4.0 - Festival update
 - Audio
   - Improve transitions on state reset
-  - Scale wave parameters on time of day to match height
 - Documentation
   - Graphical description of surface
   - Performance notes

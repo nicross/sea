@@ -10,6 +10,7 @@
 - Graphics
   - Added subtle shimmer to surface
   - Improved surface render performance
+  - Reddened light levels around dusk and dawn
 - Documentation
   - Updated documentation to reflect latest changes
 - Haptic feedback
@@ -32,16 +33,16 @@
   - Rendered audio while paused
   - Updated access hotkeys to reflect new Status screen order
 
-  <details markdown="1">
-    <summary>Spoiler Warning</summary>
-    <ul>
-      <li>Audio
-        <ul>
-          <li>Fixed underwater momentum between surface and sea level</li>
-        </ul>
-      </li>
-    </ul>
-  </details>
+<details markdown="1">
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Audio
+      <ul>
+        <li>Fixed underwater momentum between surface and sea level</li>
+      </ul>
+    </li>
+  </ul>
+</details>
 
 ## v1.3.0
 - Audio

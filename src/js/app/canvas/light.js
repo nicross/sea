@@ -42,23 +42,23 @@ app.canvas.light = (() => {
   function calculateScheme() {
     const clock = content.system.time.clock(),
       cycle = smooth(engine.utility.wrapAlternate(clock * 2, 0, 1)) ** (1/3),
-      hue = engine.utility.lerpExp(1, 240/360, Math.abs(Math.cos(Math.PI * 2 * clock)), 1/2),
+      hue = engine.utility.lerp(330/360, 240/360, smooth(Math.abs(Math.cos(Math.PI * 2 * clock)) ** 0.5)),
       hueHalf = engine.utility.lerp(hue, 240/360, 0.5)
 
     return [
       app.utility.color.lerpHsl(
         {h: hue, s: 0.5, l: 0.20},
-        {h: hue, s: 1, l: 0.85},
+        {h: hue, s: 1, l: 0.80},
         cycle
       ),
       app.utility.color.lerpHsl(
         {h: hueHalf, s: 0.25, l: 0.10},
-        {h: hueHalf, s: 1, l: 0.75},
+        {h: hueHalf, s: 1, l: 0.70},
         cycle
       ),
       app.utility.color.lerpHsl(
         {h: 240/360, s: 0, l: 0},
-        {h: 240/360, s: 1, l: 0.09},
+        {h: 240/360, s: 1, l: 0.10},
         cycle
       ),
     ]

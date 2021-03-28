@@ -2,13 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.4.0 - Festival update
-- Documentation
-  - Graphical description of surface
-  - Performance notes
-  - Photosensitivity warning
-  - Reword sections based on current marketing
-
 ## v1.5.0 - Life update
 - Aquatic life
   - Dolphins
@@ -69,6 +62,7 @@ This document outlines upcoming changes for post-jam releases.
   - Procedural jets over time
 - Unlockable alien technologies
   - Ability to freeze time
+  - Jump jets
 
 <details>
   <summary>Ultimate Spoiler Warning</summary>

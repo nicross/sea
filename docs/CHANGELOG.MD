@@ -7,12 +7,14 @@
   - Added slider for volume while game is paused
   - Added music to splash screen and main menu
   - Remixed various levels for clarity
+- Documentation
+  - Added photosensitivity warning and graphical description
+  - Added performance troubleshooting tips
+  - Updated documentation to reflect latest changes
 - Graphics
   - Added subtle shimmer to surface
   - Improved surface render performance
   - Reddened light levels around dusk and dawn
-- Documentation
-  - Updated documentation to reflect latest changes
 - Haptic feedback
   - Added haptic feedback for supported browsers and devices
   - Added slider for vibration to Controls screen
@@ -28,8 +30,7 @@
   - Added randomized scenes to splash screen and menus
   - Fixed tab key not working when sliders were focused
   - Moved solar time to top of Status screen
-  - Overlaid menus over graphics
-  - Redesigned menu styles
+  - Overhauled menu styles to be legible over scenes
   - Rendered audio while paused
   - Updated access hotkeys to reflect new Status screen order
 

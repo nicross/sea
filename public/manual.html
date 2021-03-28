@@ -274,8 +274,8 @@
 
       <section>
         <h2>System Requirements</h2>
-        <p>S.E.A. is an audio game best experienced with headphones.</p>
-        <p>Real-time synthesis is an <em>extremely</em> CPU-intensive process. S.E.A. will attempt to run on any machine that meets its minimum requirements; however, players may experience stuttering or drop-outs when running below the recommended requirements.</p>
+        <p>S.E.A. is best experienced with headphones and a gamepad.</p>
+        <p>Real-time synthesis is an <em>extremely</em> CPU-intensive process. S.E.A. will attempt to run on any machine that meets its minimum requirements; however, pilots may experience stuttering or drop-outs when running below the recommended requirements.</p>
 
         <h3>Minimum System Requirements</h3>
         <table>
@@ -302,7 +302,10 @@
         </table>
 
         <h3>Browser Support</h3>
-        <p>The HTML5 build of S.E.A. is intended to be played in a recent version of a Chromium-based browser, including Google Chrome, Microsoft Edge, and Opera. Browser extensions that alter page behavior are not recommended. Other browsers may suffice if they support modern JavaScript features and the current Web Audio API specification.</p>
+        <p>The HTML5 build of S.E.A. is intended to be played in a recent version of a Chromium-based browser, including Google Chrome, Microsoft Edge, and Opera. Browser extensions that alter page behavior are not recommended. Other browsers must support modern JavaScript features and the current Web Audio API specification.</p>
+
+        <h3>Troubleshooting Performance Issues</h3>
+        <p>S.E.A. has been optimized for its recommended system requirements. Pilots experiencing performance issues are encouraged to adjust settings on the <strong>Audio</strong> or <strong>Graphics</strong> screens. Audio stuttering can be solved by disabling reverb or reducing the number of objects. Frame rates can be improved by reducing draw distance or disabling graphics entirely.</p>
       </section>
 
       <section>
@@ -453,6 +456,71 @@
           </div>
         </details>
 
+        <h4>Access Hotkeys</h4>
+        <p>Hotkeys have been provided to quickly jump to screen elements. Press numbers <kbd>1</kbd> through <kbd>0</kbd> to focus the element at that position. If the desired element is already focused, then it will be clicked instead.</p>
+        <p>Additional keyboard shortcuts have been provided to quickly access certain UI elements with a screen reader while in-game. They can be used by first pressing and holding either <kbd>Alt</kbd> key:</p>
+
+        <div class="scrollable">
+          <table>
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Button 1</th>
+                <th>Button 2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Solar Time</th>
+                <td>T</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <th>Coordinates</th>
+                <td>C</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <th>Heading</th>
+                <td>H</td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <th>X-Coordinate</th>
+                <td>X</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Y-Coordinate</th>
+                <td>Y</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details>
+          <summary>Heavy Spoiler Warning</summary>
+          <div class="scrollable">
+            <table>
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Button 1</th>
+                  <th>Button 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Depth</th>
+                  <td>Z</td>
+                  <td>4</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
         <h3>Mouse Controls</h3>
         <p>The S.E.A. can be controlled entirely with a mouse or in tandem with a keyboard for an immersive first-person experience:</p>
 
@@ -517,7 +585,7 @@
         </details>
 
         <h3>Gamepad Controls</h3>
-        <p>The S.E.A. supports standard gamepads such as an Xbox One controller. Other controllers can be configured with a utility like <a href="https://github.com/x360ce/x360ce" rel="nofollow noopener" target="_blank">x360ce</a> or <a href="https://xpadder.com/" rel="nofollow noopener" target="_blank">Xpadder</a>:</p>
+        <p>The S.E.A. supports standard gamepads such as an Xbox controller. Other controllers can be configured with a utility like <a href="https://github.com/x360ce/x360ce" rel="nofollow noopener" target="_blank">x360ce</a> or <a href="https://xpadder.com/" rel="nofollow noopener" target="_blank">Xpadder</a>:</p>
 
         <div class="scrollable">
           <table>
@@ -624,86 +692,31 @@
           </div>
         </details>
 
+        <h4>Haptic Feedback</h4>
+        <p>Feel the ocean as the S.E.A. interrogates its surfaces. Vibration can be reduced or disabled entirely from the <strong>Controls</strong> screen.</p>
+
         <h3>Touch Controls</h3>
-        <p>S.E.A. does not currently support touch beyond its menus. For best results on mobile devices, perhipherals are strongly recommended.</p>
+        <p>S.E.A. does not currently support touch beyond its menus. For best results on mobile devices, a gamepad is strongly recommended.</p>
       </section>
 
       <section>
         <h2>Accessibility</h2>
         <p>S.E.A. is developed in accordance with WCAG (Web Content Accessibility Guidelines) 2.1 at Level AA conformance. Its menus are fully operable with a keyboard and screen readers such as NVDA.</p>
 
-        <h3>Access Hotkeys</h3>
-        <p>Hotkeys have been provided to quickly jump to screen elements. Press numbers <kbd>1</kbd> through <kbd>0</kbd> to focus the element at that position. If the desired element is already focused, then it will be clicked instead.</p>
-
-        <p>Additional keyboard shortcuts have been provided to quickly access certain UI elements with a screen reader while in-game. They can be used by first pressing and holding either <kbd>Alt</kbd> key:</p>
-
-        <div class="scrollable">
-          <table>
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Button 1</th>
-                <th>Button 2</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Solar Time</th>
-                <td>T</td>
-                <td>1</td>
-              </tr>
-              <tr>
-                <th>Coordinates</th>
-                <td>C</td>
-                <td>2</td>
-              </tr>
-              <tr>
-                <th>Heading</th>
-                <td>H</td>
-                <td>3</td>
-              </tr>
-              <tr>
-                <th>X-Coordinate</th>
-                <td>X</td>
-                <td></td>
-              </tr>
-              <tr>
-                <th>Y-Coordinate</th>
-                <td>Y</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <details>
-          <summary>Heavy Spoiler Warning</summary>
-          <div class="scrollable">
-            <table>
-              <thead>
-                <tr>
-                  <th>Action</th>
-                  <th>Button 1</th>
-                  <th>Button 2</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>Depth</th>
-                  <td>Z</td>
-                  <td>4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </details>
+        <h3>Photosensitivity Warning</h3>
+        <p>The S.E.A. can produce certain strobing patterns when moving at high velocities. Please navigate to the <strong>Graphics</strong> screen to make adjustments or disable them entirely.</p>
 
         <h3>Graphical Description</h3>
-        <p>The S.E.A. is equipped with a basic heads-up-display that projects a compass which updates as you turn.</p>
+        <p>The S.E.A. visually reconstructs the sounds it hears to help orient its pilot. Its display illuminates an otherwise lightless cockpit. Throughout the day its background cycles through gradients of colors and values. The sun and moon rise and set, tracing the ecliptic above, reddening as they near the horizon. At night stars fade into constellations. All of this light reflects off the ocean surface, revealing its undulating geometry. A compass indicating the current heading is strewn across the top of the display.</p>
+
+        <details>
+          <summary>Light Spoiler Warning</summary>
+          <p>As the S.E.A. descends below the surface, the background of its display fades to black. A number appears in the corner indicating its depth below sea level.</p>
+        </details>
 
         <details>
           <summary>Heavy Spoiler Warning</summary>
-          <p>The S.E.A. is equipped with state-of-the-art gyroscopes that track its position with respect to its surroundings. It reconstructs data from its scans as points positioned in three-dimensional space. They form networks of jagged cave-like structures. They mesmerize as they slowly fluctuate through waves of rainbow hues.</p>
+          <p>The S.E.A. maps data from its underwater scans to points in three-dimensional space. They form networks of jagged cave-like structures. They mesmerize as they slowly fluctuate through waves of rainbow hues.</p>
         </details>
       </section>
 

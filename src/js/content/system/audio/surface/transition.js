@@ -18,8 +18,8 @@ content.system.audio.surface.transition = (() => {
   }
 
   function triggerSubmerge(velocity) {
-    const duration = engine.utility.scale(velocity, 0, -20, 1, 2),
-      frequency = engine.utility.scale(velocity, 0, -20, 1000, 2500)
+    const duration = engine.utility.scale(velocity, 0, -content.const.underwaterTurboMaxVelocity, 1, 2),
+      frequency = engine.utility.scale(velocity, 0, -content.const.underwaterTurboMaxVelocity, 1000, 2500)
 
     const synth = engine.audio.synth.createBuffer({
       buffer: engine.audio.buffer.noise.white(),
@@ -40,8 +40,8 @@ content.system.audio.surface.transition = (() => {
   }
 
   function triggerSurface(velocity) {
-    const duration = engine.utility.scale(velocity, 0, 20, 1, 2),
-      frequency = engine.utility.scale(velocity, 0, 20, 1000, 2500)
+    const duration = engine.utility.lerp(1, 2, velocity),
+      frequency = engine.utility.lerp(1000, 2500, velocity)
 
     const synth = engine.audio.synth.createBuffer({
       buffer: engine.audio.buffer.noise.white(),

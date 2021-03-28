@@ -425,11 +425,13 @@ content.system.movement = (() => {
   })
 
   medium.on('enter-underwater', () => {
-    pubsub.emit('transition-underwater', engine.position.getVelocity().z)
+    const velocity = Math.abs(engine.position.getVelocity().z) / content.const.underwaterTurboMaxVelocity
+    pubsub.emit('transition-underwater', engine.utility.clamp(velocity, 0, 1))
   })
 
   medium.on('exit-underwater', () => {
-    pubsub.emit('transition-surface', engine.position.getVelocity().z)
+    const velocity = Math.abs(engine.position.getVelocity().z) / content.const.underwaterTurboMaxVelocity
+    pubsub.emit('transition-surface', engine.utility.clamp(velocity, 0, 1))
   })
 
   return engine.utility.pubsub.decorate({

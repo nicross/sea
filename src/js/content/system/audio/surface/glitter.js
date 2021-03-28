@@ -1,8 +1,7 @@
 content.system.audio.surface.glitter = (() => {
   const bus = content.system.audio.mixer.bus.music.createBus(),
     context = engine.audio.context(),
-    feedbackDelays = [],
-    filter = context.createBiquadFilter()
+    feedbackDelays = []
 
   const frequencies = [
     // A2
@@ -47,12 +46,11 @@ content.system.audio.surface.glitter = (() => {
     maxFrequency = engine.utility.midiToFrequency(78),
     minFrequency = engine.utility.midiToFrequency(33)
 
-  let wasAbove
+  let filter,
+    previousZ
 
+  swapFilter()
   createFeedbackDelays()
-
-  filter.frequency.value = 0
-  filter.connect(bus)
 
   function calculateGrainChance(z) {
     const isCatchingAir = content.system.movement.isCatchingAir()
@@ -131,43 +129,40 @@ content.system.audio.surface.glitter = (() => {
     synth.stop(now + attack + decay)
   }
 
+  function swapFilter() {
+    filter = context.createBiquadFilter()
+    filter.frequency.value = 0
+    filter.connect(bus)
+  }
+
   function teardownFeedbackDelays() {
     for (const feedbackDelay of feedbackDelays) {
-      engine.audio.ramp.linear(feedbackDelay.param.gain, engine.const.zeroGain, 1/8)
+      engine.audio.ramp.linear(feedbackDelay.param.gain, engine.const.zeroGain, 1/4)
     }
 
     feedbackDelays.length = 0
   }
 
   function updateFilter(z) {
-    const isAbove = !content.system.movement.isUnderwater()
-
-    if (isAbove && wasAbove) {
+    if (previousZ == z) {
       return
     }
 
-    if (isAbove) {
-      engine.audio.ramp.exponential(filter.frequency, engine.const.maxFrequency, 0.5)
-    } else {
-      const zRatio = engine.utility.scale(z, content.system.surface.current(), content.const.lightZone, 1, 0)
-      const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
-      engine.audio.ramp.set(filter.frequency, frequency)
+    previousZ = z
+
+    if (!content.system.movement.isUnderwater()) {
+      return engine.audio.ramp.set(filter.frequency, engine.const.maxFrequency)
     }
+
+    const zRatio = engine.utility.scale(z, content.system.surface.current(), content.const.lightZone, 1, 0)
+    const frequency = engine.utility.lerpExp(minFrequency, maxFrequency, zRatio, frequencyDropoff)
+
+    engine.audio.ramp.set(filter.frequency, frequency)
   }
 
   return {
-    import: function () {
-      const isAbove = !content.system.movement.isUnderwater()
-
-      if (isAbove) {
-        filter.frequency.value = engine.const.maxFrequency
-      }
-
-      wasAbove = isAbove
-
-      return this
-    },
     reset: function () {
+      swapFilter()
       teardownFeedbackDelays()
       createFeedbackDelays()
       return this
@@ -196,5 +191,4 @@ engine.loop.on('frame', () => {
   content.system.audio.surface.glitter.update()
 })
 
-engine.state.on('import', () => content.system.audio.surface.glitter.import())
 engine.state.on('reset', () => content.system.audio.surface.glitter.reset())

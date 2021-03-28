@@ -97,3 +97,16 @@ content.system.scan.on('trigger', () => {
     weakMagnitude: 1,
   })
 })
+
+content.system.scan.on('recharge', () => {
+  if (engine.loop.isPaused()) {
+    return
+  }
+
+  app.controls.haptic.trigger({
+    duration: 37.5,
+    startDelay: 0,
+    strongMagnitude: 0.5,
+    weakMagnitude: 0.5,
+  })
+})

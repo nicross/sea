@@ -4,6 +4,7 @@ content.system.audio.surface.moon = (() => {
     clockPreSet = 0.245,
     clockPostRise = 0.755,
     clockPostSet = 0.275,
+    context = engine.audio.context(),
     cycleFullyVisible = 0.525,
     fadeDepth = 100,
     rootFrequency = engine.utility.midiToFrequency(54),
@@ -119,6 +120,8 @@ content.system.audio.surface.moon = (() => {
   }
 
   function createSynth(preset) {
+    const fader = context.createGain()
+
     const root = engine.audio.synth.createMod({
       amodDepth: preset.root.amodDepth,
       amodFrequency: preset.root.amodFrequency,
@@ -130,7 +133,7 @@ content.system.audio.surface.moon = (() => {
       gain: preset.root.gain,
     }).filtered({
       frequency: rootFrequency * preset.root.color,
-    })
+    }).connect(fader)
 
     const third = engine.audio.synth.createMod({
       amodDepth: preset.third.amodDepth,
@@ -143,7 +146,7 @@ content.system.audio.surface.moon = (() => {
       gain: preset.third.gain,
     }).filtered({
       frequency: thirdFrequency * preset.third.color,
-    })
+    }).connect(fader)
 
     const sub = engine.audio.synth.createAm({
       carrierFrequency: subFrequency,
@@ -151,11 +154,12 @@ content.system.audio.surface.moon = (() => {
       gain: preset.sub.gain,
       modDepth: 3/8,
       modFrequency: preset.sub.modFrequency,
-    })
+    }).connect(fader)
 
-    binaural.from(root).from(third).from(sub)
+    binaural.from(fader)
 
     synth = {
+      fader,
       root,
       stop: function (...args) {
         root.stop(...args)
@@ -166,18 +170,21 @@ content.system.audio.surface.moon = (() => {
       sub,
       third,
     }
+
+    // Fade in
+    synth.fader.gain.value = engine.const.zeroGain
+    engine.audio.ramp.linear(synth.fader.gain, 1, 1/32)
   }
 
   function teardown() {
-    if (binaural) {
-      binaural.destroy()
-      binaural = undefined
+    if (synth) {
+      // Fade out
+      engine.audio.ramp.linear(synth.fader.gain, engine.const.zeroGain, 1/32)
+      synth.stop(engine.audio.time(1/32))
     }
 
-    if (synth) {
-      synth.stop()
-      synth = undefined
-    }
+    binaural = undefined
+    synth = undefined
   }
 
   function updateBinaural() {

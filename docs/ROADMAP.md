@@ -3,8 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ## v1.4.0 - Festival update
-- Audio
-  - Improve transitions on state reset
 - Documentation
   - Graphical description of surface
   - Performance notes
@@ -42,7 +40,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Wishlist
 ### Audio
 - Dynamic range presets
-- Haptic feedback on certain cues (e.g. collisions with surface and terrain)
 - Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
@@ -70,6 +67,8 @@ This document outlines upcoming changes for post-jam releases.
   - Unique loot table, specific alien artifacts
 - New game sound (jet flying away)
   - Procedural jets over time
+- Unlockable alien technologies
+  - Ability to freeze time
 
 <details>
   <summary>Ultimate Spoiler Warning</summary>
@@ -90,7 +89,6 @@ This document outlines upcoming changes for post-jam releases.
 - Surface weather patterns
   - Clouds
   - Weather patterns (rain, storm)
-- Settings for fixed time of day or dynamic with speeds
 
 ### User interface
 - Improve screen transitions

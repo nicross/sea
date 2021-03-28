@@ -21,13 +21,13 @@ content.system.audio.surface.wind = (() => {
       type: 'bandpass',
     })
 
-    engine.audio.ramp.linear(bus.gain, 1, engine.const.zeroTime)
+    engine.audio.ramp.linear(bus.gain, 1, 1/32)
     binaural.from(synth)
   }
 
   function destroySynth() {
-    engine.audio.ramp.linear(bus.gain, engine.const.zeroGain, engine.const.zeroTime)
-    synth.stop(engine.audio.zeroTime())
+    engine.audio.ramp.linear(bus.gain, engine.const.zeroGain, 1/32)
+    synth.stop(engine.audio.time(1/32))
     synth = null
   }
 

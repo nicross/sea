@@ -33,7 +33,7 @@ app.settings = (() => {
     },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
-      default: 0,
+      default: 0.25,
       update: () => {
         app.canvas.forceResize()
       },

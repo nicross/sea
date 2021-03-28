@@ -15,6 +15,7 @@
 - Graphics
   - Added subtle shimmer to surface
   - Improved surface render performance
+  - Increased default field of view to 75 degrees
   - Reddened light levels around dusk and dawn
 - Haptic feedback
   - Added haptic feedback for supported browsers and devices

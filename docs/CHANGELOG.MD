@@ -6,6 +6,7 @@
   - Added slider for miscellaneous sound volume
   - Added slider for volume while game is paused
   - Added music to splash screen and main menu
+  - Reduced default object limit to 15
   - Remixed various levels for clarity
 - Documentation
   - Added photosensitivity warning and graphical description

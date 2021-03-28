@@ -78,6 +78,28 @@ content.system.movement.on('surface-splash', ({
   })
 })
 
+content.system.movement.on('transition-underwater', (velocity = 0) => {
+  velocity = engine.utility.clamp(-velocity / content.const.underwaterTurboMaxVelocity, 0, 1)
+
+  app.controls.haptic.trigger({
+    duration: engine.utility.lerpExp(25, 125, velocity, 2),
+    startDelay: 0,
+    strongMagnitude: velocity,
+    weakMagnitude: 0,
+  })
+})
+
+content.system.movement.on('transition-surface', (velocity = 0) => {
+  velocity = engine.utility.clamp(velocity / content.const.underwaterTurboMaxVelocity, 0, 1)
+
+  app.controls.haptic.trigger({
+    duration: engine.utility.lerpExp(25, 125, velocity, 2),
+    startDelay: 0,
+    strongMagnitude: velocity,
+    weakMagnitude: 0,
+  })
+})
+
 content.system.movement.on('underwater-collision', ({
   ratio = 0,
 } = {}) => {

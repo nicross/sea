@@ -109,7 +109,7 @@ content.system.movement.on('underwater-collision', ({
 
 content.system.scan.on('trigger', () => {
   app.controls.haptic.trigger({
-    duration: 75,
+    duration: 50,
     startDelay: 0,
     strongMagnitude: 1,
     weakMagnitude: 1,
@@ -122,7 +122,7 @@ content.system.scan.on('recharge', () => {
   }
 
   app.controls.haptic.trigger({
-    duration: 37.5,
+    duration: 50,
     startDelay: 0,
     strongMagnitude: 0.5,
     weakMagnitude: 0.5,

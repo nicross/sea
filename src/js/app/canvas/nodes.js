@@ -33,7 +33,7 @@ app.canvas.nodes = (() => {
       vfov = main.vfov(),
       width = main.width()
 
-    const nodes = content.system.exploration.retrieve({
+    const nodes = content.exploration.retrieve({
       x: position.x - drawDistance,
       y: position.y - drawDistance,
       z: position.z - drawDistance,
@@ -110,7 +110,7 @@ app.canvas.nodes = (() => {
     x = 0,
     y = 0,
     z = 0,
-    t = content.system.time.value(),
+    t = content.time.value(),
   } = {}) {
     const halfT = t / 2
 

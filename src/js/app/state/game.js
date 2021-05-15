@@ -33,7 +33,7 @@ app.state.game = engine.utility.machine.create({
 engine.ready(() => {
   // Initial mix
   engine.audio.mixer.master.param.gain.value = engine.const.zeroGain
-  content.system.audio.mixer.bus.environment.bus().gain.value = engine.const.zeroGain
+  content.audio.mixer.bus.environment.bus().gain.value = engine.const.zeroGain
 
   // Game state changes
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
@@ -77,7 +77,7 @@ app.state.game.on('enter-none', () => {
   const gain = app.settings.computed.mainVolume * app.settings.computed.pausedVolume
   engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 0.5)
 
-  engine.audio.ramp.set(content.system.audio.mixer.bus.environment.bus().gain, engine.const.zeroGain)
+  engine.audio.ramp.set(content.audio.mixer.bus.environment.bus().gain, engine.const.zeroGain)
 
   // Generate scene
   const isRise = Math.random() > 0.5
@@ -120,7 +120,7 @@ app.state.game.on('enter-none', () => {
 })
 
 app.state.game.on('exit-none', () => {
-  engine.audio.ramp.linear(content.system.audio.mixer.bus.environment.bus().gain, app.settings.computed.environmentVolume, 0.5)
+  engine.audio.ramp.linear(content.audio.mixer.bus.environment.bus().gain, app.settings.computed.environmentVolume, 0.5)
 })
 
 app.state.game.on('enter-paused', () => {

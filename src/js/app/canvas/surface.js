@@ -34,7 +34,7 @@ app.canvas.surface = (() => {
       height = main.height(),
       hfov = main.hfov(),
       position = engine.position.getVector(),
-      time = content.system.time.value(),
+      time = content.time.value(),
       vfov = main.vfov(),
       width = main.width(),
       zOffset = engine.const.positionRadius / 2
@@ -58,7 +58,7 @@ app.canvas.surface = (() => {
           continue
         }
 
-        relative.z = content.system.surface.value(grid.x, grid.y) - (position.z + zOffset)
+        relative.z = content.surface.value(grid.x, grid.y) - (position.z + zOffset)
 
         const vangle = Math.atan2(relative.z, relative.x)
 
@@ -92,7 +92,7 @@ app.canvas.surface = (() => {
   }
 
   function getColor() {
-    const clock = content.system.time.clock(),
+    const clock = content.time.clock(),
       cycle = engine.utility.wrapAlternate(clock * 2)
 
     const color = app.utility.color.lerpHsl(
@@ -127,7 +127,7 @@ app.canvas.surface = (() => {
       return false
     }
 
-    const surface = content.system.surface.current()
+    const surface = content.surface.current()
 
     if (z > surface) {
       return z - surface < drawDistance

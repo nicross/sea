@@ -19,7 +19,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  if (content.system.movement.isMedium('air')) {
+  if (content.movement.isMedium('air')) {
     app.stats.timeAir.increment(delta)
   }
 })

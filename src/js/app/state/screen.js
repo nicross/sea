@@ -214,12 +214,12 @@ app.state.screen.on('enter', (e) => {
 // Fast travel actions
 app.state.screen.on('before-fastTravel-floor', () => {
   const position = engine.position.getVector()
-  const floor = content.system.terrain.floor.value(position.x, position.y) + 5
+  const floor = content.terrain.floor.value(position.x, position.y) + 5
 
   const distance = Math.abs(position.z - floor),
     travelTime = distance / content.const.underwaterTurboMaxVelocity
 
-  content.system.time.incrementOffset(travelTime)
+  content.time.incrementOffset(travelTime)
 
   engine.position.setVector({
     ...position,
@@ -243,9 +243,9 @@ app.state.screen.on('before-fastTravel-origin', () => {
     : content.const.underwaterTurboMaxVelocity
 
   const travelTime = distance / velocity
-  content.system.time.incrementOffset(travelTime)
+  content.time.incrementOffset(travelTime)
 
-  const surface = content.system.surface.value(0, 0) + engine.const.zero
+  const surface = content.surface.value(0, 0) + engine.const.zero
 
   engine.position.setVector({
     x: 0,
@@ -267,9 +267,9 @@ app.state.screen.on('before-fastTravel-surface', () => {
   const distance = Math.abs(position.z),
     travelTime = distance / content.const.underwaterTurboMaxVelocity
 
-  content.system.time.incrementOffset(travelTime)
+  content.time.incrementOffset(travelTime)
 
-  const surface = content.system.surface.value(0, 0) + engine.const.zero
+  const surface = content.surface.value(0, 0) + engine.const.zero
 
   engine.position.setVector({
     ...position,

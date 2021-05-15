@@ -25,7 +25,7 @@ app.screen.game = (() => {
 
     if (access) {
       if (!paused) {
-        content.system.movement.update()
+        content.movement.update()
       }
       return app.access.handle(access)
     }
@@ -43,12 +43,12 @@ app.screen.game = (() => {
       ...game,
     }
 
-    content.system.movement.update(controls)
+    content.movement.update(controls)
 
     if (ui.scanForward) {
-      content.system.scan.triggerForward()
+      content.scan.triggerForward()
     } else if (ui.scanReverse) {
-      content.system.scan.triggerReverse()
+      content.scan.triggerReverse()
     }
   }
 

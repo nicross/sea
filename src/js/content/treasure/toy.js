@@ -1,4 +1,4 @@
-content.system.treasures.register('toy', 3, (srand) => {
+content.treasures.register('toy', 3, (srand) => {
   const adjectives = [
     {
       name: 'Broken',

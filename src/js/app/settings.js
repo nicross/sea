@@ -4,7 +4,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -15, rawValue, 130000000)),
       default: 1,
       update: (computedValue) => {
-        content.system.audio.compass.setGain(computedValue)
+        content.audio.compass.setGain(computedValue)
       },
     },
     drawDistance: {
@@ -18,7 +18,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,
       update: (computedValue) => {
-        content.system.audio.mixer.bus.environment.setGain(computedValue)
+        content.audio.mixer.bus.environment.setGain(computedValue)
       },
     },
     gamepadDeadzone: {
@@ -75,7 +75,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,
       update: (computedValue) => {
-        content.system.audio.mixer.bus.misc.setGain(computedValue)
+        content.audio.mixer.bus.misc.setGain(computedValue)
       },
     },
     mouseSensitivity: {
@@ -86,7 +86,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 4294000000)),
       default: 1,
       update: (computedValue) => {
-        content.system.audio.mixer.bus.music.setGain(computedValue)
+        content.audio.mixer.bus.music.setGain(computedValue)
       },
     },
     pausedVolume: {

@@ -1,4 +1,4 @@
-content.system.treasures.register('shell', 10, (srand) => {
+content.treasures.register('shell', 10, (srand) => {
   const adjectives = [
     {
       name: 'Chipped',

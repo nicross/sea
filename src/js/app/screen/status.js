@@ -70,11 +70,11 @@ app.screen.status = (() => {
   function updateStatus() {
     const {x, y, z} = engine.position.getVector()
 
-    const clock = content.system.time.clock(),
+    const clock = content.time.clock(),
       coordinates = {x, y},
       depth = Math.max(0, -z),
-      treasures = content.system.treasure.getCollected(),
-      time = content.system.time.time(),
+      treasures = content.treasure.getCollected(),
+      time = content.time.time(),
       yaw = engine.position.getEuler().yaw
 
     const earnings = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),

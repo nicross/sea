@@ -9,7 +9,7 @@ content.prop.exploration = content.prop.base.invent({
       frequencyRoll = engine.utility.lerpRandom([0, 0.25], [0.75, 1], Math.max(0, distanceRatio * facingRatio))
 
     const duration = engine.utility.lerp(1, 2, strength),
-      frequency = engine.utility.choose(content.system.soundtrack.harmonics(), frequencyRoll),
+      frequency = engine.utility.choose(content.soundtrack.harmonics(), frequencyRoll),
       gain = engine.utility.fromDb(engine.utility.lerp(-21, -15, strength))
 
     const synth = engine.audio.synth.createSimple({
@@ -27,7 +27,7 @@ content.prop.exploration = content.prop.base.invent({
     return engine.utility.timing.promise(duration * 1000)
   },
   onUpdate: function () {
-    if (content.system.scan.isCooldown()) {
+    if (content.scan.isCooldown()) {
       return
     }
 

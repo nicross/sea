@@ -1,4 +1,4 @@
-content.system.treasures.register('dogtag', 5, (srand) => {
+content.treasures.register('dogtag', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 0.75,

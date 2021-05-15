@@ -21,7 +21,7 @@ app.crashFixer = (() => {
     })
     await nextFrame()
 
-    content.system.audio.treasure.rebuildFilters()
+    content.audio.treasure.rebuildFilters()
     await nextFrame()
 
     engine.props.get().forEach((prop) => {
@@ -56,7 +56,7 @@ app.crashFixer = (() => {
     isFixing: () => isFixing,
     isFubar: () => isFubar(),
     test: async function () {
-      content.system.treasure.off('collect')
+      content.treasure.off('collect')
 
       engine.props.get().forEach((prop) => {
         if (content.prop.treasure.isPrototypeOf(prop)) {
@@ -64,11 +64,11 @@ app.crashFixer = (() => {
         }
       })
 
-      await content.system.scan.triggerForward()
+      await content.scan.triggerForward()
       await nextFrame()
 
       if (!engine.props.get().filter(p => content.prop.treasure.isPrototypeOf(p)).length) {
-        content.system.treasure.test(1)
+        content.treasure.test(1)
       }
 
       return this
@@ -77,7 +77,7 @@ app.crashFixer = (() => {
       const loop = () => {
         this.test()
 
-        content.system.scan.once('recharge', async () => {
+        content.scan.once('recharge', async () => {
           await nextFrame()
           setTimeout(() => {
             if (!isFubar()) {

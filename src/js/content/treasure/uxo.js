@@ -1,4 +1,4 @@
-content.system.treasures.register('uxo', 5, (srand) => {
+content.treasures.register('uxo', 5, (srand) => {
   const adjectives = [
     {
       modifier: (value) => value * 0.5,

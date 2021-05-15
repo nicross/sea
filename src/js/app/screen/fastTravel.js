@@ -21,7 +21,7 @@ app.screen.fastTravel = (() => {
 
   function canFloor() {
     return app.storage.getTreasures().length > 0
-      || content.system.exploration.export().length > 0
+      || content.exploration.export().length > 0
   }
 
   function canOrigin() {

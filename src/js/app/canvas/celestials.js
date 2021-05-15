@@ -24,7 +24,7 @@ app.canvas.celestials = (() => {
   })
 
   function calculateAlpha() {
-    const surface = content.system.surface.current()
+    const surface = content.surface.current()
     const {z} = engine.position.getVector()
 
     if (z >= surface) {
@@ -83,7 +83,7 @@ app.canvas.celestials = (() => {
   }
 
   function calculatePitch(offset) {
-    const clock = content.system.time.clock(),
+    const clock = content.time.clock(),
       value = (2 * Math.PI * -clock) + offset
 
     return engine.utility.wrap(value, 0, Math.PI * 2)

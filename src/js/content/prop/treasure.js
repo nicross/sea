@@ -1,11 +1,11 @@
 content.prop.treasure = content.prop.base.invent({
   name: 'Treasure',
   onConstruct: function () {
-    content.system.audio.treasure.add(this)
+    content.audio.treasure.add(this)
     this.buildFilter()
   },
   onDestroy: function () {
-    content.system.audio.treasure.remove(this)
+    content.audio.treasure.remove(this)
     this.destroyFilter()
   },
   onUpdate: function () {
@@ -25,7 +25,7 @@ content.prop.treasure = content.prop.base.invent({
     this.filter = context.createBiquadFilter()
     this.filter.frequency.value = this.calculateFilterFrequency()
 
-    content.system.audio.treasure.output().connect(this.filter)
+    content.audio.treasure.output().connect(this.filter)
     this.filter.connect(this.output)
 
     return this
@@ -38,19 +38,19 @@ content.prop.treasure = content.prop.base.invent({
 
     const color = engine.utility.lerp(1, 8, engine.utility.clamp(distanceRatio * facingRatio, 0, 1))
 
-    return color * content.system.audio.treasure.getFrequency()
+    return color * content.audio.treasure.getFrequency()
   },
   collect: function () {
     this.isCollected = true
     engine.audio.ramp.exponential(this.output.gain, engine.const.zeroGain, 1/4)
-    content.system.treasure.collect(this)
+    content.treasure.collect(this)
     return this
   },
   destroyFilter: function () {
     this.filter.disconnect()
 
     try {
-      content.system.audio.treasure.output().disconnect(this.filter)
+      content.audio.treasure.output().disconnect(this.filter)
     } catch (e) {}
 
     return this

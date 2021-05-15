@@ -19,7 +19,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  if (content.system.movement.isMedium('surface')) {
+  if (content.movement.isMedium('surface')) {
     app.stats.timeSurface.increment(delta)
   }
 })

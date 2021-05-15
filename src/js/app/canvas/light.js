@@ -40,7 +40,7 @@ app.canvas.light = (() => {
   }
 
   function calculateScheme() {
-    const clock = content.system.time.clock(),
+    const clock = content.time.clock(),
       cycle = smooth(engine.utility.wrapAlternate(clock * 2, 0, 1)) ** (1/3),
       hue = engine.utility.lerp(330/360, 240/360, smooth(Math.abs(Math.cos(Math.PI * 2 * clock)) ** 0.5)),
       hueHalf = engine.utility.lerp(hue, 240/360, 0.5)

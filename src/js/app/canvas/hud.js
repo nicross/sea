@@ -9,7 +9,7 @@ app.canvas.hud = (() => {
   let opacity
 
   engine.state.on('import', () => {
-    opacity = content.system.idle.is() ? 0 : 1
+    opacity = content.idle.is() ? 0 : 1
   })
 
   main.on('resize', () => {
@@ -30,7 +30,7 @@ app.canvas.hud = (() => {
     }
 
     const delta = engine.loop.delta(),
-      isIdle = content.system.idle.is()
+      isIdle = content.idle.is()
 
     if (isIdle && opacity > 0) {
       opacity = engine.utility.clamp(opacity - (delta * fadeOutRate))

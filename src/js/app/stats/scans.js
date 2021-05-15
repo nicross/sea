@@ -14,6 +14,6 @@ app.stats.scans = (() => {
   })
 })()
 
-content.system.scan.on('trigger', () => {
+content.scan.on('trigger', () => {
   app.stats.scans.increment()
 })

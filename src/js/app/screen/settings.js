@@ -65,7 +65,7 @@ app.screen.settings = (() => {
     app.utility.focus.setWithin(root)
 
     const hasTreasures = app.storage.getTreasures().length > 0
-      || content.system.treasure.any().length > 0
+      || content.treasure.any().length > 0
 
     root.querySelector('.a-settings--action-gameplay').hidden = !hasTreasures
   }

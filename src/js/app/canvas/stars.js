@@ -18,13 +18,13 @@ app.canvas.stars = (() => {
 
   function calculateAlpha() {
     const {z} = engine.position.getVector()
-    const surface = content.system.surface.current()
+    const surface = content.surface.current()
 
     if (z < surface - 2) {
       return 0
     }
 
-    const cycle = content.system.time.cycle()
+    const cycle = content.time.cycle()
 
     if (cycle >= 0.525) {
       return 0
@@ -50,7 +50,7 @@ app.canvas.stars = (() => {
   }
 
   function calculateTwinkle(phase) {
-    const time = content.system.time.time()
+    const time = content.time.time()
     const fmod = Math.sin(Math.PI * 1/20 * time)
     const f = engine.utility.lerp(2, 6, fmod)
     const amod = Math.sin((Math.PI * f * time) + phase) ** 2
@@ -75,7 +75,7 @@ app.canvas.stars = (() => {
 
     const conjugate = engine.position.getQuaternion().conjugate(),
       horizon = calculateHorizon(),
-      rotation = -2 * Math.PI * content.system.time.clock()
+      rotation = -2 * Math.PI * content.time.clock()
 
     const horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
 

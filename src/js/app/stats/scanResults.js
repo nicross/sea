@@ -14,7 +14,7 @@ app.stats.scanResults = (() => {
   })
 })()
 
-content.system.scan.on('complete', (results) => {
+content.scan.on('complete', (results) => {
   let count = 0
 
   for (const result of Object.values(results)) {

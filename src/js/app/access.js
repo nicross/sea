@@ -9,7 +9,7 @@ app.access = (() => {
       return app.utility.format.angle(yaw)
     },
     time: () => {
-      const clock = content.system.time.clock()
+      const clock = content.time.clock()
       return app.utility.format.clock(clock)
     },
     x: () => {

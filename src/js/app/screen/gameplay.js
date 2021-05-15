@@ -75,7 +75,7 @@ app.screen.gameplay = (() => {
     app.utility.focus.setWithin(root)
 
     const hasTreasures = app.storage.getTreasures().length > 0
-      || content.system.treasure.any().length > 0
+      || content.treasure.any().length > 0
 
     root.querySelector('.a-gameplay--field-notifyTreasure').hidden = !hasTreasures
     root.querySelector('.a-gameplay--field-treasureHints').hidden = !hasTreasures || !app.settings.computed.graphicsOn

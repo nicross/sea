@@ -15,7 +15,7 @@ app.screen.game.notifications = (() => {
     app.state.screen.on('enter-game', onEnterGame)
     app.state.screen.on('exit-game', onExitGame)
 
-    content.system.treasure.on('collect', onTreasureCollect)
+    content.treasure.on('collect', onTreasureCollect)
   })
 
   function onEnterGame() {
@@ -79,7 +79,7 @@ app.screen.game.notifications = (() => {
 
   return {
     testTreasure: () => onTreasureCollect({
-      ...content.system.treasures.generate(),
+      ...content.treasures.generate(),
       ...engine.position.getVector(),
     }),
   }

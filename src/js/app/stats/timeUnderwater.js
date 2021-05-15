@@ -19,7 +19,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  if (content.system.movement.isMedium('underwater') && !content.system.audio.reverb.is('cave')) {
+  if (content.movement.isMedium('underwater') && !content.audio.reverb.is('cave')) {
     app.stats.timeUnderwater.increment(delta)
   }
 })

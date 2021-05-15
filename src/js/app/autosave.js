@@ -57,7 +57,7 @@ app.autosave = (() => {
   }
 })()
 
-content.system.treasure.on('collect', (treasure) => {
+content.treasure.on('collect', (treasure) => {
   const treasures = app.storage.getTreasures()
 
   treasures.push(treasure)

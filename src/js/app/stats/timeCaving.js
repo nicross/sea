@@ -20,7 +20,7 @@ engine.loop.on('frame', ({delta, paused}) => {
   }
 
   // Technically also underwater, but use reverb to split time into separate statistics
-  if (content.system.movement.isMedium('underwater') && content.system.audio.reverb.is('cave')) {
+  if (content.movement.isMedium('underwater') && content.audio.reverb.is('cave')) {
     app.stats.timeCaving.increment(delta)
   }
 })

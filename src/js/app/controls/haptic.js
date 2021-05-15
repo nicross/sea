@@ -54,7 +54,7 @@ app.controls.haptic = (() => {
   }
 })()
 
-content.system.movement.on('surface-smack', ({
+content.movement.on('surface-smack', ({
   gravity = 0,
   lateral = 0,
 } = {}) => {
@@ -66,7 +66,7 @@ content.system.movement.on('surface-smack', ({
   })
 })
 
-content.system.movement.on('surface-splash', ({
+content.movement.on('surface-splash', ({
   size = 0,
   velocity = 0,
 } = {}) => {
@@ -78,7 +78,7 @@ content.system.movement.on('surface-splash', ({
   })
 })
 
-content.system.movement.on('transition-underwater', (velocity = 0) => {
+content.movement.on('transition-underwater', (velocity = 0) => {
   app.controls.haptic.trigger({
     duration: engine.utility.lerpExp(25, 125, velocity, 2),
     startDelay: 0,
@@ -87,7 +87,7 @@ content.system.movement.on('transition-underwater', (velocity = 0) => {
   })
 })
 
-content.system.movement.on('transition-surface', (velocity = 0) => {
+content.movement.on('transition-surface', (velocity = 0) => {
   app.controls.haptic.trigger({
     duration: engine.utility.lerpExp(25, 125, velocity, 2),
     startDelay: 0,
@@ -96,7 +96,7 @@ content.system.movement.on('transition-surface', (velocity = 0) => {
   })
 })
 
-content.system.movement.on('underwater-collision', ({
+content.movement.on('underwater-collision', ({
   ratio = 0,
 } = {}) => {
   app.controls.haptic.trigger({
@@ -107,7 +107,7 @@ content.system.movement.on('underwater-collision', ({
   })
 })
 
-content.system.scan.on('trigger', () => {
+content.scan.on('trigger', () => {
   app.controls.haptic.trigger({
     duration: 50,
     startDelay: 0,
@@ -116,7 +116,7 @@ content.system.scan.on('trigger', () => {
   })
 })
 
-content.system.scan.on('recharge', () => {
+content.scan.on('recharge', () => {
   if (engine.loop.isPaused()) {
     return
   }

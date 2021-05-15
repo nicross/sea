@@ -19,7 +19,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  if (content.system.idle.is()) {
+  if (content.idle.is()) {
     app.stats.timeIdle.increment(delta)
   }
 })

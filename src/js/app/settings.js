@@ -31,6 +31,13 @@ app.settings = (() => {
     gamepadVibration: {
       default: 1,
     },
+    graphicsDarkModeOn: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: false,
+      update: () => {
+        app.canvas.forceUpdate()
+      },
+    },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0.25,

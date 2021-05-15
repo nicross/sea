@@ -6,7 +6,6 @@ This document outlines upcoming changes for post-jam releases.
 - Improve handling of slopes
 - Improve access hotkey alerts
 - Add velocity to status screen
-- Toggle to enable background (on by default)
 
 ## v1.5.0 - Deep update
 - Underwater terrain voxelization

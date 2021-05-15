@@ -112,6 +112,13 @@ app.screen.graphics = (() => {
     })
 
     enableFields(on.getValue())
+
+    ;[
+      ['.a-graphics--darkModeOn', app.settings.raw.graphicsDarkModeOn, app.settings.setGraphicsDarkModeOn],
+    ].forEach(([selector, initialValue, setter]) => {
+      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
+      component.on('change', () => setter(component.getValue()))
+    })
   }
 
   function onBackClick() {

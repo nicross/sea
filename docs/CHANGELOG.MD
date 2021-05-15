@@ -1,5 +1,6 @@
 # S.E.A. changelog
 ## v1.4.1
+- Added toggle for Dark Mode on Graphics screen
 - Adjusted motion blur values
 - Fixed some things caching between new games
 - Prevented statistics collecting while on title screen

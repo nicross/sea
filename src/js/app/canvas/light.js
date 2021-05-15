@@ -134,6 +134,10 @@ app.canvas.light = (() => {
   return {
     averageColor: () => ({...averageColor}),
     draw: function () {
+      if (app.settings.computed.graphicsDarkModeOn) {
+        return this
+      }
+
       const opacity = calculateOpacity()
 
       if (!opacity) {

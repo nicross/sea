@@ -40,3 +40,23 @@
     transform: translateX(-50%) translateY(-2em);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes a-game--notification--in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes a-game--notification--out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

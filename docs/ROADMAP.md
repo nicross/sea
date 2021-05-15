@@ -2,16 +2,41 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.5.0 - Life update
+## v1.5.0 - Deep update
+- Underwater terrain voxelization
+  - Object with 3D coordinates, boolean solid property, and eventually other attributes
+  - Generate and cache values around player as needed
+  - Fine and coarse intervals for different purposes
+- Terrain streaming
+- Collisions
+  - Fine intervaled voxels
+  - Collision detection finds solid voxels within radius from player
+  - Calculate terrain normal on collision for better reflections
+- Scanning
+  - Coarse intervaled voxels
+  - Find all edge voxels (solid with any non-solid neighbors)
+  - Find all void voxels (no solid neighbors)
+  - Return as sets sorted by distance
+  - Audio cue
+    - Edges are sonified into grains sequenced by distance
+    - Frequencies indicate relative elevation
+    - All edges become nodes in exploration graph
+  - Treasure spawning
+    - Sort void voxels by distance and pick random
+- Miscellaneous E.X.O. lessons
+  - Physics improvements
+  - Surface scanning
+
+## v1.6.0 - Life update
 - Aquatic life
   - Dolphins
   - Gulls
   - Whales
 - Basic biome generation
-  - Aleotoric
+  - Aleotoric (current)
   - Caves (indicate worm caves)
   - Drone
-  - Pebble (scanner-like)
+  - Polyrhythm
   - Tremolo
 - Perlin worm caves
 - Underwater music enhancements
@@ -19,7 +44,7 @@ This document outlines upcoming changes for post-jam releases.
   - More oscillators
   - More triads
 
-## v1.6.0 - Redacted update
+## v1.7.0 - Redacted update
 - ???
 
 ## v2.0.0 - Gold update
@@ -84,6 +109,10 @@ This document outlines upcoming changes for post-jam releases.
   - Clouds
   - Weather patterns (rain, storm)
 
+### Treasure
+- Rework gallery interfaces
+- Consider whether treasures should be broken into raw materials that have uses beyond score
+
 ### User interface
 - Improve screen transitions
 - Improve treasure gallery
@@ -93,6 +122,15 @@ This document outlines upcoming changes for post-jam releases.
   - Scanned points can be different props determined by noise fields
   - Represented graphically with a range of saturation levels (i.e. albedo)
   - Different musical colors, patterns (aleotoric, step melody), or behaviors entirely
+  - Polyrhythm biome
+    - Each prop can be of three rhythmic layers selected by a 3d noise field
+    - Each prop subscirbes to a timer which emits a regular pulse
+    - Each prop has a percussive sound that fires a number of times each pulse
+    - Props are grouped into one of three pulse rates
+      - 1 or 2 times per pulse (determined by a 3d noise field)
+      - 3 times per pulse
+      - 5 or 7 times per pulse (determined by a 3d noise field)
+    - Notes selected from noise fields representing melodic ostinatos
 - Cavern generation
   - Perlin worms carve tunnels out from the terrain
     - Octree stores points with data like radius

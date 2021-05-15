@@ -276,6 +276,7 @@ content.system.treasure = (() => {
     reset: function () {
       collected.length = 0
       spawned.length = 0
+      tokens.clear()
       return this
     },
     spawned: () => [...spawned],

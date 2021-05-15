@@ -15,7 +15,7 @@ app.stats.totalDistance = (() => {
 })()
 
 engine.loop.on('frame', ({delta, paused}) => {
-  if (paused) {
+  if (paused || !app.state.game.is('running')) {
     return
   }
 

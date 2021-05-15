@@ -15,7 +15,7 @@ app.stats.timeUnderwater = (() => {
 })()
 
 engine.loop.on('frame', ({delta, paused}) => {
-  if (paused && !app.state.game.is('running')) {
+  if (paused || !app.state.game.is('running')) {
     return
   }
 

@@ -20,7 +20,7 @@ app.stats.maxDistance = (() => {
 })()
 
 engine.loop.on('frame', ({paused}) => {
-  if (paused) {
+  if (paused || !app.state.game.is('running')) {
     return
   }
 

@@ -1,4 +1,7 @@
 # S.E.A. changelog
+## v1.4.1
+- Fixed some things caching between new games
+- Prevent statistics collecting while on title screen
 
 ## v1.4.0
 - Audio

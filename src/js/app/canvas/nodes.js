@@ -127,54 +127,17 @@ app.canvas.nodes = (() => {
     return z < content.const.lightZone
   }
 
-  function tameAlpha() {
-    // XXX: Huge performance impact
-    // TODO: Look into better solution
-    return
-
-    const image = context.getImageData(0, 0, main.width(), main.height())
-
-    const data = image.data,
-      length = data.length
-
-    for (let i = 4; i < length; i += 4) {
-      if (data[i] > 0) {
-        data[i] -= 1
-      }
-    }
-
-    context.putImageData(image, 0, 0)
-  }
-
   return {
     draw: function () {
       if (!shouldDraw()) {
         return this
       }
 
-      const hasBlur = app.settings.computed.graphicsMotionBlur > 0
-
-      if (hasBlur) {
-        tameAlpha()
-      }
-
-      const blur = hasBlur
-        ? context.createPattern(canvas, 'no-repeat')
-        : undefined
-
       clear()
-
-      if (hasBlur) {
-        context.globalAlpha = app.settings.computed.graphicsMotionBlur
-        context.fillStyle = blur
-        context.fillRect(0, 0, main.width(), main.height())
-        context.globalAlpha = 1
-      }
-
       drawNodes()
 
-      // Draw to main canvas, assume identical dimensions
-      main.context().drawImage(canvas, 0, 0)
+      // Draw to main canvas (motion blur channel), assume identical dimensions
+      main.blur.context().drawImage(canvas, 0, 0)
 
       return this
     },

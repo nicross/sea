@@ -42,12 +42,14 @@ app.canvas = (() => {
   }
 
   function draw() {
+    app.canvas.blur.prime()
     app.canvas.black.draw()
     app.canvas.light.draw()
     app.canvas.stars.draw()
     app.canvas.celestials.draw()
     app.canvas.surface.draw()
     app.canvas.nodes.draw()
+    app.canvas.blur.draw()
     app.canvas.grain.draw()
     app.canvas.hud.draw()
   }
@@ -57,7 +59,6 @@ app.canvas = (() => {
       return
     }
 
-    clear()
     draw()
   }
 
@@ -82,6 +83,7 @@ app.canvas = (() => {
 
   return engine.utility.pubsub.decorate({
     aspect: () => aspect,
+    clear,
     context: () => context,
     forceResize: function () {
       onResize()

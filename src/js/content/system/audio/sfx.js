@@ -35,7 +35,7 @@ content.system.audio.sfx.collectTreasure = () => {
     synth.param.gain.linearRampToValueAtTime(endGain, off)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, off + 1/8)
 
-    synth.stop(off + 1/16)
+    synth.stop(off + 1/8)
   }
 
   const now = engine.audio.time()

@@ -71,4 +71,4 @@ engine.loop.on('frame', ({delta, paused}) => {
   content.utility.ephemeralNoise.update(delta)
 })
 
-engine.state.reset(() => content.utility.ephemeralNoise.reset())
+engine.state.on('reset', () => content.utility.ephemeralNoise.reset())

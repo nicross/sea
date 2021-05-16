@@ -72,7 +72,6 @@ app.screen.status = (() => {
 
     const clock = content.time.clock(),
       coordinates = {x, y},
-      depth = Math.max(0, -z),
       treasures = content.treasure.getCollected(),
       time = content.time.time(),
       velocity = engine.position.getVelocity(),
@@ -85,20 +84,21 @@ app.screen.status = (() => {
       ? treasures[treasuresCollected - 1].name
       : ''
 
-    root.querySelector('.a-status--row-depth').hidden = !depth
     root.querySelector('.a-status--row-earnings').hidden = !treasuresCollected
     root.querySelector('.a-status--row-lastTreasure').hidden = !treasuresCollected
     root.querySelector('.a-status--row-treasures').hidden = !treasuresCollected
 
     root.querySelector('.a-status--metric-clock').innerHTML = app.utility.format.clock(clock)
     root.querySelector('.a-status--metric-coordinates').innerHTML = app.utility.format.coordinates(coordinates)
-    root.querySelector('.a-status--metric-depth').innerHTML = app.utility.format.number(depth)
     root.querySelector('.a-status--metric-earnings').innerHTML = app.utility.format.number(earnings)
     root.querySelector('.a-status--metric-heading').innerHTML = app.utility.format.angle(yaw)
     root.querySelector('.a-status--metric-lastTreasure').innerHTML = lastTreasure
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
     root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
     root.querySelector('.a-status--metric-velocity').innerHTML = app.utility.format.velocity(velocity)
+
+    root.querySelector('.a-status--label-z').innerHTML = z >= 0 ? 'Altitude' : 'Depth'
+    root.querySelector('.a-status--metric-z').innerHTML = app.utility.format.number(Math.abs(z))
   }
 
   return {}

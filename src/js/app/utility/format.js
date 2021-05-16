@@ -1,5 +1,12 @@
 app.utility.format = {}
 
+app.utility.format.altitude = function (value = 0) {
+  const label = value >= 0 ? 'above' : 'below',
+    number = this.number(Math.abs(value))
+
+  return `${number} ${label}`
+}
+
 app.utility.format.angle = function (radians = 0) {
   let degrees = engine.utility.radiansToDegrees(
     engine.const.tau - engine.utility.normalizeAngle(radians - Math.PI/2)
@@ -78,7 +85,7 @@ app.utility.format.coordinates = function ({
   }
 
   if (z) {
-    label += `, ${this.number(z)} meters`
+    label += `, ${this.altitude(z)}`
   }
 
   return label

@@ -40,7 +40,7 @@ app.access = (() => {
     },
     z: () => {
       const {z} = engine.position.getVector()
-      return `${app.utility.format.number(z)} meters`
+      return `${app.utility.format.altitude(z)}`
     },
   }
 

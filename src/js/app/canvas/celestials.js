@@ -131,19 +131,14 @@ app.canvas.celestials = (() => {
       return
     }
 
-    const pitch = calculatePitch(offset)
+    const horizon = calculateHorizon(),
+      pitch = calculatePitch(offset)
 
     const color = calculateColor(pitch, alpha),
       radius = calculateRadius(pitch),
       sun = calculatePosition(pitch)
 
-    if (!engine.utility.between(sun.y, -radius, main.height() + radius)) {
-      return
-    }
-
-    const horizon = calculateHorizon()
-
-    if (sun.y > horizon) {
+    if (!engine.utility.between(sun.y, -3 * radius, horizon)) {
       return
     }
 

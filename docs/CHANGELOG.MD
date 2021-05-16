@@ -8,6 +8,7 @@
 - Graphics
   - Added toggle for Dark Mode on Graphics screen
   - Adjusted range of motion blur strengths
+  - Fixed celestial glows disappearing when crossing top of screen
 - Miscellaneous
   - Fixed some things caching between new games
   - Prevented statistics collecting while on title screen

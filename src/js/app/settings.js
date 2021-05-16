@@ -52,7 +52,7 @@ app.settings = (() => {
       },
     },
     graphicsMotionBlur: {
-      compute: (rawValue) => engine.utility.lerpExp(0, 9/10, rawValue, 0.5),
+      compute: (rawValue) => engine.utility.lerpExp(0, 9/10, rawValue, 0.848),
       default: 0,
       update: () => {
         app.canvas.forceUpdate()

@@ -137,7 +137,7 @@ app.canvas.nodes = (() => {
       drawNodes()
 
       // Draw to main canvas (motion blur channel), assume identical dimensions
-      main.blur.context().drawImage(canvas, 0, 0)
+      main.blur.touch().context().drawImage(canvas, 0, 0)
 
       return this
     },

@@ -1,6 +1,7 @@
 # S.E.A. changelog
 ## v1.4.1
 - Accessibility
+  - Added access hotkey for velocity
   - Added status screen row for velocity
   - Improved verbosity of access hotkey alerts
   - Rearranged heading and coordinates on Status screen

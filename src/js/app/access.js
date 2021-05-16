@@ -12,6 +12,10 @@ app.access = (() => {
       const clock = content.time.clock()
       return app.utility.format.clock(clock)
     },
+    velocity: () => {
+      const velocity = engine.position.getVelocity()
+      return app.utility.format.velocity(velocity)
+    },
     x: () => {
       const {x} = engine.position.getVector()
 

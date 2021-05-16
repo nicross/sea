@@ -1,11 +1,15 @@
 # S.E.A. changelog
 ## v1.4.1
-- Added toggle for Dark Mode on Graphics screen
-- Adjusted motion blur values
-- Fixed some things caching between new games
-- Improved verbosity of access hotkey alerts
-- Prevented statistics collecting while on title screen
-- Miscellaneous coding chores to support future updates
+- Accessibility
+  - Improved verbosity of access hotkey alerts
+  - Rearranged heading and coordinates on Status screen
+- Graphics
+  - Added toggle for Dark Mode on Graphics screen
+  - Adjusted range of motion blur strengths
+- Miscellaneous
+  - Fixed some things caching between new games
+  - Prevented statistics collecting while on title screen
+  - Miscellaneous coding chores to support future updates
 
 ## v1.4.0
 - Audio

@@ -4,7 +4,6 @@ This document outlines upcoming changes for post-jam releases.
 ## Planned versions
 ## v1.4.1
 - Improve handling of slopes
-- Add velocity to status screen
 
 ## v1.5.0 - Deep update
 - Underwater terrain voxelization

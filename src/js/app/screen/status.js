@@ -75,6 +75,7 @@ app.screen.status = (() => {
       depth = Math.max(0, -z),
       treasures = content.treasure.getCollected(),
       time = content.time.time(),
+      velocity = engine.position.getVelocity(),
       yaw = engine.position.getEuler().yaw
 
     const earnings = treasures.reduce((sum, treasure) => sum + app.utility.treasure.computeValue(treasure), 0),
@@ -97,6 +98,7 @@ app.screen.status = (() => {
     root.querySelector('.a-status--metric-lastTreasure').innerHTML = lastTreasure
     root.querySelector('.a-status--metric-time').innerHTML = app.utility.format.time(time)
     root.querySelector('.a-status--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
+    root.querySelector('.a-status--metric-velocity').innerHTML = app.utility.format.velocity(velocity)
   }
 
   return {}

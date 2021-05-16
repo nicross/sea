@@ -139,3 +139,8 @@ app.utility.format.time = (time = 0) => {
 
   return label
 }
+
+app.utility.format.velocity = function (vector = {}) {
+  const distance = engine.utility.distance(vector)
+  return `${this.number(distance)} <abbr aria-label="meters per second">m/s</abbr>`
+}

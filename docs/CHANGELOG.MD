@@ -3,6 +3,7 @@
 - Added toggle for Dark Mode on Graphics screen
 - Adjusted motion blur values
 - Fixed some things caching between new games
+- Improved verbosity of access hotkey alerts
 - Prevented statistics collecting while on title screen
 - Miscellaneous coding chores to support future updates
 

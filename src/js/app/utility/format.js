@@ -2,7 +2,7 @@ app.utility.format = {}
 
 app.utility.format.angle = function (radians = 0) {
   let degrees = engine.utility.radiansToDegrees(
-    (Math.PI * 2) - engine.utility.normalizeAngle(radians - Math.PI/2)
+    engine.const.tau - engine.utility.normalizeAngle(radians - Math.PI/2)
   )
 
   let label = ''
@@ -41,7 +41,7 @@ app.utility.format.angle = function (radians = 0) {
     label += '<abbr aria-label="north-northwest">NNW</abbr>'
   }
 
-  label += ` (${Math.round(degrees)}<abbr aria-label=" degrees">°</abbr>)`;
+  label += ` (${Math.round(degrees) % 360}<abbr aria-label=" degrees">°</abbr>)`;
 
   return label
 }
@@ -49,13 +49,11 @@ app.utility.format.angle = function (radians = 0) {
 app.utility.format.coordinates = function ({
   x = 0,
   y = 0,
+  z = 0,
 } = {}) {
   x = Math.round(x)
   y = Math.round(y)
-
-  if (!x && !y) {
-    return 'Origin'
-  }
+  z = Math.round(z)
 
   let label = ''
 
@@ -73,6 +71,14 @@ app.utility.format.coordinates = function ({
     label += `${this.number(x)} <abbr aria-label="East">E</abbr>`
   } else if (x < 0) {
     label += `${this.number(Math.abs(x))} <abbr aria-label="West">W</abbr>`
+  }
+
+  if (!x && !y) {
+    label += 'Origin'
+  }
+
+  if (z) {
+    label += `, ${this.number(z)} meters`
   }
 
   return label

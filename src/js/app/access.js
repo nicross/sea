@@ -15,23 +15,28 @@ app.access = (() => {
     x: () => {
       const {x} = engine.position.getVector()
 
-      return x >= 0
+      if (!Math.round(x)) {
+        return 0
+      }
+
+      return x > 0
         ? `${app.utility.format.number(x)} east`
         : `${app.utility.format.number(-x)} west`
     },
     y: () => {
       const {y} = engine.position.getVector()
 
+      if (!Math.round(y)) {
+        return 0
+      }
+
       return y >= 0
         ? `${app.utility.format.number(y)} north`
         : `${app.utility.format.number(-y)} south`
     },
     z: () => {
-      const position = engine.position.getVector()
-
-      if (position.z < 0) {
-        return `${app.utility.format.number(-position.z)} meters`
-      }
+      const {z} = engine.position.getVector()
+      return `${app.utility.format.number(z)} meters`
     },
   }
 
@@ -41,21 +46,27 @@ app.access = (() => {
     root = document.querySelector('.a-app--access')
   })
 
+  function replaceAbbreviations() {
+    [...root.querySelectorAll('abbr[aria-label]')].forEach((element) => {
+      element.innerHTML = element.getAttribute('aria-label')
+    })
+  }
+
   return {
     handle: function (hotkey) {
       const value = hotkey in hotkeys
         ? hotkeys[hotkey]()
         : undefined
 
-      if (value) {
+      if (value !== undefined) {
         this.set(value)
       }
 
       return this
     },
     set: function (value = '') {
-      root.innerHTML = ''
       root.innerHTML = value
+      replaceAbbreviations()
       return this
     },
   }

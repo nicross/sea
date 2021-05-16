@@ -42,8 +42,8 @@ app.canvas = (() => {
   }
 
   function draw() {
+    clear()
     app.canvas.blur.prime()
-    app.canvas.black.draw()
     app.canvas.light.draw()
     app.canvas.stars.draw()
     app.canvas.celestials.draw()

@@ -62,9 +62,11 @@ app.canvas.grain = (() => {
     const color = getColor()
 
     for (let i = 0; i < patternDataLength; i += 4) {
-      patternData.data[i] = color.r
-      patternData.data[i + 1] = color.g
-      patternData.data[i + 2] = color.b
+      const random = engine.utility.random.integer(-4, 4)
+
+      patternData.data[i] = engine.utility.clamp(color.r + random, 0, 255)
+      patternData.data[i + 1] = engine.utility.clamp(color.g + random, 0, 255)
+      patternData.data[i + 2] = engine.utility.clamp(color.b + random, 0, 255)
       patternData.data[i + 3] = engine.utility.random.integer(0, strength)
     }
 

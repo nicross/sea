@@ -47,12 +47,12 @@ app.canvas.light = (() => {
 
     return [
       app.utility.color.lerpHsl(
-        {h: hue, s: 0.5, l: 0.20},
+        {h: hue, s: 0.666, l: 0.125},
         {h: hue, s: 1, l: 0.80},
         cycle
       ),
       app.utility.color.lerpHsl(
-        {h: hueHalf, s: 0.25, l: 0.10},
+        {h: hueHalf, s: 0.333, l: 0.0625},
         {h: hueHalf, s: 1, l: 0.70},
         cycle
       ),

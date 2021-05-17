@@ -82,7 +82,7 @@ app.canvas.surface = (() => {
           shimmer = getShimmer(grid.x, grid.y, time)
 
         // Apply shimmer to color
-        const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0.5, 1.5, shimmer), 0, 1) * (distanceRatio ** 0.5),
+        const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0.5, 1.5, shimmer), 0, 1) * (distanceRatio ** 0.666),
           luminance = engine.utility.clamp(color.l * engine.utility.lerp(1.5, 0.5, shimmer), 0, 1)
 
         context.fillStyle = `hsla(${color.h}, ${color.s}%, ${luminance * 100}%, ${alpha})`

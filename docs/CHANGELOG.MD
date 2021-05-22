@@ -11,6 +11,7 @@
   - Adjusted range of motion blur strengths
   - Fixed celestial glows disappearing when crossing top of screen
   - Increased contrast of nighttime sky
+  - Made stars visible for longer
 - Miscellaneous
   - Fixed some things caching between new games
   - Prevented statistics collecting while on title screen

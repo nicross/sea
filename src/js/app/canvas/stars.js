@@ -2,6 +2,8 @@ app.canvas.stars = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     count = 1000,
+    cycleFadeMax = 2/3,
+    cycleFadeMin = 1/3,
     depthCutoff = 1,
     firmament = 5000,
     main = app.canvas,
@@ -27,11 +29,13 @@ app.canvas.stars = (() => {
 
     const cycle = content.time.cycle()
 
-    if (cycle >= 0.525) {
+    if (cycle >= cycleFadeMax) {
       return 0
     }
 
-    const cycleFactor = engine.utility.scale(cycle, 0.525, 0, 0, 1) ** 0.25
+    const cycleFactor = cycle <= cycleFadeMin
+      ? 1
+      : engine.utility.scale(cycle, cycleFadeMin, cycleFadeMax, 1, 0) ** 0.5
 
     const surfaceFactor = z >= surface
       ? 1

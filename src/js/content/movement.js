@@ -188,16 +188,24 @@ content.movement = (() => {
   function getSurfacePitch() {
     const {yaw} = engine.position.getEuler()
 
-    const position = engine.position.getVector(),
-      unitX = engine.utility.vector2d.create({x: 0.25}).rotate(yaw)
+    const delta = engine.loop.delta(),
+      position = engine.position.getVector(),
+      velocity = engine.position.getVelocity()
 
-    const back = position.subtract(unitX),
-      front = position.add(unitX)
+    const magnitude = velocity.subtract({z: velocity.z})
+      .scale(delta)
+      .distance()
 
-    const surfaceBack = content.surface.value(back.x, back.y),
-      surfaceFront = content.surface.value(front.x, front.y)
+    const ahead = position.add(
+      engine.utility.vector2d.create({
+        x: magnitude,
+      }).rotate(yaw)
+    )
 
-    return Math.atan2(surfaceFront - surfaceBack, 0.5)
+    const surfaceAhead = content.surface.value(ahead.x, ahead.y),
+      surfaceCurrent = content.surface.current()
+
+    return Math.atan2(surfaceAhead - surfaceCurrent, magnitude)
   }
 
   function getSurfaceZ() {

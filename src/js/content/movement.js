@@ -56,13 +56,20 @@ content.movement = (() => {
       })
     }
 
-    engine.position.setAngularVelocityEuler({
+    const target = engine.utility.quaternion.fromEuler({
       yaw: content.utility.accelerate.value(
         yaw,
         angularThrust * angularMaxVelocity,
         angularAcceleration * scale
       ),
     })
+
+    // Prevent large velocities going negative
+    if (target.w < 0) {
+      return
+    }
+
+    engine.position.setAngularVelocity(target)
   }
 
   function applyDrag(scale = 1) {
@@ -183,6 +190,17 @@ content.movement = (() => {
     }
 
     return false
+  }
+
+  function enforceSanity() {
+    // Prevent quaternion from becoming extreme from too many turns
+    engine.position.setQuaternion(
+      engine.position.getQuaternion().normalize()
+    )
+
+    engine.position.setAngularVelocity(
+      engine.position.getAngularVelocity().normalize()
+    )
   }
 
   function getSurfacePitch() {
@@ -491,6 +509,8 @@ content.movement = (() => {
       updateThrusters({...controls})
 
       mediumHandlers[medium.state]({...controls})
+
+      enforceSanity()
 
       return this
     },

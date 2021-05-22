@@ -7,6 +7,7 @@
   - Rearranged heading and coordinates on Status screen
 - Graphics
   - Added toggle for Dark Mode on Graphics screen
+  - Added radius to stars
   - Adjusted range of motion blur strengths
   - Fixed celestial glows disappearing when crossing top of screen
   - Increased contrast of nighttime sky

@@ -2,6 +2,7 @@ app.canvas.stars = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     count = 1000,
+    depthCutoff = 1,
     firmament = 5000,
     main = app.canvas,
     stars = []
@@ -20,7 +21,7 @@ app.canvas.stars = (() => {
     const {z} = engine.position.getVector()
     const surface = content.surface.current()
 
-    if (z < surface - 2) {
+    if (z < surface - depthCutoff) {
       return 0
     }
 
@@ -34,9 +35,25 @@ app.canvas.stars = (() => {
 
     const surfaceFactor = z >= surface
       ? 1
-      : engine.utility.scale(z, surface, surface - 2, 1, 0)
+      : engine.utility.scale(z, surface, surface - depthCutoff, 1, 0) ** 2
 
     return cycleFactor * surfaceFactor
+  }
+
+  function calculateRadius() {
+    const {z} = engine.position.getVector()
+    const surface = content.surface.current()
+
+    if (z >= surface) {
+      return 1
+    }
+
+    if (z < surface - depthCutoff) {
+      return 16
+    }
+
+    const scaled = engine.utility.scale(z, surface, surface - depthCutoff, 0, 1)
+    return engine.utility.lerpExp(1, 16, scaled, 2)
   }
 
   function calculateHorizon() {
@@ -63,11 +80,11 @@ app.canvas.stars = (() => {
 
   function drawStars() {
     const globalAlpha = calculateAlpha(),
-        height = main.height(),
-        hfov = main.hfov(),
-        radius = 0.5,
-        vfov = main.vfov(),
-        width = main.width()
+      globalRadius = calculateRadius(),
+      height = main.height(),
+      hfov = main.hfov(),
+      vfov = main.vfov(),
+      width = main.width()
 
     if (globalAlpha <= 0) {
       return
@@ -122,6 +139,8 @@ app.canvas.stars = (() => {
         alpha *= engine.utility.scale(screen.y, horizon - horizonCutoff, horizon, 1, 0)
       }
 
+      const radius = star.radius * globalRadius
+
       context.fillStyle = `rgba(255, 255, 255, ${alpha})`
       context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
     }
@@ -138,14 +157,14 @@ app.canvas.stars = (() => {
         delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),
         phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),
+        radius: engine.utility.lerpExp(0.5, 1, srand(), 8),
       })
     }
   }
 
   function shouldDraw() {
     const {z} = engine.position.getVector()
-    // calculateAlpha will always return 0 below this depth
-    return z > -2
+    return z > -depthCutoff
   }
 
   engine.state.on('import', () => {

@@ -1,17 +1,19 @@
 # S.E.A. changelog
 ## v1.4.1
-- Accessibility
-  - Added access hotkeys for altitude and velocity
-  - Added status screen rows for altitude and velocity
-  - Improved verbosity of access hotkey alerts
-  - Rearranged heading and coordinates on Status screen
 - Graphics
   - Added toggle for Dark Mode on Graphics screen
-  - Added radius to stars
+  - Added random radii to stars
   - Adjusted range of motion blur strengths
   - Fixed celestial glows disappearing when crossing top of screen
   - Increased contrast of nighttime sky
   - Made stars visible for longer
+- Movement
+  - Improved handling on slopes
+- User interface
+  - Added access hotkeys for altitude and velocity
+  - Added status screen rows for altitude and velocity
+  - Improved verbosity of access hotkey alerts
+  - Rearranged heading and coordinates on Status screen
 - Miscellaneous
   - Fixed some things caching between new games
   - Prevented statistics collecting while on title screen

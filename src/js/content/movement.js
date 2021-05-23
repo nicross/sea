@@ -1,7 +1,7 @@
 content.movement = (() => {
   const pubsub = engine.utility.pubsub.create(),
     reflectionRate = 1/2,
-    surfaceLeeway = engine.const.zero + (1 / (engine.const.gravity ** 1.25))
+    surfaceLeeway = 1/8
 
   const medium = engine.utility.machine.create({
     transition: {
@@ -204,30 +204,22 @@ content.movement = (() => {
   }
 
   function getSurfacePitch() {
-    const {yaw} = engine.position.getEuler()
-
     const delta = engine.loop.delta(),
       position = engine.position.getVector(),
-      velocity = engine.position.getVelocity()
+      velocity = engine.position.getVelocity().scale(delta)
 
-    const magnitude = velocity.subtract({z: velocity.z})
-      .scale(delta)
-      .distance()
+    const magnitude = velocity.distance()
 
-    const ahead = position.add(
-      engine.utility.vector2d.create({
-        x: magnitude,
-      }).rotate(yaw)
-    )
+    if (!magnitude) {
+      return 0
+    }
+
+    const ahead = position.add(velocity)
 
     const surfaceAhead = content.surface.value(ahead.x, ahead.y),
       surfaceCurrent = content.surface.current()
 
     return Math.atan2(surfaceAhead - surfaceCurrent, magnitude)
-  }
-
-  function getSurfaceZ() {
-    return content.surface.current()
   }
 
   function handleAir(controls = {}) {
@@ -242,10 +234,10 @@ content.movement = (() => {
     }
 
     const {z} = engine.position.getVector()
-    const surfaceZ = getSurfaceZ()
+    const surface = content.surface.current()
 
     // Remain in air while above surface
-    if (z > surfaceZ + surfaceLeeway) {
+    if (z > surface + surfaceLeeway) {
       return
     }
 
@@ -273,7 +265,7 @@ content.movement = (() => {
     })
 
     // Glue to surface
-    setZ(getSurfaceZ())
+    setZ(content.surface.current())
 
     // Apply thrust
     const thrustScale = engine.performance.fps() / 4
@@ -282,19 +274,22 @@ content.movement = (() => {
   }
 
   function handleSurface(controls) {
+    const pitch = getSurfacePitch()
+
     applyAngularThrust()
-    applyLateralThrust(1, getSurfacePitch())
+    applyLateralThrust(1, pitch)
+    rotateSurfaceVelocity(pitch)
 
     const {z} = engine.position.getVector()
 
-    const surfaceZ = getSurfaceZ(),
+    const surface = content.surface.current(),
       velocity = engine.position.getVelocity()
 
     const isLateralMovement = velocity.x || velocity.y,
-      maxSurfaceZ = surfaceZ + surfaceLeeway
+      maxSurface = surface + surfaceLeeway
 
-    // Jump if moving up or not intersecting surface while moving laterally
-    if (velocity.z > 0 || (z > maxSurfaceZ && isLateralMovement)) {
+    // Jump if moving up
+    if (z > maxSurface) {
       return medium.dispatch('jump')
     }
 
@@ -304,12 +299,12 @@ content.movement = (() => {
     }
 
     // Splash if lateral movement and approaching incline
-    if (z < maxSurfaceZ && isLateralMovement) {
-      splash(surfaceZ)
+    if (isLateralMovement) {
+      splash(surface)
     }
 
     // Glue to surface
-    setZ(surfaceZ)
+    setZ(surface)
   }
 
   function handleUnderwater() {
@@ -320,12 +315,12 @@ content.movement = (() => {
     const {z} = engine.position.getVector()
 
     // Surface when at or above it, otherwise stick below it
-    if (z >= getSurfaceZ()) {
+    if (z >= content.surface.current()) {
       if (velocity.z > 0) {
         return medium.dispatch('surface')
       }
 
-      setZ(getSurfaceZ() - engine.const.zero)
+      setZ(content.surface.current() - engine.const.zero)
     }
 
     // Skip collision checks if none possible
@@ -382,14 +377,19 @@ content.movement = (() => {
     })
   }
 
-  function splash(surfaceZ) {
-    const velocity = engine.position.getVelocity()
-    const {yaw} = engine.position.getAngularVelocityEuler()
+  function splash() {
+    const surface = content.surface.current(),
+      velocity = engine.position.getVelocity()
+
+    const yaw = velocity.normalize().rotateQuaternion(
+      engine.position.getQuaternion().conjugate()
+    ).euler().yaw
+
     const {z} = engine.position.getVector()
 
     pubsub.emit('surface-splash', {
-      pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 0, 1), 0, 1),
-      size: (surfaceZ - z) / content.surface.max(),
+      pan: engine.utility.clamp(engine.utility.scale(yaw, -Math.PI/2, Math.PI/2, 1, 0), 0, 1),
+      size: engine.utility.clamp((surface - z) / content.surface.max(), 0, 1),
       velocity: engine.utility.clamp(velocity.distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
     })
   }
@@ -426,11 +426,11 @@ content.movement = (() => {
 
   medium.on('before-dive', () => {
     // Just under the surface
-    setZ(getSurfaceZ() - engine.const.zero)
+    setZ(content.surface.current() - engine.const.zero)
   })
 
   medium.on('before-jump', () => {
-    setZ(getSurfaceZ())
+    setZ(content.surface.current())
   })
 
   medium.on('before-land', (e) => {
@@ -443,11 +443,11 @@ content.movement = (() => {
       z: 0,
     })
 
-    setZ(getSurfaceZ())
+    setZ(content.surface.current())
   })
 
   medium.on('before-surface', () => {
-    setZ(getSurfaceZ())
+    setZ(content.surface.current())
   })
 
   medium.on('enter-underwater', () => {
@@ -473,7 +473,7 @@ content.movement = (() => {
       const {z} = engine.position.getVector()
 
       medium.state = z >= 0
-        ? (z > getSurfaceZ() ? 'air' : 'surface')
+        ? (z > content.surface.current() ? 'air' : 'surface')
         : 'underwater'
 
       calculateModel()

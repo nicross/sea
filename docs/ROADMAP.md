@@ -2,9 +2,6 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.4.1
-- Improve handling of slopes
-
 ## v1.5.0 - Deep update
 - Underwater terrain voxelization
   - Object with 3D coordinates, boolean solid property, and eventually other attributes

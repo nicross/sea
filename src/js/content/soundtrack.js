@@ -43,6 +43,10 @@ content.soundtrack = (() => {
   let frequencies = [],
     harmonics = []
 
+  content.utility.ephemeralNoise
+    .manage(chordField)
+    .manage(inversionField)
+
   function getChord(present) {
     let x = present.x / chordScale
     x += present.time * chordMomentum / chordScale
@@ -108,10 +112,6 @@ content.soundtrack = (() => {
 
       return this
     },
-    reset: function () {
-      // TODO: Reset fields
-      return this
-    },
     update: function () {
       // TODO: Possibly a frame limiter
 
@@ -147,4 +147,3 @@ engine.loop.on('frame', ({paused}) => {
 })
 
 engine.state.on('import', (data) => content.soundtrack.import(data))
-engine.state.on('reset', () => content.soundtrack.reset())

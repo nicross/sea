@@ -27,6 +27,7 @@
     <li>Audio
       <ul>
         <li>Added more triads to underwater soundtrack</li>
+        <li>Fixed a memory leak within underwater soundtrack</li>
       </ul>
     </li>
   </ul>

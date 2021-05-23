@@ -14,8 +14,8 @@ content.audio.surface.splash = (() => {
     size = 0,
     velocity = 0,
   } = {}) {
-    const color = engine.utility.lerpExp(100, 1000, velocity, 2.5),
-      duration = engine.utility.lerp(1/2, 1, size),
+    const color = engine.utility.lerpExp(100, 1000, velocity, 1.5),
+      duration = engine.utility.lerp(1/2, 1, engine.utility.lerpRandom([0.5, 0.75], [0.75, 1], size)),
       gain = engine.utility.lerp(1, 1/2, velocity),
       panner = context.createStereoPanner()
 

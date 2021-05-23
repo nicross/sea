@@ -241,7 +241,8 @@ content.movement = (() => {
       return
     }
 
-    // Intersection with surface, trigger smack
+    // Intersection with surface, trigger sounds
+    splash()
     smack()
 
     // Dive if controls are pressed
@@ -340,6 +341,29 @@ content.movement = (() => {
       normalized: velocity.normalize().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       ratio: engine.utility.clamp(velocity.distance() / content.const.underwaterTurboMaxVelocity, 0, 1),
     })
+  }
+
+  function rotateSurfaceVelocity(pitch) {
+    const velocity = engine.position.getVelocity()
+
+    if (velocity.subtract({z: velocity.z}).distance() < 2) {
+      return
+    }
+
+    const target = velocity.subtract({z: velocity.z})
+      .rotateEuler({pitch})
+      .add({z: velocity.z})
+
+    const next = content.utility.accelerate.vector(
+      velocity,
+      target,
+      1
+    )
+
+    const normal = engine.utility.vector3d.unitX().rotateEuler({pitch})
+    next.z = Math.max(normal.z, next.z)
+
+    engine.position.setVelocity(next)
   }
 
   function setTurbo(state) {

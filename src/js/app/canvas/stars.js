@@ -70,12 +70,29 @@ app.canvas.stars = (() => {
     return horizon.y
   }
 
-  function calculateTwinkle(phase) {
+  function calculateTwinkle(phase, depth = 0.125) {
     const time = content.time.time()
-    const fmod = Math.sin(Math.PI * 1/20 * time)
+
+    const fmod = Math.sin((Math.PI * 1/20 * time) + phase)
     const f = engine.utility.lerp(2, 6, fmod)
+
     const amod = Math.sin((Math.PI * f * time) + phase) ** 2
-    return 0.875 + (amod * 0.125)
+    return (1 - depth) + (amod * depth)
+  }
+
+  function calculateTwinkleDepth() {
+    const {z} = engine.position.getVector()
+    const surface = content.surface.current()
+
+    if (z >= surface) {
+      return 1/8
+    }
+
+    if (z <= surface - depthCutoff) {
+      return 1/2
+    }
+
+    return engine.utility.scale(z, surface, surface - depthCutoff, 1/8, 1/2)
   }
 
   function clear() {
@@ -87,6 +104,7 @@ app.canvas.stars = (() => {
       globalRadius = calculateRadius(),
       height = main.height(),
       hfov = main.hfov(),
+      twinkleDepth = calculateTwinkleDepth(),
       vfov = main.vfov(),
       width = main.width()
 

@@ -2,7 +2,7 @@
 This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
-## v1.5.0 - Deep update
+### v1.5.0 - Deep update
 - Underwater terrain voxelization
   - Object with 3D coordinates, boolean solid property, and eventually other attributes
   - Generate and cache values around player as needed
@@ -27,7 +27,7 @@ This document outlines upcoming changes for post-jam releases.
   - Physics improvements
   - Surface scanning
 
-## v1.6.0 - Life update
+### v1.6.0 - Life update
 - Aquatic life
   - Dolphins
   - Gulls
@@ -42,12 +42,11 @@ This document outlines upcoming changes for post-jam releases.
 - Underwater music enhancements
   - More colors
   - More oscillators
-  - More triads
 
-## v1.7.0 - Redacted update
+### v1.7.0 - Redacted update
 - ???
 
-## v2.0.0 - Gold update
+### v2.0.0 - Gold update
 - ???
 
 ## Known issues

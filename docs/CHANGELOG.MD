@@ -21,6 +21,17 @@
   - Prevented statistics collecting while on title screen
   - Miscellaneous coding chores to support future updates
 
+<details markdown="1">
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Audio
+      <ul>
+        <li>Added more triads to underwater soundtrack</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
 ## v1.4.0
 - Audio
   - Added slider for environmental sound volume

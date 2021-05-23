@@ -20,6 +20,7 @@
   - Fixed some things caching between new games
   - Prevented statistics collecting while on title screen
   - Miscellaneous coding chores to support future updates
+  - Updated documentation to reflect changes
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>
@@ -30,8 +31,14 @@
         <li>Fixed a memory leak within underwater soundtrack</li>
       </ul>
     </li>
+    <li>Graphics
+      <ul>
+        <li>Added effect to stars when crossing surface</li>
+      </ul>
+    </li>
     <li>Movement
       <ul>
+        <li>Improved surface transitions</li>
         <li>Prevented getting stuck in terrain</li>
         <li>Voxelized terrain collisions</li>
       </ul>

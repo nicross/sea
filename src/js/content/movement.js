@@ -34,6 +34,7 @@ content.movement = (() => {
 
   let angularThrust = 0,
     isTurbo,
+    lastKnownGoodUnderwaterPosition = engine.utility.vector3d.create(),
     lateralThrust = engine.utility.vector3d.create()
 
   let angularAcceleration = 0,
@@ -166,6 +167,13 @@ content.movement = (() => {
 
     if (deltaVelocity.isZero()) {
       return false
+    }
+
+    if (content.terrain.collision.check(position)) {
+      engine.position.setVector(lastKnownGoodUnderwaterPosition)
+      return true
+    } else {
+      lastKnownGoodUnderwaterPosition = position
     }
 
     const nextPosition = position.add(deltaVelocity)
@@ -498,6 +506,8 @@ content.movement = (() => {
     getLateralThrust: () => lateralThrust.clone(),
     import: function () {
       const {z} = engine.position.getVector()
+
+      lastKnownGoodUnderwaterPosition = engine.position.getVector()
 
       medium.state = z >= 0
         ? (z > content.surface.current() + surfaceLeeway ? 'air' : 'surface')

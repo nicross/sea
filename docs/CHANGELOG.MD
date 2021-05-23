@@ -32,6 +32,7 @@
     </li>
     <li>Movement
       <ul>
+        <li>Prevented getting stuck in terrain</li>
         <li>Voxelized terrain collisions</li>
       </ul>
     </li>

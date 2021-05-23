@@ -230,7 +230,6 @@ content.movement = (() => {
     }
 
     // Intersection with surface, trigger sounds
-    splash()
     smack()
 
     // Dive if controls are pressed
@@ -270,11 +269,8 @@ content.movement = (() => {
 
     const {z} = engine.position.getVector()
 
-    const surface = content.surface.current(),
-      velocity = engine.position.getVelocity()
-
-    const isLateralMovement = velocity.x || velocity.y,
-      maxSurface = surface + surfaceLeeway
+    const surface = content.surface.current()
+    const maxSurface = surface + surfaceLeeway
 
     // Jump if moving up
     if (z > maxSurface) {
@@ -288,11 +284,6 @@ content.movement = (() => {
 
     // Jumps feel better if this isn't applied before jumping
     rotateSurfaceVelocity(pitch)
-
-    // Splash if lateral movement and approaching incline
-    if (isLateralMovement) {
-      splash(surface)
-    }
 
     // Glue to surface
     setZ(surface)
@@ -388,23 +379,6 @@ content.movement = (() => {
       gravity: engine.utility.clamp(Math.abs(velocity.z) / content.const.underwaterTurboMaxVelocity, 0, 1),
       lateral: engine.utility.clamp(lateralVelocity / lateralMaxVelocity, 0, 1),
       pan: engine.utility.clamp(engine.utility.scale(yaw / angularMaxVelocity, -1, 1, 1, 0), 0, 1),
-    })
-  }
-
-  function splash() {
-    const surface = content.surface.current(),
-      velocity = engine.position.getVelocity()
-
-    const yaw = velocity.normalize().rotateQuaternion(
-      engine.position.getQuaternion().conjugate()
-    ).euler().yaw
-
-    const {z} = engine.position.getVector()
-
-    pubsub.emit('surface-splash', {
-      pan: engine.utility.clamp(engine.utility.scale(yaw, -Math.PI/2, Math.PI/2, 1, 0), 0, 1),
-      size: engine.utility.clamp((surface - z) / content.surface.max(), 0, 1),
-      velocity: engine.utility.clamp(velocity.distance() / content.const.surfaceTurboMaxVelocity, 0, 1),
     })
   }
 

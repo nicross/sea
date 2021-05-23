@@ -66,15 +66,12 @@ content.movement.on('surface-smack', ({
   })
 })
 
-content.movement.on('surface-splash', ({
-  size = 0,
-  velocity = 0,
-} = {}) => {
+content.audio.surface.splash.on('grain', (strength = 0) => {
   app.controls.haptic.trigger({
-    duration: engine.utility.lerpExp(25, 100, size, 2),
+    duration: engine.utility.lerpExp(25, 100, strength, 2),
     startDelay: 0,
     strongMagnitude: 0,
-    weakMagnitude: velocity * Math.random(),
+    weakMagnitude: strength,
   })
 })
 

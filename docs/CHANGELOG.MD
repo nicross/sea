@@ -1,6 +1,7 @@
 # S.E.A. changelog
 ## v1.4.1
 - Audio
+  - Added binaural processing to splash cue
   - Reworked splash cue for movement changes
 - Graphics
   - Added toggle for Dark Mode on Graphics screen

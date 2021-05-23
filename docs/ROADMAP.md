@@ -9,8 +9,6 @@ This document outlines upcoming changes for post-jam releases.
   - Fine and coarse intervals for different purposes
 - Terrain streaming
 - Collisions
-  - Fine intervaled voxels
-  - Collision detection finds solid voxels within radius from player
   - Calculate terrain normal on collision for better reflections
 - Scanning
   - Coarse intervaled voxels

@@ -30,6 +30,11 @@
         <li>Fixed a memory leak within underwater soundtrack</li>
       </ul>
     </li>
+    <li>Movement
+      <ul>
+        <li>Voxelized terrain collisions</li>
+      </ul>
+    </li>
   </ul>
 </details>
 

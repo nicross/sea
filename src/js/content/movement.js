@@ -168,28 +168,8 @@ content.movement = (() => {
       return false
     }
 
-    const radius = engine.const.positionRadius
-
-    const vertices = [
-      position.add({x: radius, y: radius, z: radius}),
-      position.add({x: radius, y: -radius, z: radius}),
-      position.add({x: radius, y: radius, z: -radius}),
-      position.add({x: radius, y: -radius, z: -radius}),
-      position.add({x: -radius, y: radius, z: radius}),
-      position.add({x: -radius, y: -radius, z: radius}),
-      position.add({x: -radius, y: radius, z: -radius}),
-      position.add({x: -radius, y: -radius, z: -radius}),
-    ]
-
-    for (const vertex of vertices) {
-      const {x, y, z} = vertex.add(deltaVelocity)
-
-      if (content.terrain.isSolid(x, y, z)) {
-        return true
-      }
-    }
-
-    return false
+    const nextPosition = position.add(deltaVelocity)
+    return content.terrain.collision.check(nextPosition)
   }
 
   function enforceSanity() {

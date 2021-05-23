@@ -279,7 +279,6 @@ content.movement = (() => {
 
     applyAngularThrust()
     applyLateralThrust(1, pitch)
-    rotateSurfaceVelocity(pitch)
 
     const {z} = engine.position.getVector()
 
@@ -299,6 +298,9 @@ content.movement = (() => {
       return medium.dispatch('dive')
     }
 
+    // Jumps feel better if this isn't applied before jumping
+    rotateSurfaceVelocity(pitch)
+
     // Splash if lateral movement and approaching incline
     if (isLateralMovement) {
       splash(surface)
@@ -308,7 +310,7 @@ content.movement = (() => {
     setZ(surface)
   }
 
-  function handleUnderwater() {
+  function handleUnderwater(controls) {
     applyAngularThrust()
     applyLateralThrust()
 
@@ -317,7 +319,7 @@ content.movement = (() => {
 
     // Surface when at or above it, otherwise stick below it
     if (z >= content.surface.current()) {
-      if (velocity.z > 0) {
+      if (controls.z > 0 || velocity.z > 0) {
         return medium.dispatch('surface')
       }
 
@@ -449,12 +451,21 @@ content.movement = (() => {
   })
 
   medium.on('before-dive', () => {
-    // Just under the surface
+    // Glue under surface
     setZ(content.surface.current() - engine.const.zero)
+
+    // Prevent positive z-velocity
+    const velocity = engine.position.getVelocity()
+
+    if (velocity.z > 0) {
+      engine.position.setVelocity(
+        velocity.subtract({z: velocity.z})
+      )
+    }
   })
 
   medium.on('before-jump', () => {
-    setZ(content.surface.current())
+    setZ(content.surface.current() + surfaceLeeway)
   })
 
   medium.on('before-land', (e) => {
@@ -462,16 +473,28 @@ content.movement = (() => {
       return
     }
 
+    // Glue to surface
+    setZ(content.surface.current())
+
+    // Prevent z-velocity
     engine.position.setVelocity({
       ...engine.position.getVelocity(),
       z: 0,
     })
-
-    setZ(content.surface.current())
   })
 
   medium.on('before-surface', () => {
+    // Glue to surface
     setZ(content.surface.current())
+
+    // Prevent negative z-velocity
+    const velocity = engine.position.getVelocity()
+
+    if (velocity.z < 0) {
+      engine.position.setVelocity(
+        velocity.subtract({z: velocity.z})
+      )
+    }
   })
 
   medium.on('enter-underwater', () => {
@@ -497,7 +520,7 @@ content.movement = (() => {
       const {z} = engine.position.getVector()
 
       medium.state = z >= 0
-        ? (z > content.surface.current() ? 'air' : 'surface')
+        ? (z > content.surface.current() + surfaceLeeway ? 'air' : 'surface')
         : 'underwater'
 
       calculateModel()

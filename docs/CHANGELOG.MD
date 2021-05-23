@@ -19,6 +19,7 @@
 - Miscellaneous
   - Fixed some things caching between new games
   - Prevented statistics collecting while on title screen
+  - Tweaked haptic strengths to be stronger overall
   - Miscellaneous coding chores to support future updates
   - Updated documentation to reflect changes
 

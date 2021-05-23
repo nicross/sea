@@ -59,7 +59,7 @@ content.movement.on('surface-smack', ({
   lateral = 0,
 } = {}) => {
   app.controls.haptic.trigger({
-    duration: engine.utility.lerpExp(25, 250, gravity * (1 - lateral), 2),
+    duration: engine.utility.lerpExp(50, 250, gravity * (1 - lateral), 2),
     startDelay: 0,
     strongMagnitude: gravity,
     weakMagnitude: 0,
@@ -80,7 +80,7 @@ content.movement.on('surface-splash', ({
 
 content.movement.on('transition-underwater', (velocity = 0) => {
   app.controls.haptic.trigger({
-    duration: engine.utility.lerpExp(25, 125, velocity, 2),
+    duration: engine.utility.lerpExp(50, 200, velocity, 2),
     startDelay: 0,
     strongMagnitude: velocity,
     weakMagnitude: 0,
@@ -89,7 +89,7 @@ content.movement.on('transition-underwater', (velocity = 0) => {
 
 content.movement.on('transition-surface', (velocity = 0) => {
   app.controls.haptic.trigger({
-    duration: engine.utility.lerpExp(25, 125, velocity, 2),
+    duration: engine.utility.lerpExp(50, 200, velocity, 2),
     startDelay: 0,
     strongMagnitude: velocity,
     weakMagnitude: 0,
@@ -100,7 +100,7 @@ content.movement.on('underwater-collision', ({
   ratio = 0,
 } = {}) => {
   app.controls.haptic.trigger({
-    duration: engine.utility.lerp(25, 250, ratio),
+    duration: engine.utility.lerp(50, 250, ratio),
     startDelay: 0,
     strongMagnitude: ratio ** 0.5,
     weakMagnitude: ratio ** 3,

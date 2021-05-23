@@ -1,8 +1,8 @@
 {
   "name": "S.E.A.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "",
-  "license": "UNLICENSED",
+  "license": "Unlicense",
   "main": "electron/main.js",
   "private": true,
   "devDependencies": {

@@ -1,190 +1,125 @@
 content.audio.engine = (() => {
   const binaural = engine.audio.binaural.create(),
-    bus = content.audio.mixer.bus.misc.createBus()
+    bus = content.audio.mixer.bus.misc.createBus(),
+    rootFrequency = engine.utility.midiToFrequency(33)
 
-  const fadeDuration = 1/6,
-    rootFrequency = engine.utility.midiToFrequency(33),
-    rotationStrength = 1/25,
-    turboDetune = 1200
+  let detune = 0,
+    strength = engine.utility.vector3d.create(),
+    synth
 
-  let synth
-
-  bus.gain.value = engine.utility.fromDb(-7.5)
+  bus.gain.value = engine.utility.fromDb(-6.66)
   binaural.to(bus)
 
-  function calculateParams() {
-    const vector = getLateralThrusters().add(
-      getAngularThrusters()
-    )
+  function calculateIntent() {
+    const rotate = engine.utility.vector3d.create({
+      y: -content.movement.getAngularThrust(),
+    }).scale(1/12)
 
-    const strength = vector.distance()
+    const thrust = content.movement.getLateralThrust().inverse()
 
-    return {
-      strength: Math.min(strength, 1),
-      vector: vector.scale(strength ? (1 / strength) : 0),
-    }
+    return thrust.add(rotate)
+      .scale(content.movement.isTurbo() ? 1 : 0.5)
   }
 
-  function calculateWork(thrust, velocity) {
-    if (thrust == velocity) {
-      return thrust
-    }
-
-    const thrustSign = engine.utility.sign(thrust),
-      velocitySign = engine.utility.sign(velocity)
-
-    if (thrustSign == velocitySign) {
-      if (Math.abs(velocity) > Math.abs(thrust)) {
-        return thrust
-      }
-
-      if (velocity > 0) {
-        return Math.max(velocity, engine.const.zero)
-      }
-
-      if (velocity < 0) {
-        return Math.min(velocity, -engine.const.zero)
-      }
-
-      return 0
-    }
-
-    return thrust ? thrustSign * engine.const.zero : 0
-  }
-
-  function createSynth() {
-    const detune = engine.utility.random.float(-12.5, 12.5),
-      isTurbo = content.movement.isTurbo()
-
-    synth = engine.audio.synth.createMod({
-      amodDepth: 0,
-      amodFrequency: 0,
-      amodType: 'triangle',
-      carrierDetune: detune + (isTurbo ? turboDetune : 0),
-      carrierFrequency: rootFrequency,
-      carrierGain: 0,
-      carrierType: 'sawtooth',
-      fmodDepth: rootFrequency / 2,
-      fmodDetune: detune + (isTurbo ? turboDetune : 0),
-      fmodFrequency: rootFrequency,
-      fmodType: 'sawtooth',
-      gain: engine.const.zeroGain,
-    }).filtered({
-      detune: detune + (isTurbo ? turboDetune : 0),
-      frequency: rootFrequency,
-    })
-
-    engine.audio.ramp.linear(synth.param.carrierGain, 1/2, fadeDuration)
-    engine.audio.ramp.linear(synth.param.amod.depth, 1/2, fadeDuration)
-
-    binaural.from(synth.output)
-  }
-
-  function destroySynth() {
-    engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, fadeDuration)
-    synth.stop(engine.audio.time(fadeDuration))
-    synth = null
-  }
-
-  function getAngularThrusters() {
-    const thrust = content.movement.getAngularThrust()
-
-    if (!thrust) {
-      return engine.utility.vector3d.create()
-    }
-
-    const ratio = Math.abs(engine.position.getAngularVelocityEuler().yaw) / content.movement.getAngularMaxVelocity(),
-      strength = engine.utility.clamp(thrust * ratio, -1, 1) * rotationStrength
-
-    return engine.utility.vector3d.create({
-      x: Math.abs(strength),
-      y: -strength,
-    })
-  }
-
-  function getLateralThrusters() {
-    const lateralThrust = content.movement.getLateralThrust()
-
-    const velocity = engine.position.getVelocity()
-      .scale(1 / content.movement.getLateralMaxVelocity())
-      .rotateQuaternion(engine.position.getQuaternion().conjugate())
-
-    let result = engine.utility.vector3d.create({
-      x: calculateWork(lateralThrust.x, velocity.x),
-      y: calculateWork(lateralThrust.y, velocity.y),
-      z: calculateWork(lateralThrust.z, velocity.z),
-    })
-
-    const radius = result.distance()
-
-    if (radius > 1) {
-      result = result.scale(1 / radius)
-    }
-
-    return result.rotateEuler({yaw: Math.PI})
-  }
-
-  function updateSynth() {
-    const {
-      strength,
-      vector,
-    } = calculateParams()
+  function calculateParameters() {
+    const magnitude = strength.distance()
 
     const isCatchingAir = content.movement.isCatchingAir(),
       isTurbo = content.movement.isTurbo(),
       isUnderwater = content.movement.isUnderwater()
 
-    const amodFrequency = isCatchingAir
-      ? 27.5
-      : engine.utility.lerp(4, 16, strength)
-
     const color = isUnderwater
-      ? (isTurbo ? 1 : 2)
+      ? 1
       : (isCatchingAir ? 4 : 2)
 
-    const gain = engine.utility.lerpExp(0.5, 1, strength, 0.5)
+    const amodDepth = engine.utility.lerpExp(1/12, 1/2, magnitude, 0.5),
+      turboThreshold = isTurbo ? 0.25 : 0.5
 
-    engine.audio.ramp.set(synth.filter.frequency, rootFrequency * color)
-    engine.audio.ramp.set(synth.param.amod.frequency, amodFrequency)
-    engine.audio.ramp.set(synth.param.gain, gain)
+    const fullDetune = magnitude >= turboThreshold
+      ? engine.utility.scale(magnitude, turboThreshold, 1, 0, 1200)
+      : engine.utility.scale(magnitude, 0, turboThreshold, -500, 0)
 
-    binaural.update(vector)
+    return {
+      amodDepth,
+      amodFrequency: isCatchingAir ? 27.5 : engine.utility.lerpExp(4, 16, magnitude, 2),
+      detune: detune + fullDetune,
+      carrierGain: 1 - amodDepth,
+      filterFrequency: rootFrequency * color,
+      gain: engine.utility.lerpExp(engine.const.zeroGain, 1, magnitude, 1/3),
+    }
+  }
+
+  function createSynth() {
+    detune = engine.utility.random.float(-12.5, 12.5)
+
+    const parameters = calculateParameters()
+
+    synth = engine.audio.synth.createMod({
+      amodDepth: parameters.amodDepth,
+      amodFrequency: parameters.amodFrequency,
+      amodType: 'triangle',
+      carrierDetune: parameters.detune,
+      carrierFrequency: rootFrequency,
+      carrierGain: parameters.carrierGain,
+      carrierType: 'sawtooth',
+      fmodDepth: rootFrequency / 2,
+      fmodDetune: parameters.detune,
+      fmodFrequency: rootFrequency,
+      fmodType: 'sawtooth',
+      gain: parameters.gain,
+    }).filtered({
+      detune: parameters.detune,
+      frequency: parameters.filterFrequency,
+    })
+
+    binaural.from(synth.output)
+  }
+
+  function destroySynth() {
+    const now = engine.audio.time(),
+      release = 1/32
+
+    engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, release)
+    synth.stop(now + release)
+    synth = null
+  }
+
+  function updateSynth() {
+    const parameters = calculateParameters()
+
+    engine.audio.ramp.set(synth.filter.detune, parameters.detune)
+    engine.audio.ramp.set(synth.filter.frequency, parameters.filterFrequency)
+    engine.audio.ramp.set(synth.param.amod.depth, parameters.amodDepth)
+    engine.audio.ramp.set(synth.param.amod.frequency, parameters.amodFrequency)
+    engine.audio.ramp.set(synth.param.carrierGain, parameters.carrierGain)
+    engine.audio.ramp.set(synth.param.fmod.detune, parameters.detune)
+    engine.audio.ramp.set(synth.param.detune, parameters.detune)
+    engine.audio.ramp.set(synth.param.gain, parameters.gain)
+
+    binaural.update(strength.normalize())
   }
 
   return {
-    onNormal: function () {
-      if (synth) {
-        engine.audio.ramp.linear(synth.filter.detune, 0, 0.5)
-        engine.audio.ramp.linear(synth.param.detune, 0, 0.5)
-        engine.audio.ramp.linear(synth.param.fmod.detune, 0, 0.5)
-      }
-    },
-    onTurbo: function () {
-      if (synth) {
-        engine.audio.ramp.linear(synth.filter.detune, turboDetune, 0.5)
-        engine.audio.ramp.linear(synth.param.detune, turboDetune, 0.5)
-        engine.audio.ramp.linear(synth.param.fmod.detune, turboDetune, 0.5)
-      }
-    },
     reset: function () {
       if (synth) {
         destroySynth()
       }
+
+      strength = engine.utility.vector3d.create()
+
       return this
     },
     update: function () {
-      const angularThrust = content.movement.getAngularThrust(),
-        lateralThrust = content.movement.getLateralThrust()
+      const intent = calculateIntent()
 
-      const shouldHaveSynth = content.movement.isSurface()
-        ? angularThrust || lateralThrust.x
-        : angularThrust || lateralThrust.x || lateralThrust.y || lateralThrust.z
+      strength = content.utility.accelerate.vector(strength, intent, 3)
 
-      if (shouldHaveSynth) {
-        if (!synth) {
+      if (!strength.isZero()) {
+        if (synth) {
+          updateSynth()
+        } else {
           createSynth()
         }
-        updateSynth()
       } else if (synth) {
         destroySynth()
       }
@@ -193,11 +128,6 @@ content.audio.engine = (() => {
     },
   }
 })()
-
-engine.ready(() => {
-  content.movement.on('transition-normal', () => content.audio.engine.onNormal())
-  content.movement.on('transition-turbo', () => content.audio.engine.onTurbo())
-})
 
 engine.loop.on('frame', () => content.audio.engine.update())
 engine.state.on('reset', () => content.audio.engine.reset())

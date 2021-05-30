@@ -4,22 +4,12 @@ content.audio.engine = (() => {
     rootFrequency = engine.utility.midiToFrequency(33)
 
   let detune = 0,
+    position = engine.utility.vector3d.create(),
     strength = engine.utility.vector3d.create(),
     synth
 
   bus.gain.value = engine.utility.fromDb(-6.66)
   binaural.to(bus)
-
-  function calculateIntent() {
-    const rotate = engine.utility.vector3d.create({
-      y: -content.movement.getAngularThrust(),
-    }).scale(1/12)
-
-    const thrust = content.movement.getLateralThrust().inverse()
-
-    return thrust.add(rotate)
-      .scale(content.movement.isTurbo() ? 1 : 0.5)
-  }
 
   function calculateParameters() {
     const magnitude = strength.distance()
@@ -73,6 +63,7 @@ content.audio.engine = (() => {
     })
 
     binaural.from(synth.output)
+    binaural.update(position.normalize())
   }
 
   function destroySynth() {
@@ -82,6 +73,33 @@ content.audio.engine = (() => {
     engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, release)
     synth.stop(now + release)
     synth = null
+  }
+
+  function updateStrength() {
+    const angularThrust = content.movement.getAngularThrust(),
+      lateralThrust = content.movement.getLateralThrust(),
+      isTurbo = content.movement.isTurbo()
+
+    let intendedPosition = lateralThrust.inverse(),
+      intendedStrength = lateralThrust.scale(isTurbo ? 1 : 0.5)
+
+    if (angularThrust) {
+      intendedPosition = intendedPosition.isZero()
+        ? intendedPosition.add({
+            x: Math.cos(-angularThrust * Math.PI/4),
+            y: Math.sin(-angularThrust * Math.PI/4),
+          })
+        : intendedPosition.rotateEuler({yaw: angularThrust * Math.PI/4})
+
+      intendedStrength = intendedStrength.isZero()
+        ? intendedStrength.add({
+            x: Math.abs(angularThrust / 12),
+          })
+        : intendedStrength.scale(1 + Math.abs(angularThrust / 12))
+    }
+
+    position = content.utility.accelerate.vector(position, intendedPosition, 2)
+    strength = content.utility.accelerate.vector(strength, intendedStrength, 2)
   }
 
   function updateSynth() {
@@ -96,7 +114,7 @@ content.audio.engine = (() => {
     engine.audio.ramp.set(synth.param.detune, parameters.detune)
     engine.audio.ramp.set(synth.param.gain, parameters.gain)
 
-    binaural.update(strength.normalize())
+    binaural.update(position.normalize())
   }
 
   return {
@@ -105,14 +123,13 @@ content.audio.engine = (() => {
         destroySynth()
       }
 
+      position = engine.utility.vector3d.create()
       strength = engine.utility.vector3d.create()
 
       return this
     },
     update: function () {
-      const intent = calculateIntent()
-
-      strength = content.utility.accelerate.vector(strength, intent, 3)
+      updateStrength()
 
       if (!strength.isZero()) {
         if (synth) {

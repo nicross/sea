@@ -1,4 +1,16 @@
 # S.E.A. changelog
+## v1.4.2
+- Audio
+  - Reduced default compass volume by half
+  - Reworked engine sound to be more responsive to input
+- Graphics
+  - Adjusted splash screens to show off new star effects
+  - Increased default draw distance to maximum value
+- Movement
+  - Allowed strafing on surface
+- Miscellaneous
+  - Prevented haptics while game is paused
+
 ## v1.4.1
 - Audio
   - Added binaural processing to splash cue

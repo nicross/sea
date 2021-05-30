@@ -2,14 +2,14 @@ app.settings = (() => {
   const settings = {
     compassVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -15, rawValue, 130000000)),
-      default: 1,
+      default: 0.5,
       update: (computedValue) => {
         content.audio.compass.setGain(computedValue)
       },
     },
     drawDistance: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
-      default: engine.utility.scale(500, 50, 1000, 0, 1),
+      default: 1,
       update: () => {
         app.canvas.forceResize()
       },

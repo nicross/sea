@@ -45,6 +45,10 @@ app.controls.haptic = (() => {
     getActuators,
     isActive,
     trigger: function (...args) {
+      if (engine.loop.isPaused()) {
+        return this
+      }
+
       if (isActive()) {
         trigger(...args)
       }

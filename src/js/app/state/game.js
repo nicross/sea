@@ -108,7 +108,7 @@ app.state.game.on('enter-none', () => {
       }),
       x: 0,
       y: 0,
-      z: -1,
+      z: -engine.const.zero,
     },
     seed: Math.random(),
     time: {

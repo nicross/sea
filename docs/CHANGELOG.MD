@@ -6,6 +6,7 @@
 - Graphics
   - Adjusted splash screens to show off new star effects
   - Increased default draw distance to maximum value
+  - Prevented periodic GPU crashes when motion blur enabled
 - Movement
   - Allowed strafing on surface
 - Miscellaneous

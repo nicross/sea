@@ -1,9 +1,10 @@
 app.canvas.blur = (() => {
-  const canvas = document.createElement('canvas'),
-    context = canvas.getContext('2d'),
-    main = app.canvas
+  const main = app.canvas
 
-  let empty,
+  let canvas = document.createElement('canvas'),
+    context = canvas.getContext('2d'),
+    empty,
+    previousCanvas,
     touched
 
   engine.ready(() => {
@@ -63,6 +64,19 @@ app.canvas.blur = (() => {
     return false
   }
 
+  function swapCanvas() {
+    // XXX: Prevents periodic GPU crashes when same canvas is reused for context.createPattern() each frame
+    // Not sure why this problem exists or how this fixes it
+
+    previousCanvas = canvas
+
+    canvas = document.createElement('canvas')
+    canvas.height = previousCanvas.height
+    canvas.width = previousCanvas.width
+
+    context = canvas.getContext('2d')
+  }
+
   function update() {
     if (!shouldUpdate()) {
       clear()
@@ -72,8 +86,9 @@ app.canvas.blur = (() => {
     const height = main.height(),
       width = main.width()
 
-    context.fillStyle = context.createPattern(canvas, 'no-repeat')
-    clear()
+    swapCanvas()
+
+    context.fillStyle = context.createPattern(previousCanvas, 'no-repeat')
     context.globalAlpha = app.settings.computed.graphicsMotionBlur
     context.fillRect(0, 0, width, height)
     context.globalAlpha = 1

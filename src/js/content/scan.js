@@ -1,13 +1,14 @@
 content.scan = (() => {
   const maxDistance = 50,
     pubsub = engine.utility.pubsub.create(),
-    stepDistance = 1/4,
     unit2 = Math.sqrt(2) / 2,
     unit3 = Math.sqrt(3) / 3
 
   let isCooldown = false
 
   function doRaytrace(position, direction) {
+    const stepDistance = content.terrain.voxels.granularity()
+
     let {
       x: dx,
       y: dy,
@@ -24,7 +25,7 @@ content.scan = (() => {
       y += dy
       z += dz
       d += stepDistance
-      isSolid = content.terrain.isSolid(x, y, z)
+      isSolid = content.terrain.voxels.get({x, y, z}).isSolid
     } while (!isSolid && d < maxDistance)
 
     return {
@@ -100,9 +101,9 @@ content.scan = (() => {
   }
 
   return engine.utility.pubsub.decorate({
-    benchmark: function () {
+    benchmark: async function () {
       const start = performance.now()
-      this.trigger()
+      await this.triggerForward()
       return performance.now() - start
     },
     isCooldown: () => isCooldown,

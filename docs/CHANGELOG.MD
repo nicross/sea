@@ -26,6 +26,11 @@
         <li>Improved underwater collision detection memory usage</li>
       </ul>
     </li>
+    <li>Scanning
+      <ul>
+        <li>Voxelized scan collisions</li>
+      </ul>
+    </li>
   </ul>
 </details>
 

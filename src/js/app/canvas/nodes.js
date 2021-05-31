@@ -100,23 +100,18 @@ app.canvas.nodes = (() => {
     })
   }
 
-  /*
-     XXX: See git history at this line.
-          Using 4D noise here was an artistic choice.
-          Changing it for performance not a light decision.
-     TODO: Look into simples or other more performant noise for this.
-   */
   function getNodeHue({
     x = 0,
     y = 0,
     z = 0,
     t = content.time.value(),
   } = {}) {
-    const halfT = t / 2
+    // XXX: This used to be 4D noise prior to v1.2.2.
+    // TODO: Look into simplex or other more performant noise.
 
-    let value = nodeHue.value((x + halfT) / 10, (y + halfT) / 10, (z + halfT) / 10) * 2
-    value += engine.loop.time() * nodeHueRotateSpeed
-    value = engine.utility.wrap(value, 0, 1)
+    let value = nodeHue.value((x + t/59) / 25, (y + t/61) / 25, (z + t/2) / 25)
+    value += t * nodeHueRotateSpeed
+    value = engine.utility.wrap(value * 2, 0, 1)
 
     return engine.utility.lerp(0, 360, value)
   }

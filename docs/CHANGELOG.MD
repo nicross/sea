@@ -15,6 +15,11 @@
 <details markdown="1">
   <summary>Spoiler Warning</summary>
   <ul>
+    <li>Graphics
+      <ul>
+        <li>Adjusted underwater node coloring</li>
+      </ul>
+    </li>
     <li>Movement
       <ul>
         <li>Doubled normal underwater speed</li>

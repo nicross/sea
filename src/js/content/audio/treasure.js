@@ -182,7 +182,7 @@ content.audio.treasure = (() => {
       return this
     },
     unduck: function () {
-      const duration = content.const.scanCooldown/1000,
+      const duration = content.const.scanCooldown,
         now = engine.audio.time()
 
       output.gain.setValueAtTime(gain/32, now + duration/2)

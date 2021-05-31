@@ -129,7 +129,7 @@ content.scan = (() => {
 
       pubsub.emit('complete', results)
 
-      engine.utility.timing.promise(content.const.scanCooldown).then(() => {
+      engine.utility.timing.promise(content.const.scanCooldown * 1000).then(() => {
         isCooldown = false
         pubsub.emit('recharge', results)
       })
@@ -158,7 +158,7 @@ content.scan = (() => {
 
       pubsub.emit('complete', results)
 
-      engine.utility.timing.promise(content.const.scanCooldown).then(() => {
+      engine.utility.timing.promise(content.const.scanCooldown * 1000).then(() => {
         isCooldown = false
         pubsub.emit('recharge', results)
       })

@@ -11,7 +11,7 @@ content.const = {
   normalAngularDeceleration: 2 * Math.PI,
   normalDeceleration: 10,
   propLimit: 30,
-  scanCooldown: 2 * 1000,
+  scanCooldown: 2.25,
   surfaceNormalAcceleration: 5,
   surfaceNormalMaxVelocity: 10,
   surfaceTurboAcceleration: 10,

@@ -41,8 +41,8 @@ content.audio.scan = (() => {
 
     const now = engine.audio.time()
 
-    const attack = now + (content.const.scanCooldown / 1000) - 1/32,
-      release = now + (content.const.scanCooldown / 1000)
+    const attack = now + content.const.scanCooldown - 1/32,
+      release = now + content.const.scanCooldown
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.linearRampToValueAtTime(1/32, attack)
@@ -61,11 +61,16 @@ content.audio.scan = (() => {
   }
 
   function render(scan) {
+    const delay = 0.5,
+      duration = content.const.scanCooldown - delay - 0.5,
+      now = engine.audio.time(),
+      offset = duration/5
+
     // up
     renderGrain({
       note: 89,
       value: scan.up,
-      when: engine.audio.time(0.5),
+      when: now + delay,
     })
 
     // up
@@ -77,7 +82,7 @@ content.audio.scan = (() => {
       scan.rightUp,
     ], {
       octave: 1,
-      when: engine.audio.time(0.75),
+      when: now + delay + offset,
     })
 
     // level
@@ -89,7 +94,7 @@ content.audio.scan = (() => {
       scan.right,
     ], {
       octave: 0,
-      when: engine.audio.time(1),
+      when: now + delay + (2 * offset),
     })
 
     // down
@@ -101,14 +106,14 @@ content.audio.scan = (() => {
       scan.rightDown,
     ], {
       octave: -1,
-      when: engine.audio.time(1.25),
+      when: now + delay + (3 * offset),
     })
 
     // down
     renderGrain({
       note: 45,
       scan: scan.down,
-      when: engine.audio.time(1.5),
+      when: now + delay + (4 * offset),
     })
   }
 

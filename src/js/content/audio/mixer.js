@@ -46,7 +46,7 @@ content.audio.mixer = (() => {
     createBus,
     createBypass,
     onScanComplete: function () {
-      const duration = content.const.scanCooldown/1000,
+      const duration = content.const.scanCooldown,
         now = engine.audio.time()
 
       bus.gain.setValueAtTime(1/64, now + duration/2)

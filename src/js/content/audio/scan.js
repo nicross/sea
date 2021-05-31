@@ -1,7 +1,5 @@
 content.audio.scan = (() => {
-  const bus = content.audio.mixer.bus.misc.createBypass(),
-    context = engine.audio.context()
-
+  const bus = content.audio.mixer.bus.misc.createBypass()
   bus.gain.value = engine.utility.fromDb(-4.5)
 
   function honk(isForward = false) {
@@ -41,12 +39,12 @@ content.audio.scan = (() => {
 
     const now = engine.audio.time()
 
-    const attack = now + content.const.scanCooldown - 1/32,
+    const attack = now + content.const.scanCooldown/2,
       release = now + content.const.scanCooldown
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.linearRampToValueAtTime(1/32, attack)
-    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, release)
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, release)
 
     synth.param.mod.depth.setValueAtTime(0, now)
     synth.param.mod.depth.linearRampToValueAtTime(5, release)
@@ -61,15 +59,16 @@ content.audio.scan = (() => {
   }
 
   function render(scan) {
-    const delay = 0.5,
-      duration = content.const.scanCooldown - delay - 0.5,
+    const delay = 0.25,
+      duration = content.const.scanCooldown - delay - 0.25,
       now = engine.audio.time(),
-      offset = duration/5
+      offset = duration/20
 
     // up
     renderGrain({
-      note: 89,
-      value: scan.up,
+      note: 93,
+      scan: scan.up,
+      type: 'sawtooth',
       when: now + delay,
     })
 
@@ -82,7 +81,8 @@ content.audio.scan = (() => {
       scan.rightUp,
     ], {
       octave: 1,
-      when: now + delay + offset,
+      offset,
+      when: now + delay + (3 * offset),
     })
 
     // level
@@ -94,7 +94,8 @@ content.audio.scan = (() => {
       scan.right,
     ], {
       octave: 0,
-      when: now + delay + (2 * offset),
+      offset,
+      when: now + delay + (8 * offset),
     })
 
     // down
@@ -106,29 +107,37 @@ content.audio.scan = (() => {
       scan.rightDown,
     ], {
       octave: -1,
-      when: now + delay + (3 * offset),
+      offset,
+      when: now + delay + (13 * offset),
     })
 
     // down
     renderGrain({
       note: 45,
       scan: scan.down,
-      when: now + delay + (4 * offset),
+      type: 'sawtooth',
+      when: now + delay + (20 * offset),
     })
   }
 
   function renderGrain({
     note = 0,
     scan,
+    type = 'sine',
     when = 0,
   } = {}) {
     if (!scan || !scan.isSolid) {
       return
     }
 
+    const frequency = engine.utility.midiToFrequency(note)
+
     const synth = engine.audio.synth.createSimple({
-      frequency: engine.utility.midiToFrequency(note),
+      frequency,
+      type,
       when,
+    }).filtered({
+      frequency: frequency * (type == 'sawtooth' ? 3 : 2),
     })
 
     const relative = engine.utility.vector3d.create(scan)
@@ -136,50 +145,53 @@ content.audio.scan = (() => {
       .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
     const binaural = engine.audio.binaural.create({
-      ...relative,
+      ...relative.scale(0.5),
     }).from(synth).to(bus)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
     synth.param.gain.exponentialRampToValueAtTime(1, when + 1/32)
-    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.5)
+    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.25)
 
-    synth.stop(when + 0.5)
+    synth.stop(when + 0.25)
 
     const now = engine.audio.time()
-    setTimeout(() => binaural.destroy(), (when - now + 1) * 1000)
+    setTimeout(() => binaural.destroy(), (when - now + 0.5) * 1000)
   }
 
-  function renderGroup(group = [], {octave, when} = {}) {
+  function renderGroup(group = [], {octave, offset, when} = {}) {
     octave *= 12
 
     renderGrain({
-      note: 62 + octave,
+      note: 74 + octave,
       scan: group[0],
-      when,
+      when: when,
     })
 
     renderGrain({
-      note: 67 + octave,
+      note: 72 + octave,
       scan: group[1],
-      when,
+      type: 'triangle',
+      when: when + offset,
     })
 
     renderGrain({
       note: 69 + octave,
       scan: group[2],
-      when,
+      type: 'sawtooth',
+      when: when + (2 * offset),
     })
 
     renderGrain({
-      note: 64 + octave,
+      note: 67 + octave,
       scan: group[3],
-      when,
+      type: 'triangle',
+      when: when + (3 * offset),
     })
 
     renderGrain({
-      note: 60 + octave,
+      note: 65 + octave,
       scan: group[4],
-      when,
+      when: when + (4 * offset),
     })
   }
 

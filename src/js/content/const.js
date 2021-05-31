@@ -12,7 +12,7 @@ content.const = {
   normalDeceleration: 10,
   normalSpeedOfSound: 343,
   propLimit: 30,
-  scanCooldown: 2.25,
+  scanCooldown: 0.25 + 2.125 + 0.25,
   surfaceNormalAcceleration: 5,
   surfaceNormalMaxVelocity: 10,
   surfaceTurboAcceleration: 10,

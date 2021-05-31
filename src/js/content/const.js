@@ -10,6 +10,7 @@ content.const = {
   midnightZoneMax: -1250,
   normalAngularDeceleration: 2 * Math.PI,
   normalDeceleration: 10,
+  normalSpeedOfSound: 343,
   propLimit: 30,
   scanCooldown: 2.25,
   surfaceNormalAcceleration: 5,

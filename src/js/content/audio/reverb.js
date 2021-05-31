@@ -35,18 +35,25 @@ content.audio.reverb = (() => {
   })
 
   machine.on('enter-cave', () => {
+    engine.const.speedOfSound = content.const.underwaterSpeedOfSound
     gain = engine.utility.fromDb(-3)
+
     engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.medium())
   })
 
   machine.on('enter-surface', () => {
+    engine.const.speedOfSound = content.const.normalSpeedOfSound
     gain = engine.const.zeroGain
+
     engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
+    engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
   })
 
   machine.on('enter-underwater', () => {
+    engine.const.speedOfSound = content.const.underwaterSpeedOfSound
     gain = engine.utility.fromDb(-3)
+
     engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
   })

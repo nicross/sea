@@ -15,12 +15,6 @@
 <details markdown="1">
   <summary>Spoiler Warning</summary>
   <ul>
-    <li>Audio
-      <ul>
-        <li>Added binaural processing to scan results</li>
-        <li>Attenuated reverb while scanning</li>
-      </ul>
-    </li>
     <li>Graphics
       <ul>
         <li>Adjusted underwater node coloring</li>
@@ -34,7 +28,14 @@
     </li>
     <li>Scanning
       <ul>
+        <li>Added binaural processing to scan results</li>
+        <li>Attenuated reverb while scanning</li>
         <li>Voxelized scan collisions</li>
+      </ul>
+    </li>
+    <li>Simulation
+      <ul>
+        <li>Simulated speed of sound of current medium</li>
       </ul>
     </li>
   </ul>

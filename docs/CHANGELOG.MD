@@ -12,6 +12,17 @@
 - Miscellaneous
   - Prevented haptics while game is paused
 
+<details markdown="1">
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Movement
+      <ul>
+        <li>Doubled normal underwater speed</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
 ## v1.4.1
 - Audio
   - Added binaural processing to splash cue

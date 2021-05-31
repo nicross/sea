@@ -1,6 +1,7 @@
 // Manages memory of ephemeral noise by resetting them on fixed time intervals
 content.utility.ephemeralNoise = (() => {
-  const noises = []
+  const interval = 60,
+    noises = []
 
   let timer
 
@@ -22,7 +23,7 @@ content.utility.ephemeralNoise = (() => {
   }
 
   function resetTimer() {
-    timer = content.const.ephemeralNoiseTimer
+    timer = interval
   }
 
   return {
@@ -42,20 +43,15 @@ content.utility.ephemeralNoise = (() => {
       return this
     },
     reset: function () {
+      resetManaged()
       resetTimer()
-
-      for (const noise of noises) {
-        noise.reset()
-      }
-
       return this
     },
     update: function (delta) {
       timer -= delta
 
       if (timer <= 0) {
-        resetManaged()
-        resetTimer()
+        this.reset()
       }
 
       return this

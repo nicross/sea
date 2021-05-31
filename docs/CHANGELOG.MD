@@ -23,6 +23,7 @@
     <li>Movement
       <ul>
         <li>Doubled normal underwater speed</li>
+        <li>Improved underwater collision detection memory usage</li>
       </ul>
     </li>
   </ul>

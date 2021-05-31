@@ -4,6 +4,8 @@ content.terrain.collision = (() => {
     radius = 0.5,
     tree = engine.utility.octree.create()
 
+  content.utility.ephemeralTree.manage(tree)
+
   // Cache deltas to check
   for (let z = -radius; z <= radius; z += granularity) {
     for (let y = -radius; y <= radius; y += granularity) {
@@ -65,11 +67,5 @@ content.terrain.collision = (() => {
 
       return false
     },
-    reset: function () {
-      tree.clear()
-      return this
-    },
   }
 })()
-
-engine.state.on('reset', () => content.terrain.collision.reset())

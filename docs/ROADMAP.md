@@ -3,10 +3,6 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ### v1.5.0 - Deep update
-- Underwater terrain voxelization
-  - Object with 3D coordinates, boolean solid property, and eventually other attributes
-  - Generate and cache values around player as needed
-  - Fine and coarse intervals for different purposes
 - Terrain streaming
 - Collisions
   - Calculate terrain normal on collision for better reflections

@@ -49,13 +49,13 @@ content.audio.mixer = (() => {
       const duration = content.const.scanCooldown/1000,
         now = engine.audio.time()
 
-      bus.gain.setValueAtTime(1/32, now + duration/2)
+      bus.gain.setValueAtTime(1/64, now + duration/2)
       bus.gain.exponentialRampToValueAtTime(1, now + duration)
 
       return this
     },
     onScanTrigger: function () {
-      engine.audio.ramp.exponential(bus.gain, 1/32, 1/2)
+      engine.audio.ramp.exponential(bus.gain, 1/64, 1/2)
       return this
     },
   }

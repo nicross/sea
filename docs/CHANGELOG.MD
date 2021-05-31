@@ -15,6 +15,11 @@
 <details markdown="1">
   <summary>Spoiler Warning</summary>
   <ul>
+    <li>Audio
+      <ul>
+        <li>Attenuated reverb while scanning</li>
+      </ul>
+    </li>
     <li>Graphics
       <ul>
         <li>Adjusted underwater node coloring</li>

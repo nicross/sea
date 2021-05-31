@@ -1,5 +1,6 @@
 content.audio.reverb = (() => {
-  const send = engine.audio.mixer.send.reverb.create()
+  const reverbGain = engine.audio.mixer.auxiliary.reverb.param.gain,
+    send = engine.audio.mixer.send.reverb.create()
 
   const machine = engine.utility.machine.create({
     state: 'none',
@@ -26,22 +27,27 @@ content.audio.reverb = (() => {
     },
   })
 
+  let gain = engine.const.zeroGain
+
   send.update({
     x: 0,
     y: 0,
   })
 
   machine.on('enter-cave', () => {
-    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.utility.fromDb(-3), 0.125)
+    gain = engine.utility.fromDb(-3)
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.medium())
   })
 
   machine.on('enter-surface', () => {
-    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.const.zeroGain, 0.125)
+    gain = engine.const.zeroGain
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
   })
 
   machine.on('enter-underwater', () => {
-    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, engine.utility.fromDb(-3), 0.125)
+    gain = engine.utility.fromDb(-3)
+    engine.audio.ramp.linear(engine.audio.mixer.auxiliary.reverb.param.gain, gain, 0.125)
     engine.audio.mixer.auxiliary.reverb.setImpulse(engine.audio.buffer.impulse.large())
   })
 
@@ -64,6 +70,19 @@ content.audio.reverb = (() => {
       return this
     },
     is: (state) => machine.is(state),
+    onScanComplete: function () {
+      const duration = 2,
+        now = engine.audio.time()
+
+      reverbGain.setValueAtTime(gain/4, now + duration/2)
+      reverbGain.exponentialRampToValueAtTime(gain, now + duration)
+
+      return this
+    },
+    onScanTrigger: function () {
+      engine.audio.ramp.exponential(reverbGain, gain/4, 1)
+      return this
+    },
     update: function () {
       const {x, y, z} = engine.position.getVector()
 
@@ -103,3 +122,8 @@ engine.loop.on('frame', ({frame, paused}) => {
 })
 
 engine.state.on('import', () => content.audio.reverb.import())
+
+engine.ready(() => {
+  content.scan.on('complete', () => content.audio.reverb.onScanComplete())
+  content.scan.on('trigger', () => content.audio.reverb.onScanTrigger())
+})

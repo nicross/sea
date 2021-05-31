@@ -3,23 +3,7 @@ This document outlines upcoming changes for post-jam releases.
 
 ## Planned versions
 ### v1.5.0 - Deep update
-- Terrain streaming
-- Collisions
-  - Calculate terrain normal on collision for better reflections
-- Scanning
-  - Coarse intervaled voxels
-  - Find all edge voxels (solid with any non-solid neighbors)
-  - Find all void voxels (no solid neighbors)
-  - Return as sets sorted by distance
-  - Audio cue
-    - Edges are sonified into grains sequenced by distance
-    - Frequencies indicate relative elevation
-    - All edges become nodes in exploration graph
-  - Treasure spawning
-    - Sort void voxels by distance and pick random
-- Miscellaneous E.X.O. lessons
-  - Physics improvements
-  - Surface scanning
+- ???
 
 ### v1.6.0 - Life update
 - Aquatic life

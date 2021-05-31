@@ -24,6 +24,7 @@
       <ul>
         <li>Doubled normal underwater speed</li>
         <li>Improved underwater collision detection memory usage</li>
+        <li>Remembered collisions as exploration nodes</li>
       </ul>
     </li>
     <li>Scanning

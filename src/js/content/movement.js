@@ -169,9 +169,11 @@ content.movement = (() => {
       return false
     }
 
-    if (content.terrain.collision.check(position)) {
+    const currentVoxel = content.terrain.collision.check(position)
+
+    if (currentVoxel) {
       engine.position.setVector(lastKnownGoodUnderwaterPosition)
-      return true
+      return currentVoxel
     } else {
       lastKnownGoodUnderwaterPosition = position
     }
@@ -310,7 +312,9 @@ content.movement = (() => {
       return
     }
 
-    if (!checkUnderwaterCollision()) {
+    const voxel = checkUnderwaterCollision()
+
+    if (!voxel) {
       return
     }
 
@@ -321,6 +325,7 @@ content.movement = (() => {
     return pubsub.emit('underwater-collision', {
       normalized: velocity.normalize().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       ratio: engine.utility.clamp(velocity.distance() / content.const.underwaterTurboMaxVelocity, 0, 1),
+      voxel,
     })
   }
 

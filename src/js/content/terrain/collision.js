@@ -31,7 +31,7 @@ content.terrain.collision = (() => {
           voxel = content.terrain.voxels.get(point)
 
         if (voxel.isSolid) {
-          return true
+          return {...voxel}
         }
       }
 

@@ -25,9 +25,16 @@ content.exploration = (() => {
       values.map(addNode)
       return this
     },
-    onScan: function (scan) {
-      const nodes = []
+    onCollision: function (voxel) {
+      const checkNearby = tree.find(voxel, content.const.explorationNodeRadius)
 
+      if (!checkNearby) {
+        addNode(voxel)
+      }
+
+      return this
+    },
+    onScan: function (scan) {
       for (const result of Object.values(scan)) {
         if (result && !result.isSolid) {
           continue
@@ -39,13 +46,7 @@ content.exploration = (() => {
           continue
         }
 
-        nodes.push(
-          addNode({
-            x: result.x,
-            y: result.y,
-            z: result.z,
-          })
-        )
+        addNode(result)
       }
 
       return this
@@ -60,6 +61,7 @@ content.exploration = (() => {
 })()
 
 engine.ready(() => {
+  content.movement.on('underwater-collision', ({voxel}) => content.exploration.onCollision(voxel))
   content.scan.on('recharge', (scan) => content.exploration.onScan(scan))
 })
 

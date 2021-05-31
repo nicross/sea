@@ -17,6 +17,7 @@
   <ul>
     <li>Audio
       <ul>
+        <li>Added binaural processing to scan results</li>
         <li>Attenuated reverb while scanning</li>
       </ul>
     </li>

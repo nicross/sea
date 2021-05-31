@@ -64,7 +64,6 @@ content.audio.scan = (() => {
     // up
     renderGrain({
       note: 89,
-      pan: 0,
       value: scan.up,
       when: engine.audio.time(0.5),
     })
@@ -108,7 +107,6 @@ content.audio.scan = (() => {
     // down
     renderGrain({
       note: 45,
-      pan: 0,
       scan: scan.down,
       when: engine.audio.time(1.5),
     })
@@ -116,7 +114,6 @@ content.audio.scan = (() => {
 
   function renderGrain({
     note = 0,
-    pan = 0,
     scan,
     when = 0,
   } = {}) {
@@ -124,24 +121,27 @@ content.audio.scan = (() => {
       return
     }
 
-    const gain = engine.utility.distanceToPower(scan.distance ** 0.5),
-      panner = context.createStereoPanner()
-
-    when += scan.distance / content.const.underwaterSpeedOfSound
-
     const synth = engine.audio.synth.createSimple({
       frequency: engine.utility.midiToFrequency(note),
       when,
-    }).connect(panner)
+    })
 
-    panner.pan.value = pan
-    panner.connect(bus)
+    const relative = engine.utility.vector3d.create(scan)
+      .subtract(engine.position.getVector())
+      .rotateQuaternion(engine.position.getQuaternion().conjugate())
+
+    const binaural = engine.audio.binaural.create({
+      ...relative,
+    }).from(synth).to(bus)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
-    synth.param.gain.exponentialRampToValueAtTime(gain, when + 1/32)
+    synth.param.gain.exponentialRampToValueAtTime(1, when + 1/32)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.5)
 
     synth.stop(when + 0.5)
+
+    const now = engine.audio.time()
+    setTimeout(() => binaural.destroy(), (when - now + 1) * 1000)
   }
 
   function renderGroup(group = [], {octave, when} = {}) {
@@ -149,35 +149,30 @@ content.audio.scan = (() => {
 
     renderGrain({
       note: 62 + octave,
-      pan: -1,
       scan: group[0],
       when,
     })
 
     renderGrain({
       note: 67 + octave,
-      pan: -0.5,
       scan: group[1],
       when,
     })
 
     renderGrain({
       note: 69 + octave,
-      pan: 0,
       scan: group[2],
       when,
     })
 
     renderGrain({
       note: 64 + octave,
-      pan: 0.5,
       scan: group[3],
       when,
     })
 
     renderGrain({
       note: 60 + octave,
-      pan: 1,
       scan: group[4],
       when,
     })

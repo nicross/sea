@@ -40,7 +40,7 @@ content.audio.engine = (() => {
   }
 
   function createSynth() {
-    detune = engine.utility.random.float(-12.5, 12.5)
+    detune = engine.utility.random.float(-5, 5)
 
     const parameters = calculateParameters()
 

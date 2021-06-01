@@ -90,10 +90,11 @@ app.canvas.nodes = (() => {
 
     // Draw nodes
     nodes.forEach((node) => {
-      const distanceRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0)
+      const alphaRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0),
+        radiusRatio = engine.utility.scale(node.z, 0, 1000, 1, 0) // max drawDistance
 
-      const alpha = distanceRatio ** 2,
-        radius = engine.utility.lerpExp(1, nodeRadius, distanceRatio, 64)
+      const alpha = alphaRatio ** 2,
+        radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 64)
 
       context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`
       context.fillRect(node.x - radius, node.y - radius, radius * 2, radius * 2)

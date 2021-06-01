@@ -2,7 +2,7 @@
 ## v1.4.2
 - Audio
   - Reduced default compass volume by half
-  - Reworked engine sound to be more responsive to input
+  - Reworked engine cues to be more responsive to input
 - Graphics
   - Adjusted splash screens to show off new star effects
   - Draw nodes consistently across draw distances
@@ -11,8 +11,8 @@
   - Prevented periodic GPU crashes when motion blur enabled
 - Movement
   - Allowed strafing on surface
-- Miscellaneous
   - Prevented haptics while game is paused
+  - Updated desktop builds to Electron 13 (Chromium 91)
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>
@@ -170,7 +170,7 @@
   - Press <kbd>Alt</kbd>+<kbd>4</kbd> or <kbd>T</kbd> to access solar time with a screen reader
   - Reduced screen transition times
 - Miscellaneous
-  - Updated desktop builds to Electron v12.0.0 (Chromium 89)
+  - Updated desktop builds to Electron 12 (Chromium 89)
 
 <details markdown="1">
   <summary>Spoiler Warning</summary>

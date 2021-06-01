@@ -44,13 +44,13 @@ app.controls.haptic = (() => {
   return {
     getActuators,
     isActive,
-    trigger: function (...args) {
-      if (engine.loop.isPaused()) {
+    trigger: function (options = {}, force = false) {
+      if (!force && engine.loop.isPaused()) {
         return this
       }
 
       if (isActive()) {
-        trigger(...args)
+        trigger(options)
       }
 
       return this
@@ -114,7 +114,7 @@ content.scan.on('trigger', () => {
     startDelay: 0,
     strongMagnitude: 1,
     weakMagnitude: 1,
-  })
+  }, true)
 })
 
 content.scan.on('recharge', () => {

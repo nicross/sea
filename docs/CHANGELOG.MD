@@ -5,6 +5,7 @@
   - Reworked engine sound to be more responsive to input
 - Graphics
   - Adjusted splash screens to show off new star effects
+  - Fixed drawing on resize when graphics disabled
   - Increased default draw distance to maximum value
   - Prevented periodic GPU crashes when motion blur enabled
 - Movement

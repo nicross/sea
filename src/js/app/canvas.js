@@ -69,8 +69,10 @@ app.canvas = (() => {
   function onResize() {
     recalculate()
     pubsub.emit('resize')
-    clear()
-    draw()
+
+    if (app.settings.computed.graphicsOn && document.visibilityState != 'hidden') {
+      draw()
+    }
   }
 
   function recalculate() {

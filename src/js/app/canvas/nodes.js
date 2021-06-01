@@ -2,6 +2,7 @@ app.canvas.nodes = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     main = app.canvas,
+    maxObjects = 1000,
     nodeHue = engine.utility.perlin3d.create('exploration', 'node', 'hue'),
     nodeHueRotateSpeed = 1 / 120
 
@@ -88,12 +89,15 @@ app.canvas.nodes = (() => {
     // Sort back-to-front
     nodes.sort((a, b) => b.z - a.z)
 
+    // Limit to maximum object limit
+    const length = Math.min(nodes.length, maxObjects)
+
     // Draw nodes
-    nodes.forEach((node) => {
+    nodes.slice(-length).forEach((node, index) => {
       const alphaRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0),
         radiusRatio = engine.utility.scale(node.z, 0, 1000, 1, 0) // max drawDistance
 
-      const alpha = alphaRatio ** 2,
+      const alpha = (alphaRatio ** 2) * ((index / length) ** 0.5),
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 64)
 
       context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`

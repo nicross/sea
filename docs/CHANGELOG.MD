@@ -19,7 +19,8 @@
   <ul>
     <li>Graphics
       <ul>
-        <li>Adjusted underwater node coloring</li>
+        <li>Adjusted exploration node coloring</li>
+        <li>Limited maximum number of exploration nodes drawn</li>
       </ul>
     </li>
     <li>Movement

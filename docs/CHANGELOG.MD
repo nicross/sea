@@ -34,6 +34,7 @@
       <ul>
         <li>Added binaural processing to scan results</li>
         <li>Attenuated reverb while scanning</li>
+        <li>Improved load times for games with many scans</li>
         <li>Reworked scan results cue for directional clarity</li>
         <li>Voxelized scan collisions</li>
       </ul>

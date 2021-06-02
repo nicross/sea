@@ -52,15 +52,15 @@ app.canvas.nodes = (() => {
 
       const hangle = Math.atan2(relative.y, relative.x)
 
-      // Filter out nodes beyond horizontal field of view
-      if (Math.abs(hangle) > hfov / 2) {
+      // Filter out nodes beyond horizontal field of view (with leeway)
+      if (Math.abs(hangle) > hfov / 1.95) {
         return nodes
       }
 
       const vangle = Math.atan2(relative.z, relative.x)
 
-      // Filter out nodes beyond vertical field of view
-      if (Math.abs(vangle) > vfov / 2) {
+      // Filter out nodes beyond vertical field of view (with leeway)
+      if (Math.abs(vangle) > vfov / 1.95) {
         return nodes
       }
 

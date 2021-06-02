@@ -28,7 +28,6 @@ This document outlines upcoming changes for post-jam releases.
 - ???
 
 ## Known issues
-- Improve mouse look, perhaps independent from craft physics
 - Treasure causes unstable BiquadFilterNode (audio recovers after approximately 4 seconds)
 
 ## Wishlist

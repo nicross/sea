@@ -1,5 +1,10 @@
 app.controls.mouse = (() => {
-  let gameScreen
+  let gameScreen,
+    rotate = 0
+
+  // XXX: syngen hack
+  let previousMoveX = 0,
+    previousWheelY = 0
 
   engine.ready(() => {
     gameScreen = document.querySelector('.a-game')
@@ -43,6 +48,13 @@ app.controls.mouse = (() => {
     if (isPointerLock()) {
       exitPointerLock()
     }
+
+    rotate = 0
+
+    // XXX: syngen hack
+    engine.input.mouse.reset()
+    previousMoveX = 0
+    previousWheelY = 0
   }
 
   function onPointerlockchange() {
@@ -89,7 +101,19 @@ app.controls.mouse = (() => {
       }
 
       if (mouse.moveX) {
-        state.rotate = engine.utility.scale(mouse.moveX, -window.innerWidth, window.innerWidth, 1, -1) * app.settings.computed.mouseSensitivity
+        // XXX: syngen hack
+        const deltaMoveX = mouse.moveX - previousMoveX
+        previousMoveX = mouse.moveX
+
+        // Accelerate and clamp rotation
+        rotate += engine.utility.scale(deltaMoveX, -window.innerWidth, window.innerWidth, 1, -1) * app.settings.computed.mouseSensitivity
+        rotate = engine.utility.clamp(rotate, -1, 1)
+      }
+
+      if (rotate) {
+        // Apply and decelerate rotation to zero
+        state.rotate = rotate
+        rotate = content.utility.accelerate.value(rotate, 0, 32)
       }
 
       return state
@@ -98,9 +122,13 @@ app.controls.mouse = (() => {
       const mouse = engine.input.mouse.get(),
         state = {}
 
-      if (mouse.wheelY < 0) {
+      // XXX: syngen hack
+      const deltaWheelY = mouse.wheelY - previousWheelY
+      previousWheelY = mouse.wheelY
+
+      if (deltaWheelY < 0) {
         state.scanForward = true
-      } else if (mouse.wheelY > 0) {
+      } else if (deltaWheelY > 0) {
         state.scanReverse = true
       }
 
@@ -112,3 +140,7 @@ app.controls.mouse = (() => {
     },
   }
 })()
+
+// XXX: Hack to prevent race condition with setTimeout() call within syngen.input.mouse.update()
+// TODO: Fix in syngen
+engine.input.mouse.update = () => {}

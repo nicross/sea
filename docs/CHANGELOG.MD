@@ -7,6 +7,7 @@
   - Adjusted splash screens to show off new star effects
   - Draw nodes consistently across draw distances
   - Fixed drawing on resize when graphics disabled
+  - Improved mouse turning and sensitivity values
   - Increased default draw distance to maximum value
   - Increased film grain refresh rate
   - Prevented periodic GPU crashes when motion blur enabled

@@ -137,7 +137,7 @@ content.audio.scan = (() => {
       type,
       when,
     }).filtered({
-      frequency: frequency * (type == 'sawtooth' ? 3 : 2),
+      frequency: frequency * (type == 'sawtooth' ? 4 : 2),
     })
 
     const relative = engine.utility.vector3d.create(scan)

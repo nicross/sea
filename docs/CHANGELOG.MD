@@ -7,15 +7,16 @@
   - Adjusted splash screens to show off new star effects
   - Draw nodes consistently across draw distances
   - Fixed drawing on resize when graphics disabled
-  - Improved mouse turning and sensitivity values
   - Increased default draw distance to maximum value
   - Increased film grain refresh rate
-  - Prevented periodic GPU crashes when motion blur enabled
+  - Prevented periodic GPU crashes when tracers enabled
 - Movement
   - Allowed strafing on surface
+  - Improved mouse turning and sensitivity values
   - Prevented haptics while game is paused
 - User interface
   - Added confirmation screen before starting a new game
+  - Renamed motion blur setting to tracers
 - Miscellaneous
   - Updated desktop builds to Electron 13 (Chromium 91)
 

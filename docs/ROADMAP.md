@@ -122,3 +122,4 @@ This document outlines upcoming changes for post-jam releases.
 - Refactor app state management (e.g. how audio fades, scenes load) for clarity
 - Refactor controls handling to be more reusable across screens
 - Refactor fast travel as content system
+- Rename motion blur to tracers internally

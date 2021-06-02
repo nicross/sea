@@ -1,0 +1,6 @@
+.a-newGame {}
+  .a-newGame--warning {
+    font-size: 1.5em;
+    margin: 0.5rem 0 1rem 0;
+    text-shadow: 0 0 calc(0.5em / 3) rgba(96, 96, 255, 0.5); /* Lifted from .c-screen--title */
+  }

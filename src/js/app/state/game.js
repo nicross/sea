@@ -40,7 +40,7 @@ engine.ready(() => {
   app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))
   app.state.screen.on('before-gameMenu-resume', () => app.state.game.dispatch('resume'))
   app.state.screen.on('before-mainMenu-continue', () => app.state.game.dispatch('load'))
-  app.state.screen.on('before-mainMenu-newGame', () => app.state.game.dispatch('new'))
+  app.state.screen.on('before-newGame-new', () => app.state.game.dispatch('new'))
 
   app.state.game.dispatch('activate')
 })

@@ -91,7 +91,7 @@ app.state.screen = engine.utility.machine.create({
         this.change('misc')
       },
       newGame: function () {
-        this.change('game')
+        this.change('newGame')
       },
       quit: () => {
         ElectronApi.quit()
@@ -113,6 +113,14 @@ app.state.screen = engine.utility.machine.create({
       },
       stats: function () {
         this.change('stats')
+      },
+    },
+    newGame: {
+      back: function () {
+        this.change('mainMenu')
+      },
+      new: function () {
+        this.change('game')
       },
     },
     none: {
@@ -193,6 +201,7 @@ app.state.screen.on('enter', (e) => {
     graphics: '.a-app--graphics',
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
+    newGame: '.a-app--newGame',
     settings: '.a-app--settings',
     splash: '.a-app--splash',
     stats: '.a-app--stats',

@@ -12,6 +12,9 @@
 - Movement
   - Allowed strafing on surface
   - Prevented haptics while game is paused
+- User interface
+  - Added confirmation screen before starting a new game
+- Miscellaneous
   - Updated desktop builds to Electron 13 (Chromium 91)
 
 <details markdown="1">

@@ -8,6 +8,7 @@
   - Draw nodes consistently across draw distances
   - Fixed drawing on resize when graphics disabled
   - Increased default draw distance to maximum value
+  - Increased film grain refresh rate
   - Prevented periodic GPU crashes when motion blur enabled
 - Movement
   - Allowed strafing on surface

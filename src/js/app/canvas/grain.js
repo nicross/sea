@@ -4,9 +4,9 @@ app.canvas.grain = (() => {
     main = app.canvas,
     pattern = document.createElement('canvas'),
     patternContext = pattern.getContext('2d'),
-    period = 1/8,
+    period = 1/24,
     scale = 1,
-    size = 128,
+    size = 256,
     strength = 1/16 * 255
 
   const patternData = patternContext.createImageData(size, size),

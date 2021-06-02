@@ -7,7 +7,7 @@ app.canvas.grain = (() => {
     period = 1/24,
     scale = 1,
     size = 256,
-    strength = 1/16 * 255
+    strength = 1/14 * 255
 
   const patternData = patternContext.createImageData(size, size),
     patternDataLength = 4 * (size ** 2)
@@ -16,7 +16,6 @@ app.canvas.grain = (() => {
     surface: 0,
     sunlit: content.const.lightZone * 0.125,
     twilight: content.const.lightZone * 0.75,
-    midnightFade: content.const.lightZone * 0.9,
     midnight: content.const.lightZone,
   }
 
@@ -44,11 +43,9 @@ app.canvas.grain = (() => {
 
     let color = app.canvas.light.averageColor()
 
-    if (z <= zones.midnightFade) {
-      color.l *= engine.utility.scale(z, zones.midnightFade, zones.midnight, 1, 0)
+    if (z <= zones.twilight) {
+      color.l *= engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0)
     }
-
-    color.l **= 0.5
 
     if (engine.utility.between(z, zones.twilight, zones.midnight)) {
       const ratio = engine.utility.scale(z, zones.twilight, zones.midnight, 0, 1)

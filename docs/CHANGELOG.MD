@@ -24,6 +24,7 @@
     <li>Graphics
       <ul>
         <li>Adjusted exploration node coloring</li>
+        <li>Improved background color depth transitions</li>
         <li>Limited maximum number of exploration nodes drawn</li>
       </ul>
     </li>

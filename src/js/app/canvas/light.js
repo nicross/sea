@@ -116,11 +116,9 @@ app.canvas.light = (() => {
       return scheme[2]
     }
 
-    const color = z > zones.sunlit
+    return z > zones.sunlit
       ? app.utility.color.lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
       : app.utility.color.lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
-
-    return color
   }
 
   function toHsl({

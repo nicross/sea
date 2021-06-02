@@ -17,7 +17,7 @@ app.canvas.nodes = (() => {
     canvas.height = height
     canvas.width = width
 
-    nodeRadius = Math.max(1, (width / 1920) * 8)
+    nodeRadius = Math.max(1, (width / 1920) * 16)
 
     clear()
   })

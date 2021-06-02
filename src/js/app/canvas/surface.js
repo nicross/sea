@@ -20,7 +20,7 @@ app.canvas.surface = (() => {
     canvas.width = width
 
     drawDistance = Math.round(engine.utility.lerpExp(5, 35, app.settings.raw.drawDistance, 0.9275))
-    nodeRadius = Math.max(1, (width / 1920) * 6)
+    nodeRadius = Math.max(1, (width / 1920) * 8)
 
     clear()
   })

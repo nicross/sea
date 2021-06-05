@@ -300,7 +300,7 @@ content.movement = (() => {
 
     // Surface when at or above it, otherwise stick below it
     if (z >= content.surface.current()) {
-      if (controls.z > 0 || velocity.z > 0) {
+      if (controls.z >= 0) {
         return medium.dispatch('surface')
       }
 

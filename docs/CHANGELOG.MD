@@ -33,6 +33,7 @@
     </li>
     <li>Movement
       <ul>
+        <li>Allowed surfacing regardless of vertical velocity</li>
         <li>Doubled normal underwater speed</li>
         <li>Improved underwater collision detection memory usage</li>
         <li>Remembered collisions as exploration nodes</li>

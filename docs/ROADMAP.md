@@ -69,7 +69,6 @@ This document outlines upcoming changes for post-jam releases.
   <ul>
     <li>Aliens wanted to peacefully immigrate to Earth.</li>
     <li>Alien leaders established a secret base on Earth.</li>
-    <li>Convert UXO archetype to munitions, add Resistance side (more prevalent at lower depths) and more nouns.</li>
   </ul>
 </details>
 

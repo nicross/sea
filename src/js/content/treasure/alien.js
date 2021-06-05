@@ -4,10 +4,12 @@ content.treasures.register('alien', 2, (srand) => {
     'Alien Black Box',
     'Alien Computational Device',
     'Alien Communications Device',
+    'Alien Entertainment Device',
     'Alien Exoskeleton',
     'Alien Navigational Device',
     'Alien Propulsion Device',
     'Alien Translation Device',
+    'Alien Weapon',
     'Unknown Alien Technology',
   ]
 

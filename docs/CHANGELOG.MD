@@ -54,6 +54,7 @@
     <li>Treasure
       <ul>
         <li>Added musical instruments as possible junk</li>
+        <li>Expanded munitions with new adjectives and nouns</li>
       </ul>
     </li>
   </ul>

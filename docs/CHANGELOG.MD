@@ -19,6 +19,7 @@
   - Added confirmation screen before starting a new game
   - Renamed motion blur setting to tracers
 - Miscellaneous
+  - Updated documentation to reflect changes
   - Updated desktop builds to Electron 13 (Chromium 91)
 
 <details markdown="1">

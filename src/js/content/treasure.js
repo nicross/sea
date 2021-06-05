@@ -134,7 +134,10 @@ content.treasure = (() => {
       scan.reverseRightDown,
       scan.right,
     ].filter((trace) => {
-      return trace && trace.isSolid && (trace.distance > content.const.treasurePickupRadius * 2)
+      return trace
+        && trace.isSolid
+        && (trace.distance > content.const.treasurePickupRadius * 2)
+        && !spawnedThreed.has(scan.x, scan.y, scan.z)
     }).sort((a, b) => b.distance - a.distance)
 
     // Bias towards farther scans, e.g. to prevent automatic acquisition

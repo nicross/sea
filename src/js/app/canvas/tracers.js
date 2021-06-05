@@ -1,4 +1,4 @@
-app.canvas.blur = (() => {
+app.canvas.tracers = (() => {
   const main = app.canvas
 
   let canvas = document.createElement('canvas'),
@@ -89,7 +89,7 @@ app.canvas.blur = (() => {
     swapCanvas()
 
     context.fillStyle = context.createPattern(previousCanvas, 'no-repeat')
-    context.globalAlpha = app.settings.computed.graphicsMotionBlur
+    context.globalAlpha = app.settings.computed.graphicsTracers
     context.fillRect(0, 0, width, height)
     context.globalAlpha = 1
   }
@@ -103,7 +103,7 @@ app.canvas.blur = (() => {
       return this
     },
     prime: function () {
-      if (app.settings.computed.graphicsMotionBlur) {
+      if (app.settings.computed.graphicsTracers) {
         update()
       } else {
         clear()

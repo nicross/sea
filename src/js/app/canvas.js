@@ -43,13 +43,13 @@ app.canvas = (() => {
 
   function draw() {
     clear()
-    app.canvas.blur.prime()
+    app.canvas.tracers.prime()
     app.canvas.light.draw()
     app.canvas.stars.draw()
     app.canvas.celestials.draw()
     app.canvas.surface.draw()
     app.canvas.nodes.draw()
-    app.canvas.blur.draw()
+    app.canvas.tracers.draw()
     app.canvas.grain.draw()
     app.canvas.hud.draw()
   }

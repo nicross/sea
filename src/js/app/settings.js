@@ -51,7 +51,7 @@ app.settings = (() => {
         app.canvas.forceUpdate()
       },
     },
-    graphicsMotionBlur: {
+    graphicsTracers: {
       compute: (rawValue) => engine.utility.lerpExp(0, 9/10, rawValue, 0.848),
       default: 0,
       update: () => {

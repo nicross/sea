@@ -167,8 +167,8 @@ app.canvas.surface = (() => {
       clear()
       drawNodes()
 
-      // Draw to main canvas (motion blur channel), assume identical dimensions
-      main.blur.touch().context().drawImage(canvas, 0, 0)
+      // Draw to main canvas (tracers channel), assume identical dimensions
+      main.tracers.touch().context().drawImage(canvas, 0, 0)
 
       return this
     },

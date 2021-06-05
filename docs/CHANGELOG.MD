@@ -10,6 +10,7 @@
   - Increased default draw distance to maximum value
   - Increased film grain refresh rate
   - Prevented periodic GPU crashes when tracers enabled
+  - Rendered tracers for sun, moon, and stars
 - Movement
   - Allowed strafing on surface
   - Improved mouse turning and sensitivity values

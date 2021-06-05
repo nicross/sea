@@ -4,7 +4,6 @@ app.canvas.tracers = (() => {
   let canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     empty,
-    previousCanvas,
     touched
 
   engine.ready(() => {
@@ -68,13 +67,15 @@ app.canvas.tracers = (() => {
     // XXX: Prevents periodic GPU crashes when same canvas is reused for context.createPattern() each frame
     // Not sure why this problem exists or how this fixes it
 
-    previousCanvas = canvas
+    const previousCanvas = canvas
 
     canvas = document.createElement('canvas')
     canvas.height = previousCanvas.height
     canvas.width = previousCanvas.width
 
     context = canvas.getContext('2d')
+
+    return previousCanvas
   }
 
   function update() {
@@ -84,11 +85,10 @@ app.canvas.tracers = (() => {
     }
 
     const height = main.height(),
+      patternCanvas = swapCanvas(),
       width = main.width()
 
-    swapCanvas()
-
-    context.fillStyle = context.createPattern(previousCanvas, 'no-repeat')
+    context.fillStyle = context.createPattern(patternCanvas, 'no-repeat')
     context.globalAlpha = app.settings.computed.graphicsTracers
     context.fillRect(0, 0, width, height)
     context.globalAlpha = 1
@@ -96,7 +96,10 @@ app.canvas.tracers = (() => {
 
   return {
     canvas: () => canvas,
-    clear,
+    clear: function () {
+      clear()
+      return this
+    },
     context: () => context,
     draw: function () {
       main.context().drawImage(canvas, 0, 0)

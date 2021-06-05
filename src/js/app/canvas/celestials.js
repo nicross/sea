@@ -1,6 +1,8 @@
 app.canvas.celestials = (() => {
-  const canvas = document.createElement('canvas'),
-    context = canvas.getContext('2d'),
+  const canvasMain = document.createElement('canvas'),
+    canvasTracers = document.createElement('canvas'),
+    contextMain = canvasMain.getContext('2d'),
+    contextTracers = canvasTracers.getContext('2d'),
     horizonDistance = 5000,
     main = app.canvas
 
@@ -14,8 +16,11 @@ app.canvas.celestials = (() => {
       hfov = main.hfov(),
       width = main.width()
 
-    canvas.height = height
-    canvas.width = width
+    canvasMain.height = height
+    canvasMain.width = width
+
+    canvasTracers.height = height
+    canvasTracers.width = width
 
     minRadius = 0.125 * width / hfov / Math.PI
     maxRadius = minRadius * 4
@@ -111,7 +116,8 @@ app.canvas.celestials = (() => {
   }
 
   function clear() {
-    context.clearRect(0, 0, canvas.width, canvas.height)
+    contextMain.clearRect(0, 0, canvasMain.width, canvasMain.height)
+    contextTracers.clearRect(0, 0, canvasTracers.width, canvasTracers.height)
   }
 
   function drawMoon() {
@@ -154,11 +160,14 @@ app.canvas.celestials = (() => {
 
     const top = sun.y - (height / 2)
 
-    context.shadowBlur = height
-    context.shadowColor = color
+    // Draw rectangle on tracers context
+    contextTracers.fillStyle = color
+    contextTracers.fillRect(sun.x - radius, top, radius * 2, height)
 
-    context.fillStyle = color
-    context.fillRect(sun.x - radius, top, radius * 2, height)
+    // Prevent artefacts by drawing glow on main context rather than on tracers
+    contextMain.shadowBlur = height
+    contextMain.shadowColor = color
+    contextMain.fillRect(sun.x - radius, top, radius * 2, height)
   }
 
   function drawSun() {
@@ -193,8 +202,9 @@ app.canvas.celestials = (() => {
       drawMoon()
       drawSun()
 
-      // Draw to main canvas (tracers channel), assume identical dimensions
-      main.tracers.touch().context().drawImage(canvas, 0, 0)
+      // Draw to main canvas (both channels), assume identical dimensions
+      main.context().drawImage(canvasMain, 0, 0)
+      main.tracers.touch().context().drawImage(canvasTracers, 0, 0)
 
       return this
     },

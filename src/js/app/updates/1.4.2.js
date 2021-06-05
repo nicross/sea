@@ -1,4 +1,4 @@
-app.updates.register('1.4.3', () => {
+app.updates.register('1.4.2', () => {
   updateSettings()
   function updateSettings() {
     const settings = app.storage.getSettings()

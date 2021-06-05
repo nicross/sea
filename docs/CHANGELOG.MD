@@ -51,6 +51,11 @@
         <li>Simulated speed of sound of current medium</li>
       </ul>
     </li>
+    <li>Treasure
+      <ul>
+        <li>Added musical instruments as possible junk</li>
+      </ul>
+    </li>
   </ul>
 </details>
 

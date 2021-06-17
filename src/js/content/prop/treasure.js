@@ -17,7 +17,7 @@ content.prop.treasure = content.prop.base.invent({
       return this.collect()
     }
 
-    this.filter.frequency.value = this.calculateFilterFrequency()
+    engine.audio.ramp.set(this.filter.frequency, this.calculateFilterFrequency())
   },
   buildFilter: function () {
     const context = engine.audio.context()

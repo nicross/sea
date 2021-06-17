@@ -39,8 +39,11 @@ content.audio.treasure = (() => {
   }
 
   function pulse() {
+    let createdSynth = false
+
     if (!synth) {
       createSynth()
+      createdSynth = true
     }
 
     if (!lfo) {
@@ -86,7 +89,10 @@ content.audio.treasure = (() => {
       synth.param.frequency.exponentialRampToValueAtTime(f1 * 2, now + decay + release + attack)
     }
 
-    synth.param.gain.setValueAtTime(baseGain, now)
+    if (!createdSynth) {
+      synth.param.gain.setValueAtTime(baseGain, now)
+    }
+
     synth.param.gain.exponentialRampToValueAtTime(1, now + attack)
     synth.param.gain.exponentialRampToValueAtTime(baseGain * 2, now + attack + decay)
     synth.param.gain.exponentialRampToValueAtTime(1, now + decay + attack)

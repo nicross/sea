@@ -13,6 +13,9 @@ app.crashFixer = (() => {
     console.error('BiquadFilterNode: bad state fix attempted')
     isFixing = true
 
+    content.audio.mixer.killswitch(false)
+    await nextFrame()
+
     // Not sure how this helps, similar logic in prop.troubleshoot(), but without it the fix fails
     engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
@@ -34,6 +37,7 @@ app.crashFixer = (() => {
     engine.audio.mixer.rebuildFilters()
     await nextFrame()
 
+    content.audio.mixer.killswitch(true)
     isFixing = false
   }
 

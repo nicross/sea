@@ -6,6 +6,8 @@
     <li>Fixed sun and moon fading to black while descending underwater</li>
     <li>Fixed treasure hints not disabling when toggled off</li>
     <li>Forced graphics to update when treasure hints are toggled</li>
+    <li>Improved handling of audio crashes</li>
+    <li>Tentatively reduced frequency of treasure cue-related crashes</li>
   </ul>
 </details>
 

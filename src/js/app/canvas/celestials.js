@@ -165,9 +165,11 @@ app.canvas.celestials = (() => {
     contextTracers.fillRect(sun.x - radius, top, radius * 2, height)
 
     // Prevent artefacts by drawing glow on main context rather than on tracers
+    contextMain.fillStyle = color
     contextMain.shadowBlur = height
     contextMain.shadowColor = color
     contextMain.fillRect(sun.x - radius, top, radius * 2, height)
+    contextMain.clearRect(sun.x - radius, top, radius * 2, height)
   }
 
   function drawSun() {

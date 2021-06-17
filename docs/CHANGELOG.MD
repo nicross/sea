@@ -1,4 +1,12 @@
 # S.E.A. changelog
+## v1.4.3
+<details markdown="1">
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Fixed sun and moon fading to black while descending underwater</li>
+  </ul>
+</details>
+
 ## v1.4.2
 - Audio
   - Reduced default compass volume by half

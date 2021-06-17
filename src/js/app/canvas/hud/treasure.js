@@ -17,6 +17,10 @@ app.canvas.hud.treasure = (() => {
   })
 
   function draw({canvas, context}) {
+    if (!app.settings.computed.treasureHints) {
+      return
+    }
+
     const drawDistance = engine.streamer.getRadius(),
       margin = app.utility.css.rem(4)
 

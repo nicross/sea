@@ -4,6 +4,7 @@
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Fixed sun and moon fading to black while descending underwater</li>
+    <li>Fixed treasure hints not disabling when toggled off</li>
   </ul>
 </details>
 

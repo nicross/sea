@@ -140,7 +140,7 @@ app.canvas.stars = (() => {
         continue
       }
 
-      let alpha = star.alpha * globalAlpha * calculateTwinkle(star.phase)
+      let alpha = star.alpha * globalAlpha * calculateTwinkle(star.phase, twinkleDepth)
 
       if (alpha <= 0) {
         continue
@@ -174,6 +174,7 @@ app.canvas.stars = (() => {
     for (let i = 0; i < count; i += 1) {
       const delta = srand(-1, 1)
 
+      // TODO: Convert delta/theta to a 3d unit vector so the projection doesn't tear North-South along the y-axis
       stars.push({
         alpha: srand(1/2, 1),
         delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),

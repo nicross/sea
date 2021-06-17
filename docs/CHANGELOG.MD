@@ -5,6 +5,7 @@
   <ul>
     <li>Fixed sun and moon fading to black while descending underwater</li>
     <li>Fixed treasure hints not disabling when toggled off</li>
+    <li>Forced graphics to update when treasure hints are toggled</li>
   </ul>
 </details>
 

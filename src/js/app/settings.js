@@ -147,6 +147,9 @@ app.settings = (() => {
     treasureHints: {
       compute: (rawValue) => Boolean(rawValue),
       default: true,
+      update: () => {
+        app.canvas.forceUpdate()
+      },
     },
   }
 

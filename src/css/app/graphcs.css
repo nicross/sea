@@ -1,13 +1,14 @@
 .a-graphics--fields {
   max-height: calc(4 * 3.25em + 0.5em);
 }
-.a-graphics--onFields {
+.a-graphics--subfields {
   filter: grayscale(0);
   opacity: 1;
+  margin-top: 1em;
   transition: all 0.5s ease;
   transition-property: filter, opacity;
 }
-.a-graphics--onFields[aria-hidden] {
+.a-graphics--subfields[aria-hidden] {
   filter: grayscale(1);
   opacity: 0.25;
   pointer-events: none;

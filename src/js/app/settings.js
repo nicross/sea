@@ -31,6 +31,13 @@ app.settings = (() => {
     gamepadVibration: {
       default: 1,
     },
+    graphicsBacklightStrength: {
+      compute: (rawValue) => rawValue ** 2,
+      default: 0.5,
+      update: () => {
+        app.canvas.forceUpdate()
+      },
+    },
     graphicsDarkModeOn: {
       compute: (rawValue) => Boolean(rawValue),
       default: false,

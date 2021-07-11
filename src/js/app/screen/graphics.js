@@ -1,10 +1,14 @@
 app.screen.graphics = (() => {
   const sliders = []
 
-  let root
+  let darkModeOnFields,
+    onFields,
+    root
 
   engine.ready(() => {
     root = document.querySelector('.a-graphics')
+    darkModeOnFields = root.querySelector('.a-graphics--darkModeOnFields')
+    onFields = root.querySelector('.a-graphics--onFields')
 
     app.state.screen.on('enter-graphics', onEnter)
     app.state.screen.on('exit-graphics', onExit)
@@ -17,9 +21,7 @@ app.screen.graphics = (() => {
     hydrateToggles()
   })
 
-  function enableFields(isEnabled) {
-    const fields = root.querySelector('.a-graphics--onFields')
-
+  function enableFields(fields, isEnabled) {
     if (isEnabled) {
       fields.removeAttribute('aria-hidden', 'hidden')
       fields.removeAttribute('role', 'presentation')
@@ -91,6 +93,7 @@ app.screen.graphics = (() => {
 
   function hydrateSliders() {
     [
+      ['.a-graphics--backlightStrength', app.settings.raw.graphicsBacklightStrength, app.settings.setGraphicsBacklightStrength],
       ['.a-graphics--drawDistance', app.settings.raw.drawDistance, app.settings.setDrawDistance],
       ['.a-graphics--fov', app.settings.raw.graphicsFov, app.settings.setGraphicsFov],
       ['.a-graphics--hudOpacity', app.settings.raw.graphicsHudOpacity, app.settings.setGraphicsHudOpacity],
@@ -103,22 +106,25 @@ app.screen.graphics = (() => {
   }
 
   function hydrateToggles() {
+    const darkModeOn = app.component.toggle.hydrate(root.querySelector('.a-graphics--darkModeOn'), app.settings.raw.graphicsDarkModeOn)
+
+    darkModeOn.on('change', () => {
+      const value = darkModeOn.getValue()
+      app.settings.setGraphicsDarkModeOn(value)
+      enableFields(darkModeOnFields, value)
+    })
+
+    enableFields(darkModeOnFields, darkModeOn.getValue())
+
     const on = app.component.toggle.hydrate(root.querySelector('.a-graphics--on'), app.settings.raw.graphicsOn)
 
     on.on('change', () => {
       const value = on.getValue()
       app.settings.setGraphicsOn(value)
-      enableFields(value)
+      enableFields(onFields, value)
     })
 
-    enableFields(on.getValue())
-
-    ;[
-      ['.a-graphics--darkModeOn', app.settings.raw.graphicsDarkModeOn, app.settings.setGraphicsDarkModeOn],
-    ].forEach(([selector, initialValue, setter]) => {
-      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
-      component.on('change', () => setter(component.getValue()))
-    })
+    enableFields(onFields, on.getValue())
   }
 
   function onBackClick() {

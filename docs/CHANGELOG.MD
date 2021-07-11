@@ -1,6 +1,14 @@
 # S.E.A. changelog
+## v1.4.4
+<details>
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Added relative height cues to treasures</li>
+  </ul>
+</details>
+
 ## v1.4.3
-<details markdown="1">
+<details>
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Fixed sun and moon fading to black while descending underwater</li>
@@ -34,7 +42,7 @@
   - Updated documentation to reflect changes
   - Updated desktop builds to Electron 13 (Chromium 91)
 
-<details markdown="1">
+<details>
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Graphics
@@ -100,7 +108,7 @@
   - Miscellaneous coding chores to support future updates
   - Updated documentation to reflect changes
 
-<details markdown="1">
+<details>
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Audio
@@ -160,7 +168,7 @@
   - Rendered audio while paused
   - Updated access hotkeys to reflect new Status screen order
 
-<details markdown="1">
+<details>
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Audio
@@ -201,7 +209,7 @@
 - Miscellaneous
   - Updated desktop builds to Electron 12 (Chromium 89)
 
-<details markdown="1">
+<details>
   <summary>Spoiler Warning</summary>
   <ul>
     <li>Audio

@@ -1,12 +1,18 @@
 content.prop.treasure = content.prop.base.invent({
   name: 'Treasure',
   onConstruct: function () {
+    const context = engine.audio.context()
+
+    this.harmonyGain = context.createGain()
+    this.harmonyGain.gain.value = this.calculateHarmonyGain()
+    this.harmonyGain.connect(this.output)
+
     content.audio.treasure.add(this)
-    this.buildFilter()
+    this.buildFilters()
   },
   onDestroy: function () {
     content.audio.treasure.remove(this)
-    this.destroyFilter()
+    this.destroyFilters()
   },
   onUpdate: function () {
     if (this.isCollected) {
@@ -17,28 +23,46 @@ content.prop.treasure = content.prop.base.invent({
       return this.collect()
     }
 
-    engine.audio.ramp.set(this.filter.frequency, this.calculateFilterFrequency())
+    engine.audio.ramp.set(this.harmonyFilter.frequency, this.calculateHarmonyFilterFrequency())
+    engine.audio.ramp.set(this.harmonyGain.gain, this.calculateHarmonyGain())
+    engine.audio.ramp.set(this.melodyFilter.frequency, this.calculateMelodyFilterFrequency())
   },
-  buildFilter: function () {
+  buildFilters: function () {
     const context = engine.audio.context()
 
-    this.filter = context.createBiquadFilter()
-    this.filter.frequency.value = this.calculateFilterFrequency()
+    this.harmonyFilter = context.createBiquadFilter()
+    this.harmonyFilter.frequency.value = this.calculateHarmonyFilterFrequency()
+    this.harmonyFilter.Q.value = 1/4
+    this.harmonyFilter.type = 'bandpass'
 
-    content.audio.treasure.output().connect(this.filter)
-    this.filter.connect(this.output)
+    content.audio.treasure.harmonyOutput().connect(this.harmonyFilter)
+    this.harmonyFilter.connect(this.harmonyGain)
+
+    this.melodyFilter = context.createBiquadFilter()
+    this.melodyFilter.frequency.value = this.calculateMelodyFilterFrequency()
+
+    content.audio.treasure.melodyOutput().connect(this.melodyFilter)
+    this.melodyFilter.connect(this.output)
 
     return this
   },
-  calculateFilterFrequency: function () {
-    const angle = this.relative.euler().yaw
+  calculateHarmonyFilterFrequency: function () {
+    const angle = this.relative.euler().pitch,
+      frequency = content.audio.treasure.getHarmonyFrequency(),
+      ratio = engine.utility.scale(Math.sin(angle) || 0, -1, 1, 0, 1)
 
-    const distanceRatio = Math.max(0, 1 - (this.distance / engine.streamer.getRadius())),
-      facingRatio = engine.utility.scale(Math.cos(angle), -1, 1, 0, 1)
+    return ratio > 0.5
+      ? frequency * 256
+      : frequency * 8
+  },
+  calculateHarmonyGain: function () {
+    return engine.utility.clamp(Math.abs(this.relative.z) / this.radius, 0, 1)
+  },
+  calculateMelodyFilterFrequency: function () {
+    const angle = this.relative.euler().yaw,
+      ratio = engine.utility.scale(Math.cos(angle) || 0, -1, 1, 0, 1)
 
-    const color = engine.utility.lerp(1, 8, engine.utility.clamp(distanceRatio * facingRatio, 0, 1))
-
-    return color * content.audio.treasure.getFrequency()
+    return content.audio.treasure.getMelodyFrequency() * engine.utility.lerp(1, 8, ratio)
   },
   collect: function () {
     this.isCollected = true
@@ -46,17 +70,16 @@ content.prop.treasure = content.prop.base.invent({
     content.treasure.collect(this)
     return this
   },
-  destroyFilter: function () {
-    this.filter.disconnect()
-
+  destroyFilters: function () {
     try {
-      content.audio.treasure.output().disconnect(this.filter)
+      content.audio.treasure.harmonyOutput().disconnect(this.harmonyFilter)
+      content.audio.treasure.melodyOutput().disconnect(this.melodyFilter)
     } catch (e) {}
 
     return this
   },
   troubleshoot: function () {
     // XXX: Last resort fix for biquad filter issues
-    return this.destroyFilter().buildFilter().rebuildBinaural()
+    return this.destroyFilters().buildFilters().rebuildBinaural()
   },
 })

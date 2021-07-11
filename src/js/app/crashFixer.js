@@ -24,9 +24,6 @@ app.crashFixer = (() => {
     })
     await nextFrame()
 
-    content.audio.treasure.rebuildFilters()
-    await nextFrame()
-
     engine.props.get().forEach((prop) => {
       if (prop.troubleshoot) {
         prop.troubleshoot()

@@ -8,26 +8,10 @@ content.audio.treasure = (() => {
     props = new Set()
 
   let count = 0,
-    filter,
-    lfo,
     synth,
     timer
 
   output.gain.value = gain
-
-  function createLfo() {
-    filter = context.createBiquadFilter()
-    filter.frequency.value = f1 * 6
-
-    synth.disconnect(output)
-    synth.connect(filter)
-    filter.connect(output)
-
-    lfo = engine.audio.synth.createLfo({
-      depth: f1 * 3,
-      frequency: 4,
-    }).connect(filter.frequency)
-  }
 
   function createSynth() {
     synth = engine.audio.synth.createFm({
@@ -44,10 +28,6 @@ content.audio.treasure = (() => {
     if (!synth) {
       createSynth()
       createdSynth = true
-    }
-
-    if (!lfo) {
-      createLfo()
     }
 
     const d1 = engine.utility.random.float(-12.5, 12.5),
@@ -117,16 +97,6 @@ content.audio.treasure = (() => {
   }
 
   function stop() {
-    if (filter) {
-      filter.disconnect()
-      filter = null
-    }
-
-    if (lfo) {
-      lfo.stop()
-      lfo = null
-    }
-
     if (synth) {
       synth.stop()
       synth = null
@@ -137,17 +107,6 @@ content.audio.treasure = (() => {
       timer.stop()
       timer = null
     }
-  }
-
-  function teardownLfo() {
-    synth.disconnect(filter)
-    synth.connect(output)
-
-    filter.disconnect()
-    filter = null
-
-    lfo.stop()
-    lfo = null
   }
 
   return {
@@ -171,13 +130,6 @@ content.audio.treasure = (() => {
 
       if (!props.size) {
         stop()
-      }
-
-      return this
-    },
-    rebuildFilters: function () {
-      if (synth && lfo) {
-        teardownLfo()
       }
 
       return this

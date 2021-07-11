@@ -25,14 +25,20 @@ app.canvas.light = (() => {
     const {z} = engine.position.getVector()
 
     if (z > zones.twilight) {
-      return 1
+      return app.settings.computed.graphicsDarkModeOn
+       ? app.settings.computed.graphicsBacklightStrength
+       : 1
     }
 
     if (z < zones.midnight) {
       return 0
     }
 
-    return engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0)
+    const value = engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0)
+
+    return app.settings.computed.graphicsDarkModeOn
+     ? value * app.settings.computed.graphicsBacklightStrength
+     : value
   }
 
   function clear() {
@@ -77,8 +83,14 @@ app.canvas.light = (() => {
     // Cache averageColor
     averageColor = app.utility.color.lerpHsl(top, bottom, 0.5)
 
-    gradient.addColorStop(0, toHsl(top))
-    gradient.addColorStop(1, toHsl(bottom))
+    if (app.settings.computed.graphicsDarkModeOn) {
+      gradient.addColorStop(0.5, toHsla({...averageColor, a: 0}))
+      gradient.addColorStop(1 - (2 / canvas.height), toHsla({...averageColor, a: 1/8}))
+      gradient.addColorStop(1, toHsla({...averageColor, a: 1/4}))
+    } else {
+      gradient.addColorStop(0, toHsla(top))
+      gradient.addColorStop(1, toHsla(bottom))
+    }
 
     return gradient
   }
@@ -121,18 +133,19 @@ app.canvas.light = (() => {
       : app.utility.color.lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
   }
 
-  function toHsl({
+  function toHsla({
     h = 0,
     s = 0,
     l = 0,
+    a = 1,
   }) {
-    return `hsl(${h * 360}, ${s * 100}%, ${l * 100}%)`
+    return `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`
   }
 
   return {
     averageColor: () => ({...averageColor}),
     draw: function () {
-      if (app.settings.computed.graphicsDarkModeOn) {
+      if (app.settings.computed.graphicsDarkModeOn && !app.settings.computed.graphicsBacklightStrength) {
         return this
       }
 

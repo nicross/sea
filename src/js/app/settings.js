@@ -32,7 +32,7 @@ app.settings = (() => {
       default: 1,
     },
     graphicsBacklightStrength: {
-      compute: (rawValue) => rawValue ** 2,
+      compute: (rawValue) => Number(rawValue),
       default: 0.5,
       update: () => {
         app.canvas.forceUpdate()

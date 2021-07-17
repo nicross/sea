@@ -53,8 +53,8 @@ app.canvas.light = (() => {
 
   function calculateScheme() {
     const clock = content.time.clock(),
-      cycle = smooth(engine.utility.wrapAlternate(clock * 2, 0, 1)) ** (1/3),
-      hue = engine.utility.lerp(330/360, 240/360, smooth(Math.abs(Math.cos(Math.PI * 2 * clock)) ** 0.5)),
+      cycle = content.utility.smooth(engine.utility.wrapAlternate(clock * 2, 0, 1), 25) ** (1/3),
+      hue = engine.utility.lerp(330/360, 240/360, content.utility.smooth(Math.abs(Math.cos(Math.PI * 2 * clock)) ** 0.5, 25)),
       hueHalf = engine.utility.lerp(hue, 240/360, 0.5)
 
     return [
@@ -117,12 +117,6 @@ app.canvas.light = (() => {
     bottomColor = getGradientColorBottom(z)
     topColor = getGradientColorTop(z)
     averageColor = app.utility.color.lerpHsl(topColor, bottomColor, 0.5)
-  }
-
-  function smooth(value) {
-    // generalized logistic function
-    // identical to surface
-    return 1 / (1 + (Math.E ** (-25 * (value - 0.5))))
   }
 
   function toGradientColor(z) {

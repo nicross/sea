@@ -13,15 +13,11 @@ app.canvas = (() => {
     root = document.querySelector('.a-app--canvas')
     context = root.getContext('2d')
 
-    window.addEventListener('resize', onResize)
-
-    // TODO: app.settings.computed.graphicsFov is undefined
-    setTimeout(() => {
-      onResize()
-      engine.loop.on('frame', onFrame)
-    }, 0)
-
+    engine.loop.on('frame', onFrame)
     engine.state.on('reset', onReset)
+
+    window.addEventListener('resize', onResize)
+    onResize()
   })
 
   function clear() {
@@ -69,10 +65,6 @@ app.canvas = (() => {
   function onResize() {
     recalculate()
     pubsub.emit('resize')
-
-    if (app.settings.computed.graphicsOn && document.visibilityState != 'hidden') {
-      draw()
-    }
   }
 
   function recalculate() {

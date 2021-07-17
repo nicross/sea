@@ -119,13 +119,8 @@ app.canvas.stars = (() => {
     const horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
 
     for (const star of stars) {
-      const relative = engine.utility.vector3d.create({
-        x: firmament,
-      }).rotateEuler({
+      const relative = star.vector.rotateEuler({
         pitch: rotation,
-      }).rotateEuler({
-        pitch: star.theta,
-        yaw: star.delta,
       }).rotateQuaternion(conjugate)
 
       const hangle = Math.atan2(relative.y, relative.x)
@@ -174,14 +169,23 @@ app.canvas.stars = (() => {
     for (let i = 0; i < count; i += 1) {
       const delta = srand(-1, 1)
 
-      // TODO: Convert delta/theta to a 3d unit vector so the projection doesn't tear North-South along the y-axis
-      stars.push({
+      const star = {
         alpha: srand(1/2, 1),
         delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),
         phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),
         radius: engine.utility.lerpExp(0.5, 1, srand(), 8),
-      })
+      }
+
+      star.vector = engine.utility.vector3d.unitX()
+        .scale(firmament)
+        .rotateEuler({
+          pitch: star.theta,
+          yaw: star.delta,
+        })
+
+      // TODO: Convert delta/theta to a 3d unit vector so the projection doesn't tear North-South along the y-axis
+      stars.push(star)
     }
   }
 

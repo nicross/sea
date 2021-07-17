@@ -3,6 +3,7 @@
 - Added adjustable backlight to Dark Mode
 - Added backlight strength slider to Graphics screen
 - Added UI theme color cycling based on in-game solar time
+- Fixed star projection
 
 <details>
   <summary>Spoiler Warning</summary>

@@ -173,7 +173,9 @@ app.settings = (() => {
     }
 
     // Fix undefined values when importing settings that depend on eachother
-    computed[key] = value.default
+    computed[key] = value.compute
+      ? value.compute(value.default)
+      : value.default
   }
 
   function capitalize(value) {

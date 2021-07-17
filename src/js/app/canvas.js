@@ -51,6 +51,8 @@ app.canvas = (() => {
   }
 
   function onFrame({paused}) {
+    app.canvas.light.recalculate()
+
     if (paused || !app.settings.computed.graphicsOn || document.visibilityState == 'hidden') {
       return
     }

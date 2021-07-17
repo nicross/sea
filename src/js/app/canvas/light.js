@@ -12,7 +12,13 @@ app.canvas.light = (() => {
   }
 
   let averageColor,
+    bottomColor,
+    topColor,
     scheme
+
+  engine.ready(() => {
+    recalculate()
+  })
 
   main.on('resize', () => {
     canvas.height = main.height()
@@ -72,24 +78,14 @@ app.canvas.light = (() => {
 
   function getGradient() {
     const gradient = context.createLinearGradient(0, 0, 0, canvas.height)
-    const {z} = engine.position.getVector()
-
-    // Cache scheme between toGradientColor() calls
-    scheme = calculateScheme()
-
-    const bottom = getGradientColorBottom(z),
-      top = getGradientColorTop(z)
-
-    // Cache averageColor
-    averageColor = app.utility.color.lerpHsl(top, bottom, 0.5)
 
     if (app.settings.computed.graphicsDarkModeOn) {
       gradient.addColorStop(0.5, toHsla({...averageColor, a: 0}))
       gradient.addColorStop(1 - (2 / canvas.height), toHsla({...averageColor, a: 1/8}))
       gradient.addColorStop(1, toHsla({...averageColor, a: 1/4}))
     } else {
-      gradient.addColorStop(0, toHsla(top))
-      gradient.addColorStop(1, toHsla(bottom))
+      gradient.addColorStop(0, toHsla(topColor))
+      gradient.addColorStop(1, toHsla(bottomColor))
     }
 
     return gradient
@@ -111,6 +107,16 @@ app.canvas.light = (() => {
       .add({z})
 
     return toGradientColor(pov.z)
+  }
+
+  function recalculate() {
+    const {z} = engine.position.getVector()
+
+    scheme = calculateScheme()
+
+    bottomColor = getGradientColorBottom(z)
+    topColor = getGradientColorTop(z)
+    averageColor = app.utility.color.lerpHsl(topColor, bottomColor, 0.5)
   }
 
   function smooth(value) {
@@ -138,7 +144,7 @@ app.canvas.light = (() => {
     s = 0,
     l = 0,
     a = 1,
-  }) {
+  } = {}) {
     return `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`
   }
 
@@ -164,6 +170,10 @@ app.canvas.light = (() => {
       // Draw to main canvas
       main.context().drawImage(canvas, 0, 0, main.width(), main.height())
 
+      return this
+    },
+    recalculate: function () {
+      recalculate()
       return this
     },
   }

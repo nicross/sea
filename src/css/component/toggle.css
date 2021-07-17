@@ -1,7 +1,7 @@
 .c-toggle {}
   .c-toggle--button {
     border: 1px solid currentColor;
-    color: #8080FF;
+    color: var(--color-cycle);
     display: flex;
     font-size: inherit;
     transition: all 0.5s ease;
@@ -24,7 +24,7 @@
   }
   .c-toggle--button[aria-checked="false"] .c-toggle--off,
   .c-toggle--button[aria-checked="true"] .c-toggle--on {
-    background-color: #8080FF;
+    background-color: var(--color-cycle);
     color: #000000;
     font-family: RobotoBold;
     font-weight: 700;

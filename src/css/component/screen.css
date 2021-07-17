@@ -32,8 +32,8 @@
   }
   .c-screen--scrollable {
     background-color: rgba(0, 0, 0, 0.75);
-    border: 1px solid rgba(96, 96, 255, 0.5);
-    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.25);
+    border: 1px solid var(--color-cycle);
+    box-shadow: 0 0 0.5em var(--color-cycle-half);
     padding: 0.75em;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -41,18 +41,18 @@
     transition-property: background-color, border-color, box-shadow;
   }
   .c-screen--scrollable:hover {
-    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, 0.925);
     border-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.5);
+    box-shadow: 0 0 0.5em var(--color-cycle);
   }
   .c-screen--scrollable:focus-within {
-    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(0, 0, 0, 0.925);
     border-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 0 0.5em rgba(96, 96, 255, 0.5);
+    box-shadow: 0 0 0.5em var(--color-cycle);
   }
   .c-screen--title {
     font-family: RobotoRegular;
     font-size: 3em;
     font-weight: 400;
-    text-shadow: 0 0 calc(0.5em / 3) rgba(96, 96, 255, 0.5);
+    text-shadow: 0 0 calc(0.5em / 3) var(--color-cycle);
   }

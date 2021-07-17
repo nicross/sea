@@ -162,5 +162,6 @@ app.canvas.light = (() => {
       recalculate()
       return this
     },
+    scheme: () => scheme.map((color) => ({...color})),
   }
 })()

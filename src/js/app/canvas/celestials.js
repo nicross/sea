@@ -56,7 +56,7 @@ app.canvas.celestials = (() => {
       a: alpha,
     }
 
-    return toHsla(moonColor)
+    return app.utility.color.toHslaString(moonColor)
   }
 
   function calculateColorSun(pitch, alpha = 1) {
@@ -74,7 +74,7 @@ app.canvas.celestials = (() => {
       a: alpha,
     }
 
-    return toHsla(sunColor)
+    return app.utility.color.toHslaString(sunColor)
   }
 
   function calculateHorizon() {
@@ -183,15 +183,6 @@ app.canvas.celestials = (() => {
     const {z} = engine.position.getVector()
     // calculateAlpha will always return 0 below this depth
     return z > -150
-  }
-
-  function toHsla({
-    h = 0,
-    s = 0,
-    l = 0,
-    a = 0,
-  }) {
-    return `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`
   }
 
   return {

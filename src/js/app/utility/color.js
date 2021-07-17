@@ -38,3 +38,10 @@ app.utility.color.lerpHsl = (a, b, value) => ({
   s: engine.utility.lerp(a.s, b.s, value),
   l: engine.utility.lerp(a.l, b.l, value),
 })
+
+app.utility.color.toHslaString = ({
+  h = 0,
+  s = 0,
+  l = 0,
+  a = 1,
+} = {}) => `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`

@@ -77,7 +77,8 @@ app.canvas.light = (() => {
   }
 
   function getGradient() {
-    const gradient = context.createLinearGradient(0, 0, 0, canvas.height)
+    const gradient = context.createLinearGradient(0, 0, 0, canvas.height),
+      toHsla = app.utility.color.toHslaString
 
     if (app.settings.computed.graphicsDarkModeOn) {
       gradient.addColorStop(0.5, toHsla({...averageColor, a: 0}))
@@ -131,15 +132,6 @@ app.canvas.light = (() => {
     return z > zones.sunlit
       ? app.utility.color.lerpHsl(scheme[0], scheme[1], engine.utility.scale(z, zones.surface, zones.sunlit, 0, 1))
       : app.utility.color.lerpHsl(scheme[1], scheme[2], engine.utility.scale(z, zones.sunlit, zones.twilight, 0, 1))
-  }
-
-  function toHsla({
-    h = 0,
-    s = 0,
-    l = 0,
-    a = 1,
-  } = {}) {
-    return `hsla(${h * 360}, ${s * 100}%, ${l * 100}%, ${a})`
   }
 
   return {

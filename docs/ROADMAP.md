@@ -1,34 +1,12 @@
 # ROADMAP
 This document outlines upcoming changes for post-jam releases.
 
+This needs a rewrite.
+See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
+
 ## Planned versions
-### v1.5.0 - Deep update
-- ???
-
-### v1.6.0 - Life update
-- Aquatic life
-  - Dolphins
-  - Gulls
-  - Whales
-- Basic biome generation
-  - Aleotoric (current)
-  - Caves (indicate worm caves)
-  - Drone
-  - Polyrhythm
-  - Tremolo
-- Perlin worm caves
-- Underwater music enhancements
-  - More colors
-  - More oscillators
-
-### v1.7.0 - Redacted update
-- ???
-
-### v2.0.0 - Gold update
-- ???
 
 ## Known issues
-- Treasure causes unstable BiquadFilterNode (audio recovers after approximately 4 seconds)
 
 ## Wishlist
 ### Audio

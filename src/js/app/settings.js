@@ -11,7 +11,7 @@ app.settings = (() => {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: 1,
       update: () => {
-        app.canvas.forceResize()
+        app.canvas.forceResize().forceUpdate()
       },
     },
     environmentVolume: {
@@ -49,7 +49,7 @@ app.settings = (() => {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0.25,
       update: () => {
-        app.canvas.forceResize()
+        app.canvas.forceResize().forceUpdate()
       },
     },
     graphicsHudOpacity: {

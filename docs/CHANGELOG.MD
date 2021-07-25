@@ -1,4 +1,8 @@
 # S.E.A. changelog
+## v1.4.5
+- Updated syngen to the latest version
+- Fixed black screens when resizing window while paused
+
 ## v1.4.4
 - Added adjustable backlight to Dark Mode
 - Added backlight strength slider to Graphics screen

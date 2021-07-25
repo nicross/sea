@@ -11,7 +11,11 @@ app.settings = (() => {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: 1,
       update: () => {
-        app.canvas.forceResize().forceUpdate()
+        app.canvas.forceResize()
+
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
     environmentVolume: {
@@ -42,27 +46,37 @@ app.settings = (() => {
       compute: (rawValue) => Boolean(rawValue),
       default: false,
       update: () => {
-        app.canvas.forceUpdate()
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
     graphicsFov: {
       compute: (rawValue) => engine.utility.lerp(Math.PI/3, Math.PI * 2/3, rawValue),
       default: 0.25,
       update: () => {
-        app.canvas.forceResize().forceUpdate()
+        app.canvas.forceResize()
+
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
     graphicsHudOpacity: {
       default: 1,
       update: () => {
-        app.canvas.forceUpdate()
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
     graphicsTracers: {
       compute: (rawValue) => engine.utility.lerpExp(0, 9/10, rawValue, 0.848),
       default: 0,
       update: () => {
-        app.canvas.forceUpdate()
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
     graphicsOn: {
@@ -155,7 +169,9 @@ app.settings = (() => {
       compute: (rawValue) => Boolean(rawValue),
       default: true,
       update: () => {
-        app.canvas.forceUpdate()
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
       },
     },
   }

@@ -51,9 +51,13 @@ app.canvas = (() => {
   }
 
   function onFrame({paused}) {
+    if (paused) {
+      return
+    }
+
     app.canvas.light.recalculate()
 
-    if (paused || !app.settings.computed.graphicsOn || document.visibilityState == 'hidden') {
+    if (!app.settings.computed.graphicsOn || document.visibilityState == 'hidden') {
       return
     }
 
@@ -86,10 +90,10 @@ app.canvas = (() => {
       return this
     },
     forceUpdate: function () {
-      clear()
-
       if (app.settings.computed.graphicsOn) {
         draw()
+      } else {
+        clear()
       }
 
       return this

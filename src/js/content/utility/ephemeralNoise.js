@@ -7,15 +7,6 @@ content.utility.ephemeralNoise = (() => {
 
   engine.ready(resetTimer)
 
-  function decorate(noise) {
-    noise.prune = returnSelf
-    noise.requestPrune = returnSelf
-  }
-
-  function returnSelf() {
-    return this
-  }
-
   function resetManaged() {
     for (const noise of noises) {
       noise.reset()
@@ -33,12 +24,6 @@ content.utility.ephemeralNoise = (() => {
       }
 
       noises.push(noise)
-
-      if (noise.perlin) {
-        noise.perlin.forEach(decorate)
-      } else {
-        decorate(noise)
-      }
 
       return this
     },

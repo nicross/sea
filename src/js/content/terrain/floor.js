@@ -1,23 +1,44 @@
 content.terrain.floor = (() => {
-  const floor = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'floor', 8),
-    floorHeight = 250,
-    floorScale = 1000
+  const floor = engine.utility.createNoiseWithOctaves({
+    octaves: 8,
+    seed: ['content', 'terrain', 'floor'],
+    type: engine.utility.simplex2d,
+  })
 
-  const hill = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'hill', 4),
-    hillHeight = 250,
-    hillScale = 100
+  const hill = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['content', 'terrain', 'floor', 'hill'],
+    type: engine.utility.simplex2d,
+  })
 
-  const hillMix = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'hillMix', 2),
-    hillMixScale = 1000
+  const hillMix = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['content', 'terrain', 'floor', 'hillMix'],
+    type: engine.utility.simplex2d,
+  })
 
-  const trench = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'trench', 4),
-    trenchHeight = 1500,
-    trenchScaleX = 2500,
-    trenchScaleY = 10000
+  const trench = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['content', 'terrain', 'floor', 'trench'],
+    type: engine.utility.simplex2d,
+  })
 
-  const trenchMix = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, 'trenchMix', 4),
-    trenchMixScaleX = 2500,
-    trenchMixScaleY = 10000
+  const trenchMix = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['content', 'terrain', 'floor', 'trenchMix'],
+    type: engine.utility.simplex2d,
+  })
+
+  const floorHeight = 250 / engine.utility.simplex2d.prototype.skewFactor,
+    floorScale = 1000 / engine.utility.simplex2d.prototype.skewFactor,
+    hillHeight = 250 / engine.utility.simplex2d.prototype.skewFactor,
+    hillScale = 100 / engine.utility.simplex2d.prototype.skewFactor,
+    hillMixScale = 1000 / engine.utility.simplex2d.prototype.skewFactor,
+    trenchHeight = 1500 / engine.utility.simplex2d.prototype.skewFactor,
+    trenchScaleX = 2500 / engine.utility.simplex2d.prototype.skewFactor,
+    trenchScaleY = 10000 / engine.utility.simplex2d.prototype.skewFactor,
+    trenchMixScaleX = 2500 / engine.utility.simplex2d.prototype.skewFactor,
+    trenchMixScaleY = 10000 / engine.utility.simplex2d.prototype.skewFactor
 
   let floorOffsetX = 0,
     floorOffsetY = 0,
@@ -56,7 +77,7 @@ content.terrain.floor = (() => {
       return this.value(x, y)
     },
     import: function () {
-      const srand = engine.utility.srand('terrain', 'floor', 'init')
+      const srand = engine.utility.srand('content', 'terrain', 'floor', 'init')
 
       floorOffsetX = srand(-1, 1)
       floorOffsetY = srand(-1, 1)

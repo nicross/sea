@@ -1,6 +1,11 @@
 content.wind = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'wind', 4),
-    timeScale = 10 // Evolves over 10 seconds
+  const field = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: 'wind',
+    type: engine.utility.perlin1d,
+  })
+
+  const timeScale = 10 // Evolves over 10 seconds
 
   content.utility.ephemeralNoise.manage(field)
 

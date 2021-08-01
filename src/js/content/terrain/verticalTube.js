@@ -1,14 +1,27 @@
 content.terrain.verticalTube = (() => {
-  const tube = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'verticalTube', 1),
-    tubeScaleX = 50,
-    tubeScaleY = 50,
-    tubeScaleZ = 1000
+  const mix = engine.utility.createNoiseWithOctaves({
+    octaves: 8,
+    seed: ['content', 'terrain', 'verticalTube', 'mix'],
+    type: engine.utility.simplex3d,
+  })
 
-  const mix = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'tubeMix', 8),
-    mixScale = 1000
+  const range = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['content', 'terrain', 'verticalTube', 'range'],
+    type: engine.utility.simplex3d,
+  })
 
-  const range = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'tubeRange', 2),
-    rangeScale = 100
+  const tube = engine.utility.createNoiseWithOctaves({
+    octaves: 1,
+    seed: ['content', 'terrain', 'verticalTube'],
+    type: engine.utility.simplex3d,
+  })
+
+  const mixScale = 1000 / engine.utility.simplex3d.prototype.skewFactor,
+    rangeScale = 100 / engine.utility.simplex3d.prototype.skewFactor,
+    tubeScaleX = 50 / engine.utility.simplex3d.prototype.skewFactor,
+    tubeScaleY = 50 / engine.utility.simplex3d.prototype.skewFactor,
+    tubeScaleZ = 1000 / engine.utility.simplex3d.prototype.skewFactor
 
   const maxRange = 0.1,
     minRange = 0.05
@@ -65,7 +78,7 @@ content.terrain.verticalTube = (() => {
       return !engine.utility.between(value, lowerBound, upperBound)
     },
     import: function () {
-      const srand = engine.utility.srand('terrain', 'verticalTube', 'init')
+      const srand = engine.utility.srand('content', 'terrain', 'verticalTube', 'init')
 
       mixOffsetX = srand(-1, 1)
       mixOffsetY = srand(-1, 1)
@@ -80,9 +93,10 @@ content.terrain.verticalTube = (() => {
       return this
     },
     reset: function () {
-      tube.reset()
       mix.reset()
       range.reset()
+      tube.reset()
+
       return this
     },
   }

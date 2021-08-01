@@ -1,12 +1,25 @@
 content.terrain.lattice = (() => {
-  const lattice = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'lattice', 8),
-    latticeScale = 50
+  const lattice = engine.utility.createNoiseWithOctaves({
+    octaves: 8,
+    seed: ['content', 'terrain', 'lattice'],
+    type: engine.utility.simplex3d,
+  })
 
-  const mix = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'latticeMix', 8),
-    mixScale = 1000
+  const mix = engine.utility.createNoiseWithOctaves({
+    octaves: 8,
+    seed: ['content', 'terrain', 'lattice', 'mix'],
+    type: engine.utility.simplex3d,
+  })
 
-  const range = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, 'latticeRange', 8),
-    rangeScale = 100
+  const range = engine.utility.createNoiseWithOctaves({
+    octaves: 8,
+    seed: ['content', 'terrain', 'lattice', 'range'],
+    type: engine.utility.simplex3d,
+  })
+
+  const latticeScale = 50 / engine.utility.simplex3d.prototype.skewFactor,
+    mixScale = 1000 / engine.utility.simplex3d.prototype.skewFactor,
+    rangeScale = 100 / engine.utility.simplex3d.prototype.skewFactor
 
   const maxRange = 0.45,
     minRange = 0.05
@@ -63,7 +76,7 @@ content.terrain.lattice = (() => {
       return !engine.utility.between(value, lowerBound, upperBound)
     },
     import: function () {
-      const srand = engine.utility.srand('terrain', 'lattice', 'init')
+      const srand = engine.utility.srand('content', 'terrain', 'lattice', 'init')
 
       latticeOffsetX = srand(-1, 1)
       latticeOffsetY = srand(-1, 1)

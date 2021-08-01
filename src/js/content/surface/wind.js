@@ -1,13 +1,25 @@
 content.surface.wind = (() => {
-  const fieldNormal = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, ['surface', 'wind', 'normal'], 2),
-    fieldOffset = engine.utility.createPerlinWithOctaves(engine.utility.perlin2d, ['surface', 'wind', 'offset'], 2),
-    momentumX = -7.5,
-    xScale = 40,
-    yScale = 200,
+  const fieldNormal = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['surface', 'wind', 'normal'],
+    type: engine.utility.simplex2d,
+  })
+
+  const fieldOffset = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['surface', 'wind', 'offset'],
+    type: engine.utility.simplex2d,
+  })
+
+  const momentumX = -7.5,
+    xScale = 40 / engine.utility.simplex2d.prototype.skewFactor,
+    yScale = 200 / engine.utility.simplex2d.prototype.skewFactor,
     zPower = 1.25,
     zScale = 4
 
-  content.utility.ephemeralNoise.manage(fieldNormal).manage(fieldOffset)
+  content.utility.ephemeralNoise
+    .manage(fieldNormal)
+    .manage(fieldOffset)
 
   function clip(value) {
     return Math.max((2 * value) - 1, 0)

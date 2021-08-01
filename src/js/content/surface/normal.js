@@ -1,9 +1,14 @@
 content.surface.normal = (() => {
-  const field = engine.utility.createPerlinWithOctaves(engine.utility.perlin3d, ['surface', 'normal'], 2),
-    changeTimeScale = 5,
+  const field = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['surface', 'normal'],
+    type: engine.utility.simplex3d,
+  })
+
+  const changeTimeScale = 5 / engine.utility.simplex3d.prototype.skewFactor,
     momentumX = -5,
-    xScale = 10,
-    yScale = 10,
+    xScale = 10 / engine.utility.simplex3d.prototype.skewFactor,
+    yScale = 10 / engine.utility.simplex3d.prototype.skewFactor,
     zPower = 1,
     zScale = 1
 

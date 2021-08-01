@@ -2,10 +2,10 @@ app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     main = app.canvas,
-    shimmerField = engine.utility.perlin3d.create('shimmer'),
-    shimmerScaleX = 2,
-    shimmerScaleY = 2,
-    shimmerScaleZ = 0.5
+    shimmerField = engine.utility.simplex3d.create('shimmer'),
+    shimmerScaleX = 2 / engine.utility.simplex3d.prototype.skewFactor,
+    shimmerScaleY = 2 / engine.utility.simplex3d.prototype.skewFactor,
+    shimmerScaleZ = 0.5 / engine.utility.simplex3d.prototype.skewFactor
 
   let drawDistance,
     nodeRadius

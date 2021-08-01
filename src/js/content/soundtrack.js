@@ -30,15 +30,15 @@ content.soundtrack = (() => {
     8,
   ]
 
-  const chordField = engine.utility.perlin3d.create('soundtrack', 'chord'),
+  const chordField = engine.utility.simplex3d.create('soundtrack', 'chord'),
     chordMomentum = 7,
-    chordScale = 1000,
-    chordTimeScale = 300
+    chordScale = 1000 / engine.utility.simplex3d.prototype.skewFactor,
+    chordTimeScale = 300 / engine.utility.simplex3d.prototype.skewFactor
 
-  const inversionField = engine.utility.perlin3d.create('soundtrack', 'inversion'),
+  const inversionField = engine.utility.simplex3d.create('soundtrack', 'inversion'),
     inversionMomentum = 11,
-    inversionScale = 1000,
-    inversionTimeScale = 300
+    inversionScale = 1000 / engine.utility.simplex3d.prototype.skewFactor,
+    inversionTimeScale = 300 / engine.utility.simplex3d.prototype.skewFactor
 
   let frequencies = [],
     harmonics = []

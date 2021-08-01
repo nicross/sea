@@ -1,11 +1,13 @@
 content.surface.tidal = (() => {
-  const field = engine.utility.perlin2d.create('surface', 'tidal'),
+  const field = engine.utility.simplex2d.create('surface', 'tidal'),
     momentumX = -10,
     slope = 99,
     timeScale = 30,
-    xScale = 500,
-    yScale = 500,
+    xScale = 500 / engine.utility.simplex2d.prototype.skewFactor,
+    yScale = 500 / engine.utility.simplex2d.prototype.skewFactor,
     zScale = 8
+
+  content.utility.ephemeralNoise.manage(field)
 
   return {
     value: (x, y) => {

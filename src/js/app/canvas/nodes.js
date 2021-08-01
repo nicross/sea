@@ -3,7 +3,8 @@ app.canvas.nodes = (() => {
     context = canvas.getContext('2d'),
     main = app.canvas,
     maxObjects = 1000,
-    nodeHue = engine.utility.perlin3d.create('exploration', 'node', 'hue'),
+    nodeHue = engine.utility.simplex3d.create('exploration', 'node', 'hue'),
+    nodeHueScale = 25 / engine.utility.simplex3d.prototype.skewFactor,
     nodeHueRotateSpeed = 1 / 120
 
   let nodeRadius
@@ -120,7 +121,7 @@ app.canvas.nodes = (() => {
     // XXX: This used to be 4D noise prior to v1.2.2.
     // TODO: Look into simplex or other more performant noise.
 
-    let value = nodeHue.value((x + t/59) / 25, (y + t/61) / 25, (z + t/2) / 25)
+    let value = nodeHue.value((x + t/59) / nodeHueScale, (y + t/61) / nodeHueScale, (z + t/2) / nodeHueScale)
     value += t * nodeHueRotateSpeed
     value = engine.utility.wrap(value * 2, 0, 1)
 

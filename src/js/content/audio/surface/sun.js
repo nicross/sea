@@ -11,20 +11,40 @@ content.audio.surface.sun = (() => {
     subFrequency = engine.utility.midiToFrequency(33),
     thirdFrequency = engine.utility.midiToFrequency(61)
 
-  const rootAmodDepth = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'sunRootAmodDepth', 4),
-    rootAmodFrequency = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'sunRootAmodFrequency', 4),
-    thirdAmodDepth = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'sunThirdAmodDepth', 4),
-    thirdAmodFrequency = engine.utility.createPerlinWithOctaves(engine.utility.perlin1d, 'sunThirdAmodFrequency', 4)
+  const rootAmodDepth = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: 'sunRootAmodDepth',
+    type: engine.utility.perlin1d,
+  })
+
+  const rootAmodFrequency = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: 'sunRootAmodFrequency',
+    type: engine.utility.perlin1d,
+  })
+
+  const thirdAmodDepth = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: 'sunThirdAmodDepth',
+    type: engine.utility.perlin1d,
+  })
+
+  const thirdAmodFrequency = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: 'sunThirdAmodFrequency',
+    type: engine.utility.perlin1d,
+  })
 
   let binaural,
     synth
 
   bus.gain.value = engine.utility.fromDb(-15)
 
-  content.utility.ephemeralNoise.manage(rootAmodDepth)
-  content.utility.ephemeralNoise.manage(rootAmodFrequency)
-  content.utility.ephemeralNoise.manage(thirdAmodDepth)
-  content.utility.ephemeralNoise.manage(thirdAmodFrequency)
+  content.utility.ephemeralNoise
+    .manage(rootAmodDepth)
+    .manage(rootAmodFrequency)
+    .manage(thirdAmodDepth)
+    .manage(thirdAmodFrequency)
 
   function calculatePitch() {
     // via app.canvas.celestials, consider refactoring

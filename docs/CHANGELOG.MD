@@ -1,4 +1,9 @@
 # S.E.A. changelog
+## v1.5.0
+- Noise refactor (surface and floor )
+- Performance improvements
+- Save versioning
+
 ## v1.4.5
 - Updated syngen to the latest version
 - Fixed black screens when resizing window while paused

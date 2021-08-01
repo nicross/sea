@@ -1,6 +1,14 @@
 app.utility.semver = {}
 
-app.utility.semver.compare = (a, b) => {
+app.utility.semver.compare = function (a, b) {
+  if (typeof a == 'string') {
+    a = this.parse(a)
+  }
+
+  if (typeof b == 'string') {
+    b = this.parse(b)
+  }
+
   if (a.major != b.major) {
     return a.major - b.major
   }

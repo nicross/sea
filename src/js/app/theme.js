@@ -2,6 +2,28 @@ app.theme = (() => {
   const customProperties = {},
     root = document.documentElement
 
+  let interval
+
+  engine.ready(() => {
+    app.state.screen.on('before-game-pause', update)
+    engine.loop.on('frame', onFrame)
+  })
+
+  function onFrame({delta}) {
+    if (interval > delta) {
+      interval -= delta
+      return
+    }
+
+    interval = 1/4
+
+    if (app.state.screen.is('game')) {
+      return
+    }
+
+    update()
+  }
+
   function setCustomProperty(name, value) {
     if (customProperties[name] == value) {
       return
@@ -26,13 +48,15 @@ app.theme = (() => {
     setCustomProperty('color-cycle-half', app.utility.color.toHslaString({...color, a: 0.5}))
   }
 
+  function update() {
+    setColorCycle()
+  }
+
   return {
     update: function () {
-      setColorCycle()
+      update()
 
       return this
     },
   }
 })()
-
-engine.loop.on('frame', () => app.theme.update())

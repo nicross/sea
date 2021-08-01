@@ -3,29 +3,44 @@ app.updates = (() => {
 
   engine.ready(() => {
     const appVersion = app.version(),
-      storageVersion = app.storage.getVersion()
+      storageVersions = app.storage.getVersions().sort(sortBySemver)
 
-    const appSemver = app.utility.semver.parse(appVersion),
-      storageSemver = app.utility.semver.parse(storageVersion)
-
-    if (storageVersion == '0.0.0') {
+    // First time player
+    if (!storageVersions.length) {
       return app.storage.setVersion(appVersion)
     }
 
-    if (app.utility.semver.isEqual(appSemver, storageSemver)) {
-      return
+    // No update required
+    if (storageVersions.includes(appVersion)) {
+      return app.storage.setVersion(appVersion)
     }
 
-    const updates = registry.sort((a, b) => app.utility.semver.compare(a.semver, b.semver))
+    // Determine closest earlier version
+    let storageVersion
 
-    for (const update of updates) {
-      if (app.utility.semver.isLater(update.semver, storageSemver)) {
-        update.fn()
+    for (const version of storageVersions) {
+      if (!storageVersion || app.utility.semver.isEarlier(version, storageVersion)) {
+        storageVersion = version
       }
     }
 
-    app.storage.setVersion(appVersion)
+    // Upgrade storage
+    app.storage.clone(storageVersion, appVersion)
+      .setVersion(appVersion)
+
+    // Apply updates
+    registry.sort(sortBySemver)
+
+    for (const update of registry) {
+      if (app.utility.semver.isLater(update.semver, storageVersion)) {
+        update.fn()
+      }
+    }
   })
+
+  function sortBySemver(a, b) {
+    return app.utility.semver.compare(a.semver, b.semver)
+  }
 
   return {
     register: function (semver, fn) {

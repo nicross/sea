@@ -3,7 +3,7 @@ app.updates = (() => {
 
   engine.ready(() => {
     const appVersion = app.version(),
-      storageVersions = app.storage.getVersions().sort(sortBySemver)
+      storageVersions = app.storage.getVersions()
 
     // First time player
     if (!storageVersions.length) {
@@ -29,7 +29,7 @@ app.updates = (() => {
       .setVersion(appVersion)
 
     // Apply updates
-    registry.sort(sortBySemver)
+    registry.sort((a, b) => app.utility.semver.compare(a.semver, b.semver))
 
     for (const update of registry) {
       if (app.utility.semver.isLater(update.semver, storageVersion)) {
@@ -37,10 +37,6 @@ app.updates = (() => {
       }
     }
   })
-
-  function sortBySemver(a, b) {
-    return app.utility.semver.compare(a.semver, b.semver)
-  }
 
   return {
     register: function (semver, fn) {

@@ -107,7 +107,7 @@ app.storage = (() => {
         legacyData.version,
         ...Object.keys(data),
       ].filter(Boolean).sort((a, b) => {
-        return app.utility.semver.compare(a.semver, b.semver)
+        return app.utility.semver.compare(a, b)
       })
     },
     hasGame: () => Boolean(getVersioned('game')),

@@ -162,6 +162,8 @@ function getAppJs() {
     'src/js/app.js',
     'src/js/app/const.js',
     'src/js/app/utility/*.js',
+    'src/js/app/updates.js',
+    'src/js/app/updates/*.js',
     'src/js/app/*.js',
     'src/js/app/*/*.js',
     'src/js/app/*/*/*.js',

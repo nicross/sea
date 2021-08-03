@@ -13,6 +13,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Floor proximity / cave enterance cues
 - Scanning enhancements
 - Treasure occlusion
+- Investigate getting stuck at surface when jumping at lower velocities
 
 ## Known issues
 
@@ -103,7 +104,8 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Photograph mode, or pseudo-bookmarks
 
 ### Chores
-- Performance optimizations
 - Refactor app state management (e.g. how audio fades, scenes load) for clarity
 - Refactor controls handling to be more reusable across screens
-- Refactor fast travel as content system
+- Refactor fast travel as content system rather than an app save/load
+- Refactor app settings to be more maintainable
+- Create app achievements/unlocks system to better track some hidden UI elements

@@ -1,11 +1,11 @@
 content.audio.scan = (() => {
-  const bus = content.audio.mixer.bus.misc.createBypass()
+  const bus = content.audio.mixer.bus.misc.createBypass(),
+    rootFrequency = engine.utility.midiToFrequency(69)
+
   bus.gain.value = engine.utility.fromDb(-4.5)
 
-  function honk(isForward = false) {
-    const root = isForward
-      ? engine.utility.midiToFrequency(69)
-      : engine.utility.midiToFrequency(64)
+  function honk() {
+    const root = rootFrequency
 
     const synth = engine.audio.synth.createFm({
       carrierFrequency: root,
@@ -27,14 +27,14 @@ content.audio.scan = (() => {
 
   function recharge() {
     const synth = engine.audio.synth.createFm({
-      carrierFrequency: engine.utility.midiToFrequency(21),
+      carrierFrequency: rootFrequency / 16,
       carrierType: 'sawtooth',
       modDepth: 0,
       modFrequency: 0,
     }).shaped(
       engine.audio.shape.noise()
     ).filtered({
-      frequency: engine.utility.midiToFrequency(45),
+      frequency: rootFrequency / 4,
     }).connect(bus)
 
     const now = engine.audio.time()
@@ -58,159 +58,97 @@ content.audio.scan = (() => {
     synth.stop(release)
   }
 
-  function render(scan) {
-    const delay = 0.25,
-      duration = content.const.scanCooldown - delay - 0.25,
-      now = engine.audio.time(),
-      offset = duration/20
+  function render(results) {
+    const now = engine.audio.time(),
+      rendered = engine.utility.octree.create()
 
-    // up
-    renderGrain({
-      note: 93,
-      scan: scan.up,
-      type: 'sawtooth',
-      when: now + delay,
-    })
+    // First result
+    const first = results.shift()
 
-    // up
-    renderGroup([
-      scan.leftUp,
-      scan.forwardLeftUp || scan.reverseLeftUp,
-      scan.forwardUp || scan.reverseUp,
-      scan.forwardRightUp || scan.reverseRightUp,
-      scan.rightUp,
-    ], {
-      octave: 1,
-      offset,
-      when: now + delay + (3 * offset),
-    })
+    if (first.isSolid) {
+      renderGrain({
+        result: first,
+        type: 'sawtooth',
+        when: now,
+      })
 
-    // level
-    renderGroup([
-      scan.left,
-      scan.forwardLeft || scan.reverseLeft,
-      scan.forward || scan.reverse,
-      scan.forwardRight || scan.reverseRight,
-      scan.right,
-    ], {
-      octave: 0,
-      offset,
-      when: now + delay + (8 * offset),
-    })
+      rendered.insert(first)
+    }
 
-    // down
-    renderGroup([
-      scan.leftDown,
-      scan.forwardLeftDown || scan.reverseLeftDown,
-      scan.forwardDown || scan.reverseDown,
-      scan.forwardRightDown || scan.reverseRightDown,
-      scan.rightDown,
-    ], {
-      octave: -1,
-      offset,
-      when: now + delay + (13 * offset),
-    })
+    // Random directions
+    for (const result of results) {
+      if (rendered.find(result, 1)) {
+        continue
+      }
 
-    // down
-    renderGrain({
-      note: 45,
-      scan: scan.down,
-      type: 'sawtooth',
-      when: now + delay + (20 * offset),
-    })
+      renderGrain({
+        result,
+        type: 'sine',
+        when: now,
+      })
+
+      rendered.insert(result)
+    }
   }
 
   function renderGrain({
-    note = 0,
-    scan,
+    result,
     type = 'sine',
     when = 0,
   } = {}) {
-    if (!scan || !scan.isSolid) {
-      return
-    }
+    // Adjust arrival time via distance
+    when += engine.utility.lerp(0, content.const.scanCooldown - 0.25, result.distanceRatio)
 
-    const frequency = engine.utility.midiToFrequency(note)
+    // Select from notes via z-coordinate
+    const detune = engine.utility.lerp(-2400, 2400, result.zRatio),
+      frequency = rootFrequency
 
+    // Create synth
     const synth = engine.audio.synth.createSimple({
+      detune,
       frequency,
       type,
       when,
     }).filtered({
-      frequency: frequency * (type == 'sawtooth' ? 4 : 2),
+      detune,
+      frequency: frequency * (type == 'sawtooth' ? 8 : 2),
     })
 
-    const relative = engine.utility.vector3d.create(scan)
+    // Position synth in space
+    const relative = engine.utility.vector3d.create(result)
       .subtract(engine.position.getVector())
       .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
     const binaural = engine.audio.binaural.create({
-      ...relative.scale(0.5),
+      ...relative,
     }).from(synth).to(bus)
 
+    // Automate
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
     synth.param.gain.exponentialRampToValueAtTime(1, when + 1/32)
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.25)
 
     synth.stop(when + 0.25)
 
+    // Teardown
     const now = engine.audio.time()
-    setTimeout(() => binaural.destroy(), (when - now + 0.5) * 1000)
-  }
-
-  function renderGroup(group = [], {octave, offset, when} = {}) {
-    octave *= 12
-
-    renderGrain({
-      note: 74 + octave,
-      scan: group[0],
-      when: when,
-    })
-
-    renderGrain({
-      note: 72 + octave,
-      scan: group[1],
-      type: 'triangle',
-      when: when + offset,
-    })
-
-    renderGrain({
-      note: 69 + octave,
-      scan: group[2],
-      type: 'sawtooth',
-      when: when + (2 * offset),
-    })
-
-    renderGrain({
-      note: 67 + octave,
-      scan: group[3],
-      type: 'triangle',
-      when: when + (3 * offset),
-    })
-
-    renderGrain({
-      note: 65 + octave,
-      scan: group[4],
-      when: when + (4 * offset),
-    })
+    setTimeout(() => binaural.destroy(), (when - now + 0.25) * 1000)
   }
 
   return {
-    complete: function (scan) {
-      render(scan)
+    complete: function (results) {
+      render(results)
       recharge()
       return this
     },
-    trigger: function ({
-      forward = false,
-    } = {}) {
-      honk(forward)
+    trigger: function () {
+      honk()
       return this
     },
   }
 })()
 
 engine.ready(() => {
-  content.scan.on('complete', (scan) => content.audio.scan.complete(scan))
+  content.scan.on('complete', (results) => content.audio.scan.complete(results))
   content.scan.on('trigger', (e) => content.audio.scan.trigger(e))
 })

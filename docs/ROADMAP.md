@@ -9,7 +9,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Cave geometry rewrite
 - Floor geometry rewrite
 - Floor proximity / cave enterance cues
-- Scanning enhancements
 - Treasure occlusion
 - Investigate getting stuck at surface when jumping at lower velocities
 

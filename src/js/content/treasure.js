@@ -119,25 +119,15 @@ content.treasure = (() => {
 
   function spawnTreasure({
     chunk,
-    scan,
+    results,
   }) {
     // Use scan results for possible locations
     // Sort locations by distance descending to prevent
-    const locations = [
-      scan.down,
-      scan.forward,
-      scan.forwardLeftDown,
-      scan.forwardRightDown,
-      scan.left,
-      scan.reverse,
-      scan.reverseLeftDown,
-      scan.reverseRightDown,
-      scan.right,
-    ].filter((trace) => {
-      return trace
-        && trace.isSolid
-        && (trace.distance > content.const.treasurePickupRadius * 2)
-        && !spawnedThreed.has(scan.x, scan.y, scan.z)
+    const locations = results.filter((result) => {
+      return result
+        && result.isSolid
+        && (result.distance > content.const.treasurePickupRadius * 2)
+        && !spawnedThreed.has(result.x, result.y, result.z)
     }).sort((a, b) => b.distance - a.distance)
 
     // Bias towards farther scans, e.g. to prevent automatic acquisition
@@ -216,7 +206,7 @@ content.treasure = (() => {
       importSpawned(data.spawned || [])
       return this
     },
-    onScan: function (scan) {
+    onScan: function (results) {
       // TODO: Improve this by rolling chunk for each individual scan point
 
       const {x, y, z} = engine.position.getVector()
@@ -259,7 +249,7 @@ content.treasure = (() => {
 
       spawnTreasure({
         chunk,
-        scan,
+        results,
       })
     },
     rebuildProps: function () {
@@ -304,7 +294,7 @@ content.treasure = (() => {
 })()
 
 engine.ready(() => {
-  content.scan.on('recharge', (scan) => content.treasure.onScan(scan))
+  content.scan.on('recharge', (results) => content.treasure.onScan(results))
 })
 
 engine.state.on('export', (data) => data.treasure = content.treasure.export())

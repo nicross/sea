@@ -3,6 +3,7 @@
 - Increased draw distance
 - Noise refactor (surface and floor)
 - Performance improvements
+- Scanning enhancements
 - Save versioning
 - Separate draw distance sliders
 

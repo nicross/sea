@@ -1,95 +1,112 @@
 content.scan = (() => {
-  const maxDistance = 50,
-    pubsub = engine.utility.pubsub.create(),
-    unit2 = Math.sqrt(2) / 2,
-    unit3 = Math.sqrt(3) / 3
+  const maxCount = 64,
+    maxDistance = 50,
+    minCount = 48,
+    pubsub = engine.utility.pubsub.create()
 
   let isCooldown = false
 
   function doRaytrace(position, direction) {
     const stepDistance = content.terrain.voxels.granularity()
 
-    let {
+    const {
       x: dx,
       y: dy,
       z: dz,
-    } = engine.utility.vector3d.create(direction).rotateQuaternion(position.quaternion).scale(stepDistance)
+    } = direction
 
-    let {x, y, z} = position.vector
+    let {x, y, z} = position
 
-    let d = 0,
+    let distance = 0,
       isSolid
 
     do {
       x += dx
       y += dy
       z += dz
-      d += stepDistance
+      distance += stepDistance
       isSolid = content.terrain.voxels.get({x, y, z}).isSolid
-    } while (!isSolid && d < maxDistance)
+    } while (!isSolid && ((distance + stepDistance) <= maxDistance))
 
     return {
-      distance: d,
+      distance,
+      distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
       isSolid,
-      ratio: isSolid ? d / maxDistance : Infinity,
       x,
       y,
       z,
+      zRatio: smooth(engine.utility.clamp(engine.utility.scale(z - position.z, -maxDistance, maxDistance, 0, 1), 0, 1)),
     }
   }
 
   async function scanForward() {
-    const position = {
-      quaternion: engine.position.getQuaternion(),
-      vector: engine.position.getVector(),
+    const heading = engine.position.getQuaternion(),
+      position = engine.position.getVector(),
+      results = [],
+      stepDistance = content.terrain.voxels.granularity()
+
+    // First result is directly forward
+    const reverse = engine.utility.vector3d.create({
+      x: 1,
+    }).normalize().rotateQuaternion(heading).scale(stepDistance)
+
+    results.push(
+      await scheduleRaytrace(position, reverse)
+    )
+
+    // Scan random forward directions
+    const count = engine.utility.random.float(minCount, maxCount)
+
+    for (let i = 0; i < count; i += 1) {
+      const direction = engine.utility.vector3d.create({
+        x: engine.utility.random.float(0, 1),
+        y: engine.utility.random.float(-1, 1),
+        z: engine.utility.random.float(-1, 1),
+      }).normalize().rotateQuaternion(heading).scale(stepDistance)
+
+      const result = await scheduleRaytrace(position, direction)
+
+      if (result.isSolid) {
+        results.push(result)
+      }
     }
 
-    return {
-      down: await scheduleRaytrace(position, {z: -1}),
-      forward: await scheduleRaytrace(position, {x: 1}),
-      forwardDown: await scheduleRaytrace(position, {x: unit2, z: -unit2}),
-      forwardLeft: await scheduleRaytrace(position, {x: unit2, y: unit2}),
-      forwardLeftDown: await scheduleRaytrace(position, {x: unit3, y: unit3, z: -unit3}),
-      forwardLeftUp: await scheduleRaytrace(position, {x: unit3, y: unit3, z: unit3}),
-      forwardRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
-      forwardRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      forwardRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      forwardUp: await scheduleRaytrace(position, {x: unit2, z: unit2}),
-      left: await scheduleRaytrace(position, {y: 1}),
-      leftDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
-      leftUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
-      right: await scheduleRaytrace(position, {y: -1}),
-      rightDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
-      rightUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
-      up: await scheduleRaytrace(position, {z: 1}),
-    }
+    return results
   }
 
   async function scanReverse() {
-    const position = {
-      quaternion: engine.position.getQuaternion(),
-      vector: engine.position.getVector(),
+    const heading = engine.position.getQuaternion(),
+      position = engine.position.getVector(),
+      results = [],
+      stepDistance = content.terrain.voxels.granularity()
+
+    // First result is directly reverse
+    const reverse = engine.utility.vector3d.create({
+      x: -1,
+    }).normalize().rotateQuaternion(heading).scale(stepDistance)
+
+    results.push(
+      await scheduleRaytrace(position, reverse)
+    )
+
+    // Scan random reverse directions
+    const count = engine.utility.random.float(minCount, maxCount)
+
+    for (let i = 0; i < count; i += 1) {
+      const direction = engine.utility.vector3d.create({
+        x: engine.utility.random.float(-1, 0),
+        y: engine.utility.random.float(-1, 1),
+        z: engine.utility.random.float(-1, 1),
+      }).normalize().rotateQuaternion(heading).scale(stepDistance)
+
+      const result = await scheduleRaytrace(position, direction)
+
+      if (result.isSolid) {
+        results.push(result)
+      }
     }
 
-    return {
-      down: await scheduleRaytrace(position, {z: -1}),
-      left: await scheduleRaytrace(position, {y: 1}),
-      leftDown: await scheduleRaytrace(position, {y: unit2, z: -unit2}),
-      leftUp: await scheduleRaytrace(position, {y: unit2, z: unit2}),
-      reverse: await scheduleRaytrace(position, {x: -1}),
-      reverseDown: await scheduleRaytrace(position, {x: -unit2, z: -unit2}),
-      reverseLeft: await scheduleRaytrace(position, {x: -unit2, y: unit2}),
-      reverseLeftDown: await scheduleRaytrace(position, {x: -unit3, y: unit3, z: -unit3}),
-      reverseLeftUp: await scheduleRaytrace(position, {x: -unit3, y: unit3, z: unit3}),
-      reverseRight: await scheduleRaytrace(position, {x: unit2, y: -unit2}),
-      reverseRightDown: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: -unit3}),
-      reverseRightUp: await scheduleRaytrace(position, {x: unit3, y: -unit3, z: unit3}),
-      reverseUp: await scheduleRaytrace(position, {x: -unit2, z: unit2}),
-      right: await scheduleRaytrace(position, {y: -1}),
-      rightDown: await scheduleRaytrace(position, {y: -unit2, z: -unit2}),
-      rightUp: await scheduleRaytrace(position, {y: -unit2, z: unit2}),
-      up: await scheduleRaytrace(position, {z: 1}),
-    }
+    return results
   }
 
   async function scheduleRaytrace(...args) {
@@ -98,6 +115,11 @@ content.scan = (() => {
         resolve(doRaytrace(...args))
       })
     })
+  }
+
+  function smooth(value) {
+    // 6x^5 - 15x^4 + 10x^3
+    return (value * value * value) * (value * ((value * 6) - 15) + 10)
   }
 
   return engine.utility.pubsub.decorate({

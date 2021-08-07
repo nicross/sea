@@ -1,6 +1,7 @@
 # S.E.A. changelog
 ## v1.5.0
 - Increased draw distance
+- Improved fast travel transitions
 - Noise refactor (surface and floor)
 - Performance improvements
 - Scanning enhancements

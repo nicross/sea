@@ -89,6 +89,10 @@ app.canvas = (() => {
     aspect: () => aspect,
     clear,
     context: () => context,
+    crossfade: () => {
+      crossfade()
+      return this
+    },
     forceResize: function () {
       onResize()
       return this

@@ -223,72 +223,72 @@ app.state.screen.on('enter', (e) => {
 // Fast travel actions
 app.state.screen.on('before-fastTravel-floor', () => {
   const position = engine.position.getVector()
-  const floor = content.terrain.floor.value(position.x, position.y) + 5
 
-  const distance = Math.abs(position.z - floor),
-    travelTime = distance / content.const.underwaterTurboMaxVelocity
+  const floor = content.terrain.floor.value(position.x, position.y),
+    velocity = content.const.underwaterTurboMaxVelocity
+
+  const next = engine.utility.vector3d.create({
+    ...position,
+    z: floor + velocity,
+  })
+
+  const distance = next.distance(position),
+    travelTime = distance / velocity
 
   content.time.incrementOffset(travelTime)
+  engine.position.setVector(next)
 
-  engine.position.setVector({
-    ...position,
-    z: floor,
-  })
+  content.movement.reset().import()
+  app.canvas.crossfade()
 
-  // Force hard reset
-  engine.state.import({
-    ...engine.state.export(),
-  })
+  engine.position.setVelocity(
+    next.subtract(position).normalize().scale(velocity)
+  )
 
   app.stats.fastTravels.increment()
 })
 
 app.state.screen.on('before-fastTravel-origin', () => {
   const position = engine.position.getVector()
-  const distance = position.distance()
 
-  const velocity = position.z > 0
-    ? content.const.surfaceTurboMaxVelocity
-    : content.const.underwaterTurboMaxVelocity
+  const travelTime = (engine.utility.distance({...position, z: 0}) / content.const.surfaceTurboMaxVelocity)
+    + (position.z / content.const.underwaterTurboMaxVelocity)
 
-  const travelTime = distance / velocity
+  const next = engine.utility.vector3d.create({
+    z: -engine.const.zero,
+  })
+
+  engine.position.setVector(next)
   content.time.incrementOffset(travelTime)
 
-  const surface = content.surface.value(0, 0) + engine.const.zero
-
-  engine.position.setVector({
-    x: 0,
-    y: 0,
-    z: surface,
-  })
-
-  // Force hard reset
-  engine.state.import({
-    ...engine.state.export(),
-  })
+  content.movement.reset().import()
+  app.canvas.crossfade()
 
   app.stats.fastTravels.increment()
 })
 
 app.state.screen.on('before-fastTravel-surface', () => {
-  const position = engine.position.getVector()
+  const position = engine.position.getVector(),
+    velocity = content.const.underwaterTurboMaxVelocity
 
   const distance = Math.abs(position.z),
-    travelTime = distance / content.const.underwaterTurboMaxVelocity
+    travelTime = distance / velocity
 
   content.time.incrementOffset(travelTime)
 
-  const surface = content.surface.value(0, 0) + engine.const.zero
-
-  engine.position.setVector({
+  const next = engine.utility.vector3d.create({
     ...position,
-    z: surface,
+    z: content.surface.value(position.x, position.y) - (velocity / 6),
   })
 
-  // Force hard reset
-  engine.state.import({
-    ...engine.state.export(),
-  })
+  engine.position.setVector(next)
+
+  content.movement.reset().import()
+  app.canvas.crossfade()
+
+  engine.position.setVelocity(
+    next.subtract(position).normalize().scale(velocity / 2)
+  )
 
   app.stats.fastTravels.increment()
 })

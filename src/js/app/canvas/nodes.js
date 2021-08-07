@@ -29,9 +29,11 @@ app.canvas.nodes = (() => {
 
   function drawNodes() {
     const drawDistance = app.settings.computed.drawDistance,
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       height = main.height(),
       hfov = main.hfov(),
       position = syngen.position.getVector(),
+      rotateYaw = Math.atan2(heading.y, heading.x),
       vfov = main.vfov(),
       width = main.width()
 
@@ -44,7 +46,14 @@ app.canvas.nodes = (() => {
       width: drawDistance * 2,
     }).reduce((nodes, node) => {
       // Convert to relative space
-      const relative = main.toRelative(node)
+      const relative = engine.utility.vector3d.create(
+        engine.utility.vector2d.create({
+          x: node.x - position.x,
+          y: node.y - position.y,
+        }).rotate(rotateYaw)
+      )
+
+      relative.z = node.z - position.z
 
       // Filter out nodes behind field of view
       if (relative.x <= 0) {
@@ -93,8 +102,10 @@ app.canvas.nodes = (() => {
     // Limit to maximum object limit
     const length = Math.min(nodes.length, maxObjects)
 
-    // Draw nodes
-    nodes.slice(-length).forEach((node, index) => {
+    // Draw nodes within limits
+    for (let index = 0; index < length; index += 1) {
+      const node = nodes[nodes.length - length + index]
+
       const alphaRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0),
         radiusRatio = engine.utility.scale(node.z, 0, 1000, 1, 0), // max drawDistance
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 64)
@@ -109,7 +120,7 @@ app.canvas.nodes = (() => {
 
       context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`
       context.fillRect(node.x - radius, node.y - radius, radius * 2, radius * 2)
-    })
+    }
   }
 
   function getNodeHue({

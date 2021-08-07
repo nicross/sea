@@ -102,8 +102,11 @@ app.canvas.stars = (() => {
   function drawStars() {
     const globalAlpha = calculateAlpha(),
       globalRadius = calculateRadius(),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       height = main.height(),
       hfov = main.hfov(),
+      rotatePitch = -2 * Math.PI * content.time.clock(),
+      rotateYaw = Math.atan2(heading.y, heading.x),
       twinkleDepth = calculateTwinkleDepth(),
       vfov = main.vfov(),
       width = main.width()
@@ -112,16 +115,16 @@ app.canvas.stars = (() => {
       return
     }
 
-    const conjugate = engine.position.getQuaternion().conjugate(),
-      horizon = calculateHorizon(),
-      rotation = -2 * Math.PI * content.time.clock()
+    const horizon = calculateHorizon(),
+      horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
 
-    const horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
+    context.fillStyle = '#FFFFFF'
 
     for (const star of stars) {
       const relative = star.vector.rotateEuler({
-        pitch: rotation,
-      }).rotateQuaternion(conjugate)
+        pitch: rotatePitch,
+        yaw: rotateYaw,
+      })
 
       const hangle = Math.atan2(relative.y, relative.x)
 
@@ -158,7 +161,7 @@ app.canvas.stars = (() => {
 
       const radius = star.radius * globalRadius
 
-      context.fillStyle = `rgba(255, 255, 255, ${alpha})`
+      context.globalAlpha = alpha
       context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
     }
   }

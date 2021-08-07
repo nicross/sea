@@ -31,23 +31,32 @@ app.canvas.surface = (() => {
 
   function drawNodes() {
     const color = getColor(),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       height = main.height(),
       hfov = main.hfov(),
       position = engine.position.getVector(),
+      positionGrid = position.clone(),
+      rotateYaw = Math.atan2(heading.y, heading.x),
       time = content.time.value(),
       vfov = main.vfov(),
       width = main.width(),
       zOffset = engine.const.positionRadius / 2
 
-    position.x = Math.round(position.x)
-    position.y = Math.round(position.y)
+    positionGrid.x = Math.round(positionGrid.x)
+    positionGrid.y = Math.round(positionGrid.y)
 
-    // TODO: Optimize as rectangle ahead
+    // TODO: Optimize further, possibly by selecting a sector from a pre-computed disc of relative points based on heading/hfov (a bitree could be useful), converting to global space
     for (let x = -drawDistance; x < drawDistance; x += 1) {
       for (let y = -drawDistance; y < drawDistance; y += 1) {
         // Convert to relative space
-        const grid = position.add({x, y}),
-          relative = main.toRelative(grid)
+        const global = positionGrid.add({x, y})
+
+        const relative = engine.utility.vector3d.create(
+          engine.utility.vector2d.create({
+            x: global.x - position.x,
+            y: global.y - position.y,
+          }).rotate(rotateYaw)
+        )
 
         // Filter out nodes behind field of view
         if (relative.x <= 0) {
@@ -67,7 +76,7 @@ app.canvas.surface = (() => {
         }
 
         // Calculate z-coordinate and vertical angle
-        relative.z = content.surface.value(grid.x, grid.y) - (position.z + zOffset)
+        relative.z = content.surface.value(global.x, global.y) - (position.z + zOffset)
 
         const vangle = Math.atan2(relative.z, relative.x)
 
@@ -94,7 +103,7 @@ app.canvas.surface = (() => {
         const alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
           radiusRatio = engine.utility.scale(distance, 0, 35, 1, 0), // max drawDistance
           radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 12),
-          shimmer = getShimmer(grid.x, grid.y, time)
+          shimmer = getShimmer(global.x, global.y, time)
 
         // Apply shimmer to color
         const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0.5, 1.5, shimmer), 0, 1) * (alphaRatio ** 0.666),

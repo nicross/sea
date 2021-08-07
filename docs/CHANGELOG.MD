@@ -1,6 +1,7 @@
 # S.E.A. changelog
 ## v1.5.0
-- Noise refactor (surface and floor )
+- Increased draw distance
+- Noise refactor (surface and floor)
 - Performance improvements
 - Save versioning
 

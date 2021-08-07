@@ -2,7 +2,7 @@ app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     main = app.canvas,
-    maxDrawDistance = 50,
+    maxDrawDistance = 75,
     shimmerField = engine.utility.simplex3d.create('shimmer'),
     shimmerScaleX = 2 / engine.utility.simplex3d.prototype.skewFactor,
     shimmerScaleY = 2 / engine.utility.simplex3d.prototype.skewFactor,
@@ -67,7 +67,7 @@ app.canvas.surface = (() => {
     canvas.height = height
     canvas.width = width
 
-    drawDistance = Math.round(engine.utility.lerpExp(10, 50, app.settings.raw.drawDistance, 0.9275))
+    drawDistance = Math.round(engine.utility.lerp(10, 75, app.settings.raw.drawDistance))
     nodeRadius = Math.max(1, (width / 1920) * 8)
 
     clear()
@@ -92,6 +92,8 @@ app.canvas.surface = (() => {
 
     positionGrid.x = Math.round(positionGrid.x)
     positionGrid.y = Math.round(positionGrid.y)
+
+    context.fillStyle = `hsl(${color.h}, ${color.s}%, ${color.l * 100}%)`
 
     for (const vertex of vertices) {
       // Convert to relative space
@@ -125,12 +127,10 @@ app.canvas.surface = (() => {
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 12),
         shimmer = getShimmer(global.x, global.y, time)
 
-      // Apply shimmer to color
-      const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0.5, 1.5, shimmer), 0, 1) * (alphaRatio ** 0.666),
-        luminance = engine.utility.clamp(color.l * engine.utility.lerp(1.5, 0.5, shimmer), 0, 1)
+      const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0, 2, shimmer), 0, 1) * (alphaRatio ** 0.666)
 
       // Draw
-      context.fillStyle = `hsla(${color.h}, ${color.s}%, ${luminance * 100}%, ${alpha})`
+      context.globalAlpha = alpha
       context.fillRect(screen.x - radius, screen.y - radius, radius * 2, radius * 2)
     }
   }

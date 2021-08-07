@@ -2,7 +2,7 @@ app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     main = app.canvas,
-    maxDrawDistance = 35,
+    maxDrawDistance = 50,
     shimmerField = engine.utility.simplex3d.create('shimmer'),
     shimmerScaleX = 2 / engine.utility.simplex3d.prototype.skewFactor,
     shimmerScaleY = 2 / engine.utility.simplex3d.prototype.skewFactor,
@@ -67,7 +67,7 @@ app.canvas.surface = (() => {
     canvas.height = height
     canvas.width = width
 
-    drawDistance = Math.round(engine.utility.lerpExp(5, 35, app.settings.raw.drawDistance, 0.9275))
+    drawDistance = Math.round(engine.utility.lerpExp(10, 50, app.settings.raw.drawDistance, 0.9275))
     nodeRadius = Math.max(1, (width / 1920) * 8)
 
     clear()
@@ -82,7 +82,7 @@ app.canvas.surface = (() => {
       heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion()),
       headingConjugate = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       hfov = main.hfov(),
-      hfovLeeway = hfov / 8,
+      hfovLeeway = hfov / 4,
       position = engine.position.getVector(),
       positionGrid = position.clone(),
       rotateYaw = Math.atan2(headingConjugate.y, headingConjugate.x),

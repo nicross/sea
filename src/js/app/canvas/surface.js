@@ -21,6 +21,8 @@ app.canvas.surface = (() => {
     range: engine.const.tau * 3,
   })
 
+  let nodeRadius
+
   // Fill gridCache to maximum draw distance
   for (let x = -maxDrawDistance; x < maxDrawDistance; x += 1) {
     for (let y = -maxDrawDistance; y < maxDrawDistance; y += 1) {
@@ -55,9 +57,6 @@ app.canvas.surface = (() => {
     }
   }
 
-  let drawDistance,
-    nodeRadius
-
   content.utility.ephemeralNoise.manage(shimmerField)
 
   main.on('resize', () => {
@@ -67,7 +66,6 @@ app.canvas.surface = (() => {
     canvas.height = height
     canvas.width = width
 
-    drawDistance = Math.round(engine.utility.lerp(10, 75, app.settings.raw.drawDistance))
     nodeRadius = Math.max(1, (width / 1920) * 8)
 
     clear()
@@ -79,6 +77,7 @@ app.canvas.surface = (() => {
 
   function drawNodes() {
     const color = getColor(),
+      drawDistance = app.settings.computed.drawDistanceDynamic,
       heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion()),
       headingConjugate = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       hfov = main.hfov(),
@@ -171,7 +170,8 @@ app.canvas.surface = (() => {
       return false
     }
 
-    const surface = content.surface.current()
+    const drawDistance = app.settings.computed.drawDistanceDynamic,
+      surface = content.surface.current()
 
     if (z > surface) {
       return z - surface < drawDistance

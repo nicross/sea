@@ -7,7 +7,18 @@ app.settings = (() => {
         content.audio.compass.setGain(computedValue)
       },
     },
-    drawDistance: {
+    drawDistanceDynamic: {
+      compute: (rawValue) => Math.round(engine.utility.lerp(10, 75, rawValue)),
+      default: 1,
+      update: () => {
+        app.canvas.forceResize()
+
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
+    drawDistanceStatic: {
       compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
       default: 1,
       update: () => {

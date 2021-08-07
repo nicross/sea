@@ -4,6 +4,7 @@
 - Noise refactor (surface and floor)
 - Performance improvements
 - Save versioning
+- Separate draw distance sliders
 
 ## v1.4.5
 - Updated syngen to the latest version

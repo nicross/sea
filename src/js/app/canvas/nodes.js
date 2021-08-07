@@ -28,7 +28,7 @@ app.canvas.nodes = (() => {
   }
 
   function drawNodes() {
-    const drawDistance = app.settings.computed.drawDistance,
+    const drawDistance = app.settings.computed.drawDistanceStatic,
       heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       height = main.height(),
       hfov = main.hfov(),

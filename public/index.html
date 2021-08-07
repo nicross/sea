@@ -265,10 +265,19 @@
             </div>
             <div class="a-graphics--onFields a-graphics--subfields">
               <div class="c-screen--field">
-                <label class="c-screen--label" for="a-graphics--drawDistanceInput">Draw Distance</label>
-                <div class="c-slider a-graphics--drawDistance">
+                <label class="c-screen--label" for="a-graphics--drawDistanceDynamicInput">Dynamic Draw Distance</label>
+                <div class="c-slider a-graphics--drawDistanceDynamic">
                   <div class="c-slider--input">
-                    <input id="a-graphics--drawDistanceInput" max="1000" min="50" step="50" type="range" />
+                    <input id="a-graphics--drawDistanceDynamicInput" max="75" min="10" step="5" type="range" />
+                  </div>
+                  <div class="c-slider--value"></div>
+                </div>
+              </div>
+              <div class="c-screen--field">
+                <label class="c-screen--label" for="a-graphics--drawDistanceStaticInput">Static Draw Distance</label>
+                <div class="c-slider a-graphics--drawDistanceStatic">
+                  <div class="c-slider--input">
+                    <input id="a-graphics--drawDistanceStaticInput" max="1000" min="50" step="50" type="range" />
                   </div>
                   <div class="c-slider--value"></div>
                 </div>

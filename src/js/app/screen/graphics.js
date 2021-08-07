@@ -94,7 +94,8 @@ app.screen.graphics = (() => {
   function hydrateSliders() {
     [
       ['.a-graphics--backlightStrength', app.settings.raw.graphicsBacklightStrength, app.settings.setGraphicsBacklightStrength],
-      ['.a-graphics--drawDistance', app.settings.raw.drawDistance, app.settings.setDrawDistance],
+      ['.a-graphics--drawDistanceDynamic', app.settings.raw.drawDistanceDynamic, app.settings.setDrawDistanceDynamic],
+      ['.a-graphics--drawDistanceStatic', app.settings.raw.drawDistanceStatic, app.settings.setDrawDistanceStatic],
       ['.a-graphics--fov', app.settings.raw.graphicsFov, app.settings.setGraphicsFov],
       ['.a-graphics--hudOpacity', app.settings.raw.graphicsHudOpacity, app.settings.setGraphicsHudOpacity],
       ['.a-graphics--tracers', app.settings.raw.graphicsTracers, app.settings.setGraphicsTracers],

@@ -12,10 +12,6 @@ app.settings = (() => {
       default: 1,
       update: () => {
         app.canvas.forceResize()
-
-        if (engine.loop.isPaused()) {
-          app.canvas.forceUpdate()
-        }
       },
     },
     environmentVolume: {
@@ -56,10 +52,6 @@ app.settings = (() => {
       default: 0.25,
       update: () => {
         app.canvas.forceResize()
-
-        if (engine.loop.isPaused()) {
-          app.canvas.forceUpdate()
-        }
       },
     },
     graphicsHudOpacity: {

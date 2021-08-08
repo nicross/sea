@@ -71,6 +71,10 @@ app.canvas = (() => {
   function onResize() {
     recalculate()
     pubsub.emit('resize')
+
+    if (engine.loop.isPaused()) {
+      draw()
+    }
   }
 
   function recalculate() {

@@ -39,6 +39,9 @@ content.terrain = {
   isSolid: function (x, y, z) {
     const floor = this.floor.value(x, y)
 
+    // XXX: Ignore caves
+    return z <= floor
+
     if (z > floor) {
       return false
     }

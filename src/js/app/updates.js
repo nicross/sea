@@ -2,7 +2,7 @@ app.updates = (() => {
   const registry = []
 
   engine.ready(() => {
-    const appVersion = app.version(),
+    const appVersion = app.version().replace('-debug', ''),
       storageVersions = app.storage.getVersions()
 
     // First time player

@@ -1,6 +1,6 @@
 content.scan = (() => {
   const maxCount = 64,
-    maxDistance = 50,
+    maxDistance = 100,
     minCount = 48,
     pubsub = engine.utility.pubsub.create()
 

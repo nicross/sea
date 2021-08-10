@@ -122,7 +122,7 @@ content.terrain.floor = (() => {
   }
 
   function getDepth(x, y) {
-    const scale = 10000 / engine.utility.simplex2d.prototype.skewFactor
+    const scale = 20000 / engine.utility.simplex2d.prototype.skewFactor
 
     let value = depthField.value(x / scale, y / scale)
 
@@ -179,7 +179,7 @@ content.terrain.floor = (() => {
     }, 0)
 
     for (const result of results) {
-      result.weight = (1 - (result.distance / totalDistance)) ** 2
+      result.weight = (1 - (result.distance / totalDistance)) ** 16
     }
 
     let totalWeight = results.reduce((sum, result) => {
@@ -188,7 +188,6 @@ content.terrain.floor = (() => {
 
     for (const result of results) {
       result.weight /= totalWeight
-      result.weight = 1
     }
 
     return results
@@ -236,7 +235,7 @@ content.terrain.floor = (() => {
 lowlands
 rolling plains
 canyons basins
-rough hoodoos
+rough outcrops
 mountains plateaus
 highlands
 
@@ -364,7 +363,7 @@ content.terrain.floor.registerBiome({
 })
 
 content.terrain.floor.registerBiome({
-  name: 'hoodoos',
+  name: 'outcrops',
   x: 3/5,
   y: 2/3,
   generate: ({
@@ -381,14 +380,14 @@ content.terrain.floor.registerBiome({
     noise = (Math.cos(noise * 2 * Math.PI) / 2) + 1
 
     amplitude = amplitude(x, y, 250)
-    amplitude = engine.utility.lerp(0, 250, amplitude)
+    amplitude = engine.utility.lerpExp(0, 250, amplitude, 4)
 
     exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(2, 8, exponent)
+    exponent = engine.utility.lerpExp(6, 2, exponent, 2)
 
     wildcard = wildcard(x, y, 200)
 
-    const stairHeight = engine.utility.lerp(1, 25, wildcard) / weight
+    const stairHeight = engine.utility.lerp(2, 25, wildcard) / weight
     const value = amplitude * (noise ** exponent)
     const v0 = Math.floor(value / stairHeight) * stairHeight
     const delta = smooth((value - v0) / stairHeight, 20) * stairHeight

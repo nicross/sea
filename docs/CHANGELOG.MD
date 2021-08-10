@@ -1,5 +1,6 @@
 # S.E.A. changelog
 ## v1.5.0
+- Floor generation rework
 - Increased draw distance
 - Improved fast travel transitions
 - Noise refactor (surface and floor)

@@ -1,6 +1,8 @@
 content.exploration = (() => {
   const list = [],
-    tree = engine.utility.octree.create()
+    tree = engine.utility.octree.create({
+      maxItems: 100,
+    })
 
   function addNode(node) {
     const vector = engine.utility.vector3d.create(node)

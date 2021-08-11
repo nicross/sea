@@ -224,11 +224,17 @@ content.terrain.floor = (() => {
       biomes[definition.name] = definition
       return this
     },
+    reset: function () {
+      cache.clear()
+      return this
+    },
     value: function (x, y) {
       return getValue(x, y)
     },
   }
 })()
+
+engine.state.on('reset', () => content.terrain.floor.reset())
 
 /*
 

@@ -37,14 +37,70 @@ app.canvas.nodes = (() => {
       vfov = main.vfov(),
       width = main.width()
 
-    const nodes = content.exploration.retrieve({
-      x: position.x - drawDistance,
-      y: position.y - drawDistance,
-      z: position.z - drawDistance,
-      depth: drawDistance * 2,
-      height: drawDistance * 2,
-      width: drawDistance * 2,
-    }).reduce((nodes, node) => {
+    let nodes = []
+
+    // Exclude nodes that are known to be completely behind the camera
+    // TODO: Optimize with a granular approach that selects small chunks based on rotation and field of view, like the surface
+
+    const quadrantRotate = engine.utility.normalizeAngle(-rotateYaw)
+
+    // Quadrant 1 (x, y)
+    if (quadrantRotate <= Math.PI || quadrantRotate >= Math.PI*3/2) {
+      nodes.push(
+        ...content.exploration.retrieve({
+          x: position.x,
+          y: position.y,
+          z: position.z - drawDistance,
+          depth: drawDistance * 2,
+          height: drawDistance,
+          width: drawDistance,
+        })
+      )
+    }
+
+    // Quadrant 2 (-x, y)
+    if (engine.utility.between(quadrantRotate, 0, Math.PI*3/2)) {
+      nodes.push(
+        ...content.exploration.retrieve({
+          x: position.x - drawDistance,
+          y: position.y,
+          z: position.z - drawDistance,
+          depth: drawDistance * 2,
+          height: drawDistance,
+          width: drawDistance,
+        })
+      )
+    }
+
+    // Quadrant 3 (-x, -y)
+    if (engine.utility.between(quadrantRotate, Math.PI/2, Math.PI*2)) {
+      nodes.push(
+        ...content.exploration.retrieve({
+          x: position.x - drawDistance,
+          y: position.y - drawDistance,
+          z: position.z - drawDistance,
+          depth: drawDistance * 2,
+          height: drawDistance,
+          width: drawDistance,
+        })
+      )
+    }
+
+    // Quadrant 4 (x, -y)
+    if (quadrantRotate <= Math.PI/2 || quadrantRotate >= Math.PI) {
+      nodes.push(
+        ...content.exploration.retrieve({
+          x: position.x,
+          y: position.y - drawDistance,
+          z: position.z - drawDistance,
+          depth: drawDistance * 2,
+          height: drawDistance,
+          width: drawDistance,
+        })
+      )
+    }
+
+    nodes = nodes.reduce((nodes, node) => {
       // Convert to relative space
       const relative = engine.utility.vector3d.create(
         engine.utility.vector2d.create({

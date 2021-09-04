@@ -1,7 +1,7 @@
 content.terrain.collision = (() => {
   const deltas = [],
     granularity = 1/4,
-    radius = 0.5
+    radius = 1/2
 
   // Cache deltas to check
   for (let z = -radius; z <= radius; z += granularity) {
@@ -19,6 +19,11 @@ content.terrain.collision = (() => {
       }
     }
   }
+
+  // Sort deltas by distance (outside to inside) to optimize movement checks
+  deltas.sort((a, b) => {
+    return b.distance() - a.distance()
+  })
 
   return {
     check: ({

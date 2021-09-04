@@ -3,7 +3,7 @@ content.audio.underwater.momentum = (() => {
     bus = content.audio.mixer.bus.environment.createBus()
 
   const frequencyDropoff = 1/4,
-    gainDropoff = 1/4,
+    gainDropoff = 1,
     maxFrequency = 200,
     minFrequency = 80
 

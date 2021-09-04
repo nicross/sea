@@ -1,5 +1,6 @@
 content.exploration = (() => {
   const list = [],
+    radius = 1,
     tree = engine.utility.octree.create({
       maxItems: 100,
     })
@@ -28,7 +29,7 @@ content.exploration = (() => {
       return this
     },
     onCollision: function (voxel) {
-      const checkNearby = tree.find(voxel, content.const.explorationNodeRadius)
+      const checkNearby = tree.find(voxel, radius)
 
       if (!checkNearby) {
         addNode(voxel)
@@ -42,7 +43,7 @@ content.exploration = (() => {
           continue
         }
 
-        const checkNearby = tree.find(result, content.const.explorationNodeRadius)
+        const checkNearby = tree.find(result, radius)
 
         if (checkNearby) {
           continue

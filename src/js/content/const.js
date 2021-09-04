@@ -3,7 +3,6 @@ content.const = {
   airDeceleration: 0,
   dayDuration: 30 * 60,
   ephemeralNoiseTimer: 60,
-  explorationNodeRadius: 1,
   idleTimeout: 10,
   lightZone: -1000,
   midnightZoneMin: -750,

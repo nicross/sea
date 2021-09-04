@@ -1,5 +1,5 @@
 content.audio.nodes = (() => {
-  const activeNodes = engine.utility.octree.create()
+  const activeNodes = new Set()
 
   // TODO: Use settings
   const maxProps = 10,
@@ -29,7 +29,7 @@ content.audio.nodes = (() => {
   function generateProp(velocity) {
     const position = engine.position.getVector()
 
-    // Find nearby nodes
+    // Find nearby inactive nodes
     const nodes = content.exploration.retrieve({
       depth: radius * 2,
       height: radius * 2,
@@ -37,7 +37,7 @@ content.audio.nodes = (() => {
       x: position.x - radius,
       y: position.y - radius,
       z: position.z -radius,
-    })
+    }).filter((node) => !activeNodes.has(node))
 
     if (!nodes.length) {
       return
@@ -50,14 +50,9 @@ content.audio.nodes = (() => {
 
     nodes.sort((a, b) => a._distance2 - b._distance2)
 
-    // Find random inactive nodes, weighted by nearest distance
-    let node
-
-    do {
-      node = engine.utility.choose(nodes, Math.random() ** 2)
-    } while (activeNodes.find(node, engine.const.zero))
-
-    activeNodes.insert(node)
+    // Find random node, weighted by nearest distance
+    const node = engine.utility.choose(nodes, Math.random() ** 2)
+    activeNodes.add(node)
 
     // Instantiate prop
     const prop = engine.props.create(getPrototype(node), {
@@ -71,7 +66,7 @@ content.audio.nodes = (() => {
     const onDestroy = prop.onDestroy
 
     prop.onDestroy = function () {
-      activeNodes.remove(node)
+      activeNodes.delete(node)
       return onDestroy.call()
     }
 

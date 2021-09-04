@@ -5,14 +5,15 @@ This document outlines upcoming changes for post-jam releases.
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ## v1.5.0
-- Surface geometry improvements
+- Proximity cues
 - Cave geometry rewrite
-- Floor geometry rewrite
-- Floor proximity / cave enterance cues
+- Cave sounds
+- Height map scanning
 - Treasure occlusion
-- Investigate getting stuck at surface when jumping at lower velocities
+- Surface geometry improvements?
 
 ## Known issues
+- Stuck under surface when jumping at lower velocities
 
 ## Wishlist
 ### Audio

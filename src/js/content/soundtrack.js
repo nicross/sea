@@ -91,7 +91,7 @@ content.soundtrack = (() => {
       }
     }
 
-    harmonics = harmonics.sort((a, b) => a - b)
+    harmonics.sort((a, b) => a - b)
   }
 
   return {

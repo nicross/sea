@@ -28,8 +28,6 @@ content.const = {
 
 engine.const.distancePower = 1.25
 engine.const.positionRadius = 0.5
-engine.prop.base.fadeInDuration = 1/16
-engine.prop.base.fadeOutDuration = 1/16
 
 engine.streamer.setSort((a, b) => {
   if (content.prop.treasure.isPrototypeOf(a)) {

@@ -11,13 +11,6 @@ content.exploration = (() => {
     list.push(vector)
     tree.insert(vector)
 
-    engine.streamer.registerProp(content.prop.exploration, {
-      destination: content.audio.mixer.bus.music.bus(),
-      x: node.x,
-      y: node.y,
-      z: node.z,
-    })
-
     return vector
   }
 

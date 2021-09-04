@@ -1,5 +1,7 @@
 content.prop.treasure = content.prop.base.invent({
   name: 'Treasure',
+  fadeInDuration: 1/8,
+  fadeOutDuration: 1/8,
   onConstruct: function () {
     const context = engine.audio.context()
 

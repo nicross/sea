@@ -6,8 +6,8 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
     this.periodic = {}
     return prototype.construct.apply(this, arguments)
   },
-  fadeInDuration: 1/8,
-  fadeOutDuration: 1/8,
+  fadeInDuration: engine.const.zeroTime,
+  fadeOutDuration: engine.const.zeroTime,
   handlePeriodic: function ({
     delay = () => 0,
     key = '',

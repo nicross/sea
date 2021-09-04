@@ -1,6 +1,7 @@
 app.canvas.nodes = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
+    fadeDuration = 1/2,
     main = app.canvas,
     maxObjects = 1000,
     nodeHue = engine.utility.simplex3d.create('exploration', 'node', 'hue'),
@@ -32,6 +33,7 @@ app.canvas.nodes = (() => {
       heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
       height = main.height(),
       hfov = main.hfov(),
+      now = engine.audio.time(),
       position = syngen.position.getVector(),
       rotateYaw = Math.atan2(heading.y, heading.x),
       vfov = main.vfov(),
@@ -145,6 +147,8 @@ app.canvas.nodes = (() => {
         z: relative.distance(),
       })
 
+      screen.time = node.time
+
       // Cache hue before we discard global coordinates
       screen.hue = getNodeHue(node)
       nodes.push(screen)
@@ -172,6 +176,10 @@ app.canvas.nodes = (() => {
       // Fade out nodes approaching the object limit
       if ((length > (maxObjects / 2)) && index < (length - (maxObjects / 2))) {
         alpha *= engine.utility.scale(index, 0, length - maxObjects/2, 0, 1)
+      }
+
+      if ((now - node.time) < fadeDuration) {
+        alpha *= engine.utility.scale(now - node.time, 0, fadeDuration, 0, 1)
       }
 
       context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`

@@ -1,6 +1,7 @@
 # S.E.A. changelog
 ## v1.5.0
 - Exploration node audio rework
+- Fade in exploration nodes visually on scan
 - Floor generation rework
 - Increased draw distance
 - Improved fast travel transitions

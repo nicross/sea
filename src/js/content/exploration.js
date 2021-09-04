@@ -7,6 +7,7 @@ content.exploration = (() => {
 
   function addNode(node) {
     const vector = engine.utility.vector3d.create(node)
+    vector.time = engine.audio.time()
 
     list.push(vector)
     tree.insert(vector)
@@ -15,7 +16,7 @@ content.exploration = (() => {
   }
 
   return {
-    export: () => [...list],
+    export: () => list.map((vector) => vector.clone()),
     find: (...args) => tree.find(...args),
     import: function (values = []) {
       values.map(addNode)

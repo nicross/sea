@@ -14,8 +14,8 @@ content.idle = (() => {
       return
     }
 
-    const angularVelocity = engine.position.getAngularVelocity(),
-      velocity = engine.position.getVelocity()
+    const angularVelocity = content.movement.getAngularThrust(),
+      velocity = content.movement.getLateralThrust()
 
     const isIdle = angularVelocity.equals() && velocity.equals()
 

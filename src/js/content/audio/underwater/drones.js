@@ -1,6 +1,5 @@
 content.audio.underwater.drones = (() => {
-  const context = engine.audio.context(),
-    mix = content.audio.mixer.bus.music.createBus(),
+  const mix = content.audio.mixer.bus.music.createBus(),
     synthFade = 4,
     synthGain = engine.utility.fromDb(-15)
 
@@ -123,9 +122,10 @@ content.audio.underwater.drones = (() => {
       return this
     },
     update: function () {
+      const isMuted = content.audio.mixer.bus.music.isMuted()
       const {z} = engine.position.getVector()
 
-      if (z >= content.const.midnightZoneMin) {
+      if (isMuted || z >= content.const.midnightZoneMin) {
         if (synths.length) {
           destroySynths()
         }

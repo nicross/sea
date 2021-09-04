@@ -168,9 +168,10 @@ content.audio.surface.glitter = (() => {
       return this
     },
     update: function () {
+      const isMuted = content.audio.mixer.bus.music.isMuted()
       const {z} = engine.position.getVector()
 
-      if (z < content.const.lightZone) {
+      if (isMuted || z < content.const.lightZone) {
         return this
       }
 

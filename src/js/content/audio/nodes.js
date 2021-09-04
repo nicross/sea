@@ -97,9 +97,10 @@ content.audio.nodes = (() => {
     update: function () {
       cleanupProps()
 
-      const count = engine.props.get().length
+      const count = engine.props.get().length,
+        isMuted = content.audio.mixer.bus.music.isMuted()
 
-      if (count >= maxProps) {
+      if (isMuted || count >= maxProps) {
         return this
       }
 

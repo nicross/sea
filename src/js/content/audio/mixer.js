@@ -25,6 +25,8 @@ content.audio.mixer = (() => {
     const bypass = createBypass(),
       sub = createBus()
 
+    let isMuted = false
+
     return {
       bypass: () => bypass,
       bus: () => sub,
@@ -38,9 +40,13 @@ content.audio.mixer = (() => {
         input.connect(bypass)
         return input
       },
+      isMuted: () => isMuted,
       setGain: function (value) {
+        isMuted = value <= engine.const.zeroGain
+
         engine.audio.ramp.set(bypass.gain, value)
         engine.audio.ramp.set(sub.gain, value)
+
         return this
       },
     }

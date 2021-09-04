@@ -259,10 +259,12 @@ content.audio.surface.moon = (() => {
       return this
     },
     update: function () {
-      const surface = content.surface.current()
+      const isMuted = content.audio.mixer.bus.music.isMuted(),
+        surface = content.surface.current()
+
       const {z} = engine.position.getVector()
 
-      if (z <= surface - fadeDepth) {
+      if (isMuted || z <= surface - fadeDepth) {
         teardown()
         return this
       }

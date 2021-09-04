@@ -9,11 +9,11 @@ content.prop.treasure = content.prop.base.invent({
     this.harmonyGain.gain.value = this.calculateHarmonyGain()
     this.harmonyGain.connect(this.output)
 
-    content.audio.treasure.add(this)
+    content.audio.underwater.treasure.add(this)
     this.buildFilters()
   },
   onDestroy: function () {
-    content.audio.treasure.remove(this)
+    content.audio.underwater.treasure.remove(this)
     this.destroyFilters()
   },
   onUpdate: function () {
@@ -37,20 +37,20 @@ content.prop.treasure = content.prop.base.invent({
     this.harmonyFilter.Q.value = 1/4
     this.harmonyFilter.type = 'bandpass'
 
-    content.audio.treasure.harmonyOutput().connect(this.harmonyFilter)
+    content.audio.underwater.treasure.harmonyOutput().connect(this.harmonyFilter)
     this.harmonyFilter.connect(this.harmonyGain)
 
     this.melodyFilter = context.createBiquadFilter()
     this.melodyFilter.frequency.value = this.calculateMelodyFilterFrequency()
 
-    content.audio.treasure.melodyOutput().connect(this.melodyFilter)
+    content.audio.underwater.treasure.melodyOutput().connect(this.melodyFilter)
     this.melodyFilter.connect(this.output)
 
     return this
   },
   calculateHarmonyFilterFrequency: function () {
     const angle = this.relative.euler().pitch,
-      frequency = content.audio.treasure.getHarmonyFrequency(),
+      frequency = content.audio.underwater.treasure.getHarmonyFrequency(),
       ratio = engine.utility.scale(Math.sin(angle) || 0, -1, 1, 0, 1)
 
     return ratio > 0.5
@@ -64,7 +64,7 @@ content.prop.treasure = content.prop.base.invent({
     const angle = this.relative.euler().yaw,
       ratio = engine.utility.scale(Math.cos(angle) || 0, -1, 1, 0, 1)
 
-    return content.audio.treasure.getMelodyFrequency() * engine.utility.lerp(1, 8, ratio)
+    return content.audio.underwater.treasure.getMelodyFrequency() * engine.utility.lerp(1, 8, ratio)
   },
   collect: function () {
     this.isCollected = true
@@ -74,8 +74,8 @@ content.prop.treasure = content.prop.base.invent({
   },
   destroyFilters: function () {
     try {
-      content.audio.treasure.harmonyOutput().disconnect(this.harmonyFilter)
-      content.audio.treasure.melodyOutput().disconnect(this.melodyFilter)
+      content.audio.underwater.treasure.harmonyOutput().disconnect(this.harmonyFilter)
+      content.audio.underwater.treasure.melodyOutput().disconnect(this.melodyFilter)
     } catch (e) {}
 
     return this

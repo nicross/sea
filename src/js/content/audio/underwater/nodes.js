@@ -1,4 +1,4 @@
-content.audio.nodes = (() => {
+content.audio.underwater.nodes = (() => {
   const activeNodes = new Set()
 
   // TODO: Use settings
@@ -117,7 +117,7 @@ engine.loop.on('frame', ({paused}) => {
     return
   }
 
-  content.audio.nodes.update()
+  content.audio.underwater.nodes.update()
 })
 
-engine.state.on('reset', () => content.audio.nodes.reset())
+engine.state.on('reset', () => content.audio.underwater.nodes.reset())

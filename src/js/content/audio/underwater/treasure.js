@@ -1,4 +1,4 @@
-content.audio.treasure = (() => {
+content.audio.underwater.treasure = (() => {
   const baseGain = engine.utility.fromDb(-12),
     context = engine.audio.context(),
     f0 = engine.utility.midiToFrequency(33),
@@ -184,8 +184,8 @@ content.audio.treasure = (() => {
 })()
 
 engine.ready(() => {
-  content.scan.on('trigger', () => content.audio.treasure.duck())
-  content.scan.on('complete', () => content.audio.treasure.unduck())
+  content.scan.on('trigger', () => content.audio.underwater.treasure.duck())
+  content.scan.on('complete', () => content.audio.underwater.treasure.unduck())
 })
 
-engine.state.on('reset', () => content.audio.treasure.reset())
+engine.state.on('reset', () => content.audio.underwater.treasure.reset())

@@ -17,7 +17,7 @@ content.idle = (() => {
     const angularVelocity = content.movement.getAngularThrust(),
       velocity = content.movement.getLateralThrust()
 
-    const isIdle = angularVelocity.equals() && velocity.equals()
+    const isIdle = !angularVelocity && velocity.isZero()
 
     if (state == isIdle) {
       timer = state ? 0 : content.const.idleTimeout

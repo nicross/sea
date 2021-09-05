@@ -20,7 +20,7 @@ content.prop.classic = content.prop.node.invent({
     velocity *= Math.random()
 
     const duration = engine.utility.lerp(1, 2, velocity),
-      gain = engine.utility.fromDb(engine.utility.lerp(-21, -12, velocity))
+      gain = engine.utility.fromDb(engine.utility.lerp(-13.5, -7.5, velocity))
 
     this.synth = engine.audio.synth.createSimple({
       frequency,

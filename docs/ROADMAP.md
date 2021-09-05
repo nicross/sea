@@ -10,6 +10,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Height map scanning
 - Treasure occlusion
 - Surface geometry improvements?
+- Utility that calculates synth color given relative vector3d (via dot product and small cone of confusion)
 
 ## Known issues
 - Stuck under surface when jumping at lower velocities

@@ -1,5 +1,5 @@
 content.audio.underwater.treasure = (() => {
-  const baseGain = engine.utility.fromDb(-12),
+  const baseGain = engine.utility.fromDb(-6),
     context = engine.audio.context(),
     f0 = engine.utility.midiToFrequency(33),
     f1 = engine.utility.midiToFrequency(69),

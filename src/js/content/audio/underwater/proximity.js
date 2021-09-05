@@ -31,7 +31,7 @@ content.audio.underwater.proximity = (() => {
       detune: engine.utility.scale(relative.z, -radius, radius, -1200, 1200),
       carrierGain: 1 - amodDepth,
       carrierType: 'sawtooth',
-      filterFrequency: rootFrequency * engine.utility.lerp(1, 16, angleRatio, 16),
+      filterFrequency: rootFrequency * engine.utility.lerpExp(1, 16, angleRatio, 3),
       fmodDepth: rootFrequency,
       fmodFrequency: rootFrequency * Math.PI/2,
       fmodType: 'sawtooth',

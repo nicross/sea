@@ -1,26 +1,41 @@
 content.prop.classic = content.prop.base.invent({
   name: 'Classic',
+  onUpdate: function () {
+    engine.audio.ramp.set(this.synth.filter.frequency, this.calculateFilterFrequency())
+  },
+  calculateFilterFrequency: function () {
+    const cos = Math.cos(Math.atan2(this.relative.y, this.relative.x)),
+      ratio = engine.utility.scale(cos, -1, 1, 0, 1)
+
+    const color = engine.utility.lerpExp(1, 16, ratio, 3),
+      frequency = (this.frequency || 0) * color
+
+    return engine.utility.clamp(frequency, engine.const.minFrequency, engine.const.maxFrequency)
+  },
   play: function ({
     frequency,
     velocity,
   }) {
+    this.frequency = frequency
     velocity *= Math.random()
 
     const duration = engine.utility.lerp(1, 2, velocity),
-      gain = engine.utility.fromDb(engine.utility.lerp(-21, -15, velocity))
+      gain = engine.utility.fromDb(engine.utility.lerp(-21, -12, velocity))
 
-    const synth = engine.audio.synth.createSimple({
+    this.synth = engine.audio.synth.createSimple({
       frequency,
       type: 'triangle',
+    }).filtered({
+      frequency: this.calculateFilterFrequency(),
     }).connect(this.output)
 
     const now = engine.audio.time()
 
-    synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    synth.param.gain.linearRampToValueAtTime(gain, now + duration/2)
-    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
+    this.synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
+    this.synth.param.gain.linearRampToValueAtTime(gain, now + duration/2)
+    this.synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
 
-    synth.stop(now + duration)
+    this.synth.stop(now + duration)
 
     return engine.utility.timing.promise(duration * 1000)
   },

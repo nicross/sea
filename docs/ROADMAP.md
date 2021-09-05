@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases.
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ## v1.5.0
-- Proximity cues
 - Cave geometry rewrite
 - Cave sounds
 - Height map scanning

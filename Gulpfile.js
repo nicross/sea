@@ -189,6 +189,7 @@ function getContentJs() {
     'src/js/content/utility.js',
     'src/js/content/utility/*.js',
     'src/js/content/prop/base.js',
+    'src/js/content/prop/node.js',
     'src/js/content/treasures.js',
     'src/js/content/treasure/*.js',
     'src/js/content/audio.js',

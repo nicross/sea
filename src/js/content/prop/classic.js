@@ -1,4 +1,4 @@
-content.prop.classic = content.prop.base.invent({
+content.prop.classic = content.prop.node.invent({
   name: 'Classic',
   onUpdate: function () {
     engine.audio.ramp.set(this.synth.filter.frequency, this.calculateFilterFrequency())

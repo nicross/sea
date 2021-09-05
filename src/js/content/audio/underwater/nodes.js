@@ -20,7 +20,7 @@ content.audio.underwater.nodes = (() => {
     const props = engine.props.get()
 
     for (const prop of props) {
-      if (prop.distance > radius) {
+      if (content.prop.node.isPrototypeOf(prop) && prop.distance > radius) {
         engine.props.destroy(prop)
       }
     }

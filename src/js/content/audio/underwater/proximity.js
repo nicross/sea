@@ -1,7 +1,7 @@
 content.audio.underwater.proximity = (() => {
   const acceleration = 20,
     bus = content.audio.mixer.bus.misc.createBus(),
-    radius = 5,
+    radius = 10,
     release = 1/16,
     rootFrequency = engine.utility.midiToFrequency(69)
 
@@ -27,15 +27,15 @@ content.audio.underwater.proximity = (() => {
 
     return {
       amodDepth,
-      amodFrequency: engine.utility.lerp(1, 4, distanceRatio),
-      detune: engine.utility.scale(relative.z, -radius, radius, -700, 700),
+      amodFrequency: engine.utility.lerpExp(1, 8, distanceRatio, 2),
+      detune: engine.utility.scale(relative.z, -radius, radius, -1200, 1200),
       carrierGain: 1 - amodDepth,
       carrierType: 'sawtooth',
-      filterFrequency: rootFrequency * engine.utility.lerp(1, 16, angleRatio, 4),
+      filterFrequency: rootFrequency * engine.utility.lerp(1, 16, angleRatio, 16),
       fmodDepth: rootFrequency,
-      fmodFrequency: engine.utility.lerp(0, rootFrequency * 2, distanceRatio),
+      fmodFrequency: rootFrequency * Math.PI/2,
       fmodType: 'sawtooth',
-      gain: distanceRatio ** (1/8),
+      gain: distanceRatio ** (1/16),
       relative,
     }
   }

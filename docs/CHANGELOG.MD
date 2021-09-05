@@ -7,6 +7,7 @@
 - Improved fast travel transitions
 - Noise refactor (surface and floor)
 - Performance improvements
+- Proximity cues
 - Scanning enhancements
 - Save versioning
 - Separate draw distance sliders

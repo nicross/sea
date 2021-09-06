@@ -99,7 +99,7 @@ content.scan = (() => {
         z: engine.utility.random.float(-1, 1),
       }).normalize().rotateQuaternion(heading).scale(stepDistance)
 
-      const result = await scheduleRaytrace(position, direction)
+      const result = scheduleRaytrace(position, direction)
 
       if (result.isSolid) {
         results.push(result)
@@ -110,11 +110,7 @@ content.scan = (() => {
   }
 
   async function scheduleRaytrace(...args) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(doRaytrace(...args))
-      })
-    })
+    return await content.utility.async.schedule(() => doRaytrace(...args))
   }
 
   function smooth(value) {

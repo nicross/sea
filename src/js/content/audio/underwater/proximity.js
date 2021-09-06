@@ -9,7 +9,7 @@ content.audio.underwater.proximity = (() => {
     next,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-12)
+  bus.gain.value = engine.utility.fromDb(-15)
 
   function calculateParameters(node) {
     next = content.utility.accelerate.vector(next, node, acceleration)

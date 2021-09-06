@@ -55,7 +55,9 @@ content.audio.underwater.nodes = (() => {
     activeNodes.add(node)
 
     // Instantiate prop
-    const prop = engine.props.create(getPrototype(node), {
+    const prototype = getPrototypeCached(node)
+
+    const prop = engine.props.create(prototype, {
       destination: content.audio.mixer.bus.music.bus(),
       x: node.x,
       y: node.y,
@@ -79,9 +81,21 @@ content.audio.underwater.nodes = (() => {
     })
   }
 
-  function getPrototype() {
+  function getPrototype(node) {
+    if (content.terrain.worms.isInside(node.x, node.y, node.z, 1)) {
+      return content.prop.worm
+    }
+
     // TODO: Determine prototype from terrain biome
     return content.prop.classic
+  }
+
+  function getPrototypeCached(node) {
+    if (!node._propPrototype) {
+      node._propPrototype = getPrototype(node)
+    }
+
+    return node._propPrototype
   }
 
   return {

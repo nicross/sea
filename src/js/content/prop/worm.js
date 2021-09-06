@@ -1,5 +1,5 @@
-content.prop.classic = content.prop.node.invent({
-  name: 'Classic',
+content.prop.worm = content.prop.node.invent({
+  name: 'Worm',
   onUpdate: function () {
     engine.audio.ramp.set(this.synth.filter.frequency, this.calculateFilterFrequency())
   },
@@ -14,15 +14,15 @@ content.prop.classic = content.prop.node.invent({
   },
   play: function ({
     frequency,
-    velocity,
   }) {
     this.frequency = frequency
-    velocity *= Math.random()
 
-    const duration = engine.utility.lerp(1, 2, velocity),
-      gain = engine.utility.fromDb(engine.utility.lerp(-13.5, -7.5, velocity))
+    const detune = engine.utility.random.float(-25, 25),
+      duration = 0.25,
+      gain = engine.utility.fromDb(-7.5)
 
     this.synth = engine.audio.synth.createSimple({
+      detune,
       frequency,
       type: 'triangle',
     }).filtered({
@@ -32,8 +32,11 @@ content.prop.classic = content.prop.node.invent({
     const now = engine.audio.time()
 
     this.synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
-    this.synth.param.gain.linearRampToValueAtTime(gain, now + duration/2)
-    this.synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, now + duration)
+    this.synth.param.gain.exponentialRampToValueAtTime(gain, now + 1/64)
+    this.synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, now + duration)
+
+    this.synth.param.detune.setValueAtTime(detune, now)
+    this.synth.param.detune.linearRampToValueAtTime(detune + 0, now + duration)
 
     this.synth.stop(now + duration)
 

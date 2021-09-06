@@ -1,8 +1,11 @@
 content.terrain.worms = (() => {
-  const chunkSize = 500,
+  const chunks = [],
+    chunkSize = 500,
     chunkTree = engine.utility.quadtree.create(),
     maxRadius = 10,
     pointTree = engine.utility.octree.create()
+
+  let isReady = false
 
   function createChunk(options) {
     const chunk = content.terrain.worms.chunk.create({
@@ -10,6 +13,7 @@ content.terrain.worms = (() => {
       ...options,
     })
 
+    chunks.push(chunk)
     chunkTree.insert(chunk)
   }
 
@@ -44,6 +48,7 @@ content.terrain.worms = (() => {
 
       return this
     },
+    chunks: () => [...chunks],
     find: (...args) => pointTree.find(...args),
     isInside: function (x, y, z, radius = engine.const.zero) {
       const from = engine.utility.vector3d.create({x, y, z}),
@@ -66,13 +71,27 @@ content.terrain.worms = (() => {
 
       return false
     },
+    isReady: () => isReady,
     reset: function () {
+      isReady = false
+
       chunkTree.clear()
       pointTree.clear()
 
       return this
     },
     retrieve: (...args) => pointTree.retrieve(...args),
+    import: function () {
+      streamChunks()
+
+      Promise.all(
+        chunks.map((chunk) => chunk.ready)
+      ).then(() => {
+        isReady = true
+      })
+
+      return this
+    },
     update: function () {
       streamChunks()
 
@@ -89,4 +108,5 @@ engine.loop.on('frame', ({paused}) => {
   content.terrain.worms.update()
 })
 
+engine.state.on('import', () => content.terrain.worms.import())
 engine.state.on('reset', () => content.terrain.worms.reset())

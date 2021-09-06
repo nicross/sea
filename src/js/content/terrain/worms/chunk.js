@@ -14,7 +14,7 @@ content.terrain.worms.chunk.prototype = {
     this.x = x
     this.y = y
 
-    this.generate()
+    this.ready = this.generate()
 
     return this
   },

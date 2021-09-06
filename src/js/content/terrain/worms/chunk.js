@@ -33,8 +33,10 @@ content.terrain.worms.chunk.prototype = {
 
     const batchSize = 100,
       length = srand(250, 2500),
-      granularity = 1/4,
-      scale = 100
+      granularity = 1/2,
+      pitchScale = srand(100, 200),
+      radiusScale = srand(50, 150),
+      yawScale = srand(100, 200)
 
     // TODO: Octaves and random radius/pitch/yaw scales
     const radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index, 'radius'),
@@ -57,7 +59,7 @@ content.terrain.worms.chunk.prototype = {
     while (distance < length) {
       await content.utility.async.schedule(() => {
         for (let batchIndex = 0; batchIndex < batchSize && distance < length; batchIndex += 1) {
-          const radius = radiusField.value(distance / scale)
+          const radius = radiusField.value(distance / radiusScale)
 
           content.terrain.worms.addPoint({
             radius: engine.utility.lerp(2, 10, radius),
@@ -66,13 +68,13 @@ content.terrain.worms.chunk.prototype = {
             z,
           })
 
-          const pitch = pitchField.value(distance / scale),
-            yaw = yawField.value(distance / scale)
+          const pitch = pitchField.value(distance / pitchScale),
+            yaw = yawField.value(distance / yawScale)
 
           const vector = engine.utility.vector3d.create({
             x: Math.cos(yaw * engine.const.tau),
             y: Math.sin(yaw * engine.const.tau),
-            z: engine.utility.lerp(0, -1, pitch),
+            z: engine.utility.lerp(0, -0.75, pitch),
           }).normalize().scale(granularity)
 
           distance += granularity
@@ -82,6 +84,8 @@ content.terrain.worms.chunk.prototype = {
         }
       })
     }
+
+    // TODO: Add branches at random places along line
 
     return this
   },

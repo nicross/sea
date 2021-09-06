@@ -5,14 +5,16 @@ This document outlines upcoming changes for post-jam releases.
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ## v1.5.0
-- Cave sounds
-- Height map scanning
+- Cave branches
+- Height map scanning (see E.X.O.)
 - Treasure occlusion
+- Performance optimizations
 - Surface geometry improvements?
-- Utility that calculates synth color given relative vector3d (via dot product and small cone of confusion)
-- Vertical look
+- Utility that calculates synth color given relative vector3d (via dot product and small cone of confusion)?
+- Vertical look?
 
 ## Known issues
+- Backwards scanning vibration is too powerful
 - Stuck under surface when jumping at lower velocities
 
 ## Wishlist

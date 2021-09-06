@@ -11,6 +11,7 @@
 - Scanning enhancements
 - Save versioning
 - Separate draw distance sliders
+- Worm cave generation
 
 ## v1.4.5
 - Updated syngen to the latest version

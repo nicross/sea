@@ -3,13 +3,13 @@ content.audio.underwater.proximity = (() => {
     bus = content.audio.mixer.bus.misc.createBus(),
     radius = 10,
     release = 1/16,
-    rootFrequency = engine.utility.midiToFrequency(69)
+    rootFrequency = engine.utility.midiToFrequency(57)
 
   let binaural,
     next,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-9)
+  bus.gain.value = engine.utility.fromDb(-12)
 
   function calculateParameters(node) {
     next = content.utility.accelerate.vector(next, node, acceleration)
@@ -23,18 +23,16 @@ content.audio.underwater.proximity = (() => {
     const angleRatio = engine.utility.scale(Math.cos(Math.atan2(relative.y, relative.x)), -1, 1, 0, 1),
       distanceRatio = engine.utility.clamp(1 - (relative.distance() / radius), 0, 1)
 
-    const amodDepth = engine.utility.lerp(1/2, 1/3, distanceRatio)
+    const amodDepth = engine.utility.lerp(1/2, 1/2.5, distanceRatio)
 
     return {
       amodDepth,
-      amodFrequency: engine.utility.lerpExp(1, 8, distanceRatio, 2),
+      amodFrequency: engine.utility.lerpExp(2, 12, distanceRatio, 2),
       detune: engine.utility.scale(relative.z, -radius, radius, -1200, 1200),
       carrierGain: 1 - amodDepth,
-      carrierType: 'sawtooth',
-      filterFrequency: rootFrequency * engine.utility.lerpExp(1, 16, angleRatio, 3),
+      filterFrequency: rootFrequency * engine.utility.lerpExp(1, 4, angleRatio, 2),
       fmodDepth: engine.utility.addInterval(rootFrequency, -6/12),
       fmodFrequency: rootFrequency,
-      fmodType: 'sawtooth',
       gain: distanceRatio ** (1/2),
       relative,
     }
@@ -61,9 +59,11 @@ content.audio.underwater.proximity = (() => {
       carrierDetune: detune,
       carrierFrequency: rootFrequency,
       carrierGain,
+      carrierType: 'sawtooth',
       gain,
       fmodDepth: fmodDepth,
       fmodFrequency,
+      fmodType: 'square',
     }).filtered({
       detune,
       frequency: filterFrequency,

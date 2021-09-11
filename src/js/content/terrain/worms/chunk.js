@@ -63,8 +63,7 @@ content.terrain.worms.chunk.prototype = {
       z = content.terrain.floor.value(x, y)
     }
 
-    const batchSize = 100,
-      granularity = 1/2
+    const granularity = 1/2
 
     const branchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch'),
       branchRoller = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch', 'roller'),
@@ -79,6 +78,10 @@ content.terrain.worms.chunk.prototype = {
     // Generate points asynchronously along [0, distance]
     while (distance < length) {
       await content.utility.async.schedule(async () => {
+        // Determine batch size, optimizing closer to player
+        const playerDistanceRatio = engine.position.getVector().distance({x, y}) / 2500
+        const batchSize = engine.utility.lerp(250, 2500, playerDistanceRatio)
+
         // Generate batch
         for (let batchIndex = 0; batchIndex < batchSize && distance < length; batchIndex += 1) {
           // Generate next point in branch

@@ -22,6 +22,8 @@ content.soundtrack = (() => {
   ]
 
   const multiples = [
+    0.5,
+    1,
     1.5,
     2,
     3,

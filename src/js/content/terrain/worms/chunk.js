@@ -25,12 +25,14 @@ content.terrain.worms.chunk.prototype = {
     for (let i = 0; i < count; i += 1) {
       const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
 
-      const x = srand(this.x * this.size, (this.x + 1) * this.size),
-        y = srand(this.y * this.size, (this.y + 1) * this.size),
+      const length = srand(250, 2500),
+        x = srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size),
+        y = srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size),
         z = content.terrain.floor.value(x, y)
 
       await content.utility.async.schedule(() => this.generateWorm({
-        length: srand(250, 2500),
+        branchScale: length / srand(4, 16),
+        length,
         pitchScale: srand(100, 200),
         radiusScale: srand(50, 150),
         seed: [i],
@@ -44,6 +46,7 @@ content.terrain.worms.chunk.prototype = {
     return this
   },
   generateWorm: async function ({
+    branchScale,
     length,
     pitchScale,
     radiusScale,
@@ -63,16 +66,22 @@ content.terrain.worms.chunk.prototype = {
     const batchSize = 100,
       granularity = 1/2
 
-    const radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'radius'),
+    const branchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch'),
+      branchRoller = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch', 'roller'),
+      radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'radius'),
       pitchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'pitch'),
       yawField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'yaw')
 
-    let distance = 0
+    let distance = 0,
+      branchIndex = 0,
+      lastBranch = 0
 
-    // Generate points asynchronously along [0, distance] in batches of batchSize
+    // Generate points asynchronously along [0, distance]
     while (distance < length) {
-      await content.utility.async.schedule(() => {
+      await content.utility.async.schedule(async () => {
+        // Generate batch
         for (let batchIndex = 0; batchIndex < batchSize && distance < length; batchIndex += 1) {
+          // Generate next point in branch
           const radius = radiusField.value(distance / radiusScale)
 
           content.terrain.worms.addPoint({
@@ -96,7 +105,42 @@ content.terrain.worms.chunk.prototype = {
           y += vector.y
           z += vector.z
 
-          // TODO: Roll for a branch
+          // Determine whether to generate a branch
+          if (length < 20) {
+            continue
+          }
+
+          const branchChance = (branchField.value(distance / branchScale) ** 4) // Base chance from field
+            * (engine.utility.wrapAlternate(2 * distance / length, 0, 1) ** 2) // Prefer the center of the branch
+            * (engine.utility.clamp((distance - lastBranch) / (length / 2), 0, 1) ** 2) // Get more likely further from last branch
+            * granularity // Scale by granularity
+
+          const branchRoll = branchRoller()
+
+          if (branchRoll > branchChance) {
+            continue
+          }
+
+          // Generate new branch
+          const branchSrand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, branchIndex)
+          const branchLength = (length - distance) / branchSrand(1, 4)
+
+          //console.log('generating branch', [...seed, branchIndex], {x, y, z, length: branchLength, progress: Math.round(distance / length * 100)})
+
+          await content.utility.async.schedule(() => this.generateWorm({
+            branchScale: branchLength / branchSrand(4, 16),
+            length: branchLength,
+            pitchScale: branchSrand(100, 200),
+            radiusScale: branchSrand(50, 150),
+            seed: [...seed, branchIndex],
+            x,
+            y,
+            yawScale: branchSrand(100, 200),
+            z,
+          }))
+
+          branchIndex += 1
+          lastBranch = distance
         }
       })
     }

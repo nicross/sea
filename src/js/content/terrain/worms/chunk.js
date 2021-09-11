@@ -23,37 +23,51 @@ content.terrain.worms.chunk.prototype = {
     const count = Math.round(srand(1, 3))
 
     for (let i = 0; i < count; i += 1) {
-      await content.utility.async.schedule(() => this.generateWorm(i))
+      const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
+
+      const x = srand(this.x * this.size, (this.x + 1) * this.size),
+        y = srand(this.y * this.size, (this.y + 1) * this.size),
+        z = content.terrain.floor.value(x, y)
+
+      await content.utility.async.schedule(() => this.generateWorm({
+        length: srand(250, 2500),
+        pitchScale: srand(100, 200),
+        radiusScale: srand(50, 150),
+        seed: [i],
+        x,
+        y,
+        yawScale: srand(100, 200),
+        z,
+      }))
     }
 
     return this
   },
-  generateWorm: async function (index) {
-    const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index)
-
-    const batchSize = 100,
-      length = srand(250, 2500),
-      granularity = 1/2,
-      pitchScale = srand(100, 200),
-      radiusScale = srand(50, 150),
-      yawScale = srand(100, 200)
-
-    // TODO: Octaves and random radius/pitch/yaw scales
-    const radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index, 'radius'),
-      pitchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index, 'pitch'),
-      yawField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index, 'yaw')
-
-    let distance = 0,
-      x = srand(this.x * this.size, (this.x + 1) * this.size),
-      y = srand(this.y * this.size, (this.y + 1) * this.size),
-      z = content.terrain.floor.value(x, y)
-
+  generateWorm: async function ({
+    length,
+    pitchScale,
+    radiusScale,
+    seed = [],
+    x,
+    y,
+    yawScale,
+    z,
+  }) {
     // XXX: Special debugging case, always place a cave at origin
-    if (!this.x && !this.y && !index) {
+    if (!this.x && !this.y && seed.length == 1 && !seed[0]) {
       x = 0
       y = 0
       z = content.terrain.floor.value(x, y)
     }
+
+    const batchSize = 100,
+      granularity = 1/2
+
+    const radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'radius'),
+      pitchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'pitch'),
+      yawField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'yaw')
+
+    let distance = 0
 
     // Generate points asynchronously along [0, distance] in batches of batchSize
     while (distance < length) {
@@ -81,11 +95,11 @@ content.terrain.worms.chunk.prototype = {
           x += vector.x
           y += vector.y
           z += vector.z
+
+          // TODO: Roll for a branch
         }
       })
     }
-
-    // TODO: Add branches at random places along line
 
     return this
   },

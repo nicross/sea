@@ -1,8 +1,9 @@
 content.terrain.worms = (() => {
   const chunks = [],
-    chunkSize = 500,
+    chunkSize = 1000,
     chunkTree = engine.utility.quadtree.create(),
-    maxRadius = 10,
+    maxStreamRadius = 2,
+    maxWormRadius = 16,
     pointTree = engine.utility.octree.create()
 
   const streamOffsets = []
@@ -10,8 +11,12 @@ content.terrain.worms = (() => {
   let isReady = false,
     isStreaming = false
 
-  for (let x = -maxRadius; x <= maxRadius; x += 1) {
-    for (let y = -maxRadius; y <= maxRadius; y += 1) {
+  for (let x = -maxStreamRadius; x <= maxStreamRadius; x += 1) {
+    for (let y = -maxStreamRadius; y <= maxStreamRadius; y += 1) {
+      if (engine.utility.distance({x, y}) > maxStreamRadius) {
+        continue
+      }
+
       streamOffsets.push(
         engine.utility.vector2d.create({x, y})
       )
@@ -23,7 +28,7 @@ content.terrain.worms = (() => {
     return a.distance() - b.distance()
   })
 
-  async function createChunk(options) {
+  function createChunk(options) {
     const chunk = content.terrain.worms.chunk.create({
       size: chunkSize,
       ...options,
@@ -32,7 +37,7 @@ content.terrain.worms = (() => {
     chunks.push(chunk)
     chunkTree.insert(chunk)
 
-    await chunk.ready
+    return chunk.ready
   }
 
   function getChunk(x, y) {
@@ -43,7 +48,7 @@ content.terrain.worms = (() => {
     const position = engine.position.getVector()
 
     const streamRadius = Math.round(
-      engine.utility.lerp(0, 5,
+      engine.utility.lerp(0, maxStreamRadius,
         engine.utility.clamp(position.z / content.const.lightZone, 0, 1),
       )
     )
@@ -79,7 +84,7 @@ content.terrain.worms = (() => {
     find: (...args) => pointTree.find(...args),
     isInside: function (x, y, z, radius = engine.const.zero) {
       const from = engine.utility.vector3d.create({x, y, z}),
-        searchRadius = maxRadius + radius
+        searchRadius = maxWormRadius + radius
 
       const points = pointTree.retrieve({
         depth: 2 * searchRadius,

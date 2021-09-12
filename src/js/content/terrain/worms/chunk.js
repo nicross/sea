@@ -25,7 +25,7 @@ content.terrain.worms.chunk.prototype = {
     for (let i = 0; i < count; i += 1) {
       const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
 
-      const length = srand(250, 2500),
+      const length = srand(500, 2000),
         x = srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size),
         y = srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size),
         z = content.terrain.floor.value(x, y)
@@ -63,7 +63,8 @@ content.terrain.worms.chunk.prototype = {
       z = content.terrain.floor.value(x, y)
     }
 
-    const granularity = 1/2
+    const granularity = 1/2,
+      minLength = 16
 
     const branchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch'),
       branchRoller = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch', 'roller'),
@@ -80,7 +81,7 @@ content.terrain.worms.chunk.prototype = {
       await content.utility.async.schedule(async () => {
         // Determine batch size, optimizing closer to player
         const playerDistanceRatio = engine.position.getVector().distance({x, y}) / 2500
-        const batchSize = engine.utility.lerp(250, 2500, playerDistanceRatio)
+        const batchSize = engine.utility.lerpExp(100, 2000, playerDistanceRatio, 3)
 
         // Generate batch
         for (let batchIndex = 0; batchIndex < batchSize && distance < length; batchIndex += 1) {
@@ -109,7 +110,7 @@ content.terrain.worms.chunk.prototype = {
           z += vector.z
 
           // Determine whether to generate a branch
-          if (length < 20) {
+          if (length < minLength) {
             continue
           }
 
@@ -126,9 +127,11 @@ content.terrain.worms.chunk.prototype = {
 
           // Generate new branch
           const branchSrand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, branchIndex)
-          const branchLength = (length - distance) / branchSrand(1, 4)
+          const branchLength = (length - distance) / branchSrand(1, 3)
 
-          //console.log('generating branch', [...seed, branchIndex], {x, y, z, length: branchLength, progress: Math.round(distance / length * 100)})
+          if (branchLength < minLength) {
+            continue
+          }
 
           await content.utility.async.schedule(() => this.generateWorm({
             branchScale: branchLength / branchSrand(4, 16),

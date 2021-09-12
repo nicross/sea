@@ -118,10 +118,14 @@ content.terrain.worms.chunk.prototype = {
           const pitch = pitchField.value(distance / pitchScale),
             yaw = yawField.value(distance / yawScale)
 
+          const zBias = isBranch
+            ? 1
+            : engine.utility.clamp(distance / minLength, 0, 1)
+
           const vector = engine.utility.vector3d.create({
-            x: Math.cos(yaw * engine.const.tau),
-            y: Math.sin(yaw * engine.const.tau),
-            z: engine.utility.lerp(0, -0.75, pitch),
+            x: Math.cos(yaw * engine.const.tau) * engine.utility.lerp(1/4, 1, zBias),
+            y: Math.sin(yaw * engine.const.tau) * engine.utility.lerp(1/4, 1, zBias),
+            z: engine.utility.lerp(-1, engine.utility.lerp(0, -1, pitch), zBias),
           }).normalize().scale(granularity)
 
           distance += granularity

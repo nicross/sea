@@ -16,6 +16,15 @@ content.exploration = (() => {
   }
 
   return {
+    add: function (node) {
+      const checkNearby = tree.find(node, radius)
+
+      if (!checkNearby) {
+        addNode(node)
+      }
+
+      return this
+    },
     export: () => list.map((vector) => vector.clone()),
     find: (...args) => tree.find(...args),
     import: function (values = []) {

@@ -106,10 +106,11 @@ content.terrain.worms.chunk.prototype = {
         // Generate batch
         for (let batchIndex = 0; batchIndex < batchSize && distance < length; batchIndex += 1) {
           // Generate next point in branch
-          const radius = radiusField.value(distance / radiusScale)
+          const radius = radiusField.value(distance / radiusScale),
+            radiusBias = engine.utility.clamp(engine.utility.scale(distance, length - minLength, length, 1, 0), 0, 1)
 
           content.terrain.worms.addPoint({
-            radius: engine.utility.lerp(4, 16, radius),
+            radius: engine.utility.lerp(4, 16, radius * radiusBias),
             x,
             y,
             z,

@@ -20,7 +20,7 @@ content.terrain.worms.chunk.prototype = {
   },
   generate: async function () {
     const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y)
-    const count = Math.round(srand(1, 3))
+    const count = Math.round(srand(0, 2))
 
     for (let i = 0; i < count; i += 1) {
       const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
@@ -33,12 +33,12 @@ content.terrain.worms.chunk.prototype = {
       await content.utility.async.schedule(() => this.generateWorm({
         branchScale: length / srand(4, 16),
         length,
-        pitchScale: srand(100, 200),
-        radiusScale: srand(50, 150),
+        pitchScale: srand(25, 50),
+        radiusScale: srand(25, 50),
         seed: [i],
         x,
         y,
-        yawScale: srand(100, 200),
+        yawScale: srand(25, 50),
         z,
       }))
     }
@@ -64,13 +64,34 @@ content.terrain.worms.chunk.prototype = {
     }
 
     const granularity = 1/2,
+      isBranch = seed.length > 1,
       minLength = 16
 
-    const branchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch'),
-      branchRoller = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch', 'roller'),
-      radiusField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'radius'),
-      pitchField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'pitch'),
-      yawField = engine.utility.perlin1d.create('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'yaw')
+    const branchField = engine.utility.createNoiseWithOctaves({
+      octaves: 2,
+      seed: ['terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch'],
+      type: engine.utility.perlin1d,
+    })
+
+    const branchRoller = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'branch', 'roller')
+
+    const radiusField = engine.utility.createNoiseWithOctaves({
+      octaves: 4,
+      seed: ['terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'radius'],
+      type: engine.utility.perlin1d,
+    })
+
+    const pitchField = engine.utility.createNoiseWithOctaves({
+      octaves: 4,
+      seed: ['terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'pitch'],
+      type: engine.utility.perlin1d,
+    })
+
+    const yawField = engine.utility.createNoiseWithOctaves({
+      octaves: 4,
+      seed: ['terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, 'yaw'],
+      type: engine.utility.perlin1d,
+    })
 
     let distance = 0,
       branchIndex = 0,
@@ -80,7 +101,6 @@ content.terrain.worms.chunk.prototype = {
     while (distance < length) {
       await content.utility.async.schedule(async () => {
         // Determine batch size, optimizing closer to player
-        const playerDistanceRatio = engine.position.getVector().distance({x, y}) / 2500
         const batchSize = engine.utility.lerpExp(100, 2000, playerDistanceRatio, 3)
 
         // Generate batch
@@ -89,7 +109,7 @@ content.terrain.worms.chunk.prototype = {
           const radius = radiusField.value(distance / radiusScale)
 
           content.terrain.worms.addPoint({
-            radius: engine.utility.lerp(2, 10, radius),
+            radius: engine.utility.lerp(4, 16, radius),
             x,
             y,
             z,
@@ -116,7 +136,7 @@ content.terrain.worms.chunk.prototype = {
 
           const branchChance = (branchField.value(distance / branchScale) ** 4) // Base chance from field
             * (engine.utility.wrapAlternate(2 * distance / length, 0, 1) ** 2) // Prefer the center of the branch
-            * (engine.utility.clamp((distance - lastBranch) / (length / 2), 0, 1) ** 2) // Get more likely further from last branch
+            * (Math.abs((distance - lastBranch) / (distance - length)) ** 3) // Get more likely further from last branch
             * granularity // Scale by granularity
 
           const branchRoll = branchRoller()
@@ -127,7 +147,7 @@ content.terrain.worms.chunk.prototype = {
 
           // Generate new branch
           const branchSrand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', ...seed, branchIndex)
-          const branchLength = (length - distance) / branchSrand(1, 3)
+          const branchLength = (length - distance) / branchSrand(1, 2)
 
           if (branchLength < minLength) {
             continue
@@ -136,12 +156,12 @@ content.terrain.worms.chunk.prototype = {
           await content.utility.async.schedule(() => this.generateWorm({
             branchScale: branchLength / branchSrand(4, 16),
             length: branchLength,
-            pitchScale: branchSrand(100, 200),
-            radiusScale: branchSrand(50, 150),
+            pitchScale: branchSrand(25, 50),
+            radiusScale: branchSrand(25, 50),
             seed: [...seed, branchIndex],
             x,
             y,
-            yawScale: branchSrand(100, 200),
+            yawScale: branchSrand(25, 50),
             z,
           }))
 

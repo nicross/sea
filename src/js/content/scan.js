@@ -46,12 +46,12 @@ content.scan = (() => {
       stepDistance = content.terrain.voxels.granularity()
 
     // First result is directly forward
-    const reverse = engine.utility.vector3d.create({
+    const forward = engine.utility.vector3d.create({
       x: 1,
     }).normalize().rotateQuaternion(heading).scale(stepDistance)
 
     results.push(
-      await scheduleRaytrace(position, reverse)
+      await content.utility.async.schedule(() => doRaytrace(position, forward))
     )
 
     // Scan random forward directions
@@ -64,11 +64,9 @@ content.scan = (() => {
         z: engine.utility.random.float(-1, 1),
       }).normalize().rotateQuaternion(heading).scale(stepDistance)
 
-      const result = await scheduleRaytrace(position, direction)
-
-      if (result.isSolid) {
-        results.push(result)
-      }
+      results.push(
+        await content.utility.async.schedule(() => doRaytrace(position, direction))
+      )
     }
 
     return results
@@ -86,7 +84,7 @@ content.scan = (() => {
     }).normalize().rotateQuaternion(heading).scale(stepDistance)
 
     results.push(
-      await scheduleRaytrace(position, reverse)
+      await content.utility.async.schedule(() => doRaytrace(position, reverse))
     )
 
     // Scan random reverse directions
@@ -99,18 +97,12 @@ content.scan = (() => {
         z: engine.utility.random.float(-1, 1),
       }).normalize().rotateQuaternion(heading).scale(stepDistance)
 
-      const result = scheduleRaytrace(position, direction)
-
-      if (result.isSolid) {
-        results.push(result)
-      }
+      results.push(
+        await content.utility.async.schedule(() => doRaytrace(position, direction))
+      )
     }
 
     return results
-  }
-
-  async function scheduleRaytrace(...args) {
-    return await content.utility.async.schedule(() => doRaytrace(...args))
   }
 
   function smooth(value) {
@@ -140,10 +132,16 @@ content.scan = (() => {
       isCooldown = true
       pubsub.emit('trigger', {forward: true})
 
-      // Don't bother hurting the frame rate if nothing to see
-      const results = z >= engine.const.lightZone
-        ? {}
-        : await scanForward()
+      let results = []
+
+      if (z < content.const.lightZone) {
+        try {
+          results = await scanForward()
+        } catch (e) {
+          // Handle content.utility.async.reset()
+          return this
+        }
+      }
 
       pubsub.emit('complete', results)
 
@@ -169,10 +167,16 @@ content.scan = (() => {
       isCooldown = true
       pubsub.emit('trigger', {reverse: true})
 
-      // Don't bother hurting the frame rate if nothing to see
-      const results = z >= engine.const.lightZone
-        ? {}
-        : await scanReverse()
+      let results = []
+
+      if (z < content.const.lightZone) {
+        try {
+          results = await scanReverse()
+        } catch (e) {
+          // Handle content.utility.async.reset()
+          return this
+        }
+      }
 
       pubsub.emit('complete', results)
 

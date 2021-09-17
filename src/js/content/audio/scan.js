@@ -65,7 +65,7 @@ content.audio.scan = (() => {
     // First result
     const first = results.shift()
 
-    if (first.isSolid) {
+    if (first && first.isSolid) {
       renderGrain({
         result: first,
         type: 'sawtooth',
@@ -77,7 +77,7 @@ content.audio.scan = (() => {
 
     // Random directions
     for (const result of results) {
-      if (rendered.find(result, 1)) {
+      if (!result.isSolid || rendered.find(result, 1)) {
         continue
       }
 

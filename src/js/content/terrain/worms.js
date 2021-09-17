@@ -9,7 +9,8 @@ content.terrain.worms = (() => {
   const streamOffsets = []
 
   let isReady = false,
-    isStreaming = false
+    isStreaming = false,
+    readyChunk
 
   for (let x = -maxStreamRadius; x <= maxStreamRadius; x += 1) {
     for (let y = -maxStreamRadius; y <= maxStreamRadius; y += 1) {
@@ -44,34 +45,38 @@ content.terrain.worms = (() => {
     return chunkTree.find({x, y}, engine.const.zero)
   }
 
-  async function streamChunks() {
-    const position = engine.position.getVector()
+  function streamChunks() {
+    try {
+      const position = engine.position.getVector()
 
-    const streamRadius = Math.round(
-      engine.utility.lerp(0, maxStreamRadius,
-        engine.utility.clamp(position.z / content.const.lightZone, 0, 1),
+      const streamRadius = Math.round(
+        engine.utility.lerp(0, maxStreamRadius,
+          engine.utility.clamp(position.z / content.const.lightZone, 0, 1),
+        )
       )
-    )
 
-    const xi = Math.floor((position.x / chunkSize) + 0.5),
-      yi = Math.floor((position.y / chunkSize) + 0.5)
+      const xi = Math.floor((position.x / chunkSize) + 0.5),
+        yi = Math.floor((position.y / chunkSize) + 0.5)
 
-    isStreaming = true
+      isStreaming = true
 
-    for (const offset of streamOffsets) {
-      if (offset.distance() > streamRadius) {
-        continue
+      for (const offset of streamOffsets) {
+        if (offset.distance() > streamRadius) {
+          continue
+        }
+
+        const x = xi + offset.x,
+          y = yi + offset.y
+
+        if (!getChunk(x, y)) {
+          createChunk({x, y})
+        }
       }
 
-      const x = xi + offset.x,
-        y = yi + offset.y
-
-      if (!getChunk(x, y)) {
-        await createChunk({x, y})
-      }
+      isStreaming = false
+    } catch (e) {
+      // Handle content.utility.async.reset()
     }
-
-    isStreaming = false
   }
 
   return {
@@ -107,6 +112,7 @@ content.terrain.worms = (() => {
     reset: function () {
       isReady = false
       isStreaming = false
+      readyChunk = null
 
       chunks.length = 0
       chunkTree.clear()
@@ -117,10 +123,13 @@ content.terrain.worms = (() => {
     retrieve: (...args) => pointTree.retrieve(...args),
     import: function () {
       streamChunks()
+      readyChunk = chunks[0]
 
-      chunks[0].ready.then(() => {
-        isReady = true
-      })
+      readyChunk.ready.then(() => {
+        if (chunks[0] === readyChunk) {
+          isReady = true
+        }
+      }, () => {})
 
       return this
     },

@@ -13,8 +13,8 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Vertical look?
 
 ## Known issues
-- Backwards scanning vibration is too powerful
 - Stuck under surface when jumping at lower velocities
+- Treasure collection hangs
 
 ## Wishlist
 ### Audio

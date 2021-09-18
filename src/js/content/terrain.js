@@ -6,6 +6,10 @@ content.terrain = {
       return false
     }
 
-    return !this.worms.isInside(x, y, z)
+    if (this.worms.isInside(x, y, z)) {
+      return false
+    }
+
+    return this.cheese.isSolid(x, y, z)
   },
 }

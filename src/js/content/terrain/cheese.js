@@ -1,14 +1,26 @@
 content.terrain.cheese = (() => {
-  const cheeseField = engine.utility.createNoiseWithOctaves({
-    octaves: 2,
-    seed: ['terrain', 'cheese', 'cheese'],
-    type: engine.utility.simplex3d,
-  })
-
   const depthField = engine.utility.createNoiseWithOctaves({
     octaves: 2,
     seed: ['terrain', 'cheese', 'depth'],
     type: engine.utility.simplex2d,
+  })
+
+  const largeField = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['terrain', 'floor', 'large'],
+    type: engine.utility.simplex3d,
+  })
+
+  const largeExponentField = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['terrain', 'floor', 'large', 'exponent'],
+    type: engine.utility.simplex3d,
+  })
+
+  const largeThresholdField = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['terrain', 'floor', 'large', 'threshold'],
+    type: engine.utility.simplex3d,
   })
 
   const paddingField = engine.utility.createNoiseWithOctaves({
@@ -17,46 +29,77 @@ content.terrain.cheese = (() => {
     type: engine.utility.simplex2d,
   })
 
-  const thresholdField = engine.utility.createNoiseWithOctaves({
-    octaves: 4,
-    seed: ['terrain', 'cheese', 'threshold'],
+  const smallField = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['terrain', 'floor', 'small'],
     type: engine.utility.simplex3d,
   })
 
-  const cheeseScale = 50 / engine.utility.simplex3d.prototype.skewFactor,
-    depthScale = 1000 / engine.utility.simplex2d.prototype.skewFactor,
+  const smallExponentField = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['terrain', 'floor', 'small', 'exponent'],
+    type: engine.utility.simplex3d,
+  })
+
+  const smallThresholdField = engine.utility.createNoiseWithOctaves({
+    octaves: 2,
+    seed: ['terrain', 'floor', 'small', 'threshold'],
+    type: engine.utility.simplex3d,
+  })
+
+  const depthScale = 1000 / engine.utility.simplex2d.prototype.skewFactor,
+    largeExponentScale = 100 / engine.utility.simplex3d.prototype.skewFactor,
+    largeScale = 300 / engine.utility.simplex3d.prototype.skewFactor,
+    largeThresholdScale = 150 / engine.utility.simplex3d.prototype.skewFactor,
     paddingScale = 500 / engine.utility.simplex2d.prototype.skewFactor,
-    thresholdScale = 200 / engine.utility.simplex3d.prototype.skewFactor
+    smallExponentScale = 10 / engine.utility.simplex3d.prototype.skewFactor,
+    smallScale = 30 / engine.utility.simplex3d.prototype.skewFactor,
+    smallThresholdScale = 15 / engine.utility.simplex3d.prototype.skewFactor
 
   content.utility.ephemeralNoise
-    .manage(cheeseField)
     .manage(depthField)
+    .manage(largeExponentField)
+    .manage(largeField)
+    .manage(largeThresholdField)
     .manage(paddingField)
-    .manage(thresholdField)
-
-  function getCheese(x, y, z) {
-    return cheeseField.value(x / cheeseScale, y / cheeseScale, z / cheeseScale)
-  }
+    .manage(smallExponentField)
+    .manage(smallField)
+    .manage(smallThresholdField)
 
   function getDepth(x, y) {
     const value = depthField.value(x / depthScale, y / depthScale)
     return engine.utility.lerp(2500, 5000, value)
   }
 
-  function getPadding(x, y) {
-    const value = paddingField.value(x / paddingScale, y / paddingScale)
-    return engine.utility.lerp(10, 100, value)
+  function getLarge(x, y, z) {
+    return largeField.value(x / largeScale, y / largeScale, z / largeScale)
   }
 
-  function getThreshold(x, y, z, min, max) {
-    const ratio = engine.utility.scale(z, min, max, 0, 1),
-      value = thresholdField.value(x / thresholdScale, y / thresholdScale, z / thresholdScale)
+  function getLargeExponent(x, y, z) {
+    const value = largeExponentField.value(x / largeExponentScale, y / largeExponentScale, z / largeExponentScale)
+    return engine.utility.lerp(1, 2, value)
+  }
 
-    const mix = ratio < 0.5
-      ? engine.utility.scale(ratio, 0, 0.5, 0, 1)
-      : engine.utility.scale(ratio, 0.5, 1, 1, 0)
+  function getLargeThreshold(x, y, z) {
+    return largeThresholdField.value(x / largeThresholdScale, y / largeThresholdScale, z / largeThresholdScale)
+  }
 
-    return ((value ** 2) / 2) * (mix ** 0.5)
+  function getPadding(x, y) {
+    const value = paddingField.value(x / paddingScale, y / paddingScale)
+    return engine.utility.lerp(50, 150, value)
+  }
+
+  function getSmall(x, y, z) {
+    return smallField.value(x / smallScale, y / smallScale, z / smallScale)
+  }
+
+  function getSmallExponent(x, y, z) {
+    const value = smallExponentField.value(x / smallExponentScale, y / smallExponentScale, z / smallExponentScale)
+    return engine.utility.lerp(1, 2, value)
+  }
+
+  function getSmallThreshold(x, y, z) {
+    return smallThresholdField.value(x / smallThresholdScale, y / smallThresholdScale, z / smallThresholdScale)
   }
 
   return {
@@ -66,21 +109,32 @@ content.terrain.cheese = (() => {
       const floor = content.terrain.floor.value(x, y),
         max = floor - getPadding(x, y, z)
 
+      if (z > max) {
+        return true
+      }
+
       const min = max - getDepth(x, y, z)
 
-      const cheese = getCheese(x, y, z),
-        threshold = getThreshold(x, y, z, min, max)
+      if (z < min) {
+        return true
+      }
 
-      const value = !engine.utility.between(cheese, 0.5 - threshold, 0.5 + threshold)
+      const ratio = engine.utility.scale(z, min, max, 0, 1)
+
+      const mix = (
+        ratio < 0.5
+          ? engine.utility.scale(ratio, 0, 0.5, 0, 1)
+          : engine.utility.scale(ratio, 0.5, 1, 1, 0)
+      ) ** 0.5
+
+      const value = getLarge(x, y, z) < ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
+        || getSmall(x, y, z) < ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
 
       return {
         floor,
-        padding: getPadding(x, y, z),
         max,
-        depth: getDepth(x, y, z),
         min,
-        cheese,
-        threshold,
+        mix,
         value,
       }
     },
@@ -98,10 +152,16 @@ content.terrain.cheese = (() => {
         return true
       }
 
-      const cheese = getCheese(x, y, z),
-        threshold = getThreshold(x, y, z, min, max)
+      const ratio = engine.utility.scale(z, min, max, 0, 1)
 
-      return !engine.utility.between(cheese, 0.5 - threshold, 0.5 + threshold)
+      const mix = (
+        ratio < 0.5
+          ? engine.utility.scale(ratio, 0, 0.5, 0, 1)
+          : engine.utility.scale(ratio, 0.5, 1, 1, 0)
+      ) ** 0.5
+
+      return getLarge(x, y, z) < ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
+        || getSmall(x, y, z) < ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
     },
   }
 })()

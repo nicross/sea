@@ -249,7 +249,7 @@ content.treasure = (() => {
 
       spawnTreasure({
         chunk,
-        results,
+        results: results.scan3d,
       })
     },
     rebuildProps: function () {

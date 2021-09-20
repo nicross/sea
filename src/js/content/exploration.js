@@ -41,7 +41,9 @@ content.exploration = (() => {
       return this
     },
     onScan: function (scan) {
-      for (const result of Object.values(scan)) {
+      // TODO: scan.scan2d
+
+      for (const result of Object.values(scan.scan3d)) {
         if (result && !result.isSolid) {
           continue
         }

@@ -137,7 +137,8 @@ content.audio.scan = (() => {
 
   return {
     complete: function (results) {
-      render(results)
+      // TODO: results.scan2d
+      render(results.scan3d)
       recharge()
       return this
     },

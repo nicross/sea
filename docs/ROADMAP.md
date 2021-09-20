@@ -15,6 +15,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ## Known issues
 - Stuck under surface when jumping at lower velocities
 - Treasure collection hangs
+- Treasure streams too late/close, visual cue radius too small
 
 ## Wishlist
 ### Audio

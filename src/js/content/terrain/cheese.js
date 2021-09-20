@@ -125,10 +125,10 @@ content.terrain.cheese = (() => {
         ratio < 0.5
           ? engine.utility.scale(ratio, 0, 0.5, 0, 1)
           : engine.utility.scale(ratio, 0.5, 1, 1, 0)
-      ) ** 0.5
+      ) ** (1/16)
 
-      const value = getLarge(x, y, z) < ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
-        || getSmall(x, y, z) < ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
+      const value = getLarge(x, y, z) > ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
+        && getSmall(x, y, z) > ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
 
       return {
         floor,
@@ -136,6 +136,12 @@ content.terrain.cheese = (() => {
         min,
         mix,
         value,
+        large: getLarge(x, y, z),
+        largeThreshold: getLargeThreshold(x, y, z),
+        largeExponent: getLargeExponent(x, y, z),
+        small: getSmall(x, y, z),
+        smallThreshold: getSmallThreshold(x, y, z),
+        smallExponent: getSmallExponent(x, y, z),
       }
     },
     isSolid: (x, y, z) => {
@@ -158,10 +164,10 @@ content.terrain.cheese = (() => {
         ratio < 0.5
           ? engine.utility.scale(ratio, 0, 0.5, 0, 1)
           : engine.utility.scale(ratio, 0.5, 1, 1, 0)
-      ) ** 0.5
+      ) ** (1/16)
 
-      return getLarge(x, y, z) < ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
-        || getSmall(x, y, z) < ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
+      return getLarge(x, y, z) > ((getLargeThreshold(x, y, z) ** getLargeExponent(x, y, z)) * mix)
+        && getSmall(x, y, z) > ((getSmallThreshold(x, y, z) ** getSmallExponent(x, y, z)) * mix)
     },
   }
 })()

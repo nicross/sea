@@ -1,21 +1,34 @@
 # ROADMAP
-This document outlines upcoming changes for post-jam releases.
+This document outlines upcoming changes for post-jam releases leading up to the full Steam release.
 
 ## Planned versions
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
-## v1.5.0
-- Height map scanning (see E.X.O.)
+### v1.5.0: Deep update
+- Height map scanning (see E.X.O. but exclude cave points from results)
 - Treasure occlusion
-- Performance optimizations
-- Surface geometry improvements?
-- Utility that calculates synth color given relative vector3d (via dot product and small cone of confusion)?
-- Vertical look?
+- Vertical look
+- Polish
+  - Fade to/from grayscale when scanner is used
+  - Reduce light zone transition to 500m (versus 1km)
+  - Tune underwater color geometry scaling
+  - Revisit surface geometry
+  - Performance optimizations
 
-## Known issues
+#### Known issues
 - Stuck under surface when jumping at lower velocities
 - Treasure collection hangs
 - Treasure streams too late/close, visual cue radius too small
+- Audio crashes still occurring due to scanner honk/cooldown/recharge cues
+
+### v1.6.0: Life update
+TBD
+
+### v1.7.0: Redacted update
+TBD
+
+### v2.0.0: Gold update
+TBD
 
 ## Wishlist
 ### Audio
@@ -23,8 +36,8 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
-- Godrays
-- Shooting stars
+- Godrays by day
+- Shooting stars by night
 
 ### Plot
 - Abandoned alien labs
@@ -59,53 +72,39 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
   </ul>
 </details>
 
-### Quality of Life
-- Cave entrance cues (breadcrumbs spawned when reverb change detected)
-
 ### Simulation
-- Add depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
-- Light levels influenced by cloud cover
-- Moon phases
+- Life
+  - Dolphins that can be befriended
+  - Fish that can be chased
+  - Gulls that fly overhead
+  - Whales that sing
+- Moon phases that affect the darkness of night
 - Surface weather patterns
   - Clouds
   - Weather patterns (rain, storm)
+  - Light levels affected by clouds
 
 ### Treasure
-- Rework gallery interfaces
 - Consider whether treasures should be broken into raw materials that have uses beyond score
+- Depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
+- Better loot tables farther away from and at end of caves
 
 ### User interface
 - Improve screen transitions
-- Improve treasure gallery
+- Improve treasure gallery / crafting and materials screens
 
 ### World generation
 - Biomes
   - Scanned points can be different props determined by noise fields
-  - Represented graphically with a range of saturation levels (i.e. albedo)
-  - Different musical colors, patterns (aleotoric, step melody), or behaviors entirely
-  - Polyrhythm biome
-    - Each prop can be of three rhythmic layers selected by a 3d noise field
-    - Each prop subscirbes to a timer which emits a regular pulse
-    - Each prop has a percussive sound that fires a number of times each pulse
-    - Props are grouped into one of three pulse rates
-      - 1 or 2 times per pulse (determined by a 3d noise field)
-      - 3 times per pulse
-      - 5 or 7 times per pulse (determined by a 3d noise field)
-    - Notes selected from noise fields representing melodic ostinatos
-- Cavern generation
-  - Perlin worms carve tunnels out from the terrain
-    - Octree stores points with data like radius
-    - Points are generated at 1/Nm intervals
-    - Start at floor and travel for random distance
-  - Collision detection: is within Nm cube of closest point
-  - Guaranteed treasures
+  - Props have different textures, durations, and behaviors
+  - Specifics TBD
 
 ### Miscellaneous
 - Photograph mode, or pseudo-bookmarks
 
-### Chores
+### Technical debt
 - Refactor app state management (e.g. how audio fades, scenes load) for clarity
 - Refactor controls handling to be more reusable across screens
-- Refactor fast travel as content system rather than an app save/load
-- Refactor app settings to be more maintainable
+- Refactor fast travel as content system rather than an app save/load to reduce state resets
+- Refactor app settings to be more maintainable, e.g. separate files for each setting
 - Create app achievements/unlocks system to better track some hidden UI elements

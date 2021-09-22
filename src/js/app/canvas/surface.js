@@ -32,7 +32,7 @@ app.canvas.surface = (() => {
         continue
       }
 
-      const angle = Math.atan2(y, x)
+      const angle = -Math.atan2(y, x)
 
       gridCache.insert({
         angle: angle - engine.const.tau,
@@ -78,13 +78,12 @@ app.canvas.surface = (() => {
   function drawNodes() {
     const color = getColor(),
       drawDistance = app.settings.computed.drawDistanceDynamic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion()),
-      headingConjugate = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
       hfov = main.hfov(),
       hfovLeeway = hfov / 4,
-      position = engine.position.getVector(),
+      position = app.canvas.camera.computedVector(),
       positionGrid = position.clone(),
-      rotateYaw = Math.atan2(headingConjugate.y, headingConjugate.x),
+      rotateYaw = Math.atan2(heading.y, heading.x),
       time = content.time.value(),
       vertices = gridCache.retrieve(Math.atan2(heading.y, heading.x) - ((hfov + hfovLeeway) / 2), hfov + hfovLeeway),
       zOffset = engine.const.positionRadius / 2
@@ -164,7 +163,7 @@ app.canvas.surface = (() => {
   }
 
   function shouldDraw() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     if (z < content.const.lightZone) {
       return false

@@ -38,8 +38,10 @@ app.canvas = (() => {
   }
 
   function draw() {
-    clear()
+    app.canvas.camera.update()
     app.canvas.tracers.prime()
+
+    clear()
     app.canvas.light.draw()
     app.canvas.stars.draw()
     app.canvas.celestials.draw()
@@ -110,8 +112,8 @@ app.canvas = (() => {
     hfov: () => hfov,
     toRelative: (vector) => {
       return vector
-        .subtract(engine.position.getVector())
-        .rotateQuaternion(engine.position.getQuaternion().conjugate())
+        .subtract(app.canvas.camera.computedVector())
+        .rotateQuaternion(app.canvas.camera.computedQuaternion())
     },
     toScreenFromGlobal: function (vector) {
       return this.toScreenFromRelative(

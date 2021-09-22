@@ -33,7 +33,7 @@ app.canvas.grain = (() => {
   }
 
   function getColor() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     if (z <= zones.midnight || app.settings.computed.graphicsDarkModeOn) {
       return {r: 0, g: 0, b: 0}

@@ -30,11 +30,11 @@ app.canvas.nodes = (() => {
 
   function drawNodes() {
     const drawDistance = app.settings.computed.drawDistanceStatic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
       height = main.height(),
       hfov = main.hfov(),
       now = engine.audio.time(),
-      position = syngen.position.getVector(),
+      position = app.canvas.camera.computedVector(),
       rotateYaw = Math.atan2(heading.y, heading.x),
       vfov = main.vfov(),
       width = main.width()
@@ -205,7 +205,7 @@ app.canvas.nodes = (() => {
 
   function shouldDraw() {
     // TODO: Find better value, e.g. what is the Z at the bottom of screen?
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     return z < content.const.lightZone
   }
 

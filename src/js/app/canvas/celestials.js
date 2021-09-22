@@ -30,7 +30,7 @@ app.canvas.celestials = (() => {
 
   function calculateAlpha() {
     const surface = content.surface.current()
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     if (z >= surface) {
       return 1
@@ -81,7 +81,7 @@ app.canvas.celestials = (() => {
     const horizon = main.toScreenFromRelative({
       x: horizonDistance,
       y: 0,
-      z: -engine.position.getVector().z,
+      z: -app.canvas.camera.computedVector().z,
     })
 
     return horizon.y
@@ -95,7 +95,7 @@ app.canvas.celestials = (() => {
   }
 
   function calculatePosition(pitch) {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     const relative = engine.utility.vector3d.create({
       x: horizonDistance,
@@ -104,7 +104,7 @@ app.canvas.celestials = (() => {
     }).rotateEuler({
       pitch,
     }).rotateQuaternion(
-      engine.position.getQuaternion().conjugate()
+      app.canvas.camera.computedQuaternion()
     )
 
     return main.toScreenFromRelative(relative)
@@ -180,7 +180,7 @@ app.canvas.celestials = (() => {
   }
 
   function shouldDraw() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     // calculateAlpha will always return 0 below this depth
     return z > -150
   }

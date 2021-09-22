@@ -28,7 +28,7 @@ app.canvas.light = (() => {
   })
 
   function calculateOpacity() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     if (z > zones.twilight) {
       return app.settings.computed.graphicsDarkModeOn
@@ -111,7 +111,7 @@ app.canvas.light = (() => {
   }
 
   function recalculate() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
 
     scheme = calculateScheme()
 

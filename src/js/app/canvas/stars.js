@@ -20,7 +20,7 @@ app.canvas.stars = (() => {
   })
 
   function calculateAlpha() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     const surface = content.surface.current()
 
     if (z < surface - depthCutoff) {
@@ -45,7 +45,7 @@ app.canvas.stars = (() => {
   }
 
   function calculateRadius() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     const surface = content.surface.current()
 
     if (z >= surface) {
@@ -64,7 +64,7 @@ app.canvas.stars = (() => {
     const horizon = main.toScreenFromRelative({
       x: firmament,
       y: 0,
-      z: -engine.position.getVector().z,
+      z: -app.canvas.camera.computedVector().z,
     })
 
     return horizon.y
@@ -81,7 +81,7 @@ app.canvas.stars = (() => {
   }
 
   function calculateTwinkleDepth() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     const surface = content.surface.current()
 
     if (z >= surface) {
@@ -102,7 +102,7 @@ app.canvas.stars = (() => {
   function drawStars() {
     const globalAlpha = calculateAlpha(),
       globalRadius = calculateRadius(),
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(engine.position.getQuaternion().conjugate()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
       height = main.height(),
       hfov = main.hfov(),
       rotatePitch = -2 * Math.PI * content.time.clock(),
@@ -193,7 +193,7 @@ app.canvas.stars = (() => {
   }
 
   function shouldDraw() {
-    const {z} = engine.position.getVector()
+    const {z} = app.canvas.camera.computedVector()
     return z > -depthCutoff
   }
 

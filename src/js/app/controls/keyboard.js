@@ -5,6 +5,8 @@ app.controls.keyboard = {
 
     const ascend = keys.Space,
       descend = keys.ControlLeft || keys.ControlRight || keys.KeyC,
+      lookDown = keys.PageDown,
+      lookUp = keys.PageUp,
       moveBackward = keys.ArrowDown || keys.KeyS || keys.Numpad5,
       moveForward = keys.ArrowUp || keys.KeyW || keys.Numpad8,
       strafeLeft = keys.KeyA || keys.KeyZ || keys.Numpad4,
@@ -23,6 +25,12 @@ app.controls.keyboard = {
       state.x = -1
     } else if (strafeRight && !strafeLeft) {
       state.x = 1
+    }
+
+    if (lookUp && !lookDown) {
+      state.lookY = 1
+    } else if (lookDown && !lookUp) {
+      state.lookY = -1
     }
 
     if (turnLeft && !turnRight) {

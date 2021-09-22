@@ -12,6 +12,8 @@
 - Save versioning
 - Separate draw distance sliders
 - Worm cave generation
+- Cheese cave generation
+- Vertical look
 
 ## v1.4.5
 - Updated syngen to the latest version

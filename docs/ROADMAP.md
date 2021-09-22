@@ -7,7 +7,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Height map scanning (see E.X.O. but exclude cave points from results)
 - Treasure occlusion
-- Vertical look
 - Polish
   - Fade to/from grayscale when scanner is used
   - Reduce light zone transition to 500m (versus 1km)

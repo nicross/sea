@@ -3,12 +3,13 @@ app.controls.gamepad = {
     const {digital} = engine.input.gamepad.get()
     const state = {}
 
-    let rotate = 0,
+    let lookY = 0,
+      rotate = 0,
       x = 0,
-      y = 0,
-      z = 0
+      y = 0
 
-    if (engine.input.gamepad.hasAxis(0, 1, 2)) {
+    if (engine.input.gamepad.hasAxis(0, 1, 2, 3)) {
+      lookY += engine.input.gamepad.getAxis(3, true)
       rotate += engine.input.gamepad.getAxis(2, true)
       x += engine.input.gamepad.getAxis(0)
       y += engine.input.gamepad.getAxis(1, true)
@@ -36,10 +37,14 @@ app.controls.gamepad = {
       rotate = -1
     }
 
+    lookY = engine.utility.clamp(lookY, -1, 1) || 0
     rotate = engine.utility.clamp(rotate, -1, 1) || 0
     x = engine.utility.clamp(x, -1, 1) || 0
     y = engine.utility.clamp(y, -1, 1) || 0
-    z = engine.utility.clamp(z, -1, 1) || 0
+
+    if (lookY) {
+      state.lookY = lookY
+    }
 
     if (rotate) {
       state.rotate = rotate

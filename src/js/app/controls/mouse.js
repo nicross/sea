@@ -1,5 +1,6 @@
 app.controls.mouse = (() => {
   let gameScreen,
+    lookY = 0,
     rotate = 0
 
   engine.ready(() => {
@@ -95,6 +96,18 @@ app.controls.mouse = (() => {
         // Accelerate and clamp rotation
         rotate += engine.utility.scale(mouse.moveX, -window.innerWidth, window.innerWidth, 1, -1) * app.settings.computed.mouseSensitivity
         rotate = engine.utility.clamp(rotate, -1, 1)
+      }
+
+      if (mouse.moveY) {
+        // Accelerate and clamp rotation
+        lookY += engine.utility.scale(mouse.moveY, -window.innerWidth, window.innerWidth, 1, -1) * app.settings.computed.mouseSensitivity
+        lookY = engine.utility.clamp(lookY, -1, 1)
+      }
+
+      if (lookY) {
+        // Apply and decelerate lookY to zero
+        state.lookY = lookY
+        lookY = content.utility.accelerate.value(lookY, 0, 32)
       }
 
       if (rotate) {

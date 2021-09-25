@@ -2,7 +2,6 @@ app.canvas.camera = (() => {
   let computedQuaternion = engine.utility.quaternion.create(),
     computedQuaternionConjugate = engine.utility.quaternion.create(),
     computedVector = engine.utility.vector3d.create(),
-    forward = engine.utility.vector3d.create(),
     quaternion = engine.utility.quaternion.create(),
     vector = engine.utility.vector3d.create()
 

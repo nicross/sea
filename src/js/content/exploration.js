@@ -65,6 +65,7 @@ content.exploration = (() => {
       return this
     },
     retrieve: (...args) => tree.retrieve(...args),
+    tree: () => tree,
   }
 })()
 

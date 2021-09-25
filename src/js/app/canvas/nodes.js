@@ -30,127 +30,40 @@ app.canvas.nodes = (() => {
 
   function drawNodes() {
     const drawDistance = app.settings.computed.drawDistanceStatic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
+      cameraVector = app.canvas.camera.computedVector(),
       height = main.height(),
-      hfov = main.hfov(),
       now = engine.audio.time(),
-      position = app.canvas.camera.computedVector(),
-      rotateYaw = Math.atan2(heading.y, heading.x),
-      vfov = main.vfov(),
       width = main.width()
 
-    let nodes = []
+    const maxX = width + nodeRadius,
+      maxY = height + nodeRadius,
+      minX = -nodeRadius,
+      minY = -nodeRadius
 
-    // Exclude nodes that are known to be completely behind the camera
-    // TODO: Optimize with a granular approach that selects small chunks based on rotation and field of view, like the surface
-
-    const quadrantRotate = engine.utility.normalizeAngle(-rotateYaw)
-
-    // Quadrant 1 (x, y)
-    if (quadrantRotate <= Math.PI || quadrantRotate >= Math.PI*3/2) {
-      nodes.push(
-        ...content.exploration.retrieve({
-          x: position.x,
-          y: position.y,
-          z: position.z - drawDistance,
-          depth: drawDistance * 2,
-          height: drawDistance,
-          width: drawDistance,
-        })
-      )
-    }
-
-    // Quadrant 2 (-x, y)
-    if (engine.utility.between(quadrantRotate, 0, Math.PI*3/2)) {
-      nodes.push(
-        ...content.exploration.retrieve({
-          x: position.x - drawDistance,
-          y: position.y,
-          z: position.z - drawDistance,
-          depth: drawDistance * 2,
-          height: drawDistance,
-          width: drawDistance,
-        })
-      )
-    }
-
-    // Quadrant 3 (-x, -y)
-    if (engine.utility.between(quadrantRotate, Math.PI/2, Math.PI*2)) {
-      nodes.push(
-        ...content.exploration.retrieve({
-          x: position.x - drawDistance,
-          y: position.y - drawDistance,
-          z: position.z - drawDistance,
-          depth: drawDistance * 2,
-          height: drawDistance,
-          width: drawDistance,
-        })
-      )
-    }
-
-    // Quadrant 4 (x, -y)
-    if (quadrantRotate <= Math.PI/2 || quadrantRotate >= Math.PI) {
-      nodes.push(
-        ...content.exploration.retrieve({
-          x: position.x,
-          y: position.y - drawDistance,
-          z: position.z - drawDistance,
-          depth: drawDistance * 2,
-          height: drawDistance,
-          width: drawDistance,
-        })
-      )
-    }
-
-    nodes = nodes.reduce((nodes, node) => {
-      // Convert to relative space
-      const relative = engine.utility.vector3d.create(
-        engine.utility.vector2d.create({
-          x: node.x - position.x,
-          y: node.y - position.y,
-        }).rotate(rotateYaw)
-      )
-
-      relative.z = node.z - position.z
-
-      // Filter out nodes behind field of view
-      if (relative.x <= 0) {
-        return nodes
-      }
-
-      const hangle = Math.atan2(relative.y, relative.x)
-
-      // Filter out nodes beyond horizontal field of view (with leeway)
-      if (Math.abs(hangle) > hfov / 1.95) {
-        return nodes
-      }
-
-      const vangle = Math.atan2(relative.z, relative.x)
-
-      // Filter out nodes beyond vertical field of view (with leeway)
-      if (Math.abs(vangle) > vfov / 1.95) {
-        return nodes
-      }
-
-      const distance = relative.distance()
-
-      // Filter out nodes beyond draw distance
-      if (distance > drawDistance) {
+    const nodes = app.canvas.camera.frustum.cullOctree(
+      content.exploration.tree()
+    ).reduce((nodes, node) => {
+      if (!app.canvas.camera.frustum.containsPoint(node)) {
         return nodes
       }
 
       // Convert to screen space
-      // Importantly, z-coordinate represents distance from camera
-      const screen = engine.utility.vector3d.create({
-        x: (width / 2) - (width * hangle / hfov),
-        y: (height / 2) - (height * vangle / vfov),
-        z: relative.distance(),
-      })
+      const screen = app.canvas.camera.toScreenFromGlobal(node)
 
-      screen.time = node.time
+      // Skip if offscreen
+      if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {
+        return nodes
+      }
+
+      // Cache distance from player as z-coordinate
+      screen.z = cameraVector.subtract(node).distance()
 
       // Cache hue before we discard global coordinates
       screen.hue = getNodeHue(node)
+
+      // Copy node time for animations
+      screen.time = node.time
+
       nodes.push(screen)
 
       return nodes

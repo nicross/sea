@@ -33,12 +33,4 @@ app.utility.plane.prototype = {
 
     return this
   },
-  replace: function (x, y, z, constant) {
-    this.constant = constant
-    this.normal = engine.utility.vector3d.create({x, y, z})
-
-    this.normalize()
-
-    return this
-  }
 }

@@ -2,6 +2,7 @@ app.canvas.camera = (() => {
   let computedQuaternion = engine.utility.quaternion.create(),
     computedQuaternionConjugate = engine.utility.quaternion.create(),
     computedVector = engine.utility.vector3d.create(),
+    computedVectorInverse = engine.utility.vector3d.create(),
     quaternion = engine.utility.quaternion.create(),
     vector = engine.utility.vector3d.create()
 
@@ -32,12 +33,14 @@ app.canvas.camera = (() => {
     computedQuaternion: () => computedQuaternion.clone(),
     computedQuaternionConjugate: () => computedQuaternionConjugate.clone(),
     computedVector: () => computedVector.clone(),
+    computedVectorInverse: () => computedVectorInverse.clone(),
     getQuaternion: () => quaternion.clone(),
     getVector: () => vector.clone(),
     reset: function () {
       computedQuaternion = engine.utility.quaternion.create()
       computedQuaternionConjugate = engine.utility.quaternion.create()
       computedVector = engine.utility.vector3d.create()
+      computedVectorInverse = engine.utility.vector3d.create()
       quaternion = engine.utility.quaternion.create()
       vector = engine.utility.vector3d.create()
 
@@ -52,12 +55,7 @@ app.canvas.camera = (() => {
       return this
     },
     toRelative: (vector) => {
-      if (!engine.utility.vector3d.prototype.isPrototypeOf(vector)) {
-        vector = engine.utility.vector3d.create(vector)
-      }
-
-      return vector
-        .subtract(computedVector)
+      return computedVectorInverse.add(vector)
         .rotateQuaternion(computedQuaternionConjugate)
     },
     toScreenFromGlobal: function (vector) {
@@ -82,6 +80,9 @@ app.canvas.camera = (() => {
       computedQuaternion = engine.position.getQuaternion().multiply(quaternion)
       computedQuaternionConjugate = computedQuaternion.conjugate()
       computedVector = engine.position.getVector().add(vector)
+      computedVectorInverse = computedVector.inverse()
+
+      this.frustum.update()
 
       return this
     },

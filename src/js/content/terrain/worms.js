@@ -83,6 +83,12 @@ content.terrain.worms = (() => {
     addPoint: function (point) {
       pointTree.insert(point)
 
+      if (app.debug) {
+        content.exploration.add(
+          engine.utility.vector3d.unitZ().scale(point.radius).add(point)
+        )
+      }
+
       return this
     },
     chunks: () => [...chunks],

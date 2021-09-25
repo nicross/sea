@@ -101,6 +101,7 @@ content.terrain.worms.chunk.prototype = {
     while (distance < length) {
       await content.utility.async.schedule(async () => {
         // Determine batch size, optimizing closer to player
+        const playerDistanceRatio = engine.position.getVector().distance({x, y}) / 2000
         const batchSize = engine.utility.lerpExp(100, 2000, playerDistanceRatio, 3)
 
         // Generate batch

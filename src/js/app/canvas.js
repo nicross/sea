@@ -50,6 +50,10 @@ app.canvas = (() => {
     app.canvas.tracers.draw()
     app.canvas.grain.draw()
     app.canvas.hud.draw()
+
+    if (app.debug) {
+      app.debug.canvas.draw()
+    }
   }
 
   function onFrame({paused}) {

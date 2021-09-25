@@ -78,13 +78,15 @@ app.canvas.celestials = (() => {
   }
 
   function calculateHorizon() {
-    const horizon = app.canvas.camera.toScreenFromRelative({
-      x: horizonDistance,
-      y: 0,
-      z: -app.canvas.camera.computedVector().z,
+    const cameraVector = app.canvas.camera.computedVector(),
+      positionForward = engine.position.getQuaternion().forward()
+
+    const screen = app.canvas.camera.toScreenFromGlobal({
+      ...cameraVector.add(positionForward.scale(horizonDistance)),
+      z: 0,
     })
 
-    return horizon.y
+    return screen.y
   }
 
   function calculatePitch(offset) {

@@ -78,7 +78,7 @@ app.canvas.surface = (() => {
   function drawNodes() {
     const color = getColor(),
       drawDistance = app.settings.computed.drawDistanceDynamic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
       hfov = main.hfov(),
       hfovLeeway = hfov / 4,
       position = app.canvas.camera.computedVector(),

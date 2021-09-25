@@ -30,7 +30,7 @@ app.canvas.nodes = (() => {
 
   function drawNodes() {
     const drawDistance = app.settings.computed.drawDistanceStatic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
       height = main.height(),
       hfov = main.hfov(),
       now = engine.audio.time(),

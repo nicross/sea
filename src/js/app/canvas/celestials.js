@@ -104,7 +104,7 @@ app.canvas.celestials = (() => {
     }).rotateEuler({
       pitch,
     }).rotateQuaternion(
-      app.canvas.camera.computedQuaternion()
+      app.canvas.camera.computedQuaternionConjugate()
     )
 
     return main.toScreenFromRelative(relative)

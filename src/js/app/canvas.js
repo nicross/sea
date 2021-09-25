@@ -115,9 +115,13 @@ app.canvas = (() => {
     height: () => height,
     hfov: () => hfov,
     toRelative: (vector) => {
+      if (!engine.utility.vector3d.prototype.isPrototypeOf(vector)) {
+        vector = engine.utility.vector3d.create(vector)
+      }
+
       return vector
         .subtract(app.canvas.camera.computedVector())
-        .rotateQuaternion(app.canvas.camera.computedQuaternion())
+        .rotateQuaternion(app.canvas.camera.computedQuaternionConjugate())
     },
     toScreenFromGlobal: function (vector) {
       return this.toScreenFromRelative(

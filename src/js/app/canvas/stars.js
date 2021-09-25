@@ -102,7 +102,7 @@ app.canvas.stars = (() => {
   function drawStars() {
     const globalAlpha = calculateAlpha(),
       globalRadius = calculateRadius(),
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternion()),
+      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
       height = main.height(),
       hfov = main.hfov(),
       rotatePitch = -2 * Math.PI * content.time.clock(),

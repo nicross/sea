@@ -61,7 +61,7 @@ app.canvas.stars = (() => {
   }
 
   function calculateHorizon() {
-    const horizon = main.toScreenFromRelative({
+    const horizon = app.canvas.camera.toScreenFromRelative({
       x: firmament,
       y: 0,
       z: -app.canvas.camera.computedVector().z,

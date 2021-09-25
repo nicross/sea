@@ -78,7 +78,7 @@ app.canvas.celestials = (() => {
   }
 
   function calculateHorizon() {
-    const horizon = main.toScreenFromRelative({
+    const horizon = app.canvas.camera.toScreenFromRelative({
       x: horizonDistance,
       y: 0,
       z: -app.canvas.camera.computedVector().z,
@@ -107,7 +107,7 @@ app.canvas.celestials = (() => {
       app.canvas.camera.computedQuaternionConjugate()
     )
 
-    return main.toScreenFromRelative(relative)
+    return app.canvas.camera.toScreenFromRelative(relative)
   }
 
   function calculateRadius(pitch) {

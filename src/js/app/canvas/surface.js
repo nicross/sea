@@ -117,7 +117,7 @@ app.canvas.surface = (() => {
       }
 
       // Convert to screen space
-      const screen = main.toScreenFromRelative(relative)
+      const screen = app.canvas.camera.toScreenFromRelative(relative)
 
       // Calculate properties
       const alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),

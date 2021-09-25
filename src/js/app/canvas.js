@@ -114,29 +114,6 @@ app.canvas = (() => {
     },
     height: () => height,
     hfov: () => hfov,
-    toRelative: (vector) => {
-      if (!engine.utility.vector3d.prototype.isPrototypeOf(vector)) {
-        vector = engine.utility.vector3d.create(vector)
-      }
-
-      return vector
-        .subtract(app.canvas.camera.computedVector())
-        .rotateQuaternion(app.canvas.camera.computedQuaternionConjugate())
-    },
-    toScreenFromGlobal: function (vector) {
-      return this.toScreenFromRelative(
-        this.toRelative(vector)
-      )
-    },
-    toScreenFromRelative: (relative) => {
-      const hangle = Math.atan2(relative.y, relative.x),
-        vangle = Math.atan2(relative.z, relative.x)
-
-      return engine.utility.vector2d.create({
-        x: (width / 2) - (width * hangle / hfov),
-        y: (height / 2) - (height * vangle / vfov),
-      })
-    },
     vfov: () => vfov,
     width: () => width,
   }, pubsub)

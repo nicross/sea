@@ -29,9 +29,9 @@ app.canvas.camera = (() => {
 
       return this
     },
-    computedQuaternion: () => computedQuaternion,
-    computedQuaternionConjugate: () => computedQuaternionConjugate,
-    computedVector: () => computedVector,
+    computedQuaternion: () => computedQuaternion.clone(),
+    computedQuaternionConjugate: () => computedQuaternionConjugate.clone(),
+    computedVector: () => computedVector.clone(),
     getQuaternion: () => quaternion.clone(),
     getVector: () => vector.clone(),
     reset: function () {
@@ -50,6 +50,33 @@ app.canvas.camera = (() => {
     setVector: function (value) {
       vector = engine.utility.vector3d.create(value)
       return this
+    },
+    toRelative: (vector) => {
+      if (!engine.utility.vector3d.prototype.isPrototypeOf(vector)) {
+        vector = engine.utility.vector3d.create(vector)
+      }
+
+      return vector
+        .subtract(computedVector)
+        .rotateQuaternion(computedQuaternionConjugate)
+    },
+    toScreenFromGlobal: function (vector) {
+      return this.toScreenFromRelative(
+        this.toRelative(vector)
+      )
+    },
+    toScreenFromRelative: (relative) => {
+      const hangle = Math.atan2(relative.y, relative.x),
+        height = app.canvas.height(),
+        hfov = app.canvas.hfov(),
+        width = app.canvas.width(),
+        vangle = Math.atan2(relative.z, relative.x),
+        vfov = app.canvas.vfov()
+
+      return engine.utility.vector2d.create({
+        x: (width / 2) - (width * hangle / hfov),
+        y: (height / 2) - (height * vangle / vfov),
+      })
     },
     update: function () {
       computedQuaternion = engine.position.getQuaternion().multiply(quaternion)

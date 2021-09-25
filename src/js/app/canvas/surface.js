@@ -1,5 +1,6 @@
 app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
+    cone = app.utility.cone.create(),
     context = canvas.getContext('2d'),
     main = app.canvas,
     maxDrawDistance = 75,
@@ -8,17 +9,13 @@ app.canvas.surface = (() => {
     shimmerScaleY = 2 / engine.utility.simplex3d.prototype.skewFactor,
     shimmerScaleZ = 0.5 / engine.utility.simplex3d.prototype.skewFactor
 
-  /**
-   * The gridCache allows quick lookup for the vertices to draw given a heading and horizontal field of view.
-   * Vertices are converted to polar coordinates and indexed by their angle within a bitree.
-   * For simplicity, three complete rotations of the grid are stored so values always exist for every possible input.
-   * Coordinates for vertices are expressed relative to the camera.
-   */
-  const gridCache = engine.utility.bitree.create({
-    dimension: 'angle',
-    maxItems: maxDrawDistance,
-    minValue: -engine.const.tau * 1.5,
-    range: engine.const.tau * 3,
+  const gridCache = engine.utility.octree.create({
+    depth: maxDrawDistance * 2,
+    height: maxDrawDistance * 2,
+    width: maxDrawDistance * 2,
+    x: -maxDrawDistance,
+    y: -maxDrawDistance,
+    z: -maxDrawDistance,
   })
 
   let nodeRadius
@@ -26,34 +23,9 @@ app.canvas.surface = (() => {
   // Fill gridCache to maximum draw distance
   for (let x = -maxDrawDistance; x < maxDrawDistance; x += 1) {
     for (let y = -maxDrawDistance; y < maxDrawDistance; y += 1) {
-      const distance = Math.sqrt((x * x) + (y * y))
-
-      if (distance > maxDrawDistance) {
-        continue
-      }
-
-      const angle = -Math.atan2(y, x)
-
-      gridCache.insert({
-        angle: angle - engine.const.tau,
-        distance,
-        x,
-        y,
-      })
-
-      gridCache.insert({
-        angle,
-        distance,
-        x,
-        y,
-      })
-
-      gridCache.insert({
-        angle: angle + engine.const.tau,
-        distance,
-        x,
-        y,
-      })
+      gridCache.insert(
+        engine.utility.vector3d.create({x, y})
+      )
     }
   }
 
@@ -75,49 +47,55 @@ app.canvas.surface = (() => {
     context.clearRect(0, 0, canvas.width, canvas.height)
   }
 
+  function cullGrid() {
+    return app.utility.octree.reduce(gridCache, (center, radius) => cone.containsSphere(center, radius))
+  }
+
   function drawNodes() {
     const color = getColor(),
       drawDistance = app.settings.computed.drawDistanceDynamic,
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
-      hfov = main.hfov(),
-      hfovLeeway = hfov / 4,
       position = app.canvas.camera.computedVector(),
       positionGrid = position.clone(),
-      rotateYaw = Math.atan2(heading.y, heading.x),
       time = content.time.value(),
-      vertices = gridCache.retrieve(Math.atan2(heading.y, heading.x) - ((hfov + hfovLeeway) / 2), hfov + hfovLeeway),
-      zOffset = engine.const.positionRadius / 2
+      vertices = cullGrid()
 
+    // Cache min/max screen dimensions
+    const maxX = main.width() + nodeRadius,
+      maxY = main.height() + nodeRadius,
+      minX = -nodeRadius,
+      minY = -nodeRadius
+
+    // Determine grid offsets
     positionGrid.x = Math.round(positionGrid.x)
     positionGrid.y = Math.round(positionGrid.y)
+    positionGrid.z += engine.const.positionRadius
 
     context.fillStyle = `hsl(${color.h}, ${color.s}%, ${color.l * 100}%)`
 
     for (const vertex of vertices) {
-      // Convert to relative space
       const global = positionGrid.add(vertex)
-
-      const relative = engine.utility.vector3d.create(
-        engine.utility.vector2d.create({
-          x: global.x - position.x,
-          y: global.y - position.y,
-        }).rotate(rotateYaw)
-      )
-
-      // Calculate true position
-      global.z = content.surface.value(global.x, global.y)
-      relative.z = global.z - (position.z + zOffset)
-
-      // Calculate true distance
-      const distance = relative.distance()
+      let distance = global.distance(position)
 
       // Optimization: only draw within draw distance
       if (distance > drawDistance) {
         continue
       }
 
+      global.z = content.surface.value(global.x, global.y)
+      distance = global.distance(position)
+
+      // Optimization: only draw within draw distance (again)
+      if (distance > drawDistance) {
+        continue
+      }
+
       // Convert to screen space
-      const screen = app.canvas.camera.toScreenFromRelative(relative)
+      const screen = app.canvas.camera.toScreenFromGlobal(global)
+
+      // Optimization: Skip if offscreen
+      if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {
+        continue
+      }
 
       // Calculate properties
       const alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
@@ -179,6 +157,24 @@ app.canvas.surface = (() => {
     return -z + surface < drawDistance
   }
 
+  function updateCone() {
+    const drawDistance = app.settings.computed.drawDistanceDynamic,
+      fov = Math.max(app.canvas.hfov(), app.canvas.vfov())
+
+    // Solve triangle
+    const A = fov/2
+    const B = Math.PI/2
+    const C = Math.PI - A - B
+
+    // Update cone
+    cone.height = drawDistance
+    cone.normal = app.canvas.camera.computedNormal()
+    cone.radius = cone.height / Math.sin(C) * Math.sin(A)
+    cone.vertex = engine.utility.vector3d.create({
+      z: app.canvas.camera.computedVector().z,
+    })
+  }
+
   return {
     draw: function () {
       if (!shouldDraw()) {
@@ -186,6 +182,7 @@ app.canvas.surface = (() => {
       }
 
       clear()
+      updateCone()
       drawNodes()
 
       // Draw to main canvas (tracers channel), assume identical dimensions

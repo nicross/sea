@@ -50,7 +50,7 @@ app.canvas.nodes = (() => {
       // Convert to screen space
       const screen = app.canvas.camera.toScreenFromGlobal(node)
 
-      // Skip if offscreen
+      // Optimization: skip if offscreen
       if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {
         return nodes
       }

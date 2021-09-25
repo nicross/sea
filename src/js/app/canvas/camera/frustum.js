@@ -17,7 +17,7 @@ app.canvas.camera.frustum = (() => {
 
     // Update cone
     cone.height = drawDistance + leeway
-    cone.normal = app.canvas.camera.computedQuaternion().forward()
+    cone.normal = app.canvas.camera.computedNormal()
     cone.radius = cone.height / Math.sin(C) * Math.sin(A)
     cone.vertex = app.canvas.camera.computedVector().subtract(
       cone.normal.scale(leeway)
@@ -25,7 +25,7 @@ app.canvas.camera.frustum = (() => {
   }
 
   function updateNearPlane() {
-    nearPlane.normal = app.canvas.camera.computedQuaternion().forward()
+    nearPlane.normal = app.canvas.camera.computedNormal()
   }
 
   function updateSphere() {
@@ -71,35 +71,8 @@ app.canvas.camera.frustum = (() => {
 
       return true
     },
-    cullOctree: function (tree, depth = 0) {
-      if (!depth && tree.items.length) {
-        return [...tree.items]
-      }
-
-      const center = {
-        x: tree.x + (tree.width / 2),
-        y: tree.y + (tree.height / 2),
-        z: tree.z + (tree.depth / 2),
-      }
-
-      const radius = Math.max(tree.height, tree.width, tree.depth)
-
-      if (!this.containsSphere(center, radius)) {
-        return []
-      }
-
-      if (tree.items.length) {
-        return [...tree.items]
-      }
-
-      const items = []
-      depth += 1
-
-      for (const subtree of tree.nodes) {
-        items.push(...this.cullOctree(subtree, depth))
-      }
-
-      return items
+    cullOctree: function (tree) {
+      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphere(center, radius))
     },
     nearPlane: () => nearPlane,
     sphere: () => sphere,

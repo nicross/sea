@@ -1,6 +1,7 @@
 app.canvas.camera = (() => {
   let computedQuaternion = engine.utility.quaternion.create(),
     computedQuaternionConjugate = engine.utility.quaternion.create(),
+    computedNormal = engine.utility.vector3d.create(),
     computedVector = engine.utility.vector3d.create(),
     computedVectorInverse = engine.utility.vector3d.create(),
     quaternion = engine.utility.quaternion.create(),
@@ -32,11 +33,13 @@ app.canvas.camera = (() => {
     },
     computedQuaternion: () => computedQuaternion.clone(),
     computedQuaternionConjugate: () => computedQuaternionConjugate.clone(),
+    computedNormal: () => computedNormal.clone(),
     computedVector: () => computedVector.clone(),
     computedVectorInverse: () => computedVectorInverse.clone(),
     getQuaternion: () => quaternion.clone(),
     getVector: () => vector.clone(),
     reset: function () {
+      computedNormal = engine.utility.vector3d.create()
       computedQuaternion = engine.utility.quaternion.create()
       computedQuaternionConjugate = engine.utility.quaternion.create()
       computedVector = engine.utility.vector3d.create()
@@ -79,6 +82,9 @@ app.canvas.camera = (() => {
     update: function () {
       computedQuaternion = engine.position.getQuaternion().multiply(quaternion)
       computedQuaternionConjugate = computedQuaternion.conjugate()
+
+      computedNormal = computedQuaternion.forward()
+
       computedVector = engine.position.getVector().add(vector)
       computedVectorInverse = computedVector.inverse()
 

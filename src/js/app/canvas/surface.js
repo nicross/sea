@@ -1,7 +1,7 @@
 app.canvas.surface = (() => {
   const canvas = document.createElement('canvas'),
-    cone = app.utility.cone.create(),
     context = canvas.getContext('2d'),
+    cullCone = app.utility.cone.create(),
     main = app.canvas,
     maxDrawDistance = 75,
     shimmerField = engine.utility.simplex3d.create('shimmer'),
@@ -48,7 +48,7 @@ app.canvas.surface = (() => {
   }
 
   function cullGrid() {
-    return app.utility.octree.reduce(gridCache, (center, radius) => cone.containsSphere(center, radius))
+    return app.utility.octree.reduce(gridCache, (center, radius) => cullCone.containsSphere(center, radius))
   }
 
   function drawNodes() {
@@ -158,7 +158,7 @@ app.canvas.surface = (() => {
     return -z + surface < drawDistance
   }
 
-  function updateCone() {
+  function updateCullingGeometry() {
     const drawDistance = app.settings.computed.drawDistanceDynamic,
       fov = Math.max(app.canvas.hfov(), app.canvas.vfov()),
       leeway = 4
@@ -169,10 +169,10 @@ app.canvas.surface = (() => {
     const C = Math.PI - A - B
 
     // Update cone
-    cone.height = drawDistance + leeway
-    cone.normal = app.canvas.camera.computedNormal()
-    cone.radius = cone.height / Math.sin(C) * Math.sin(A)
-    cone.vertex = cone.normal.scale(-leeway).add({
+    cullCone.height = drawDistance + leeway
+    cullCone.normal = app.canvas.camera.computedNormal()
+    cullCone.radius = cullCone.height / Math.sin(C) * Math.sin(A)
+    cullCone.vertex = cullCone.normal.scale(-leeway).add({
       z: app.canvas.camera.computedVector().z,
     })
   }
@@ -184,7 +184,7 @@ app.canvas.surface = (() => {
       }
 
       clear()
-      updateCone()
+      updateCullingGeometry()
       drawNodes()
 
       // Draw to main canvas (tracers channel), assume identical dimensions

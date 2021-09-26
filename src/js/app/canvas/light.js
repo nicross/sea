@@ -93,21 +93,49 @@ app.canvas.light = (() => {
   }
 
   function getGradientColorBottom(z) {
-    const pov = engine.utility.vector3d.unitX()
-      .scale(horizonDistance)
-      .rotateEuler({pitch: main.vfov() / 2})
-      .add({z})
+    const cameraQuaternion = app.canvas.camera.computedQuaternion(),
+      fovOffset = engine.utility.quaternion.fromEuler({pitch: main.vfov() / 2})
 
-    return toGradientColor(pov.z)
+    const pov = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset)
+      .rotateQuaternion(cameraQuaternion)
+      .scale(horizonDistance)
+
+    // Clamp at bottom while looking at horizon
+    const min = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset)
+      .scale(horizonDistance)
+
+    const max = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset.conjugate())
+      .scale(horizonDistance)
+
+    const bottom = engine.utility.clamp(pov.z, min.z, max.z) + z
+
+    return toGradientColor(bottom)
   }
 
   function getGradientColorTop(z) {
-    const pov = engine.utility.vector3d.unitX()
-      .scale(horizonDistance)
-      .rotateEuler({pitch: -main.vfov() / 2})
-      .add({z})
+    const cameraQuaternion = app.canvas.camera.computedQuaternion(),
+      fovOffset = engine.utility.quaternion.fromEuler({pitch: main.vfov() / 2})
 
-    return toGradientColor(pov.z)
+    const pov = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset.conjugate())
+      .rotateQuaternion(cameraQuaternion)
+      .scale(horizonDistance)
+
+    // Clamp at bottom while looking at horizon
+    const min = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset)
+      .scale(horizonDistance)
+
+    const max = engine.utility.vector3d.unitX()
+      .rotateQuaternion(fovOffset.conjugate())
+      .scale(horizonDistance)
+
+    const top = engine.utility.clamp(pov.z, min.z, max.z) + z
+
+    return toGradientColor(top)
   }
 
   function recalculate() {

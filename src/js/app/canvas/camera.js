@@ -10,13 +10,12 @@ app.canvas.camera = (() => {
   return {
     applyLookY: function (value) {
       // TODO: Consider additional acceleration, like how content.movement handles rotation
-      // TODO: Invert look setting (for the monsters)
 
       if (!value) {
         return this
       }
 
-      const isInverted = false,
+      const isInverted = app.settings.computed.invertLookY,
         pitch = (isInverted ? 1 : -1) * engine.utility.sign(value) * Math.PI/2
 
       // Convert pitch to target quaternion (fancy!)

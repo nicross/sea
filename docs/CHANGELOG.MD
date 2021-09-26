@@ -14,6 +14,7 @@
 - Worm cave generation
 - Cheese cave generation
 - Vertical look
+- Invert look setting
 
 ## v1.4.5
 - Updated syngen to the latest version

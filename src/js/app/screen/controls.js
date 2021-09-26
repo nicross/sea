@@ -83,6 +83,7 @@ app.screen.controls = (() => {
 
   function hydrateToggles() {
     [
+      ['.a-controls--invertLookY', app.settings.raw.invertLookY, app.settings.setInvertLookY],
       ['.a-controls--toggleTurbo', app.settings.raw.toggleTurbo, app.settings.setToggleTurbo],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)

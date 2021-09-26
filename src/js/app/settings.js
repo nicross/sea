@@ -85,6 +85,10 @@ app.settings = (() => {
         app.canvas.forceUpdate()
       },
     },
+    invertLookY: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: false,
+    },
     mainVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 1,

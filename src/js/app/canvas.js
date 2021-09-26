@@ -30,6 +30,7 @@ app.canvas = (() => {
     copy.className = 'a-app--canvas a-app--canvas-crossfade'
     copy.height = height
     copy.width = width
+    copy.style.filter = root.style.filter
 
     copy.getContext('2d').drawImage(root, 0, 0, width, height)
 
@@ -57,6 +58,8 @@ app.canvas = (() => {
   }
 
   function onFrame({paused}) {
+    app.canvas.saturation.update()
+
     if (paused) {
       return
     }
@@ -93,10 +96,13 @@ app.canvas = (() => {
 
   return engine.utility.pubsub.decorate({
     aspect: () => aspect,
+    canvas: () => root,
     clear,
     context: () => context,
     crossfade: () => {
       crossfade()
+      app.canvas.saturation.reset()
+
       return this
     },
     forceResize: function () {

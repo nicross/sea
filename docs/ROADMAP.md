@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Height map scanning (see E.X.O. but exclude cave points from results)
 - Treasure occlusion
 - Polish
-  - Fade to/from grayscale when scanner is used
   - Reduce light zone transition / raise floor to 500m (versus 1km)
   - Tune underwater color geometry scaling
   - Revisit surface geometry / tidal waves

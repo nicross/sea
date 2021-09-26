@@ -44,6 +44,7 @@ app.screen.game = (() => {
     }
 
     content.movement.update(controls)
+    app.canvas.camera.applyLookY(controls.lookY || 0)
 
     if (ui.scanForward) {
       content.scan.triggerForward()

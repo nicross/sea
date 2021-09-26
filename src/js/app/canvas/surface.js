@@ -98,12 +98,13 @@ app.canvas.surface = (() => {
       }
 
       // Calculate properties
-      const alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
+      const alphaProximityAttenuation = distance > 1 ? 1 : distance,
+        alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
         radiusRatio = engine.utility.scale(distance, 0, maxDrawDistance, 1, 0),
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 12),
         shimmer = getShimmer(global.x, global.y, time)
 
-      const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0, 2, shimmer), 0, 1) * (alphaRatio ** 0.666)
+      const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0, 2, shimmer), 0, 1) * (alphaRatio ** 0.666) * alphaProximityAttenuation
 
       // Draw
       context.globalAlpha = alpha
@@ -159,7 +160,8 @@ app.canvas.surface = (() => {
 
   function updateCone() {
     const drawDistance = app.settings.computed.drawDistanceDynamic,
-      fov = Math.max(app.canvas.hfov(), app.canvas.vfov())
+      fov = Math.max(app.canvas.hfov(), app.canvas.vfov()),
+      leeway = 4
 
     // Solve triangle
     const A = fov/2
@@ -167,10 +169,10 @@ app.canvas.surface = (() => {
     const C = Math.PI - A - B
 
     // Update cone
-    cone.height = drawDistance
+    cone.height = drawDistance + leeway
     cone.normal = app.canvas.camera.computedNormal()
     cone.radius = cone.height / Math.sin(C) * Math.sin(A)
-    cone.vertex = engine.utility.vector3d.create({
+    cone.vertex = cone.normal.scale(-leeway).add({
       z: app.canvas.camera.computedVector().z,
     })
   }

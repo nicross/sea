@@ -3,7 +3,7 @@ app.canvas.celestials = (() => {
     canvasTracers = document.createElement('canvas'),
     contextMain = canvasMain.getContext('2d'),
     contextTracers = canvasTracers.getContext('2d'),
-    horizonDistance = 5000,
+    horizonDistance = 10000,
     main = app.canvas
 
   let maxRadius,

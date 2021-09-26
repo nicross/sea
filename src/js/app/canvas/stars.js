@@ -1,13 +1,19 @@
+// TODO: Rework to support vertical look
+// See how the surface handles its culling with a cone
+// The cone can have a normal = camera normal rotated by the time of day
+
 app.canvas.stars = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     count = 1000,
+    cullPlaneHorizon = app.utility.plane.create(),
+    cullPlaneNear = app.utility.plane.create(),
     cycleFadeMax = 2/3,
     cycleFadeMin = 1/3,
     depthCutoff = 1,
-    firmament = 5000,
+    firmament = 10000,
     main = app.canvas,
-    stars = []
+    starTree = engine.utility.octree.create()
 
   main.on('resize', () => {
     const height = main.height(),
@@ -61,13 +67,15 @@ app.canvas.stars = (() => {
   }
 
   function calculateHorizon() {
-    const horizon = app.canvas.camera.toScreenFromRelative({
-      x: firmament,
-      y: 0,
-      z: -app.canvas.camera.computedVector().z,
+    const cameraVector = app.canvas.camera.computedVector(),
+      positionForward = engine.position.getQuaternion().forward()
+
+    const screen = app.canvas.camera.toScreenFromGlobal({
+      ...cameraVector.add(positionForward.scale(firmament)),
+      z: 0,
     })
 
-    return horizon.y
+    return screen.y
   }
 
   function calculateTwinkle(phase, depth = 0.125) {
@@ -100,65 +108,61 @@ app.canvas.stars = (() => {
   }
 
   function drawStars() {
-    const globalAlpha = calculateAlpha(),
-      globalRadius = calculateRadius(),
-      heading = engine.utility.vector3d.unitX().rotateQuaternion(app.canvas.camera.computedQuaternionConjugate()),
-      height = main.height(),
-      hfov = main.hfov(),
-      rotatePitch = -2 * Math.PI * content.time.clock(),
-      rotateYaw = Math.atan2(heading.y, heading.x),
-      twinkleDepth = calculateTwinkleDepth(),
-      vfov = main.vfov(),
-      width = main.width()
+    const globalAlpha = calculateAlpha()
 
     if (globalAlpha <= 0) {
       return
     }
 
-    const horizon = calculateHorizon(),
-      horizonCutoff = horizon - (Math.max(1, (width / 1920) * 8))
+    const cameraVector = app.canvas.camera.computedVector(),
+      globalRadius = calculateRadius(),
+      horizon = calculateHorizon(),
+      horizonCutoff = horizon - (Math.max(1, (main.width() / 1920) * 8)),
+      stars = selectStars(),
+      twinkleDepth = calculateTwinkleDepth()
+
+    const globalRotation = engine.utility.quaternion.fromEuler({
+      pitch: -2 * Math.PI * content.time.clock(),
+    })
+
+    // Cache min/max screen dimensions
+    const maxX = main.width() + globalRadius,
+      maxY = main.height() + globalRadius,
+      minX = -globalRadius,
+      minY = -globalRadius
 
     context.fillStyle = '#FFFFFF'
 
     for (const star of stars) {
-      const relative = star.vector.rotateEuler({
-        pitch: rotatePitch,
-        yaw: rotateYaw,
-      })
-
-      const hangle = Math.atan2(relative.y, relative.x)
-
-      if (Math.abs(hangle) > hfov / 2) {
-        continue
-      }
-
-      const vangle = Math.atan2(relative.z, relative.x)
-
-      if (Math.abs(vangle) > vfov / 2) {
-        continue
-      }
-
+      // Calculate star alpha
       let alpha = star.alpha * globalAlpha * calculateTwinkle(star.phase, twinkleDepth)
 
+      // Optimization: Skip when invisible
       if (alpha <= 0) {
         continue
       }
 
-      const screen = engine.utility.vector2d.create({
-        x: (width / 2) - (width * hangle / hfov),
-        y: (height / 2) - (height * vangle / vfov),
-      })
+      // Convert to screen space
+      const screen = app.canvas.camera.toScreenFromGlobal(
+        star.vector.rotateQuaternion(globalRotation).add(cameraVector)
+      )
 
-      const horizon = calculateHorizon()
+      // Optimization: Skip if offscreen
+      if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {
+        continue
+      }
 
+      // Optimization: Skip if below horizon
       if (screen.y > horizon) {
         continue
       }
 
+      // Fade when close to horizon
       if (screen.y > horizon - horizonCutoff) {
         alpha *= engine.utility.scale(screen.y, horizon - horizonCutoff, horizon, 1, 0)
       }
 
+      // Draw
       const radius = star.radius * globalRadius
 
       context.globalAlpha = alpha
@@ -180,16 +184,46 @@ app.canvas.stars = (() => {
         radius: engine.utility.lerpExp(0.5, 1, srand(), 8),
       }
 
-      star.vector = engine.utility.vector3d.unitX()
+      const vector = engine.utility.vector3d.unitX()
         .scale(firmament)
         .rotateEuler({
           pitch: star.theta,
           yaw: star.delta,
         })
 
-      // TODO: Convert delta/theta to a 3d unit vector so the projection doesn't tear North-South along the y-axis
-      stars.push(star)
+      star.vector = vector
+      star.x = vector.x
+      star.y = vector.y
+      star.z = vector.z
+
+      starTree.insert(star)
     }
+  }
+
+  function selectStars() {
+    return app.utility.octree.reduce(starTree, (center, radius) => {
+      if (cullPlaneHorizon.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      if (cullPlaneNear.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      return true
+    })
+  }
+
+  function updateCullingGeometry() {
+    const timeOffset = engine.utility.quaternion.fromEuler({
+      pitch: -2 * Math.PI * content.time.clock(),
+    })
+
+    // Update plane
+    cullPlaneHorizon.normal = engine.utility.vector3d.unitZ().rotateQuaternion(timeOffset)
+    cullPlaneNear.normal = app.canvas.camera.computedNormal().rotateQuaternion(timeOffset)
+
+    // Maybe there will be a cone here someday
   }
 
   function shouldDraw() {
@@ -202,7 +236,7 @@ app.canvas.stars = (() => {
   })
 
   engine.state.on('reset', () => {
-    stars.length = 0
+    starTree.clear()
   })
 
   return {
@@ -212,6 +246,7 @@ app.canvas.stars = (() => {
       }
 
       clear()
+      updateCullingGeometry()
       drawStars()
 
       // Draw to main canvas (tracers channel), assume identical dimensions

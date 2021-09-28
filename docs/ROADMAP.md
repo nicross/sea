@@ -8,6 +8,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Height map scanning (see E.X.O. but exclude cave points from results)
 - Treasure occlusion
 - Polish
+  - Update content.idle to respond to any controls input rather than content.movement changes (e.g. scanning or vertical look)
   - Reduce light zone transition / raise floor to 500m (versus 1km)
   - Tune underwater color geometry scaling
   - Revisit surface geometry / tidal waves
@@ -17,6 +18,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 #### Known issues
 - Stuck under surface when jumping at lower velocities
 - Audio crashes still occurring due to scanner honk/cooldown/recharge cues
+- HUD fades get stuck at >0% opacity
 
 ### v1.6.0: Life update
 TBD
@@ -33,6 +35,8 @@ TBD
 - Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
+- Add coordinates to HUD
+- Scan animations
 - Godrays by day
 - Shooting stars by night
 

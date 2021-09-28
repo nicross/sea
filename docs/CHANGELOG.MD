@@ -16,6 +16,7 @@
 - Vertical look
 - Invert look setting
 - Saturation transitions on scanning
+- Vertical look HUD indicator
 
 ## v1.4.5
 - Updated syngen to the latest version

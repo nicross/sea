@@ -4,9 +4,10 @@ app.canvas.nodes = (() => {
     fadeDuration = 1/2,
     main = app.canvas,
     maxObjects = 1000,
-    nodeHue = engine.utility.simplex3d.create('exploration', 'node', 'hue'),
-    nodeHueScale = 25 / engine.utility.simplex3d.prototype.skewFactor,
-    nodeHueRotateSpeed = 1 / 120
+    nodeHue = engine.utility.simplex4d.create('exploration', 'node', 'hue'),
+    nodeHueScale = 37.5 / engine.utility.simplex3d.prototype.skewFactor,
+    nodeHueTimeScale = 60 / engine.utility.simplex3d.prototype.skewFactor,
+    nodeHueRotateSpeed = 1 / 300
 
   let nodeRadius
 
@@ -106,10 +107,7 @@ app.canvas.nodes = (() => {
     z = 0,
     t = content.time.value(),
   } = {}) {
-    // XXX: This used to be 4D noise prior to v1.2.2.
-    // TODO: Look into simplex or other more performant noise.
-
-    let value = nodeHue.value((x + t/59) / nodeHueScale, (y + t/61) / nodeHueScale, (z + t/2) / nodeHueScale)
+    let value = nodeHue.value(x / nodeHueScale, y / nodeHueScale, z / nodeHueScale, t / nodeHueTimeScale)
     value += t * nodeHueRotateSpeed
     value = engine.utility.wrap(value * 2, 0, 1)
 

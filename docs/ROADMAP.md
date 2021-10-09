@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Treasure occlusion
 - Polish
   - Reduce light zone transition / raise floor to 500m (versus 1km)
-  - Tune underwater color geometry scaling
   - Revisit surface geometry / tidal waves
   - New title screen angles taking advantage of vertical look
   - Camera frustum

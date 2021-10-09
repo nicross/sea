@@ -17,6 +17,7 @@
 - Invert look setting
 - Saturation transitions on scanning
 - Vertical look HUD indicator
+- Height map scanning
 
 ## v1.4.5
 - Updated syngen to the latest version

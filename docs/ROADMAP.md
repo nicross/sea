@@ -5,7 +5,6 @@ This document outlines upcoming changes for post-jam releases leading up to the 
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ### v1.5.0: Deep update
-- Height map scanning (see E.X.O. but exclude cave points from results)
 - Treasure occlusion
 - Polish
   - Treasure hints not affected by vertical look

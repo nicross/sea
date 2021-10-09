@@ -28,6 +28,8 @@ content.scan.scan2d = (() => {
         z: plane.value(point.x, point.y),
       }
 
+      result.relativeZ = result.z - position.z
+
       result.remember = plane === content.terrain.floor
         ? !content.terrain.worms.isInside(x, y, result.z)
         : false

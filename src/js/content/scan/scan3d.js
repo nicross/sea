@@ -30,10 +30,10 @@ content.scan.scan3d = (() => {
       distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
       isSolid,
       remember: isSolid,
+      relativeZ: z - position.z,
       x,
       y,
       z,
-      zRatio: smooth(engine.utility.clamp(engine.utility.scale(z - position.z, -maxDistance, maxDistance, 0, 1), 0, 1)),
     }
   }
 
@@ -101,11 +101,6 @@ content.scan.scan3d = (() => {
     }
 
     return results
-  }
-
-  function smooth(value) {
-    // 6x^5 - 15x^4 + 10x^3
-    return (value * value * value) * (value * ((value * 6) - 15) + 10)
   }
 
   return {

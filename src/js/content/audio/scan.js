@@ -8,7 +8,7 @@ content.audio.scan = (() => {
 
   bus.gain.value = engine.utility.fromDb(-4.5)
 
-  lowpass2d.frequency.value = rootFrequency * 2
+  lowpass2d.frequency.value = rootFrequency
 
   notch2d.frequency.value = rootFrequency
   notch2d.Q.value = 5
@@ -64,8 +64,11 @@ content.audio.scan = (() => {
     const count = stream.length
 
     for (let i = 0; i < count; i += 1) {
-      const gain = (1 - (i / (count - 1))) ** 4,
-        next = when + ((i + 1) * (duration / count))
+      const gain = i == 0
+        ? 0
+        : (1 - (i / (count - 1))) ** 4
+
+      const next = when + ((i + 1) * (duration / count))
 
       const {
         detune,

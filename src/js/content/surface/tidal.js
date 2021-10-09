@@ -1,11 +1,11 @@
 content.surface.tidal = (() => {
   const field = engine.utility.simplex2d.create('surface', 'tidal'),
     momentumX = -10,
-    slope = 99,
+    slope = 33,
     timeScale = 30,
-    xScale = 500 / engine.utility.simplex2d.prototype.skewFactor,
+    xScale = 500,
     yScale = 500 / engine.utility.simplex2d.prototype.skewFactor,
-    zScale = 8
+    zScale = 20
 
   content.utility.ephemeralNoise.manage(field)
 

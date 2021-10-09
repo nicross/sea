@@ -28,7 +28,7 @@ content.surface = (() => {
       cacheCurrent()
       return this
     },
-    max: () => 1 + 4 + 8,
+    max: () => 1 + 4 + 20,
     reset: function () {
       current = undefined
       return this

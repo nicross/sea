@@ -7,15 +7,14 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Treasure occlusion
 - Polish
-  - Reduce light zone transition / raise floor to 500m (versus 1km)
-  - Revisit surface geometry / tidal waves
+  - Surface culling clipping tidal waves
   - New title screen angles taking advantage of vertical look
   - Camera frustum
   - Performance optimizations
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities
-- Audio crashes still occurring due to scanner honk/cooldown/recharge cues
+- Audio crashes still occurring
 - HUD fades get stuck at >0% opacity
 
 ### v1.6.0: Life update

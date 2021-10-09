@@ -29,6 +29,7 @@ content.scan.scan3d = (() => {
       distance,
       distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
       isSolid,
+      remember: isSolid,
       x,
       y,
       z,

@@ -17,12 +17,14 @@ content.scan.scan2d = (() => {
       y += dy
 
       const result = {
+        x,
+        y,
         z: plane.value(x, y),
       }
 
-      result.solid = plane === content.terrain.floor
+      result.remember = plane === content.terrain.floor
         ? !content.terrain.worms.isInside(x, y, result.z)
-        : true
+        : false
 
       results.push(result)
     }

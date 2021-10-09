@@ -29,7 +29,7 @@ app.canvas.hud.treasure = (() => {
     })
 
     for (const treasure of treasures) {
-      const vector = app.canvas.camera.toScreenFromRelative(treasure.relative)
+      const vector = app.canvas.camera.toScreenFromGlobal(treasure)
       vector.z = treasure.distance
 
       const distanceRatio = engine.utility.scale(vector.z, 0, drawDistance, 1, 0)

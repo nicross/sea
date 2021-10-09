@@ -7,7 +7,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Treasure occlusion
 - Polish
-  - Treasure hints not affected by vertical look
   - Reduce light zone transition / raise floor to 500m (versus 1km)
   - Tune underwater color geometry scaling
   - Revisit surface geometry / tidal waves

@@ -11,6 +11,7 @@ content.const = {
   normalDeceleration: 10,
   normalSpeedOfSound: 343,
   scanCooldown: 0.25 + 2.25 + 0.25,
+  scanMinimum: 0.5,
   surfaceNormalAcceleration: 5,
   surfaceNormalMaxVelocity: 10,
   surfaceTurboAcceleration: 10,

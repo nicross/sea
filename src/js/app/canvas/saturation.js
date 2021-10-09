@@ -42,7 +42,7 @@ app.canvas.saturation = (() => {
 
     tween = {
       start: now,
-      end: now + (0.5 * 1000),
+      end: now + (content.const.scanMinimum * 1000),
       from: current,
       to: 0,
       exponent: 0.5,

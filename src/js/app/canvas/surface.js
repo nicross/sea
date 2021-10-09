@@ -158,9 +158,11 @@ app.canvas.surface = (() => {
   }
 
   function updateCullingGeometry() {
-    const drawDistance = app.settings.computed.drawDistanceDynamic,
-      fov = Math.max(app.canvas.hfov(), app.canvas.vfov()),
-      leeway = 4
+    const current = content.surface.current(),
+      drawDistance = app.settings.computed.drawDistanceDynamic,
+      fov = Math.max(app.canvas.hfov(), app.canvas.vfov())
+
+    const leeway = 4
 
     // Solve triangle
     const A = fov/2
@@ -172,7 +174,7 @@ app.canvas.surface = (() => {
     cullCone.normal = app.canvas.camera.computedNormal()
     cullCone.radius = cullCone.height / Math.sin(C) * Math.sin(A)
     cullCone.vertex = cullCone.normal.scale(-leeway).add({
-      z: app.canvas.camera.computedVector().z,
+      z: app.canvas.camera.computedVector().z - current,
     })
   }
 

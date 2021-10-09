@@ -7,7 +7,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Treasure occlusion
 - Polish
-  - Surface culling clipping tidal waves
   - New title screen angles taking advantage of vertical look
   - Camera frustum
   - Performance optimizations

@@ -1,5 +1,6 @@
 content.scan.scan2d = (() => {
   const maxDistance = 100,
+    noiseGain = 1/2,
     unitX = engine.utility.vector2d.unitX()
 
   function doRaytrace(position, plane, direction) {
@@ -16,10 +17,15 @@ content.scan.scan2d = (() => {
       x += dx
       y += dy
 
+      const point = {
+        x: x + engine.utility.random.float(-noiseGain, noiseGain),
+        y: y + engine.utility.random.float(-noiseGain, noiseGain),
+      }
+
       const result = {
-        x,
-        y,
-        z: plane.value(x, y),
+        x: point.x,
+        y: point.y,
+        z: plane.value(point.x, point.y),
       }
 
       result.remember = plane === content.terrain.floor

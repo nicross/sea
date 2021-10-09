@@ -24,6 +24,8 @@ content.idle = (() => {
       return
     }
 
+    changed = true
+
     if (isIdle) {
       timer -= delta
 
@@ -36,7 +38,6 @@ content.idle = (() => {
       return
     }
 
-    changed = true
     state = false
     timer = content.const.idleTimeout
     pubsub.emit('change', false)
@@ -52,5 +53,15 @@ content.idle = (() => {
     changed: () => changed,
     is: () => state,
     timer: () => timer,
+    touch: function () {
+      if (state) {
+        changed = true
+        state = false
+        timer = content.const.idleTimeout
+        pubsub.emit('change', false)
+      }
+
+      return this
+    },
   }, pubsub)
 })()

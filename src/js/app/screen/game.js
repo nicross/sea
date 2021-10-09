@@ -51,6 +51,10 @@ app.screen.game = (() => {
     } else if (ui.scanReverse) {
       content.scan.triggerReverse()
     }
+
+    if (controls.lookY || ui.scanForward || ui.scanReverse) {
+      content.idle.touch()
+    }
   }
 
   function onEngineStateReset() {

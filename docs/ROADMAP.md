@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Treasure occlusion
 - Polish
   - Treasure hints not affected by vertical look
-  - Update content.idle to respond to any controls input rather than content.movement changes (e.g. scanning or vertical look)
   - Reduce light zone transition / raise floor to 500m (versus 1km)
   - Tune underwater color geometry scaling
   - Revisit surface geometry / tidal waves

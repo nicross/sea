@@ -19,35 +19,37 @@ app.utility.cone.prototype = {
     return this
   },
   containsPoint: function (point) {
-    const relative = this.vertex.inverse().add(point)
-    const distance = Math.abs(relative.dotProduct(this.normal))
+    point = engine.utility.vector3d.create(point)
 
-    if (!engine.utility.between(distance, 0, this.height)) {
+    const relative = point.subtract(this.vertex),
+      length = relative.dotProduct(this.normal)
+
+    if (!engine.utility.between(length, 0, this.height)) {
       return false
     }
 
-    const coneRadius = (distance / this.height) * this.radius
+    const coneRadius = (length / this.height) * this.radius,
+      projected = this.vertex.add(this.normal.scale(length))
 
-    const perpendicular = relative.subtract(
-      this.normal.scale(distance)
-    ).distance()
+    const distance = point.distance(projected)
 
-    return perpendicular < coneRadius
+    return distance <= coneRadius
   },
   containsSphere: function (center, radius) {
-    const relative = this.vertex.inverse().add(center)
-    const distance = Math.abs(relative.dotProduct(this.normal))
+    center = engine.utility.vector3d.create(center)
 
-    if (!engine.utility.between(distance, -radius, this.height + radius)) {
+    const relative = center.subtract(this.vertex),
+      length = relative.dotProduct(this.normal)
+
+    if (!engine.utility.between(length, -radius, this.height + radius)) {
       return false
     }
 
-    const coneRadius = (distance / this.height) * this.radius
+    const coneRadius = (length / this.height) * this.radius,
+      projected = this.vertex.add(this.normal.scale(length))
 
-    const perpendicular = relative.subtract(
-      this.normal.scale(distance)
-    ).distance()
+    const distance = center.distance(projected)
 
-    return perpendicular < (coneRadius + radius)
+    return distance <= coneRadius + radius
   },
 }

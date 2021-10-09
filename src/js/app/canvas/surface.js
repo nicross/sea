@@ -68,7 +68,6 @@ app.canvas.surface = (() => {
     // Determine grid offsets
     positionGrid.x = Math.round(positionGrid.x)
     positionGrid.y = Math.round(positionGrid.y)
-    positionGrid.z += engine.const.positionRadius
 
     context.fillStyle = `hsl(${color.h}, ${color.s}%, ${color.l * 100}%)`
 
@@ -81,7 +80,7 @@ app.canvas.surface = (() => {
         continue
       }
 
-      global.z = content.surface.value(global.x, global.y)
+      global.z = content.surface.value(global.x, global.y) - engine.const.positionRadius/2
       distance = global.distance(position)
 
       // Optimization: only draw within draw distance (again)

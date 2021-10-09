@@ -11,7 +11,7 @@ app.utility.octree.reduce = function (tree, filter, depth = 0) {
     z: tree.z + (tree.depth / 2),
   }
 
-  const radius = Math.max(tree.height, tree.width, tree.depth)
+  const radius = Math.max(tree.height, tree.width, tree.depth) * app.utility.octree.toUnit3
 
   if (!filter(center, radius)) {
     return []
@@ -30,3 +30,5 @@ app.utility.octree.reduce = function (tree, filter, depth = 0) {
 
   return items
 }
+
+app.utility.octree.toUnit3 = engine.utility.distance({x: 1, y: 1, z: 1})

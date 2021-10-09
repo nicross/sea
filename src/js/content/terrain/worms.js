@@ -114,6 +114,18 @@ content.terrain.worms = (() => {
 
       return false
     },
+    import: function () {
+      streamChunks()
+      readyChunk = chunks[0]
+
+      readyChunk.ready.then(() => {
+        if (chunks[0] === readyChunk) {
+          isReady = true
+        }
+      }, () => {})
+
+      return this
+    },
     isReady: () => isReady,
     reset: function () {
       isReady = false
@@ -127,18 +139,6 @@ content.terrain.worms = (() => {
       return this
     },
     retrieve: (...args) => pointTree.retrieve(...args),
-    import: function () {
-      streamChunks()
-      readyChunk = chunks[0]
-
-      readyChunk.ready.then(() => {
-        if (chunks[0] === readyChunk) {
-          isReady = true
-        }
-      }, () => {})
-
-      return this
-    },
     update: function () {
       if (!isStreaming) {
         streamChunks()

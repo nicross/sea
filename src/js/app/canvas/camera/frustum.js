@@ -25,6 +25,7 @@ app.canvas.camera.frustum = (() => {
   }
 
   function updateNearPlane() {
+    nearPlane.constant = app.canvas.camera.computedVector().distance()
     nearPlane.normal = app.canvas.camera.computedNormal()
   }
 

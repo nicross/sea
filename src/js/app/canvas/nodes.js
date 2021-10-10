@@ -49,16 +49,22 @@ app.canvas.nodes = (() => {
     const maxX = width + nodeRadius,
       maxY = height + nodeRadius,
       minX = -nodeRadius,
-      minY = -nodeRadius
+      minY = -nodeRadius,
+      nx0 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime)),
+      nx1 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime + 1)),
+      ny0 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime)),
+      ny1 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime + 1)),
+      nz0 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime)),
+      nz1 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime + 1))
 
     const nodes = app.canvas.camera.frustum.cullOctree(
       content.exploration.tree()
     ).reduce((nodes, node) => {
       // Convert to screen space, with added noise
       const screen = app.canvas.camera.toScreenFromGlobal({
-        x: node.x + engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime - node.phase)),
-        y: node.y + engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime - node.phase)),
-        z: node.z + engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime - node.phase)),
+        x: node.x + engine.utility.lerp(nx0, nx1, node.phase),
+        y: node.y + engine.utility.lerp(ny0, ny1, node.phase),
+        z: node.z + engine.utility.lerp(nz0, nz1, node.phase),
       })
 
       // Optimization: skip if offscreen

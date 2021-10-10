@@ -7,6 +7,8 @@ content.exploration = (() => {
 
   function addNode(node) {
     const vector = engine.utility.vector3d.create(node)
+
+    // XXX: Used by app.canvas.nodes, cached here for simplicity
     vector.phase = Math.random()
     vector.time = engine.audio.time()
 

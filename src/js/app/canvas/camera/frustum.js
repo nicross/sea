@@ -1,5 +1,7 @@
 app.canvas.camera.frustum = (() => {
   const cone = app.utility.cone.create(),
+    enablePlaneChecks = true,
+    farPlane = app.utility.plane.create(),
     nearPlane = app.utility.plane.create(),
     sphere = app.utility.sphere.create()
 
@@ -8,8 +10,35 @@ app.canvas.camera.frustum = (() => {
     app.utility.plane.create(),
     app.utility.plane.create(),
     app.utility.plane.create(),
-    app.utility.plane.create(),
   ]
+
+  function checkPlanesPoint(point) {
+    if (!enablePlaneChecks) {
+      return true
+    }
+
+    for (const plane of planes) {
+      if (plane.distanceToPoint(point) < 0) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  function checkPlanesSphere(center, radius) {
+    if (!enablePlaneChecks) {
+      return true
+    }
+
+    for (const plane of planes) {
+      if (plane.distanceToPoint(center) < -radius) {
+        return false
+      }
+    }
+
+    return true
+  }
 
   function solveTriangle(angle, height) {
     const A = angle/2
@@ -35,16 +64,24 @@ app.canvas.camera.frustum = (() => {
     )
   }
 
-  function updateNearPlane() {
-    nearPlane.constant = app.canvas.camera.computedVector().distance()
-    nearPlane.normal = app.canvas.camera.computedNormal()
-  }
-
   function updatePlanes() {
     const hfov = app.canvas.hfov() / 2,
+      normal = app.canvas.camera.computedNormal(),
       quaternion = app.canvas.camera.computedQuaternion(),
-      relative = app.canvas.camera.computedVector().inverse(),
+      position = app.canvas.camera.computedVector(),
       vfov = app.canvas.vfov() / 2
+
+    // near
+    nearPlane.constant = normal.dotProduct(position)
+    nearPlane.normal = normal.clone()
+
+    // far
+    farPlane.normal = normal.inverse()
+    farPlane.constant = farPlane.normal.dotProduct(
+      position.add(
+        normal.scale(app.settings.computed.drawDistanceStatic)
+      )
+    )
 
     // left
     planes[0].normal = engine.utility.vector3d.create({
@@ -52,7 +89,7 @@ app.canvas.camera.frustum = (() => {
       y: Math.sin(hfov),
     }).rotateQuaternion(quaternion)
 
-    planes[0].constant = planes[0].normal.dotProduct(relative)
+    planes[0].constant = planes[0].normal.dotProduct(position)
 
     // right
     planes[1].normal = engine.utility.vector3d.create({
@@ -60,7 +97,7 @@ app.canvas.camera.frustum = (() => {
       y: Math.sin(-hfov),
     }).rotateQuaternion(quaternion)
 
-    planes[1].constant = planes[1].normal.dotProduct(relative)
+    planes[1].constant = planes[1].normal.dotProduct(position)
 
     // down
     planes[2].normal = engine.utility.vector3d.create({
@@ -68,7 +105,7 @@ app.canvas.camera.frustum = (() => {
       z: Math.sin(vfov),
     }).rotateQuaternion(quaternion)
 
-    planes[2].constant = planes[2].normal.dotProduct(relative)
+    planes[2].constant = planes[2].normal.dotProduct(position)
 
     // up
     planes[3].normal = engine.utility.vector3d.create({
@@ -76,11 +113,7 @@ app.canvas.camera.frustum = (() => {
       z: Math.sin(-vfov),
     }).rotateQuaternion(quaternion)
 
-    planes[3].constant = planes[3].normal.dotProduct(relative)
-
-    // far
-    planes[4].constant = nearPlane.constant + app.settings.computed.drawDistanceStatic
-    planes[4].normal = nearPlane.normal.clone()
+    planes[3].constant = planes[3].normal.dotProduct(position)
   }
 
   function updateSphere() {
@@ -95,6 +128,10 @@ app.canvas.camera.frustum = (() => {
         return false
       }
 
+      if (farPlane.distanceToPoint(point) < 0) {
+        return false
+      }
+
       if (!sphere.containsPoint(point)) {
         return false
       }
@@ -103,31 +140,19 @@ app.canvas.camera.frustum = (() => {
         return false
       }
 
-      for (const plane of planes) {
-        if (plane.distanceToPoint(point) < 0) {
-          return false
-        }
-      }
-
-      return true
+      return checkPlanesPoint(point)
     },
     containsPointQuick: function (point) {
-      if (nearPlane.distanceToPoint(point) < 0) {
-        return false
-      }
-
-      for (const plane of planes) {
-        if (plane.distanceToPoint(point) < 0) {
-          return false
-        }
-      }
-
-      return true
+      return checkPlanesPoint(point)
     },
     containsSphere: function (center, radius = 0) {
       // XXX: Includes intersections
 
       if (nearPlane.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      if (farPlane.distanceToPoint(center) < -radius) {
         return false
       }
 
@@ -139,18 +164,16 @@ app.canvas.camera.frustum = (() => {
         return false
       }
 
-      for (const plane of planes) {
-        if (plane.distanceToPoint(center) < -radius) {
-          return false
-        }
-      }
-
-      return true
+      return checkPlanesSphere(center, radius)
     },
     containsSphereQuick: function (center, radius = 0) {
       // XXX: Includes intersections
 
       if (nearPlane.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      if (farPlane.distanceToPoint(center) < -radius) {
         return false
       }
 
@@ -172,7 +195,6 @@ app.canvas.camera.frustum = (() => {
     sphere: () => sphere,
     update: function () {
       updateCone()
-      updateNearPlane()
       updatePlanes()
       updateSphere()
 

@@ -17,12 +17,12 @@ app.utility.plane.prototype = {
     return this
   },
   distanceToPoint: function (point) {
-    return this.normal.dotProduct(point) + this.constant
+    return this.normal.dotProduct(point) - this.constant
   },
   normalize: function () {
     const distance = this.normal.distance()
 
-    if (distance == 1) {
+    if (!distance || distance == 1) {
       return this
     }
 

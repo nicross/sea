@@ -8,6 +8,7 @@ app.canvas.camera.frustum = (() => {
     app.utility.plane.create(),
     app.utility.plane.create(),
     app.utility.plane.create(),
+    app.utility.plane.create(),
   ]
 
   function solveTriangle(angle, height) {
@@ -76,6 +77,10 @@ app.canvas.camera.frustum = (() => {
     }).rotateQuaternion(quaternion)
 
     planes[3].constant = planes[3].normal.dotProduct(relative)
+
+    // far
+    planes[4].constant = nearPlane.constant + app.settings.computed.drawDistanceStatic
+    planes[4].normal = nearPlane.normal.clone()
   }
 
   function updateSphere() {
@@ -95,6 +100,19 @@ app.canvas.camera.frustum = (() => {
       }
 
       if (!cone.containsPoint(point)) {
+        return false
+      }
+
+      for (const plane of planes) {
+        if (plane.distanceToPoint(point) < 0) {
+          return false
+        }
+      }
+
+      return true
+    },
+    containsPointQuick: function (point) {
+      if (nearPlane.distanceToPoint(point) < 0) {
         return false
       }
 
@@ -129,8 +147,25 @@ app.canvas.camera.frustum = (() => {
 
       return true
     },
+    containsSphereQuick: function (center, radius = 0) {
+      // XXX: Includes intersections
+
+      if (nearPlane.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      if (!sphere.containsSphere(center, radius)) {
+        return false
+      }
+
+      if (!cone.containsSphere(center, radius)) {
+        return false
+      }
+
+      return true
+    },
     cullOctree: function (tree) {
-      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphere(center, radius), (item) => this.containsPoint(item))
+      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphereQuick(center, radius), (item) => this.containsPointQuick(item))
     },
     nearPlane: () => nearPlane,
     planes: () => [...planes],

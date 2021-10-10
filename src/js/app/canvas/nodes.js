@@ -54,10 +54,6 @@ app.canvas.nodes = (() => {
     const nodes = app.canvas.camera.frustum.cullOctree(
       content.exploration.tree()
     ).reduce((nodes, node) => {
-      if (!app.canvas.camera.frustum.containsPoint(node)) {
-        return nodes
-      }
-
       // Convert to screen space, with added noise
       const screen = app.canvas.camera.toScreenFromGlobal({
         x: node.x + engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime - node.phase)),

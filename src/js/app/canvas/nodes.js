@@ -5,13 +5,21 @@ app.canvas.nodes = (() => {
     main = app.canvas,
     maxObjects = 1000,
     nodeHue = engine.utility.simplex4d.create('exploration', 'node', 'hue'),
+    nodeX = engine.utility.perlin1d.create('exploration', 'node', 'x'),
+    nodeY = engine.utility.perlin1d.create('exploration', 'node', 'y'),
+    nodeZ = engine.utility.perlin1d.create('exploration', 'node', 'z'),
+    nodeTranslateTimeScale = 4,
     nodeHueScale = 37.5 / engine.utility.simplex3d.prototype.skewFactor,
     nodeHueTimeScale = 60 / engine.utility.simplex3d.prototype.skewFactor,
     nodeHueRotateSpeed = 1 / 300
 
   let nodeRadius
 
-  content.utility.ephemeralNoise.manage(nodeHue)
+  content.utility.ephemeralNoise
+    .manage(nodeHue)
+    .manage(nodeX)
+    .manage(nodeY)
+    .manage(nodeZ)
 
   main.on('resize', () => {
     const height = main.height(),
@@ -34,6 +42,8 @@ app.canvas.nodes = (() => {
       cameraVector = app.canvas.camera.computedVector(),
       height = main.height(),
       now = engine.audio.time(),
+      translateScale = 1/10,
+      translateTime = content.time.value() / nodeTranslateTimeScale,
       width = main.width()
 
     const maxX = width + nodeRadius,
@@ -48,8 +58,12 @@ app.canvas.nodes = (() => {
         return nodes
       }
 
-      // Convert to screen space
-      const screen = app.canvas.camera.toScreenFromGlobal(node)
+      // Convert to screen space, with added noise
+      const screen = app.canvas.camera.toScreenFromGlobal({
+        x: node.x + engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime - node.phase)),
+        y: node.y + engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime - node.phase)),
+        z: node.z + engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime - node.phase)),
+      })
 
       // Optimization: skip if offscreen
       if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {

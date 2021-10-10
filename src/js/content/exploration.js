@@ -7,6 +7,7 @@ content.exploration = (() => {
 
   function addNode(node) {
     const vector = engine.utility.vector3d.create(node)
+    vector.phase = Math.random()
     vector.time = engine.audio.time()
 
     list.push(vector)

@@ -19,6 +19,7 @@
 - Vertical look HUD indicator
 - Height map scanning
 - Increased tidal wave height
+- Exploration node motion
 
 ## v1.4.5
 - Updated syngen to the latest version

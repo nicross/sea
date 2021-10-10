@@ -1,7 +1,3 @@
-// TODO: Rework to support vertical look
-// See how the surface handles its culling with a cone
-// The cone can have a normal = camera normal rotated by the time of day
-
 app.canvas.stars = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
@@ -210,6 +206,8 @@ app.canvas.stars = (() => {
         return false
       }
 
+      // TODO: Maybe there will be a cone here someday
+
       return true
     })
   }
@@ -223,7 +221,7 @@ app.canvas.stars = (() => {
     cullPlaneHorizon.normal = engine.utility.vector3d.unitZ().rotateQuaternion(timeOffset)
     cullPlaneNear.normal = app.canvas.camera.computedNormal().rotateQuaternion(timeOffset)
 
-    // Maybe there will be a cone here someday
+    // TODO: Maybe there will be a cone here someday
   }
 
   function shouldDraw() {

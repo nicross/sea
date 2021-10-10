@@ -71,11 +71,11 @@ app.canvas.camera.frustum = (() => {
       position = app.canvas.camera.computedVector(),
       vfov = app.canvas.vfov() / 2
 
-    // near
+    // nearPlane
     nearPlane.constant = normal.dotProduct(position)
     nearPlane.normal = normal.clone()
 
-    // far
+    // farPlane
     farPlane.normal = normal.inverse()
     farPlane.constant = farPlane.normal.dotProduct(
       position.add(
@@ -83,7 +83,9 @@ app.canvas.camera.frustum = (() => {
       )
     )
 
-    // left
+    // TODO: Improve plane geometry
+
+    // Left plane
     planes[0].normal = engine.utility.vector3d.create({
       x: Math.cos(hfov),
       y: Math.sin(hfov),
@@ -91,7 +93,7 @@ app.canvas.camera.frustum = (() => {
 
     planes[0].constant = planes[0].normal.dotProduct(position)
 
-    // right
+    // Right plane
     planes[1].normal = engine.utility.vector3d.create({
       x: Math.cos(-hfov),
       y: Math.sin(-hfov),
@@ -99,7 +101,7 @@ app.canvas.camera.frustum = (() => {
 
     planes[1].constant = planes[1].normal.dotProduct(position)
 
-    // down
+    // Lower plane
     planes[2].normal = engine.utility.vector3d.create({
       x: Math.cos(vfov),
       z: Math.sin(vfov),
@@ -107,7 +109,7 @@ app.canvas.camera.frustum = (() => {
 
     planes[2].constant = planes[2].normal.dotProduct(position)
 
-    // up
+    // Upper plane
     planes[3].normal = engine.utility.vector3d.create({
       x: Math.cos(-vfov),
       z: Math.sin(-vfov),

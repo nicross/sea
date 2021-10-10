@@ -57,8 +57,10 @@ app.canvas.nodes = (() => {
       nz0 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime)),
       nz1 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime + 1))
 
-    const nodes = app.canvas.camera.frustum.cullOctree(
-      content.exploration.tree()
+    const nodes = reduceClosest(
+      app.canvas.camera.frustum.cullOctree(
+        content.exploration.tree()
+      )
     ).reduce((nodes, node) => {
       // Convert to screen space, with added noise
       const screen = app.canvas.camera.toScreenFromGlobal({
@@ -128,6 +130,29 @@ app.canvas.nodes = (() => {
     value = engine.utility.wrap(value * 2, 0, 1)
 
     return engine.utility.lerp(0, 360, value)
+  }
+
+  function reduceClosest(nodes) {
+    // Optimize z-sorting by moving the near plane until object limit is on negative side of plane
+
+    const drawDistance = app.settings.computed.drawDistanceStatic,
+      step = drawDistance / 10
+
+    const plane = app.utility.plane.create({
+      constant: app.canvas.camera.computedNormal().dotProduct(app.canvas.camera.computedVector()),
+      normal: app.canvas.camera.computedNormal(),
+    })
+
+    let distance = 0,
+      results = []
+
+    while (results.length < maxObjects * 2 && distance < drawDistance) {
+      distance += step
+      plane.constant += step
+      results = nodes.filter((result) => plane.distanceToPoint(result) < 0)
+    }
+
+    return results
   }
 
   function shouldDraw() {

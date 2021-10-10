@@ -21,6 +21,7 @@
 - Increased tidal wave height
 - Exploration node motion
 - Treasure occlusion
+- Allow button press to cancel New Game warning
 
 ## v1.4.5
 - Updated syngen to the latest version

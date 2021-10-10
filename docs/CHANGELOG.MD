@@ -20,6 +20,7 @@
 - Height map scanning
 - Increased tidal wave height
 - Exploration node motion
+- Treasure occlusion
 
 ## v1.4.5
 - Updated syngen to the latest version

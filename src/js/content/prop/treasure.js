@@ -61,10 +61,43 @@ content.prop.treasure = content.prop.base.invent({
     return engine.utility.clamp(Math.abs(this.relative.z) / this.radius, 0, 1)
   },
   calculateMelodyFilterFrequency: function () {
-    const angle = this.relative.euler().yaw,
-      ratio = engine.utility.scale(Math.cos(angle) || 0, -1, 1, 0, 1)
+    const angle = this.relative.euler().yaw
+
+    let ratio = engine.utility.scale(Math.cos(angle) || 0, -1, 1, 0, 1)
+
+    if (this.checkOcclusion()) {
+      ratio /= 3
+    }
 
     return content.audio.underwater.treasure.getMelodyFrequency() * engine.utility.lerp(1, 8, ratio)
+  },
+  checkOcclusion: function () {
+    const step = content.terrain.voxels.granularity()
+
+    const direction = engine.position.getVector()
+      .subtract(this)
+      .normalize()
+      .scale(step)
+
+    let distance = step,
+      x = this.x + direction.x,
+      y = this.y + direction.y,
+      z = this.z + direction.z
+
+    while (distance < this.distance) {
+      const voxel = content.terrain.voxels.get({x, y, z})
+
+      if (voxel.isSolid) {
+        return true
+      }
+
+      x += direction.x
+      y += direction.y
+      z += direction.z
+      distance += step
+    }
+
+    return false
   },
   collect: function () {
     this.isCollected = true

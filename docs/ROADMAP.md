@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Treasure occlusion
 - Polish
   - New title screen angles taking advantage of vertical look
-  - Camera frustum
   - Performance optimizations
 
 #### Known issues

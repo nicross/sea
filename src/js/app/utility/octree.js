@@ -1,8 +1,16 @@
 app.utility.octree = {}
 
-app.utility.octree.reduce = function (tree, filter, depth = 0) {
-  if (!depth && !tree.nodes.length) {
+app.utility.octree.reduce = function (tree, filterNode, filterItem, depth = 0) {
+  const filteredItems = () => {
+    if (filterItem) {
+      return tree.items.filter(filterItem)
+    }
+
     return [...tree.items]
+  }
+
+  if (!depth && !tree.nodes.length) {
+    return filteredItems()
   }
 
   const center = {
@@ -13,19 +21,19 @@ app.utility.octree.reduce = function (tree, filter, depth = 0) {
 
   const radius = Math.max(tree.height, tree.width, tree.depth) * app.utility.octree.toUnit3
 
-  if (!filter(center, radius)) {
+  if (!filterNode(center, radius)) {
     return []
   }
 
   if (tree.items.length) {
-    return [...tree.items]
+    return filteredItems()
   }
 
   const items = []
   depth += 1
 
   for (const subtree of tree.nodes) {
-    items.push(...this.reduce(subtree, filter, depth))
+    items.push(...this.reduce(subtree, filterNode, filterItem, depth))
   }
 
   return items

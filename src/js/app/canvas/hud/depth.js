@@ -8,11 +8,11 @@ app.canvas.hud.depth = (() => {
       return
     }
 
-    const alpha = engine.utility.clamp(engine.utility.scale(z, 0, content.const.lightZone, 0, 1)),
+    const alpha = engine.utility.clamp(engine.utility.scale(z, 0, content.const.lightZone/2, 0, 1)),
       depth = app.utility.format.number(-z),
       rem = app.utility.css.rem(),
       x = canvas.width - rem,
-      y = canvas.height - rem
+      y = canvas.height - (3 * rem)
 
     context.fillStyle = `rgba(0, 0, 0, ${alpha ** 2})`
     context.font = `${2 * rem}px SuperSubmarine`

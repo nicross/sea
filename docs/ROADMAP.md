@@ -29,7 +29,6 @@ TBD
 - Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
 ### Graphics
-- Add coordinates to HUD
 - Scan animations
 - Godrays by day
 - Shooting stars by night

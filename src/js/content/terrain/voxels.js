@@ -21,24 +21,29 @@ content.terrain.voxels = (() => {
     return tree.find(point, engine.const.zero)
   }
 
-  function snap(value = 0) {
+  function snapPoint({
+    x = 0,
+    y = 0,
+    z = 0,
+  } = {}) {
+    return engine.utility.vector3d.create({
+      x: snapValue(x),
+      y: snapValue(y),
+      z: snapValue(z),
+    })
+  }
+
+  function snapValue(value = 0) {
     return (Math.round(value / granularity) * granularity) + (granularity / 2)
   }
 
   return {
-    get: ({
-      x = 0,
-      y = 0,
-      z = 0,
-    } = {}) => {
-      const point = engine.utility.vector3d.create({
-        x: snap(x),
-        y: snap(y),
-        z: snap(z),
-      })
-
+    get: function (point) {
+      point = snapPoint(point)
       return getVoxel(point) || generateVoxel(point)
     },
     granularity: () => granularity,
+    snapPoint: (point) => snapPoint(point),
+    snapValue: (value) => snapValue(value),
   }
 })()

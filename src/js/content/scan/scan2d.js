@@ -17,18 +17,16 @@ content.scan.scan2d = (() => {
       x += dx
       y += dy
 
-      const point = {
-        x: x + engine.utility.random.float(-noiseGain, noiseGain),
-        y: y + engine.utility.random.float(-noiseGain, noiseGain),
-      }
+      const scanX = content.terrain.voxels.snapValue(x + engine.utility.random.float(-noiseGain, noiseGain)),
+        scanY = content.terrain.voxels.snapValue(y + engine.utility.random.float(-noiseGain, noiseGain)),
+        scanZ = content.terrain.voxels.snapValue(plane.value(scanX, scanY))
 
       const result = {
-        x: point.x,
-        y: point.y,
-        z: plane.value(point.x, point.y),
+        relativeZ: scanZ - position.z,
+        x: scanX,
+        y: scanY,
+        z: scanZ,
       }
-
-      result.relativeZ = result.z - position.z
 
       result.remember = plane === content.terrain.floor
         ? !content.terrain.worms.isInside(x, y, result.z)

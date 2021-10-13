@@ -21,14 +21,10 @@ app.storage.legacy = (() => {
   function get(key) {
     try {
       const value = api.getItem(key)
-      return JSON.parse(value)
-    } catch (e) {}
-  }
 
-  function get(key) {
-    try {
-      const value = api.getItem(key)
-      return JSON.parse(value)
+      return key == keys.version
+        ? value
+        : JSON.parse(value)
     } catch (e) {}
   }
 
@@ -42,5 +38,6 @@ app.storage.legacy = (() => {
 
       return data
     },
+    version: () => get(keys.version),
   }
 })()

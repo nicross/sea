@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Polish
   - New title screen angles taking advantage of vertical look
   - Performance optimizations
-  - Improve app.storage to support large keys (e.g. game.exploration)
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities

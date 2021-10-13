@@ -14,7 +14,12 @@ app.storage = (() => {
 
   return {
     clone: function (from, to) {
-      this.api.set(to, app.storage.api.get(from))
+      const data = from == this.legacy.version()
+        ? this.legacy.data()
+        : app.storage.api.get(from)
+
+      this.api.set(to, data)
+
       return this
     },
     clearGame: function () {
@@ -41,7 +46,7 @@ app.storage = (() => {
     },
     getVersions: function () {
       return [
-        this.legacy.data().version,
+        this.legacy.version(),
         ...this.api.keys(),
       ].filter(Boolean).sort((a, b) => {
         return app.utility.semver.compare(a, b)

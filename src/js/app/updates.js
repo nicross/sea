@@ -47,5 +47,12 @@ app.updates = (() => {
 
       return this
     },
+    rescaleSetting: function (value, min, max, step) {
+      value = engine.utility.lerp(min, max, value)
+      value = Math.round(value / step) * step
+      value = engine.utility.scale(value, min, max, 0, 1)
+
+      return value
+    }
   }
 })()

@@ -1,11 +1,9 @@
 content.audio.underwater.nodes = (() => {
   const activeNodes = new Set()
 
-  // TODO: Use settings
-  const maxProps = 10,
-    radius = 40
-
   function calculateFrequency(node) {
+    const radius = app.settings.computed.streamerRadius
+
     // Calculate relative height ratio
     const position = engine.position.getVector()
     const value = engine.utility.scale(node.z - position.z, -radius, radius, 0, 1)
@@ -17,7 +15,8 @@ content.audio.underwater.nodes = (() => {
 
   function cleanupProps() {
     // Destroy props beyond radius
-    const props = engine.props.get()
+    const props = engine.props.get(),
+      radius = app.settings.computed.streamerRadius
 
     for (const prop of props) {
       if (content.prop.node.isPrototypeOf(prop) && prop.distance > radius) {
@@ -27,7 +26,8 @@ content.audio.underwater.nodes = (() => {
   }
 
   function generateProp(velocity) {
-    const position = engine.position.getVector()
+    const position = engine.position.getVector(),
+      radius = app.settings.computed.streamerRadius
 
     // Find nearby inactive nodes
     const nodes = content.exploration.retrieve({
@@ -104,6 +104,8 @@ content.audio.underwater.nodes = (() => {
       return this
     },
     update: function () {
+      const maxProps = app.settings.computed.streamerLimit
+
       cleanupProps()
 
       const count = engine.props.get().length,

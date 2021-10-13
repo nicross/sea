@@ -1,4 +1,4 @@
-app.updates.register('1.5.0-alpha', () => {
+app.updates.register('1.5.0-beta', () => {
   updateGame()
   updateSettings()
 
@@ -26,13 +26,16 @@ app.updates.register('1.5.0-alpha', () => {
     }
 
     if ('drawDistance' in settings) {
-      settings.drawDistanceStatic = settings.drawDistance
-
-      settings.drawDistanceDynamic = engine.utility.lerp(10, 75, settings.drawDistance)
-      settings.drawDistanceDynamic = Math.round(settings.drawDistanceDynamic / 5) * 5
-      settings.drawDistanceDynamic = engine.utility.scale(settings.drawDistanceDynamic, 10, 75, 0, 1)
-
+      settings.drawDistanceStatic = app.updates.rescaleSetting(settings.drawDistance, 10, 75, 5)
       delete settings.drawDistance
+    }
+
+    if ('streamerLimit' in settings) {
+      settings.streamerLimit = app.updates.rescaleSetting(settings.streamerLimit, 5, 15, 1)
+    }
+
+    if ('streamerRadius' in settings) {
+      settings.streamerRadius = app.updates.rescaleSetting(settings.streamerRadius, 25, 100, 5)
     }
 
     app.storage.setSettings(settings)

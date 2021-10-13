@@ -78,7 +78,7 @@ content.audio.reverb = (() => {
     },
     is: (state) => machine.is(state),
     onScanComplete: function () {
-      const duration = 2,
+      const duration = content.const.scanCooldown,
         now = engine.audio.time()
 
       reverbGain.setValueAtTime(gain/4, now + duration/2)

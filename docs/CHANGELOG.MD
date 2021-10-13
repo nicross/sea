@@ -23,6 +23,7 @@
 - Treasure occlusion
 - Allow button press to cancel New Game warning
 - Coordinates on HUD
+- Increase stereo width of waves
 
 ## v1.4.5
 - Updated syngen to the latest version

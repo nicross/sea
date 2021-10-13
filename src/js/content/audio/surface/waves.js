@@ -5,7 +5,7 @@ content.audio.surface.waves = (() => {
     highpassFilter = context.createBiquadFilter(),
     lowpassFilter = context.createBiquadFilter()
 
-  const distance = 2,
+  const distance = 5,
     highpassFrequency = 40,
     lowpassDropoffRate = 2,
     lowpassMaxFrequency = 1000,
@@ -20,6 +20,7 @@ content.audio.surface.waves = (() => {
 
   // 0 is forward
   const angles = [
+    0, // center
     Math.PI * 7/4, // forward right
     Math.PI * 1/4, // forward left
     Math.PI * 3/4, // backward left
@@ -30,8 +31,8 @@ content.audio.surface.waves = (() => {
     return engine.audio.binaural.create()
       .to(lowpassFilter)
       .update({
-        x: Math.cos(angle) * distance,
-        y: Math.sin(angle) * distance,
+        x: angle ? Math.cos(angle) * distance : 0,
+        y: angle ? Math.sin(angle) * distance : 0,
       })
   })
 
@@ -44,7 +45,7 @@ content.audio.surface.waves = (() => {
     buffers.push(buffer)
   }
 
-  bus.gain.value = engine.utility.fromDb(-12)
+  bus.gain.value = engine.utility.fromDb(-7.5)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)
@@ -110,11 +111,14 @@ content.audio.surface.waves = (() => {
     const isAbove = !content.movement.isUnderwater()
 
     synths.forEach((synth, i) => {
-      const angle = engine.position.getEuler().yaw
+      const isCenter = angles[i] == 0
       let {x, y} = engine.position.getVector()
 
-      x += Math.cos(angle + angles[i]) * distance
-      y += Math.sin(angle + angles[i]) * distance
+      if (!isCenter) {
+        const angle = engine.position.getEuler().yaw + angles[i]
+        x += Math.cos(angle) * distance
+        y += Math.sin(angle) * distance
+      }
 
       const height = content.surface.value(x, y),
         ratio = height / content.surface.max()
@@ -126,6 +130,10 @@ content.audio.surface.waves = (() => {
 
       if (z > height) {
         gain *= engine.utility.clamp(engine.utility.scale(z, height, height + content.const.underwaterTurboMaxVelocity, 1, 0.75), 0.75, 1)
+      }
+
+      if (isCenter) {
+        gain /= 32
       }
 
       engine.audio.ramp.set(synth.highpassFilter.frequency, minFrequency)

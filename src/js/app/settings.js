@@ -102,7 +102,7 @@ app.settings = (() => {
         }
 
         const gain = computed.mainVolume * computed.pausedVolume
-        engine.audio.ramp.set(engine.audio.mixer.master.param.gain, gain)
+        engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 1/8)
       },
     },
     miscVolume: {
@@ -136,7 +136,7 @@ app.settings = (() => {
         }
 
         const gain = computed.mainVolume * computed.pausedVolume
-        engine.audio.ramp.set(engine.audio.mixer.master.param.gain, gain)
+        engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 1/8)
       },
     },
     notifyTreasure: {

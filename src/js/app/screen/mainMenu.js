@@ -1,7 +1,7 @@
 app.screen.mainMenu = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-mainMenu')
 
     app.state.screen.on('enter-mainMenu', onEnter)

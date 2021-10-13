@@ -259,6 +259,6 @@ app.settings = (() => {
   }
 })()
 
-engine.ready(() => app.settings.import(
+app.ready(() => app.settings.import(
   app.storage.getSettings()
 ))

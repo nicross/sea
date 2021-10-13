@@ -3,7 +3,7 @@ app.screen.controls = (() => {
 
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-controls')
 
     app.state.screen.on('enter-controls', onEnter)

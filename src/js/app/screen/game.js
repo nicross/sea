@@ -2,7 +2,7 @@ app.screen.game = (() => {
   let root,
     turboState = false
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-game')
     app.utility.focus.trap(root)
 

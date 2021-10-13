@@ -1,7 +1,7 @@
 app.screen.settings = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-settings')
 
     app.state.screen.on('enter-settings', onEnter)

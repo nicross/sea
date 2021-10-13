@@ -1,7 +1,7 @@
 app.screen.misc = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-misc')
 
     app.state.screen.on('enter-misc', onEnter)

@@ -3,7 +3,7 @@ app.controls.mouse = (() => {
     lookY = 0,
     rotate = 0
 
-  engine.ready(() => {
+  app.ready(() => {
     gameScreen = document.querySelector('.a-game')
     gameScreen.addEventListener('click', onClick)
 

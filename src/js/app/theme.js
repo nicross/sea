@@ -4,7 +4,7 @@ app.theme = (() => {
 
   let interval
 
-  engine.ready(() => {
+  app.ready(() => {
     app.state.screen.on('before-game-pause', update)
     engine.loop.on('frame', onFrame)
   })

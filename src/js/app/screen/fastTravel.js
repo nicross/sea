@@ -1,7 +1,7 @@
 app.screen.fastTravel = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-fastTravel')
 
     app.state.screen.on('enter-fastTravel', onEnter)

@@ -1,7 +1,7 @@
 app.screen.stats = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-stats')
 
     app.state.screen.on('enter-stats', onEnter)

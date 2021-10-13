@@ -4,7 +4,7 @@ app.screen.gallery = (() => {
   let items,
     root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-gallery')
     items = root.querySelector('.a-gallery--items')
 

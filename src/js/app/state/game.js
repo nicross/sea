@@ -30,7 +30,7 @@ app.state.game = engine.utility.machine.create({
   },
 })
 
-engine.ready(() => {
+app.ready(() => {
   // Initial mix
   engine.audio.mixer.master.param.gain.value = engine.const.zeroGain
   content.audio.mixer.bus.environment.bus().gain.value = engine.const.zeroGain

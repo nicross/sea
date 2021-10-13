@@ -5,7 +5,7 @@ app.screen.graphics = (() => {
     onFields,
     root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-graphics')
     darkModeOnFields = root.querySelector('.a-graphics--darkModeOnFields')
     onFields = root.querySelector('.a-graphics--onFields')

@@ -6,7 +6,7 @@ app.canvas.tracers = (() => {
     empty,
     touched
 
-  engine.ready(() => {
+  app.ready(() => {
     engine.state.on('reset', onReset)
   })
 

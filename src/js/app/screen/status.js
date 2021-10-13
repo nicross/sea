@@ -1,7 +1,7 @@
 app.screen.status = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-status')
 
     app.state.screen.on('enter-status', onEnter)

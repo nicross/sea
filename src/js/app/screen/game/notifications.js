@@ -7,7 +7,7 @@ app.screen.game.notifications = (() => {
     root,
     timeout = 0
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-game--notifications')
 
     engine.state.on('reset', onEngineStateReset)

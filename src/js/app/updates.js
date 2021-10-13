@@ -1,7 +1,7 @@
 app.updates = (() => {
   const registry = []
 
-  engine.ready(() => {
+  app.ready(() => {
     const appVersion = app.version().replace('-debug', ''),
       storageVersions = app.storage.getVersions()
 

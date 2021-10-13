@@ -9,7 +9,7 @@ app.canvas = (() => {
     vfov,
     width
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-app--canvas')
     context = root.getContext('2d')
 

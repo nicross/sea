@@ -1,7 +1,7 @@
 app.screen.gameMenu = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-gameMenu')
 
     app.state.screen.on('enter-gameMenu', onEnter)

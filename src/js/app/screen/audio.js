@@ -3,7 +3,7 @@ app.screen.audio = (() => {
 
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-audio')
 
     app.state.screen.on('enter-audio', onEnter)

@@ -1,7 +1,7 @@
 app.screen.splash = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-splash')
     root.addEventListener('click', onInteract)
 

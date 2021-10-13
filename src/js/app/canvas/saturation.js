@@ -4,7 +4,7 @@ app.canvas.saturation = (() => {
   let current = 1,
     tween
 
-  engine.ready(() => {
+  app.ready(() => {
     content.scan.on('complete', onScanComplete)
     content.scan.on('trigger', onScanTrigger)
     engine.state.on('reset', onReset)

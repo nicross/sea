@@ -46,7 +46,7 @@ app.access = (() => {
 
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-app--access')
   })
 

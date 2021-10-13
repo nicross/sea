@@ -1,7 +1,7 @@
 app.screen.newGame = (() => {
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-newGame')
 
     app.state.screen.on('enter-newGame', onEnter)

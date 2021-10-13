@@ -163,7 +163,7 @@ app.state.screen = engine.utility.machine.create({
   },
 })
 
-engine.ready(() => {
+app.ready(() => {
   [...document.querySelectorAll('.a-app--screen')].forEach((element) => {
     element.setAttribute('aria-hidden', 'true')
     element.setAttribute('role', 'persentation')

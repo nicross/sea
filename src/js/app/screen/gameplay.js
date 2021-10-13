@@ -3,7 +3,7 @@ app.screen.gameplay = (() => {
 
   let root
 
-  engine.ready(() => {
+  app.ready(() => {
     root = document.querySelector('.a-gameplay')
 
     app.state.screen.on('enter-gameplay', onEnter)

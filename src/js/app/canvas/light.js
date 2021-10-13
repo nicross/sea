@@ -16,7 +16,7 @@ app.canvas.light = (() => {
     topColor,
     scheme
 
-  engine.ready(() => {
+  app.ready(() => {
     recalculate()
   })
 

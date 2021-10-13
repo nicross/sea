@@ -12,6 +12,17 @@ const app = {
 
     return this
   },
+  ready: async (callback) => {
+    await engine.ready()
+
+    const ready = Promise.all([
+      app.storage.ready(),
+    ])
+
+    return typeof callback == 'function'
+      ? ready.then(callback)
+      : ready
+  },
   screen: {},
   state: {},
   utility: {},

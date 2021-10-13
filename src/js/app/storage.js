@@ -1,187 +1,81 @@
 app.storage = (() => {
-  const isSupported = 'localStorage' in window
-
-  const storage = isSupported
-    ? window.localStorage
-    : {
-        data: {},
-        getItem: (key) => this.data[key],
-        removeItem: (key) => delete this.data[key],
-        setItem: (key) => this.data[key] = value,
-      }
-
-  const storagePrefix = 'shiftbacktick_sea_'
-
-  const legacyKeys = {
-    game: 'sea_game',
-    settings: 'sea_settings',
-    stats: 'sea_stats',
-    treasures: 'sea_treasures',
-    version: 'sea_version',
-  }
-
-  let storageVersion
+  let version
 
   function get(key) {
-    try {
-      const value = storage.getItem(key)
-      return JSON.parse(value)
-    } catch (e) {}
-  }
-
-  function getAllVersioned(version) {
-    const legacyData = getLegacyData()
-
-    if (version == legacyData.version) {
-      return legacyData
-    }
-
-    const data = {},
-      keys = get(prefixed(version, 'keys')) || []
-
-    for (const key of keys) {
-      data[key] = get(prefixed(version, key))
-    }
-
-    return data
-  }
-
-  function getLegacyData() {
-    const data = {}
-
-    for (const [key, value] of Object.entries(legacyKeys)) {
-      data[key] = get(value)
-    }
-
-    return data
-  }
-
-  function getVersioned(key) {
-    key = prefixed(storageVersion, key)
-    return get(key)
-  }
-
-  function prefixed(...keys) {
-    return storagePrefix + keys.join('_')
+    const data = app.storage.api.get(version) || {}
+    return data[key]
   }
 
   function set(key, value) {
-    try {
-      storage.setItem(key, JSON.stringify(value))
-    } catch (e) {}
-  }
-
-  function setVersioned(key, value) {
-    touchVersionedKey(key)
-    key = prefixed(storageVersion, key)
-    set(key, value)
-  }
-
-  function touchVersionedKey(key) {
-    const storageKey = prefixed(storageVersion, 'keys')
-    const keys = get(storageKey) || []
-
-    if (!keys.length) {
-      keys.push('keys')
-    }
-
-    if (keys.includes(key)) {
-      return
-    }
-
-    keys.push(key)
-    set(storageKey, keys)
+    const data = app.storage.api.get(version) || {}
+    data[key] = value
+    app.storage.api.set(version, data)
   }
 
   return {
     clone: function (from, to) {
-      const data = getAllVersioned(from)
-
-      to = to.replace('-debug', '')
-
-      for (const [key, value] of Object.entries(data)) {
-        set(prefixed(to, key), value)
-      }
-
+      this.api.set(to, app.storage.api.get(from))
       return this
     },
     clearGame: function () {
-      setVersioned('game', null)
+      set('game', null)
       return this
     },
-    getAll: function () {
-      const data = {},
-        keys = this.getKeys()
-
-      for (const key of keys) {
-        data[key] = getVersioned(key)
-      }
-
-      return data
-    },
     getGame: function () {
-      return getVersioned('game') || {}
+      return get('game') || {}
     },
     getKeys: function () {
-      return getVersioned('keys') || []
+      return get('keys') || []
     },
     getSettings: function () {
-      return getVersioned('settings') || {}
+      return get('settings') || {}
     },
     getStats: function () {
-      return getVersioned('stats') || {}
+      return get('stats') || {}
     },
     getTreasures: function () {
-      return getVersioned('treasures') || []
+      return get('treasures') || []
     },
     getVersion: function () {
-      return storageVersion
+      return version
     },
     getVersions: function () {
-      const data = get(prefixed('versions')) || [],
-        legacyData = getLegacyData()
-
       return [
-        legacyData.version,
-        ...data,
+        this.legacy.data().version,
+        ...this.api.keys(),
       ].filter(Boolean).sort((a, b) => {
         return app.utility.semver.compare(a, b)
       })
     },
-    hasGame: () => Boolean(getVersioned('game')),
+    hasGame: () => Boolean(get('game')),
     hasTreasures: function () {
       return this.getTreasures().length > 0
     },
+    ready: function () {
+      return this.api.ready()
+    },
     setGame: function (value) {
-      setVersioned('game', value)
+      set('game', value)
       return this
     },
     setKeys: function (value) {
-      setVersioned('keys', value)
+      set('keys', value)
       return this
     },
     setStats: function (value) {
-      setVersioned('stats', value)
+      set('stats', value)
       return this
     },
     setSettings: function (value) {
-      setVersioned('settings', value)
+      set('settings', value)
       return this
     },
     setTreasures: function (value) {
-      setVersioned('treasures', value)
+      set('treasures', value)
       return this
     },
     setVersion: function (value) {
-      storageVersion = value.replace('-debug', '')
-
-      const versions = get(prefixed('versions')) || []
-
-      if (!versions.includes(storageVersion)) {
-        versions.push(storageVersion)
-        set(prefixed('versions'), versions)
-      }
-
+      version = value.replace('-debug', '')
       return this
     },
   }

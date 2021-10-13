@@ -71,34 +71,6 @@ content.prop.treasure = content.prop.base.invent({
 
     return content.audio.underwater.treasure.getMelodyFrequency() * engine.utility.lerp(1, 8, ratio)
   },
-  checkOcclusion: function () {
-    const step = content.terrain.voxels.granularity()
-
-    const direction = engine.position.getVector()
-      .subtract(this)
-      .normalize()
-      .scale(step)
-
-    let distance = step,
-      x = this.x + direction.x,
-      y = this.y + direction.y,
-      z = this.z + direction.z
-
-    while (distance < this.distance) {
-      const voxel = content.terrain.voxels.get({x, y, z})
-
-      if (voxel.isSolid) {
-        return true
-      }
-
-      x += direction.x
-      y += direction.y
-      z += direction.z
-      distance += step
-    }
-
-    return false
-  },
   collect: function () {
     this.isCollected = true
     engine.audio.ramp.exponential(this.output.gain, engine.const.zeroGain, 1/4)

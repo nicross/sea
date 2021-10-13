@@ -8,6 +8,43 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
   },
   fadeInDuration: engine.const.zeroTime,
   fadeOutDuration: engine.const.zeroTime,
+
+  checkOcclusion: function () {
+    const step = content.terrain.voxels.granularity(),
+      threshold = 2
+
+    const direction = engine.position.getVector()
+      .subtract(this)
+      .normalize()
+      .scale(step)
+
+    let count = 0,
+      distance = step,
+      x = this.x + direction.x,
+      y = this.y + direction.y,
+      z = this.z + direction.z
+
+    while (distance < this.distance) {
+      const voxel = content.terrain.voxels.get({x, y, z})
+
+      if (voxel.isSolid) {
+        count += 1
+
+        if (count >= threshold) {
+          return true
+        }
+      } else {
+        count = 0
+      }
+
+      x += direction.x
+      y += direction.y
+      z += direction.z
+      distance += step
+    }
+
+    return false
+  },
   handlePeriodic: function ({
     delay = () => 0,
     key = '',

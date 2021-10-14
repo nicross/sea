@@ -215,7 +215,7 @@ app.canvas.stars = (() => {
   function updateCullingGeometry() {
     const timeOffset = engine.utility.quaternion.fromEuler({
       pitch: -2 * Math.PI * content.time.clock(),
-    })
+    }).conjugate()
 
     // Update plane
     cullPlaneHorizon.normal = engine.utility.vector3d.unitZ().rotateQuaternion(timeOffset)

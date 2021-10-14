@@ -83,36 +83,34 @@ app.canvas.camera.frustum = (() => {
       )
     )
 
-    // TODO: Improve plane geometry
-
     // Left plane
     planes[0].normal = engine.utility.vector3d.create({
-      x: Math.cos(hfov),
-      y: Math.sin(hfov),
+      x: Math.sin(hfov),
+      y: -Math.cos(hfov),
     }).rotateQuaternion(quaternion)
 
     planes[0].constant = planes[0].normal.dotProduct(position)
 
     // Right plane
     planes[1].normal = engine.utility.vector3d.create({
-      x: Math.cos(-hfov),
-      y: Math.sin(-hfov),
+      x: Math.sin(hfov),
+      y: Math.cos(hfov),
     }).rotateQuaternion(quaternion)
 
     planes[1].constant = planes[1].normal.dotProduct(position)
 
-    // Lower plane
+    // Upper plane
     planes[2].normal = engine.utility.vector3d.create({
-      x: Math.cos(vfov),
-      z: Math.sin(vfov),
+      x: Math.sin(vfov),
+      z: Math.cos(vfov),
     }).rotateQuaternion(quaternion)
 
     planes[2].constant = planes[2].normal.dotProduct(position)
 
-    // Upper plane
+    // Lower plane
     planes[3].normal = engine.utility.vector3d.create({
-      x: Math.cos(-vfov),
-      z: Math.sin(-vfov),
+      x: Math.sin(vfov),
+      z: -Math.cos(vfov),
     }).rotateQuaternion(quaternion)
 
     planes[3].constant = planes[3].normal.dotProduct(position)
@@ -190,7 +188,7 @@ app.canvas.camera.frustum = (() => {
       return true
     },
     cullOctree: function (tree) {
-      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphereQuick(center, radius), (item) => this.containsPointQuick(item))
+      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphere(center, radius))
     },
     nearPlane: () => nearPlane,
     planes: () => [...planes],

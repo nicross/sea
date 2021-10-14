@@ -62,7 +62,8 @@ app.canvas.camera = (() => {
     },
     toScreenFromGlobal: function (vector) {
       return this.toScreenFromRelative(
-        this.toRelative(vector)
+        computedVectorInverse.add(vector)
+          .rotateQuaternion(computedQuaternionConjugate)
       )
     },
     toScreenFromRelative: (relative) => {

@@ -8,7 +8,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Polish
   - New title screen angles taking advantage of vertical look
   - Performance optimizations
-  - Underwater scanning mix
+  - Revisit star culling
   - Add noise to content.audio.underwater.nodes
 
 #### Known issues

@@ -6,12 +6,12 @@ content.audio.scan = (() => {
   const lowpass2d = context.createBiquadFilter(),
     notch2d = context.createBiquadFilter()
 
-  bus.gain.value = engine.utility.fromDb(-4.5)
+  bus.gain.value = engine.utility.fromDb(-3)
 
   lowpass2d.frequency.value = rootFrequency
 
   notch2d.frequency.value = rootFrequency
-  notch2d.Q.value = 5
+  notch2d.Q.value = 50
   notch2d.type = 'notch'
 
   lowpass2d.connect(notch2d)
@@ -50,6 +50,7 @@ content.audio.scan = (() => {
 
   function render2dStream(stream, pan) {
     const duration = content.const.scanCooldown,
+      isSurface = engine.position.getVector().z > content.const.lightZone/2,
       panner = context.createStereoPanner(),
       when = engine.audio.time()
 
@@ -66,14 +67,14 @@ content.audio.scan = (() => {
     for (let i = 0; i < count; i += 1) {
       const gain = i == 0
         ? 0
-        : (1 - (i / (count - 1))) ** 4
+        : (1 - (i / (count - 1))) ** 2
 
       const next = when + ((i + 1) * (duration / count))
 
       const {
         detune,
         frequency,
-      } = to2dNote(stream[i].relativeZ)
+      } = to2dNote(stream[i].relativeZ, isSurface)
 
       synth.param.detune.linearRampToValueAtTime(detune, next)
       synth.param.frequency.exponentialRampToValueAtTime(frequency, next)
@@ -122,7 +123,7 @@ content.audio.scan = (() => {
     when = 0,
   } = {}) {
     // Adjust arrival time via distance
-    when += engine.utility.lerp(0, content.const.scanCooldown - 0.25, result.distanceRatio)
+    when += engine.utility.lerp(0, content.const.scanCooldown, result.distanceRatio)
 
     const {
       detune,
@@ -145,8 +146,14 @@ content.audio.scan = (() => {
       .subtract(engine.position.getVector())
       .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
-    const binaural = engine.audio.binaural.create({
-      ...relative,
+    const distance = relative.distance()
+
+    const compensation = distance > 1
+      ? 1 / Math.sqrt(distance)
+      : 1
+
+    engine.audio.binaural.create({
+      ...relative.scale(compensation),
     }).from(synth).to(bus)
 
     // Automate
@@ -155,26 +162,24 @@ content.audio.scan = (() => {
     synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.25)
 
     synth.stop(when + 0.25)
-
-    // Teardown
-    const now = engine.audio.time()
-    setTimeout(() => binaural.destroy(), (when - now + 0.25) * 1000)
   }
 
-  function to2dNote(z = 0) {
-    const scale = 100
-
-    const note = engine.utility.scale(z, 0, scale/12, 0, 12)
+  function to2dNote(z = 0, isSurface = false) {
+    const scale = isSurface
+      ? content.surface.max() * 2
+      : content.scan.scan2d.maxDistance()
 
     return {
-      detune: (note - Math.round(note)) * 100,
-      frequency: engine.utility.midiToFrequency(engine.utility.clamp(69 + Math.round(note), 0, 127)),
+      detune: engine.utility.scale(z, -scale, scale, -2400, 2400),
+      frequency: rootFrequency,
     }
   }
 
   function to3dNote(z = 0) {
+    const scale = content.scan.scan3d.maxDistance()
+
     return {
-      detune: engine.utility.scale(z, -100, 100, -2400, 2400),
+      detune: engine.utility.scale(z, -scale, scale, -2400, 2400),
       frequency: rootFrequency,
     }
   }

@@ -100,6 +100,7 @@ content.scan.scan2d = (() => {
 
       return results
     },
+    maxDistance: () => maxDistance,
     reverse: async () => {
       const plane = getPlane()
 

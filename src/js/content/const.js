@@ -10,7 +10,7 @@ content.const = {
   normalAngularDeceleration: 2 * Math.PI,
   normalDeceleration: 10,
   normalSpeedOfSound: 343,
-  scanCooldown: 0.25 + 2.25 + 0.25,
+  scanCooldown: 2.5,
   scanMinimum: 0.5,
   surfaceNormalAcceleration: 5,
   surfaceNormalMaxVelocity: 10,

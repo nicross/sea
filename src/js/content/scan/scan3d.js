@@ -119,6 +119,7 @@ content.scan.scan3d = (() => {
 
       return results
     },
+    maxDistance: () => maxDistance,
     reverse: async () => {
       const {z} = engine.position.getVector()
 

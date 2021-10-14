@@ -188,7 +188,7 @@ app.canvas.camera.frustum = (() => {
       return true
     },
     cullOctree: function (tree) {
-      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphere(center, radius))
+      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphereQuick(center, radius), (point) => this.containsPointQuick(point))
     },
     nearPlane: () => nearPlane,
     planes: () => [...planes],

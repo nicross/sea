@@ -40,17 +40,11 @@ app.canvas.nodes = (() => {
   function drawNodes() {
     const drawDistance = app.settings.computed.drawDistanceStatic,
       cameraVector = app.canvas.camera.computedVector(),
-      height = main.height(),
       now = engine.audio.time(),
       translateScale = 1/8,
-      translateTime = content.time.value() / nodeTranslateTimeScale,
-      width = main.width()
+      translateTime = content.time.value() / nodeTranslateTimeScale
 
-    const maxX = width + nodeRadius,
-      maxY = height + nodeRadius,
-      minX = -nodeRadius,
-      minY = -nodeRadius,
-      nx0 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime)),
+    const nx0 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime)),
       nx1 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime + 1)),
       ny0 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime)),
       ny1 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime + 1)),
@@ -68,11 +62,6 @@ app.canvas.nodes = (() => {
         y: node.y + engine.utility.lerp(ny0, ny1, node.phase),
         z: node.z + engine.utility.lerp(nz0, nz1, node.phase),
       })
-
-      // Optimization: skip if offscreen
-      if (!engine.utility.between(screen.x, minX, maxX) || !engine.utility.between(screen.y, minY, maxY)) {
-        return nodes
-      }
 
       // Cache distance from player as z-coordinate
       screen.z = cameraVector.subtract(node).distance()
@@ -146,10 +135,9 @@ app.canvas.nodes = (() => {
     let distance = 0,
       results = []
 
-    while (results.length < maxObjects * 2 && distance < drawDistance) {
+    while (results.length < maxObjects && distance < drawDistance) {
       distance += step
-      plane.constant += step
-      results = nodes.filter((result) => plane.distanceToPoint(result) < 0)
+      results = nodes.filter((result) => plane.distanceToPoint(result) < distance)
     }
 
     return results

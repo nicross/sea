@@ -42,7 +42,7 @@ app.canvas.nodes = (() => {
       cameraVector = app.canvas.camera.computedVector(),
       height = main.height(),
       now = engine.audio.time(),
-      translateScale = 1/10,
+      translateScale = 1/8,
       translateTime = content.time.value() / nodeTranslateTimeScale,
       width = main.width()
 

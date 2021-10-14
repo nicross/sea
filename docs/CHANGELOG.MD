@@ -1,29 +1,74 @@
 # S.E.A. changelog
 ## v1.5.0
-- Exploration node audio rework
-- Fade in exploration nodes visually on scan
-- Floor generation rework
-- Increased draw distance
-- Improved fast travel transitions
-- Noise refactor (surface and floor)
-- Performance improvements
-- Proximity cues
-- Scanning enhancements
-- Save versioning
-- Separate draw distance sliders
-- Worm cave generation
-- Cheese cave generation
-- Vertical look
-- Invert look setting
-- Saturation transitions on scanning
-- Vertical look HUD indicator
-- Height map scanning
-- Increased tidal wave height
-- Exploration node motion
-- Treasure occlusion
-- Allow button press to cancel New Game warning
-- Coordinates on HUD
-- Increase stereo width of waves
+- Audio
+  - Added heightmap sonification cues
+  - Remixed waves for a wider stereo width
+- Gameplay
+  - Added heightmap scanning of the surface
+- Graphics
+  - Added relative coordinates to heads-up-display
+  - Added pitch indicator to heads-up-display
+  - Added saturation transitions when scanner is activated
+  - Increased default dynamic draw distance
+  - Reworked graphics to support vertical look
+- User interface
+  - Added vertical look controls
+  - Added toggle for Invert Vertical Look to Controls screen
+  - Allowed cancel button on New Game confirmation
+  - Split unified Draw Distance slider into separate dynamic and static sliders
+- World generation
+  - Increased size of tidal waves
+  - Reworked world generators to use more performant OpenSimplex noise
+- Miscellaneous
+  - Added movement to Fast Travel transitions
+  - Added save game versioning to support older builds
+  - Updated desktop build to Electron 15 (Chromium 94)
+  - Updated documentation to reflect changes
+
+<details>
+  <summary>Spoiler Warning</summary>
+  <ul>
+    <li>Audio
+      <ul>
+        <li>Added cues for discovered worm-like caves</li>
+        <li>Added occlusion filtering to treasure when behind terrain</li>
+        <li>Added proximity cues to the nearest scanned terrain</li>
+        <li>Added unique cue for scanner result directly ahead</li>
+        <li>Remixed scanner audio sequence to support two-dimensional scans</li>
+        <li>Reworked terrain frequency selection to communicate relative height</li>
+        <li>Reworked pitch and timing of three-dimensional sonification cues</li>
+      </ul>
+    </li>
+      <li>Gameplay
+        <ul>
+          <li>Added heightmap scanning of the floor</li>
+          <li>Increased the amount of terrain revealed by three-dimensional scans</li>
+        </ul>
+      </li>
+    <li>Graphics
+      <ul>
+        <li>Added fade-in animation to newly scanned terrain</li>
+        <li>Added oscillating motion to scanned terrain</li>
+        <li>Tweaked geometry of scanned terrain colors</li>
+      </ul>
+    </li>
+    <li>World generation
+      <ul>
+        <li>Completely overhauled underwater terrain generation</li>
+        <li>Added nine unique biomes to the floor generator</li>
+        <li>Added worm-like caves that connect the floor to deeper areas</li>
+        <li>Added cheese-like caves below the floor for freeform spelunking</li>
+        <li>Added a worm-like cave below the origin for instant exploration</li>
+      </ul>
+    </li>
+    <li>Save game changes due to breaking terrain changes
+      <ul>
+        <li>Moved players who would be stuck below the floor</li>
+        <li>Removed all scanned terrain</li>
+      </ul>
+    </li>
+  </ul>
+</details>
 
 ## v1.4.5
 - Updated syngen to the latest version

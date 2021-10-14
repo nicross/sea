@@ -19,10 +19,12 @@ content.prop.classic = content.prop.node.invent({
     this.frequency = frequency
     velocity *= Math.random()
 
-    const duration = engine.utility.lerp(1, 2, velocity),
+    const detune = engine.utility.random.float(-10, 10),
+      duration = engine.utility.lerp(1, 2, velocity),
       gain = engine.utility.fromDb(engine.utility.lerp(-13.5, -7.5, velocity))
 
     this.synth = engine.audio.synth.createSimple({
+      detune,
       frequency,
       type: 'triangle',
     }).filtered({

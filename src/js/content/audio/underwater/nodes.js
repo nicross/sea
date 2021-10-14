@@ -43,15 +43,8 @@ content.audio.underwater.nodes = (() => {
       return
     }
 
-    // Sort by nearest distance
-    for (const node of nodes) {
-      node._distance2 = node.distance2(position)
-    }
-
-    nodes.sort((a, b) => a._distance2 - b._distance2)
-
     // Find random node, weighted by nearest distance
-    const node = engine.utility.choose(nodes, Math.random() ** 2)
+    const node = engine.utility.choose(nodes, Math.random())
     activeNodes.add(node)
 
     // Instantiate prop

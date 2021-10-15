@@ -6,9 +6,11 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 
 ### v1.5.0: Deep update
 - Polish
-  - New title screen angles taking advantage of vertical look
+  - Add static object limit slider
   - Performance optimizations
   - Add noise to content.audio.underwater.nodes
+  - New title screen angles taking advantage of vertical look
+  - Revise manual
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities
@@ -102,4 +104,5 @@ TBD
 - Refactor controls handling to be more reusable across screens
 - Refactor fast travel as content system rather than an app save/load to reduce state resets
 - Refactor app settings to be more maintainable, e.g. separate files for each setting
+- Refactor haptic feedback to handle overlapping events
 - Create app achievements/unlocks system to better track some hidden UI elements

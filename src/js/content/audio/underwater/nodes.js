@@ -26,25 +26,13 @@ content.audio.underwater.nodes = (() => {
   }
 
   function generateProp(velocity) {
-    const position = engine.position.getVector(),
-      radius = app.settings.computed.streamerRadius
+    // Select node
+    const node = selectNode()
 
-    // Find nearby inactive nodes
-    const nodes = content.exploration.retrieve({
-      depth: radius * 2,
-      height: radius * 2,
-      width: radius * 2,
-      x: position.x - radius,
-      y: position.y - radius,
-      z: position.z -radius,
-    }).filter((node) => !activeNodes.has(node))
-
-    if (!nodes.length) {
+    if (!node) {
       return
     }
 
-    // Find random node, weighted by nearest distance
-    const node = engine.utility.choose(nodes, Math.random())
     activeNodes.add(node)
 
     // Instantiate prop
@@ -89,6 +77,59 @@ content.audio.underwater.nodes = (() => {
     }
 
     return node._propPrototype
+  }
+
+  function selectNode() {
+    const nodes = selectNodes(),
+      limit = app.settings.computed.streamerLimit
+
+    // Try to produce a random inactive node without building a full set difference
+    for (let i = 0; i < limit; i += 1) {
+      const roll = Math.random()
+      const node = engine.utility.choose(nodes, roll)
+
+      if (!activeNodes.has(node)) {
+        return node
+      }
+    }
+  }
+
+  function selectNodes() {
+    const nodes = [],
+      position = engine.position.getVector(),
+      radius = app.settings.computed.streamerRadius,
+      step = Math.sqrt(radius)
+
+    // Optimization: Proceed only if there are nodes to sort, cache all results
+    const all = content.exploration.retrieve({
+      depth: radius * 2,
+      height: radius * 2,
+      width: radius * 2,
+      x: position.x - radius,
+      y: position.y - radius,
+      z: position.z - radius,
+    })
+
+    if (!all.length || all.length == activeNodes.size) {
+      return []
+    }
+
+    // Select increasing areas around position, weighting closer nodes by pushing copies into the result set
+    for (let distance = step; distance < radius; distance += step) {
+      nodes.push(...content.exploration.retrieve({
+        depth: distance * 2,
+        height: distance * 2,
+        width: distance * 2,
+        x: position.x - distance,
+        y: position.y - distance,
+        z: position.z - distance,
+      }))
+    }
+
+    // Push the cached full result set to include the last step
+    nodes.push(...all)
+
+    return nodes
   }
 
   return {

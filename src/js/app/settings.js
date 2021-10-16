@@ -69,6 +69,15 @@ app.settings = (() => {
         }
       },
     },
+    graphicsStaticObjectLimit: {
+      compute: (rawValue) => Math.round(engine.utility.lerp(250, 2500, rawValue)),
+      default: engine.utility.scale(1000, 250, 2500, 0, 1),
+      update: () => {
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
     graphicsTracers: {
       compute: (rawValue) => engine.utility.lerpExp(0, 9/10, rawValue, 0.848),
       default: 0,

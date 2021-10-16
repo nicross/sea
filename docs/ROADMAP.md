@@ -6,7 +6,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 
 ### v1.5.0: Deep update
 - Polish
-  - Add static object limit slider
   - Performance optimizations
   - Add noise to content.audio.underwater.nodes
   - New title screen angles taking advantage of vertical look

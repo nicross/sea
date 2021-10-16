@@ -98,6 +98,7 @@ app.screen.graphics = (() => {
       ['.a-graphics--drawDistanceStatic', app.settings.raw.drawDistanceStatic, app.settings.setDrawDistanceStatic],
       ['.a-graphics--fov', app.settings.raw.graphicsFov, app.settings.setGraphicsFov],
       ['.a-graphics--hudOpacity', app.settings.raw.graphicsHudOpacity, app.settings.setGraphicsHudOpacity],
+      ['.a-graphics--staticObjectLimit', app.settings.raw.graphicsStaticObjectLimit, app.settings.setGraphicsStaticObjectLimit],
       ['.a-graphics--tracers', app.settings.raw.graphicsTracers, app.settings.setGraphicsTracers],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.slider.hydrate(root.querySelector(selector), initialValue)

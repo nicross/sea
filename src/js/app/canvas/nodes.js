@@ -3,7 +3,6 @@ app.canvas.nodes = (() => {
     context = canvas.getContext('2d'),
     fadeDuration = 1/2,
     main = app.canvas,
-    maxObjects = 1000,
     nodeHue = engine.utility.simplex4d.create('exploration', 'node', 'hue'),
     nodeX = engine.utility.perlin1d.create('exploration', 'node', 'x'),
     nodeY = engine.utility.perlin1d.create('exploration', 'node', 'y'),
@@ -41,6 +40,7 @@ app.canvas.nodes = (() => {
     const drawDistance = app.settings.computed.drawDistanceStatic,
       cameraVector = app.canvas.camera.computedVector(),
       now = engine.audio.time(),
+      objectLimit = app.settings.computed.graphicsStaticObjectLimit,
       translateScale = 1/8,
       translateTime = content.time.value() / nodeTranslateTimeScale
 
@@ -81,7 +81,7 @@ app.canvas.nodes = (() => {
     nodes.sort((a, b) => b.z - a.z)
 
     // Limit to maximum object limit
-    const length = Math.min(nodes.length, maxObjects)
+    const length = Math.min(nodes.length, objectLimit)
 
     // Draw nodes within limits
     for (let index = 0; index < length; index += 1) {
@@ -95,8 +95,8 @@ app.canvas.nodes = (() => {
       let alpha = alphaRatio ** 2
 
       // Fade out nodes approaching the object limit
-      if ((length > (maxObjects / 2)) && index < (length - (maxObjects / 2))) {
-        alpha *= engine.utility.scale(index, 0, length - maxObjects/2, 0, 1)
+      if ((length > (objectLimit / 2)) && index < (length - (objectLimit / 2))) {
+        alpha *= engine.utility.scale(index, 0, length - objectLimit/2, 0, 1)
       }
 
       if ((now - node.time) < fadeDuration) {
@@ -125,6 +125,7 @@ app.canvas.nodes = (() => {
     // Optimize z-sorting by moving the near plane until object limit is on negative side of plane
 
     const drawDistance = app.settings.computed.drawDistanceStatic,
+      objectLimit = app.settings.computed.graphicsStaticObjectLimit,
       step = drawDistance / 10
 
     const plane = app.utility.plane.create({
@@ -135,7 +136,7 @@ app.canvas.nodes = (() => {
     let distance = 0,
       results = []
 
-    while (results.length < maxObjects && distance < drawDistance) {
+    while (results.length < objectLimit && distance < drawDistance) {
       distance += step
       results = nodes.filter((result) => plane.distanceToPoint(result) < distance)
     }

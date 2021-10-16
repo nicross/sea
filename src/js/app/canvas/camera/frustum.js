@@ -1,6 +1,5 @@
 app.canvas.camera.frustum = (() => {
   const cone = app.utility.cone.create(),
-    enablePlaneChecks = true,
     farPlane = app.utility.plane.create(),
     nearPlane = app.utility.plane.create(),
     sphere = app.utility.sphere.create()
@@ -13,10 +12,6 @@ app.canvas.camera.frustum = (() => {
   ]
 
   function checkPlanesPoint(point) {
-    if (!enablePlaneChecks) {
-      return true
-    }
-
     for (const plane of planes) {
       if (plane.distanceToPoint(point) < 0) {
         return false
@@ -27,10 +22,6 @@ app.canvas.camera.frustum = (() => {
   }
 
   function checkPlanesSphere(center, radius) {
-    if (!enablePlaneChecks) {
-      return true
-    }
-
     for (const plane of planes) {
       if (plane.distanceToPoint(center) < -radius) {
         return false
@@ -142,8 +133,35 @@ app.canvas.camera.frustum = (() => {
 
       return checkPlanesPoint(point)
     },
-    containsPointQuick: function (point) {
+    containsPointInPlanes: function (point) {
+      if (nearPlane.distanceToPoint(point) < 0) {
+        return false
+      }
+
+      if (farPlane.distanceToPoint(point) < 0) {
+        return false
+      }
+
       return checkPlanesPoint(point)
+    },
+    containsPointNoPlanes: function (point) {
+      if (nearPlane.distanceToPoint(point) < 0) {
+        return false
+      }
+
+      if (farPlane.distanceToPoint(point) < 0) {
+        return false
+      }
+
+      if (!sphere.containsPoint(point)) {
+        return false
+      }
+
+      if (!cone.containsPoint(point)) {
+        return false
+      }
+
+      return true
     },
     containsSphere: function (center, radius = 0) {
       // XXX: Includes intersections
@@ -166,7 +184,20 @@ app.canvas.camera.frustum = (() => {
 
       return checkPlanesSphere(center, radius)
     },
-    containsSphereQuick: function (center, radius = 0) {
+    containsSphereInPlanes: function (center, radius = 0) {
+      // XXX: Includes intersections
+
+      if (nearPlane.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      if (farPlane.distanceToPoint(center) < -radius) {
+        return false
+      }
+
+      return checkPlanesSphere(center, radius)
+    },
+    containsSphereNoPlanes: function (center, radius = 0) {
       // XXX: Includes intersections
 
       if (nearPlane.distanceToPoint(center) < -radius) {
@@ -186,9 +217,6 @@ app.canvas.camera.frustum = (() => {
       }
 
       return true
-    },
-    cullOctree: function (tree) {
-      return app.utility.octree.reduce(tree, (center, radius) => this.containsSphereQuick(center, radius), (point) => this.containsPointQuick(point))
     },
     nearPlane: () => nearPlane,
     planes: () => [...planes],

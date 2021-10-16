@@ -7,6 +7,7 @@ app.canvas.nodes = (() => {
     nodeX = engine.utility.perlin1d.create('exploration', 'node', 'x'),
     nodeY = engine.utility.perlin1d.create('exploration', 'node', 'y'),
     nodeZ = engine.utility.perlin1d.create('exploration', 'node', 'z'),
+    nodeTranslateScale = 1/8,
     nodeTranslateTimeScale = 4,
     nodeHueScale = 37.5 / engine.utility.simplex3d.prototype.skewFactor,
     nodeHueTimeScale = 60 / engine.utility.simplex3d.prototype.skewFactor,
@@ -41,19 +42,20 @@ app.canvas.nodes = (() => {
       cameraVector = app.canvas.camera.computedVector(),
       now = engine.audio.time(),
       objectLimit = app.settings.computed.graphicsStaticObjectLimit,
-      translateScale = 1/8,
       translateTime = content.time.value() / nodeTranslateTimeScale
 
-    const nx0 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime)),
-      nx1 = engine.utility.lerp(-translateScale, translateScale, nodeX.value(translateTime + 1)),
-      ny0 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime)),
-      ny1 = engine.utility.lerp(-translateScale, translateScale, nodeY.value(translateTime + 1)),
-      nz0 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime)),
-      nz1 = engine.utility.lerp(-translateScale, translateScale, nodeZ.value(translateTime + 1))
+    const nx0 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeX.value(translateTime)),
+      nx1 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeX.value(translateTime + 1)),
+      ny0 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeY.value(translateTime)),
+      ny1 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeY.value(translateTime + 1)),
+      nz0 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeZ.value(translateTime)),
+      nz1 = engine.utility.lerp(-nodeTranslateScale, nodeTranslateScale, nodeZ.value(translateTime + 1))
 
     const nodes = reduceClosest(
-      app.canvas.camera.frustum.cullOctree(
-        content.exploration.tree()
+      app.utility.octree.reduce(
+        content.exploration.tree(),
+        (center, radius) => app.canvas.camera.frustum.containsSphereNoPlanes(center, radius + nodeTranslateScale),
+        (point) => app.canvas.camera.frustum.containsSphereInPlanes(point, nodeTranslateScale)
       )
     ).reduce((nodes, node) => {
       // Convert to screen space, with added noise

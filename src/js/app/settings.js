@@ -61,6 +61,14 @@ app.settings = (() => {
         app.canvas.forceResize()
       },
     },
+    graphicsHudCompassOn: {
+      default: true,
+      update: () => {
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
     graphicsHudCoordinatesOn: {
       default: true,
       update: () => {

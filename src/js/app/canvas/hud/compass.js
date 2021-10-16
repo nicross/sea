@@ -7,6 +7,10 @@ app.canvas.hud.compass = (() => {
   app.canvas.hud.on('draw', draw)
 
   function draw({canvas, context}) {
+    if (!app.settings.computed.graphicsHudCompassOn) {
+      return
+    }
+
     const {yaw} = engine.position.getEuler()
     const {z} = engine.position.getVector()
 

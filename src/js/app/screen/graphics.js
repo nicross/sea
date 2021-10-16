@@ -105,6 +105,7 @@ app.screen.graphics = (() => {
 
   function hydrateToggles() {
     [
+      ['.a-graphics--hudCompassOn', app.settings.raw.graphicsHudCompassOn, app.settings.setGraphicsHudCompassOn],
       ['.a-graphics--hudCoordinatesOn', app.settings.raw.graphicsHudCoordinatesOn, app.settings.setGraphicsHudCoordinatesOn],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)

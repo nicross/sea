@@ -61,6 +61,14 @@ app.settings = (() => {
         app.canvas.forceResize()
       },
     },
+    graphicsHudCoordinatesOn: {
+      default: true,
+      update: () => {
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
     graphicsHudOpacity: {
       default: 1,
       update: () => {

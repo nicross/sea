@@ -1,14 +1,10 @@
 app.screen.graphics = (() => {
   const sliders = []
 
-  let darkModeOnFields,
-    onFields,
-    root
+  let root
 
   app.ready(() => {
     root = document.querySelector('.a-graphics')
-    darkModeOnFields = root.querySelector('.a-graphics--darkModeOnFields')
-    onFields = root.querySelector('.a-graphics--onFields')
 
     app.state.screen.on('enter-graphics', onEnter)
     app.state.screen.on('exit-graphics', onExit)
@@ -108,7 +104,16 @@ app.screen.graphics = (() => {
   }
 
   function hydrateToggles() {
+    [
+      ['.a-graphics--hudCoordinatesOn', app.settings.raw.graphicsHudCoordinatesOn, app.settings.setGraphicsHudCoordinatesOn],
+    ].forEach(([selector, initialValue, setter]) => {
+      const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
+      component.on('change', () => setter(component.getValue()))
+    })
+
+    // Dark mode on
     const darkModeOn = app.component.toggle.hydrate(root.querySelector('.a-graphics--darkModeOn'), app.settings.raw.graphicsDarkModeOn)
+    const darkModeOnFields = root.querySelector('.a-graphics--darkModeOnFields')
 
     darkModeOn.on('change', () => {
       const value = darkModeOn.getValue()
@@ -118,7 +123,9 @@ app.screen.graphics = (() => {
 
     enableFields(darkModeOnFields, darkModeOn.getValue())
 
+    // Graphics on
     const on = app.component.toggle.hydrate(root.querySelector('.a-graphics--on'), app.settings.raw.graphicsOn)
+    const onFields = root.querySelector('.a-graphics--onFields')
 
     on.on('change', () => {
       const value = on.getValue()

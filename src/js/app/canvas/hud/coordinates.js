@@ -2,6 +2,10 @@ app.canvas.hud.coordinates = (() => {
   app.canvas.hud.on('draw', draw)
 
   function draw(e) {
+    if (!app.settings.computed.graphicsHudCoordinatesOn) {
+      return
+    }
+
     drawDepth(e)
     drawRelative(e)
   }

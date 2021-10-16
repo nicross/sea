@@ -14,9 +14,10 @@
 - User interface
   - Added vertical look controls
   - Added toggle for Invert Vertical Look to Controls screen
-  - Added slider for Static Object Limit on Graphics screen
+  - Added slider for Static Object Limit to Graphics screen
   - Split unified Draw Distance slider into separate dynamic and static sliders on Graphics screen
-  - Allowed cancel button on New Game confirmation
+  - Added toggle for HUD Coordinates to Graphics screen
+  - Allowed cancel button on New Game confirmation to go back to Main Menu
 - World generation
   - Increased size of tidal waves
   - Reworked world generators to use more performant OpenSimplex noise

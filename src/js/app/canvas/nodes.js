@@ -87,20 +87,28 @@ app.canvas.nodes = (() => {
     for (let index = 0; index < length; index += 1) {
       const node = nodes[nodes.length - length + index]
 
-      const alphaRatio = engine.utility.scale(node.z, 0, drawDistance, 1, 0),
+      const distanceRatio = engine.utility.clamp(engine.utility.scale(node.z, 0, drawDistance, 1, 0), 0, 1),
         radiusRatio = engine.utility.scale(node.z, 0, 1000, 1, 0), // max drawDistance
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 64)
 
+      if (!distanceRatio) {
+        continue
+      }
+
       // Fade out distant nodes
-      let alpha = alphaRatio ** 2
+      let alpha = distanceRatio ** 0.5
 
       // Fade out nodes approaching the object limit
       if ((length > (objectLimit / 2)) && index < (length - (objectLimit / 2))) {
-        alpha *= engine.utility.scale(index, 0, length - objectLimit/2, 0, 1)
+        alpha *= engine.utility.scale(index, 0, length - objectLimit/2, 0, 1) ** 0.5
       }
 
       if ((now - node.time) < fadeDuration) {
         alpha *= engine.utility.scale(now - node.time, 0, fadeDuration, 0, 1)
+      }
+
+      if (!alpha) {
+        continue
       }
 
       context.fillStyle = `hsla(${node.hue}, 100%, 50%, ${alpha})`

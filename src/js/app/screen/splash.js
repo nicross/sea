@@ -28,6 +28,10 @@ app.screen.splash = (() => {
     if (ui.confirm || ui.enter || ui.space || ui.start || ui.focus === 0) {
       onInteract()
     }
+
+    if (ui.escape) {
+      app.quit()
+    }
   }
 
   function onInteract() {

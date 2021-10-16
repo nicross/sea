@@ -36,8 +36,17 @@ app.screen.splash = (() => {
       app.quit()
     }
 
+    const isMoved = engine.input.mouse.getMoveX()
+      || engine.input.mouse.getMoveY()
+      || engine.input.gamepad.getAxis(0)
+      || engine.input.gamepad.getAxis(1)
+      || engine.input.gamepad.getAxis(2)
+      || engine.input.gamepad.getAxis(3)
+
     if (!idleState && engine.audio.time() >= idleTimeout) {
       setIdle(true)
+    } else if (isMoved) {
+      setIdle(false)
     }
   }
 

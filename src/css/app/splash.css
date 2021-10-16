@@ -1,6 +1,7 @@
 .a-splash {
   align-items: center;
   text-align: center;
+  transition: opacity 0.5s ease;
 }
   .a-splash--instruction {
     animation: a-splash--instruction 1s ease-in-out 0s infinite alternate both;

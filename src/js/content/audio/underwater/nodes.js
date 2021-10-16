@@ -162,12 +162,5 @@ content.audio.underwater.nodes = (() => {
   }
 })()
 
-engine.loop.on('frame', ({paused}) => {
-  if (paused) {
-    return
-  }
-
-  content.audio.underwater.nodes.update()
-})
-
+engine.loop.on('frame', () => content.audio.underwater.nodes.update())
 engine.state.on('reset', () => content.audio.underwater.nodes.reset())

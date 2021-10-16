@@ -6,9 +6,9 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 
 ### v1.5.0: Deep update
 - Polish
-  - Performance optimizations
-  - Add noise to content.audio.underwater.nodes
-  - New title screen angles taking advantage of vertical look
+  - Audio performance optimizations
+  - Scanner nearest cave cues
+  - New random title screen angles
   - Revise manual
 
 #### Known issues

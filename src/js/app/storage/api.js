@@ -5,7 +5,8 @@ app.storage.api = (() => {
     dbStoreProxyValue = 'data',
     dbVersion = 1,
     isSupported = 'indexedDB' in window,
-    ready = open()
+    ready = open(),
+    setDbDebounced = app.utility.fn.debounced(setDb)
 
   let db,
     proxy = {}
@@ -72,6 +73,10 @@ app.storage.api = (() => {
       return
     }
 
+    setDbDebounced(key, value)
+  }
+
+  function setDb(key, value) {
     const item = {}
     item[dbStoreProxyKey] = key
     item[dbStoreProxyValue] = value

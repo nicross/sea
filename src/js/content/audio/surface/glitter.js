@@ -144,7 +144,7 @@ content.audio.surface.glitter = (() => {
   }
 
   function updateFilter(z) {
-    if (previousZ == z) {
+    if (previousZ === z) {
       return
     }
 
@@ -165,6 +165,9 @@ content.audio.surface.glitter = (() => {
       swapFilter()
       teardownFeedbackDelays()
       createFeedbackDelays()
+
+      previousZ = null
+
       return this
     },
     update: function () {

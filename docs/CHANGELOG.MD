@@ -20,8 +20,9 @@
   - Added toggle for HUD Compass to Graphics screen
   - Added toggle for HUD Coordinates to Graphics screen
   - Added toggle for HUD Pitch to Graphics screen
+  - Allowed cancel button on New Game confirmation to go back to the main menu
+  - Allowed certain keys to go back to splash screen from the main menu
   - Allowed escape key on splash screen to quit application
-  - Allowed cancel button on New Game confirmation to go back to Main Menu
 - World generation
   - Overhauled surface wave generation
   - Increased size of tidal waves

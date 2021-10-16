@@ -24,6 +24,10 @@ app.screen.mainMenu = (() => {
   function handleControls() {
     const ui = app.controls.ui()
 
+    if (ui.backspace || ui.cancel || ui.escape) {
+      return app.state.screen.dispatch('back')
+    }
+
     if (ui.confirm) {
       const focused = app.utility.focus.get(root)
 

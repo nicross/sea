@@ -84,6 +84,9 @@ app.state.screen = engine.utility.machine.create({
       },
     },
     mainMenu: {
+      back: function () {
+        this.change('splash')
+      },
       continue: function () {
         this.change('game')
       },
@@ -145,6 +148,11 @@ app.state.screen = engine.utility.machine.create({
         this.change('graphics')
       },
     },
+    splash: {
+      start: function () {
+        this.change('mainMenu')
+      },
+    },
     stats: {
       back: function () {
         this.change('misc')
@@ -153,11 +161,6 @@ app.state.screen = engine.utility.machine.create({
     status: {
       back: function () {
         this.change('gameMenu')
-      },
-    },
-    splash: {
-      start: function () {
-        this.change('mainMenu')
       },
     },
   },

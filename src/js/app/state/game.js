@@ -79,44 +79,7 @@ app.state.game.on('enter-none', () => {
 
   engine.audio.ramp.set(content.audio.mixer.bus.environment.bus().gain, engine.const.zeroGain)
 
-  // Generate scene
-  const isRise = Math.random() > 0.5
-  const isSun = Math.random() > 0.5
-
-  const yawNoise = engine.utility.random.float(-1/120, 1/120)
-
-  const yaw = isRise
-    ? Math.PI * (1/8 + yawNoise)
-    : Math.PI * (9/8 + yawNoise)
-
-  const offset = isSun
-    ? (
-      isRise
-        ? engine.utility.random.float(0.225, 0.275)
-        : engine.utility.random.float(0.7, 0.725)
-      )
-    : (
-      isRise
-        ? engine.utility.random.float(0.725, 0.775)
-        : engine.utility.random.float(0.2, 0.225)
-      )
-
-  const scene = {
-    position: {
-      quaternion: engine.utility.quaternion.fromEuler({
-        yaw,
-      }),
-      x: 0,
-      y: 0,
-      z: -engine.const.zero,
-    },
-    seed: Math.random(),
-    time: {
-      offset: offset * content.const.dayDuration,
-    },
-  }
-
-  engine.state.import(scene)
+  app.splash.applyRandom()
 })
 
 app.state.game.on('exit-none', () => {

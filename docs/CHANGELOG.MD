@@ -50,6 +50,7 @@
       <ul>
         <li>Added fade-in animation to newly scanned terrain</li>
         <li>Added oscillating motion to scanned terrain</li>
+        <li>Reduced default static draw distance</li>
         <li>Tweaked geometry of scanned terrain colors</li>
       </ul>
     </li>

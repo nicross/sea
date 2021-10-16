@@ -15,8 +15,8 @@ app.settings = (() => {
       },
     },
     drawDistanceStatic: {
-      compute: (rawValue) => Math.round(engine.utility.lerp(100, 1000, rawValue)),
-      default: 1,
+      compute: (rawValue) => Math.round(engine.utility.lerp(50, 1000, rawValue)),
+      default: engine.utility.scale(100, 50, 1000, 0, 1),
       update: () => {
         app.canvas.forceResize()
       },

@@ -85,6 +85,14 @@ app.settings = (() => {
         }
       },
     },
+    graphicsHudPitchOn: {
+      default: true,
+      update: () => {
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
     graphicsStaticObjectLimit: {
       compute: (rawValue) => Math.round(engine.utility.lerp(250, 2500, rawValue)),
       default: engine.utility.scale(1000, 250, 2500, 0, 1),

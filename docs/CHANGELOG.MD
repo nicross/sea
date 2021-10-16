@@ -18,6 +18,7 @@
   - Split unified Draw Distance slider into separate dynamic and static sliders on Graphics screen
   - Added toggle for HUD Compass to Graphics screen
   - Added toggle for HUD Coordinates to Graphics screen
+  - Added toggle for HUD Pitch to Graphics screen
   - Allowed cancel button on New Game confirmation to go back to Main Menu
 - World generation
   - Increased size of tidal waves

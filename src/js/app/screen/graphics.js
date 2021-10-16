@@ -107,6 +107,7 @@ app.screen.graphics = (() => {
     [
       ['.a-graphics--hudCompassOn', app.settings.raw.graphicsHudCompassOn, app.settings.setGraphicsHudCompassOn],
       ['.a-graphics--hudCoordinatesOn', app.settings.raw.graphicsHudCoordinatesOn, app.settings.setGraphicsHudCoordinatesOn],
+      ['.a-graphics--hudPitchOn', app.settings.raw.graphicsHudPitchOn, app.settings.setGraphicsHudPitchOn],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValue()))

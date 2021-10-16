@@ -40,6 +40,11 @@
     text-fill-color: transparent;
   }
 
+.a-splash-idle {
+  opacity: 0;
+  transition: opacity 5s ease;
+}
+
 @keyframes a-splash--instruction {
   0% {
    background-color: rgba(0, 0, 0, 0.5);

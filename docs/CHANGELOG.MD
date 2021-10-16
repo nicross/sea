@@ -9,8 +9,9 @@
   - Added relative coordinates to heads-up-display
   - Added pitch indicator to heads-up-display
   - Added saturation transitions when scanner is activated
+  - Added fade out to splash screen after a timeout
+  - Improved render performance
   - Increased default dynamic draw distance
-  - Reworked graphics to support vertical look
 - User interface
   - Added vertical look controls
   - Added toggle for Invert Vertical Look to Controls screen
@@ -22,8 +23,8 @@
   - Allowed escape key on splash screen to quit application
   - Allowed cancel button on New Game confirmation to go back to Main Menu
 - World generation
+  - Overhauled surface wave generation
   - Increased size of tidal waves
-  - Reworked world generators to use more performant OpenSimplex noise
 - Miscellaneous
   - Added movement to Fast Travel transitions
   - Added save game versioning to support older builds
@@ -60,7 +61,7 @@
     </li>
     <li>World generation
       <ul>
-        <li>Completely overhauled underwater terrain generation</li>
+        <li>Overhauled underwater terrain generation</li>
         <li>Added nine unique biomes to the floor generator</li>
         <li>Added worm-like caves that connect the floor to deeper areas</li>
         <li>Added cheese-like caves below the floor for freeform spelunking</li>

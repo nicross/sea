@@ -1,5 +1,7 @@
 app.screen.splash = (() => {
-  let root
+  let idleState,
+    idleTimeout,
+    root
 
   app.ready(() => {
     root = document.querySelector('.a-splash')
@@ -14,6 +16,7 @@ app.screen.splash = (() => {
   })
 
   function onEnter() {
+    setIdle(false)
     app.utility.focus.set(root)
     engine.loop.on('frame', onFrame)
   }
@@ -32,10 +35,25 @@ app.screen.splash = (() => {
     if (ui.escape) {
       app.quit()
     }
+
+    if (!idleState && engine.audio.time() >= idleTimeout) {
+      setIdle(true)
+    }
   }
 
   function onInteract() {
     app.state.screen.dispatch('start')
+  }
+
+  function setIdle(state) {
+    idleState = state
+
+    if (idleState) {
+      root.classList.add('a-splash-idle')
+    } else {
+      idleTimeout = engine.audio.time() + 10
+      root.classList.remove('a-splash-idle')
+    }
   }
 
   return {}

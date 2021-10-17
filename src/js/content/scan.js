@@ -25,6 +25,14 @@ content.scan = (() => {
         scan3d: await this.scan3d.forward(),
       }
 
+      for (const stream of results.scan2d) {
+        for (const result of stream) {
+          if (result.isWorm) {
+            results.scan3d.push(result)
+          }
+        }
+      }
+
       await minimum
       pubsub.emit('complete', results)
 

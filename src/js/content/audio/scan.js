@@ -103,7 +103,7 @@ content.audio.scan = (() => {
 
     // Random directions
     for (const result of results) {
-      if (!result.isSolid || rendered.find(result, 2)) {
+      if (!result.isSolid || rendered.find(result, 1)) {
         continue
       }
 
@@ -152,7 +152,7 @@ content.audio.scan = (() => {
       ? 1 / Math.sqrt(distance)
       : 1
 
-    const duration = 1/32
+    const duration = 1/16
 
     engine.audio.binaural.create({
       ...relative.scale(compensation),

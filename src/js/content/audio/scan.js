@@ -103,13 +103,13 @@ content.audio.scan = (() => {
 
     // Random directions
     for (const result of results) {
-      if (!result.isSolid || rendered.find(result, 1)) {
+      if (!result.isSolid || rendered.find(result, 2)) {
         continue
       }
 
       render3dGrain({
         result,
-        type: 'sine',
+        type: result.isWorm ? 'triangle' : 'sine',
         when: now,
       })
 
@@ -152,16 +152,18 @@ content.audio.scan = (() => {
       ? 1 / Math.sqrt(distance)
       : 1
 
+    const duration = 1/32
+
     engine.audio.binaural.create({
       ...relative.scale(compensation),
     }).from(synth).to(bus)
 
     // Automate
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
-    synth.param.gain.exponentialRampToValueAtTime(1, when + 1/32)
-    synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, when + 0.25)
+    synth.param.gain.exponentialRampToValueAtTime(1, when + duration/4)
+    synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, when + duration)
 
-    synth.stop(when + 0.25)
+    synth.stop(when + duration)
   }
 
   function to2dNote(z = 0, isSurface = false) {

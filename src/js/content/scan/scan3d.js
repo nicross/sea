@@ -1,7 +1,7 @@
 content.scan.scan3d = (() => {
-  const maxCount = 64,
+  const maxCount = 32,
     maxDistance = 100,
-    minCount = 48
+    minCount = 32
 
   function doRaytrace(position, direction) {
     const stepDistance = content.terrain.voxels.granularity()
@@ -29,6 +29,7 @@ content.scan.scan3d = (() => {
       distance,
       distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
       isSolid,
+      isWorm: content.terrain.worms.isInside(x, y, z, 1),
       remember: isSolid,
       relativeZ: z - position.z,
       x,

@@ -85,8 +85,7 @@ content.audio.scan = (() => {
   }
 
   function render3d(results) {
-    const now = engine.audio.time(),
-      rendered = engine.utility.octree.create()
+    const now = engine.audio.time()
 
     // First result
     const first = results.shift()
@@ -95,25 +94,34 @@ content.audio.scan = (() => {
       render3dGrain({
         result: first,
         type: 'sawtooth',
-        when: now,
+        when: now + engine.utility.lerp(0, content.const.scanCooldown, first.distanceRatio),
       })
-
-      rendered.insert(first)
     }
 
-    // Random directions
+    // Random directions, throttled
+    const throttleTime = content.const.scanCooldown / results.length
+    let nextWhen = now
+
+    results.sort((a, b) => a.distanceRatio - b.distanceRatio)
+
     for (const result of results) {
-      if (!result.isSolid || rendered.find(result, 1)) {
+      if (!result.isSolid) {
+        continue
+      }
+
+      const when = now + engine.utility.lerp(0, content.const.scanCooldown, result.distanceRatio)
+
+      if (when <= nextWhen) {
         continue
       }
 
       render3dGrain({
         result,
         type: result.isWorm ? 'triangle' : 'sine',
-        when: now,
+        when,
       })
 
-      rendered.insert(result)
+      nextWhen = when + throttleTime
     }
   }
 
@@ -122,9 +130,6 @@ content.audio.scan = (() => {
     type = 'sine',
     when = 0,
   } = {}) {
-    // Adjust arrival time via distance
-    when += engine.utility.lerp(0, content.const.scanCooldown, result.distanceRatio)
-
     const {
       detune,
       frequency,
@@ -138,7 +143,7 @@ content.audio.scan = (() => {
       when,
     }).filtered({
       detune,
-      frequency: frequency * (type == 'sawtooth' ? 8 : 2),
+      frequency: frequency * (type == 'sawtooth' ? 8 : 1),
     })
 
     // Position synth in space
@@ -146,16 +151,11 @@ content.audio.scan = (() => {
       .subtract(engine.position.getVector())
       .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
-    const distance = relative.distance()
-
-    const compensation = distance > 1
-      ? 1 / Math.sqrt(distance)
-      : 1
-
-    const duration = 1/16
+    const distance = relative.distance(),
+      duration = 1/16
 
     const binaural = engine.audio.binaural.create({
-      ...relative.scale(compensation),
+      ...relative,
     }).from(synth).to(bus)
 
     // Automate

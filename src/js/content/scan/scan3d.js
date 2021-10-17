@@ -1,7 +1,7 @@
 content.scan.scan3d = (() => {
-  const maxCount = 32,
+  const maxCount = 64,
     maxDistance = 100,
-    minCount = 32
+    minCount = 64
 
   function doRaytrace(position, direction) {
     const stepDistance = content.terrain.voxels.granularity()

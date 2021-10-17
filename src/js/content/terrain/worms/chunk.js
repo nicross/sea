@@ -19,16 +19,28 @@ content.terrain.worms.chunk.prototype = {
     return this
   },
   generate: async function () {
-    const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y)
-    const count = Math.round(srand(0, 2))
+    const isOrigin = !this.x && !this.y,
+      srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y)
+
+    const count = Math.round(srand(0, 2)) + Number(isOrigin)
 
     for (let i = 0; i < count; i += 1) {
-      const srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
+      const isOriginZero = isOrigin && !i,
+        srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
 
-      const length = srand(500, 2000),
-        x = srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size),
-        y = srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size),
-        z = content.terrain.floor.value(x, y)
+      const length = isOriginZero
+        ? 2000
+        : srand(500, 2000)
+
+      const x = isOriginZero
+        ? 0
+        : srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size)
+
+      const y = isOriginZero
+        ? 0
+        : srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size)
+
+      const z = content.terrain.floor.value(x, y)
 
       await content.utility.async.schedule(() => this.generateWorm({
         branchScale: length / srand(4, 16),
@@ -56,13 +68,6 @@ content.terrain.worms.chunk.prototype = {
     yawScale,
     z,
   }) {
-    // XXX: Special debugging case, always place a cave at origin
-    if (!this.x && !this.y && seed.length == 1 && !seed[0]) {
-      x = 0
-      y = 0
-      z = content.terrain.floor.value(x, y)
-    }
-
     const granularity = 1/2,
       isBranch = seed.length > 1,
       minLength = 16

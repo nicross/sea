@@ -154,7 +154,7 @@ content.audio.scan = (() => {
 
     const duration = 1/16
 
-    engine.audio.binaural.create({
+    const binaural = engine.audio.binaural.create({
       ...relative.scale(compensation),
     }).from(synth).to(bus)
 
@@ -164,6 +164,7 @@ content.audio.scan = (() => {
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, when + duration)
 
     synth.stop(when + duration)
+    setTimeout(() => binaural.destroy, duration * 1000)
   }
 
   function to2dNote(z = 0, isSurface = false) {

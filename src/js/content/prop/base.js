@@ -8,7 +8,6 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
   },
   fadeInDuration: engine.const.zeroTime,
   fadeOutDuration: engine.const.zeroTime,
-
   checkOcclusion: function () {
     const step = content.terrain.voxels.granularity(),
       threshold = 2

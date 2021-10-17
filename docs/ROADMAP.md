@@ -8,8 +8,8 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Polish
   - Audio performance optimizations
   - Scanner nearest cave cues
-  - New random title screen angles
   - Revise manual
+  - Review update script
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities

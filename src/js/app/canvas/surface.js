@@ -5,8 +5,8 @@ app.canvas.surface = (() => {
     main = app.canvas,
     maxDrawDistance = 75,
     shimmerField = engine.utility.simplex3d.create('shimmer'),
-    shimmerScaleX = 2 / engine.utility.simplex3d.prototype.skewFactor,
-    shimmerScaleY = 2 / engine.utility.simplex3d.prototype.skewFactor,
+    shimmerScaleX = 1 / engine.utility.simplex3d.prototype.skewFactor,
+    shimmerScaleY = 1 / engine.utility.simplex3d.prototype.skewFactor,
     shimmerScaleZ = 0.5 / engine.utility.simplex3d.prototype.skewFactor
 
   const gridCache = engine.utility.octree.create({

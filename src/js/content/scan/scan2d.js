@@ -1,6 +1,6 @@
 content.scan.scan2d = (() => {
   const maxDistance = 100,
-    noiseGain = 1/2,
+    maxVariance = Math.sin(Math.PI/6) * maxDistance / 4,
     unitX = engine.utility.vector2d.unitX()
 
   function doRaytrace(position, plane, direction) {
@@ -11,14 +11,22 @@ content.scan.scan2d = (() => {
       y: dy,
     } = direction
 
+    const {
+      x: px,
+      y: py,
+    } = direction.rotate(Math.PI/2)
+
     let {x, y} = position
 
     for (let d = 0; d < maxDistance; d += 1) {
       x += dx
       y += dy
 
-      const scanX = content.terrain.voxels.snapValue(x + engine.utility.random.float(-noiseGain, noiseGain)),
-        scanY = content.terrain.voxels.snapValue(y + engine.utility.random.float(-noiseGain, noiseGain)),
+      const ratio = d / maxDistance,
+        variance = engine.utility.random.float(-1, 1) * ratio * maxVariance
+
+      const scanX = content.terrain.voxels.snapValue(x + (variance * px)),
+        scanY = content.terrain.voxels.snapValue(y + (variance * py)),
         scanZ = content.terrain.voxels.snapValue(plane.value(scanX, scanY))
 
       const isWorm = plane === content.terrain.floor && content.terrain.worms.isInside(scanX, scanY, scanZ)

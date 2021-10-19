@@ -7,6 +7,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Polish
   - Audio performance optimizations
+  - Remix proximity alert
   - Revise manual
   - Review update script
 

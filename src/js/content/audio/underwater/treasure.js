@@ -144,17 +144,49 @@ content.audio.underwater.treasure = (() => {
 
       return this
     },
-    duck: function () {
-      for (const output of [harmonyOutput, melodyOutput]) {
-        engine.audio.ramp.exponential(output.gain, gain/32, 1/2)
-      }
-
-      return this
-    },
     getHarmonyFrequency: () => f0,
     getMelodyFrequency: () => f1,
     harmonyOutput: () => harmonyOutput,
     melodyOutput: () => melodyOutput,
+    onScanComplete: function () {
+      const duration = content.const.scanCooldown,
+        now = engine.audio.time()
+
+      // XXX: Fade in synths
+      // SEE: onScamTrigger
+      for (const output of [harmonyOutput, melodyOutput]) {
+        output.gain.setValueAtTime(gain/32, now + duration/2)
+        output.gain.exponentialRampToValueAtTime(gain, now + duration)
+      }
+
+      return this
+    },
+    onScanRecharge: function () {
+      // Resume ongoing pulses
+      if (timer) {
+        pulse()
+      }
+
+      return this
+    },
+    onScanTrigger: function () {
+      const duration = 1/2,
+        now = engine.audio.time()
+
+      // XXX: Fade out synths
+      // TODO: Create a bus for treasure props that gets ducked automatically
+      for (const output of [harmonyOutput, melodyOutput]) {
+        engine.audio.ramp.exponential(output.gain, gain/32, duration)
+      }
+
+      // Pause ongoing pules
+      if (timer) {
+        timer.onended = null
+        timer.stop(now + duration)
+      }
+
+      return this
+    },
     remove: function (prop) {
       props.delete(prop)
 
@@ -169,23 +201,13 @@ content.audio.underwater.treasure = (() => {
       props.clear()
       return this
     },
-    unduck: function () {
-      const duration = content.const.scanCooldown,
-        now = engine.audio.time()
-
-      for (const output of [harmonyOutput, melodyOutput]) {
-        output.gain.setValueAtTime(gain/32, now + duration/2)
-        output.gain.exponentialRampToValueAtTime(gain, now + duration)
-      }
-
-      return this
-    },
   }
 })()
 
 engine.ready(() => {
-  content.scan.on('trigger', () => content.audio.underwater.treasure.duck())
-  content.scan.on('complete', () => content.audio.underwater.treasure.unduck())
+  content.scan.on('complete', () => content.audio.underwater.treasure.onScanComplete())
+  content.scan.on('recharge', () => content.audio.underwater.treasure.onScanRecharge())
+  content.scan.on('trigger', () => content.audio.underwater.treasure.onScanTrigger())
 })
 
 engine.state.on('reset', () => content.audio.underwater.treasure.reset())

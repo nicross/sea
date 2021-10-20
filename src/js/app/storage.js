@@ -16,7 +16,9 @@ app.storage = (() => {
         ? this.legacy.data()
         : app.storage.api.get(from)
 
-      this.api.set(to, data)
+      for (const key of Object.keys(data)) {
+        this.api.set(to, key, data[key])
+      }
 
       return this
     },

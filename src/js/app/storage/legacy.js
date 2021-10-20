@@ -15,14 +15,15 @@ app.storage.legacy = (() => {
     settings: 'sea_settings',
     stats: 'sea_stats',
     treasures: 'sea_treasures',
-    version: 'sea_version',
   }
+
+  const versionKey = 'sea_version'
 
   function get(key) {
     try {
       const value = api.getItem(key)
 
-      return key == keys.version
+      return key == versionKey
         ? value
         : JSON.parse(value)
     } catch (e) {}
@@ -38,6 +39,6 @@ app.storage.legacy = (() => {
 
       return data
     },
-    version: () => get(keys.version),
+    version: () => get(versionKey),
   }
 })()

@@ -60,7 +60,7 @@ app.screen.splash = (() => {
     if (idleState) {
       root.classList.add('a-splash-idle')
     } else {
-      idleTimeout = engine.audio.time() + 10
+      idleTimeout = engine.audio.time() + 8
       root.classList.remove('a-splash-idle')
     }
   }

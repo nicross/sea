@@ -7,9 +7,7 @@ app.storage = (() => {
   }
 
   function set(key, value) {
-    const data = app.storage.api.get(version) || {}
-    data[key] = value
-    app.storage.api.set(version, data)
+    app.storage.api.set(version, key, value)
   }
 
   return {
@@ -47,7 +45,7 @@ app.storage = (() => {
     getVersions: function () {
       return [
         this.legacy.version(),
-        ...this.api.keys(),
+        ...this.api.versions(),
       ].filter(Boolean).sort((a, b) => {
         return app.utility.semver.compare(a, b)
       })

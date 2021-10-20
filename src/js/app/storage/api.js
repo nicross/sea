@@ -1,22 +1,16 @@
 app.storage.api = (() => {
   const dbName = 'shiftbacktick_sea',
-    dbStoreName = 'versions',
-    dbStoreProxyKey = 'version',
-    dbStoreProxyValue = 'data',
+    dbStoreName = 'data',
     dbVersion = 1,
+    debounceHandlers = {},
     isSupported = 'indexedDB' in window,
-    ready = open(),
-    setDbDebounced = app.utility.fn.debounced(setDb)
+    proxy = {},
+    ready = open()
 
-  let db,
-    proxy = {}
+  let db
 
-  function get(key) {
-    return proxy[key]
-  }
-
-  function keys() {
-    return [...Object.keys(proxy)]
+  function get(version, key) {
+    return key ? proxy[version][key] : proxy[version]
   }
 
   function open() {
@@ -36,7 +30,9 @@ app.storage.api = (() => {
       }
 
       request.onupgradeneeded = () => {
-        request.result.createObjectStore(dbStoreName, {keyPath: dbStoreProxyKey})
+        request.result.createObjectStore(dbStoreName, {
+          keyPath: ['version', 'key'],
+        })
       }
     })
   }
@@ -54,11 +50,12 @@ app.storage.api = (() => {
       request.onsuccess = () => {
         const results = request.result
 
-        for (const result of results) {
-          const key = result[dbStoreProxyKey],
-            value = result[dbStoreProxyValue]
+        for (const {data, key, version} of results) {
+          if (!proxy[version]) {
+            proxy[version] = {}
+          }
 
-          proxy[key] = value
+          proxy[version][key] = data
         }
 
         resolve()
@@ -66,33 +63,51 @@ app.storage.api = (() => {
     })
   }
 
-  function set(key, value) {
-    proxy[key] = value
+  function set(version, key, data) {
+    if (!proxy[version]) {
+      proxy[version] = {}
+    }
+
+    proxy[version][key] = data
 
     if (!isSupported) {
       return
     }
 
-    setDbDebounced(key, value)
+    setDbDebounced(version, key, data)
   }
 
-  function setDb(key, value) {
-    const item = {}
-    item[dbStoreProxyKey] = key
-    item[dbStoreProxyValue] = value
+  function setDb(version, key, data) {
+    const item = {
+      data,
+      key,
+      version,
+    }
 
     db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName).put(item)
   }
 
+  function setDbDebounced(version, key, data) {
+    if (!debounceHandlers[version]) {
+      debounceHandlers[version] = {}
+    }
+
+    clearTimeout(debounceHandlers[version][key])
+
+    debounceHandlers[version][key] = setTimeout(() => {
+      setDb(version, key, data)
+    }, 0)
+  }
+
   return {
-    get: (key) => {
-      return get(key)
+    get: (version, key) => {
+      return get(version, key)
     },
-    keys: () => keys(),
     ready: () => ready,
-    set: (key, value) => {
-      set(key, value)
+    set: (version, key, value) => {
+      set(version, key, value)
       return this
     },
+    versions: () => [...Object.keys(proxy)],
   }
 })()

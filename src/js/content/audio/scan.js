@@ -154,8 +154,12 @@ content.audio.scan = (() => {
     const distance = relative.distance(),
       duration = 1/16
 
+    const compensation = distance > 1
+      ? 1 / (distance ** (3/8))
+      : 1
+
     const binaural = engine.audio.binaural.create({
-      ...relative,
+      ...relative.scale(compensation),
     }).from(synth).to(bus)
 
     // Automate

@@ -9,7 +9,7 @@ content.audio.underwater.proximity = (() => {
     next,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-15)
+  bus.gain.value = engine.utility.fromDb(-18)
 
   function calculateParameters(node) {
     next = content.utility.accelerate.vector(next, node, acceleration)
@@ -30,10 +30,10 @@ content.audio.underwater.proximity = (() => {
       amodFrequency: engine.utility.lerpExp(2, 12, distanceRatio, 2),
       detune: engine.utility.scale(relative.z, -radius, radius, -1200, 1200),
       carrierGain: 1 - amodDepth,
-      filterFrequency: rootFrequency * engine.utility.lerpExp(1, 4, angleRatio, 2),
+      filterFrequency: rootFrequency * engine.utility.lerpExp(2, 4, angleRatio, 2),
       fmodDepth: engine.utility.addInterval(rootFrequency, -6/12),
       fmodFrequency: rootFrequency,
-      gain: distanceRatio ** (1/2),
+      gain: distanceRatio ** (1/4),
       relative,
     }
   }

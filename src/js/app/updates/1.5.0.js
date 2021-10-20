@@ -26,8 +26,8 @@ app.updates.register('1.5.0-beta', () => {
     }
 
     if ('drawDistance' in settings) {
-      settings.drawDistanceDynamic = app.updates.rescaleSetting(settings.drawDistance, 50, 1000, 25)
-      settings.drawDistanceStatic = app.updates.rescaleSetting(settings.drawDistance, 10, 75, 5)
+      settings.drawDistanceDynamic = app.updates.rescaleSetting(settings.drawDistance, 10, 75, 5)
+      settings.drawDistanceStatic = app.updates.rescaleSetting(settings.drawDistance, 50, 1000, 25)
       delete settings.drawDistance
     }
 

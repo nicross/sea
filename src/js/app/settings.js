@@ -9,7 +9,7 @@ app.settings = (() => {
     },
     drawDistanceDynamic: {
       compute: (rawValue) => Math.round(engine.utility.lerp(10, 75, rawValue)),
-      default: 1,
+      default: engine.utility.scale(50, 10, 75, 0, 1),
       update: () => {
         app.canvas.forceResize()
       },

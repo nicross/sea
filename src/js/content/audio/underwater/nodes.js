@@ -142,7 +142,7 @@ content.audio.underwater.nodes = (() => {
 
       cleanupProps()
 
-      const count = engine.props.get().length,
+      const count = activeNodes.size,
         isMuted = content.audio.mixer.bus.music.isMuted()
 
       if (isMuted || count >= maxProps || !content.terrain.worms.isReady()) {

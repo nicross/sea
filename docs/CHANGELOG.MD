@@ -11,6 +11,7 @@
   - Added saturation transitions when scanner is activated
   - Added fade out to splash screen after a timeout
   - Added new title sequences that showcase vertical look
+  - Improved visibility of stars at night
   - Improved render performance
   - Increased default dynamic draw distance
 - User interface

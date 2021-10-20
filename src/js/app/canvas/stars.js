@@ -74,13 +74,10 @@ app.canvas.stars = (() => {
     return screen.y
   }
 
-  function calculateTwinkle(phase, depth = 0.125) {
+  function calculateTwinkle(frequency, phase, depth) {
     const time = content.time.time()
 
-    const fmod = Math.sin((Math.PI * 1/20 * time) + phase)
-    const f = engine.utility.lerp(2, 6, fmod)
-
-    const amod = Math.sin((Math.PI * f * time) + phase) ** 2
+    const amod = Math.sin((2 * Math.PI * frequency * time) + phase) ** 2
     return (1 - depth) + (amod * depth)
   }
 
@@ -89,14 +86,14 @@ app.canvas.stars = (() => {
     const surface = content.surface.current()
 
     if (z >= surface) {
-      return 1/8
+      return 1/4
     }
 
     if (z <= surface - depthCutoff) {
       return 1/2
     }
 
-    return engine.utility.scale(z, surface, surface - depthCutoff, 1/8, 1/2)
+    return engine.utility.scale(z, surface, surface - depthCutoff, 1/4, 1/2)
   }
 
   function clear() {
@@ -131,7 +128,7 @@ app.canvas.stars = (() => {
 
     for (const star of stars) {
       // Calculate star alpha
-      let alpha = star.alpha * globalAlpha * calculateTwinkle(star.phase, twinkleDepth)
+      let alpha = star.alpha * globalAlpha * calculateTwinkle(star.twinkleFrequency, star.twinklePhase, twinkleDepth)
 
       // Optimization: Skip when invisible
       if (alpha <= 0) {
@@ -175,9 +172,10 @@ app.canvas.stars = (() => {
       const star = {
         alpha: srand(1/2, 1),
         delta: Math.PI / 2 * engine.utility.sign(delta) * (delta ** 2),
-        phase: 2 * Math.PI * srand(),
         theta: 2 * Math.PI * srand(),
-        radius: engine.utility.lerpExp(0.5, 1, srand(), 8),
+        twinkleFrequency: srand(6, 10),
+        twinklePhase: 2 * Math.PI * srand(),
+        radius: engine.utility.lerpExp(0.5, 1.5, srand(), 8),
       }
 
       const vector = engine.utility.vector3d.unitX()

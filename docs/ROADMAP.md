@@ -5,12 +5,20 @@ This document outlines upcoming changes for post-jam releases leading up to the 
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ### v1.5.0: Deep update
+- Add cave discoveries
+  - Add system for saving discovered caves
+  - Add naming system for caves in order of discovery (A->Z, AA->ZZ, etc. with NATO phonetic alphabet)
+  - Add entries for discovered caves to fast travel screen
+  - Add notifications for when caves are discovered
+  - Add toggle for cave notifications on Gameplay screen
+  - Consider refactoring fast travel as content system debt
 - Polish
   - Revise manual
   - Review update script
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities
+- Treasure spawn audio crashes, less frequent after 75bb93b
 - HUD fades get stuck at >0% opacity
 
 ### v1.6.0: Life update

@@ -6,7 +6,7 @@ content.audio.scan = (() => {
   const lowpass2d = context.createBiquadFilter(),
     notch2d = context.createBiquadFilter()
 
-  bus.gain.value = engine.utility.fromDb(-3)
+  bus.gain.value = engine.utility.fromDb(-6)
 
   lowpass2d.frequency.value = rootFrequency
 
@@ -78,7 +78,7 @@ content.audio.scan = (() => {
 
       synth.param.detune.linearRampToValueAtTime(detune, next)
       synth.param.frequency.exponentialRampToValueAtTime(frequency, next)
-      synth.param.gain.linearRampToValueAtTime(gain / (7 * 2), next)
+      synth.param.gain.linearRampToValueAtTime(gain / 7, next)
     }
 
     synth.stop(when + duration)
@@ -117,7 +117,7 @@ content.audio.scan = (() => {
 
       render3dGrain({
         result,
-        type: result.isWorm ? 'triangle' : 'sine',
+        type: result.isWorm ? 'square' : 'sine',
         when,
       })
 
@@ -135,6 +135,12 @@ content.audio.scan = (() => {
       frequency,
     } = to3dNote(result.relativeZ)
 
+    const colors = {
+      sawtooth: 8,
+      sine: 1,
+      square: 1,
+    }
+
     // Create synth
     const synth = engine.audio.synth.createSimple({
       detune,
@@ -143,7 +149,7 @@ content.audio.scan = (() => {
       when,
     }).filtered({
       detune,
-      frequency: frequency * (type == 'sawtooth' ? 8 : 1),
+      frequency: frequency * colors[type],
     }).chainAssign('panner', context.createStereoPanner()).connect(bus)
 
     // Position synth in space
@@ -155,7 +161,7 @@ content.audio.scan = (() => {
 
     // Automate
     const duration = 1/16,
-      gain = (1 - result.distanceRatio) ** 2
+      gain = (1 - result.distanceRatio) ** 4
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
     synth.param.gain.exponentialRampToValueAtTime(gain, when + duration/4)

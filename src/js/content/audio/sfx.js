@@ -1,7 +1,7 @@
 content.audio.sfx = (() => {
   const bus = content.audio.mixer.bus.misc.createBus()
 
-  bus.gain.value = engine.utility.fromDb(-7.5)
+  bus.gain.value = engine.utility.fromDb(-9)
 
   return {
     bus: () => bus,

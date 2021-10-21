@@ -22,7 +22,9 @@ content.terrain.worms.chunk.prototype = {
     const isOrigin = !this.x && !this.y,
       srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y)
 
-    const count = Math.round(srand(0, 2)) + Number(isOrigin)
+    const count = isOrigin
+     ? 3
+     : Math.round(srand(0, 2))
 
     for (let i = 0; i < count; i += 1) {
       const isOriginZero = isOrigin && !i,

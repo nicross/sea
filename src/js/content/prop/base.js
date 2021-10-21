@@ -8,9 +8,11 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
   },
   fadeInDuration: engine.const.zeroTime,
   fadeOutDuration: engine.const.zeroTime,
-  checkOcclusion: function () {
-    const step = content.terrain.voxels.granularity(),
-      threshold = 2
+  getOcclusion: async function ({
+    batchSize = 500,
+    threshold = 2,
+  } = {}) {
+    const step = content.terrain.voxels.granularity()
 
     const direction = engine.position.getVector()
       .subtract(this)
@@ -24,22 +26,34 @@ content.prop.base = engine.prop.base.invent((prototype) => ({
       z = this.z + direction.z
 
     while (distance < this.distance) {
-      const voxel = content.terrain.voxels.get({x, y, z})
+      const isOccluded = await content.utility.async.schedule(() => {
+        const batchMaxDistance = Math.min(this.distance, distance + (batchSize * step))
 
-      if (voxel.isSolid) {
-        count += 1
+        while (distance < batchMaxDistance) {
+          const voxel = content.terrain.voxels.get({x, y, z})
 
-        if (count >= threshold) {
-          return true
+          if (voxel.isSolid) {
+            count += 1
+
+            if (count >= threshold) {
+              return true
+            }
+          } else {
+            count = 0
+          }
+
+          x += direction.x
+          y += direction.y
+          z += direction.z
+          distance += step
         }
-      } else {
-        count = 0
-      }
 
-      x += direction.x
-      y += direction.y
-      z += direction.z
-      distance += step
+        return false
+      })
+
+      if (isOccluded) {
+        return true
+      }
     }
 
     return false

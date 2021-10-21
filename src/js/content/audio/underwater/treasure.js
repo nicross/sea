@@ -191,6 +191,7 @@ content.audio.underwater.treasure = (() => {
 
       return this
     },
+    props: () => [...props],
     remove: function (prop) {
       props.delete(prop)
 

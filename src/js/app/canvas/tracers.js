@@ -4,6 +4,8 @@ app.canvas.tracers = (() => {
   let canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
     empty,
+    nextSwap = 0,
+    swapInterval = 1,
     touched
 
   app.ready(() => {
@@ -85,12 +87,21 @@ app.canvas.tracers = (() => {
     }
 
     const height = main.height(),
-      patternCanvas = swapCanvas(),
       width = main.width()
+
+    let patternCanvas = canvas
+
+    if (performance.now() >= nextSwap) {
+      patternCanvas = swapCanvas()
+      nextSwap = performance.now() + (swapInterval * 1000)
+    }
 
     context.fillStyle = context.createPattern(patternCanvas, 'no-repeat')
     context.globalAlpha = app.settings.computed.graphicsTracers
+
+    clear()
     context.fillRect(0, 0, width, height)
+
     context.globalAlpha = 1
   }
 

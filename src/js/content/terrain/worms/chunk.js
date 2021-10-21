@@ -11,6 +11,7 @@ content.terrain.worms.chunk.prototype = {
     y = 0,
   } = {}) {
     this.size = size
+    this.trunks = []
     this.x = x
     this.y = y
 
@@ -27,44 +28,20 @@ content.terrain.worms.chunk.prototype = {
      : Math.round(srand(0, 2))
 
     for (let i = 0; i < count; i += 1) {
-      const isOriginZero = isOrigin && !i,
-        srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', i)
-
-      const length = isOriginZero
-        ? 2000
-        : srand(500, 2000)
-
-      const x = isOriginZero
-        ? 0
-        : srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size)
-
-      const y = isOriginZero
-        ? 0
-        : srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size)
-
-      const z = content.terrain.floor.value(x, y)
-
-      await content.utility.async.schedule(() => this.generateWorm({
-        branchScale: length / srand(4, 16),
-        length,
-        pitchScale: srand(25, 50),
-        radiusScale: srand(25, 50),
-        seed: [i],
-        x,
-        y,
-        yawScale: srand(25, 50),
-        z,
-      }))
+      this.trunks.push(
+        await this.generateTrunk(i)
+      )
     }
 
     return this
   },
-  generateWorm: async function ({
+  generateBranch: async function ({
     branchScale,
     length,
     pitchScale,
     radiusScale,
     seed = [],
+    trunk,
     x,
     y,
     yawScale,
@@ -72,7 +49,8 @@ content.terrain.worms.chunk.prototype = {
   }) {
     const granularity = 1/2,
       isBranch = seed.length > 1,
-      minLength = 16
+      minLength = 16,
+      points = []
 
     const branchField = engine.utility.createNoiseWithOctaves({
       octaves: 2,
@@ -117,12 +95,17 @@ content.terrain.worms.chunk.prototype = {
           const radius = radiusField.value(distance / radiusScale),
             radiusBias = engine.utility.clamp(engine.utility.scale(distance, length - minLength, length, 1, 0), 0, 1)
 
-          content.terrain.worms.addPoint({
+          const point = {
+            chunk: this,
             radius: engine.utility.lerp(4, 16, radius * radiusBias),
+            trunk,
             x,
             y,
             z,
-          })
+          }
+
+          content.terrain.worms.addPoint(point)
+          points.push(point)
 
           const pitch = pitchField.value(distance / pitchScale),
             yaw = yawField.value(distance / yawScale)
@@ -166,12 +149,13 @@ content.terrain.worms.chunk.prototype = {
             continue
           }
 
-          await content.utility.async.schedule(() => this.generateWorm({
+          const branch = await content.utility.async.schedule(() => this.generateBranch({
             branchScale: branchLength / branchSrand(4, 16),
             length: branchLength,
             pitchScale: branchSrand(25, 50),
             radiusScale: branchSrand(25, 50),
             seed: [...seed, branchIndex],
+            trunk,
             x,
             y,
             yawScale: branchSrand(25, 50),
@@ -180,10 +164,48 @@ content.terrain.worms.chunk.prototype = {
 
           branchIndex += 1
           lastBranch = distance
+          points.push(...branch)
         }
       })
     }
 
-    return this
+    return points
+  },
+  generateTrunk: async function (index) {
+    // Determine trunk, note special case for very first cave
+    const isOriginZero = !this.x && !this.y && !index,
+      srand = engine.utility.srand('terrain', 'worms', 'chunk', this.x, this.y, 'worm', index)
+
+    const length = isOriginZero
+      ? 2000
+      : srand(500, 2000)
+
+    const x = isOriginZero
+      ? 0
+      : srand((this.x - 0.5) * this.size, (this.x + 0.5) * this.size)
+
+    const y = isOriginZero
+      ? 0
+      : srand((this.y - 0.5) * this.size, (this.y + 0.5) * this.size)
+
+    const z = content.terrain.floor.value(x, y)
+
+    // Generate trunk
+    const trunk = {}
+
+    trunk.points = await content.utility.async.schedule(() => this.generateBranch({
+      branchScale: length / srand(4, 16),
+      length,
+      pitchScale: srand(25, 50),
+      radiusScale: srand(25, 50),
+      seed: [index],
+      trunk,
+      x,
+      y,
+      yawScale: srand(25, 50),
+      z,
+    }))
+
+    return trunk
   },
 }

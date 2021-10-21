@@ -144,31 +144,24 @@ content.audio.scan = (() => {
     }).filtered({
       detune,
       frequency: frequency * (type == 'sawtooth' ? 8 : 1),
-    })
+    }).chainAssign('panner', context.createStereoPanner()).connect(bus)
 
     // Position synth in space
     const relative = engine.utility.vector3d.create(result)
       .subtract(engine.position.getVector())
       .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
-    const distance = relative.distance(),
-      duration = 1/16
-
-    const compensation = distance > 1
-      ? 1 / (distance ** (3/8))
-      : 1
-
-    const binaural = engine.audio.binaural.create({
-      ...relative.scale(compensation),
-    }).from(synth).to(bus)
+    synth.panner.pan.value = Math.sin(Math.atan2(-relative.y, relative.x))
 
     // Automate
+    const duration = 1/16,
+      gain = (1 - result.distanceRatio) ** 2
+
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
-    synth.param.gain.exponentialRampToValueAtTime(1, when + duration/4)
+    synth.param.gain.exponentialRampToValueAtTime(gain, when + duration/4)
     synth.param.gain.linearRampToValueAtTime(engine.const.zeroGain, when + duration)
 
     synth.stop(when + duration)
-    setTimeout(() => binaural.destroy, duration * 1000)
   }
 
   function to2dNote(z = 0, isSurface = false) {

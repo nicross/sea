@@ -1,15 +1,15 @@
 content.audio.underwater.proximity = (() => {
   const acceleration = 20,
     bus = content.audio.mixer.bus.misc.createBus(),
+    context = engine.audio.context(),
     radius = 10,
     release = 1/16,
     rootFrequency = engine.utility.midiToFrequency(57)
 
-  let binaural,
-    next,
+  let next,
     synth
 
-  bus.gain.value = engine.utility.fromDb(-18)
+  bus.gain.value = engine.utility.fromDb(-21)
 
   function calculateParameters(node) {
     next = content.utility.accelerate.vector(next, node, acceleration)
@@ -28,13 +28,13 @@ content.audio.underwater.proximity = (() => {
     return {
       amodDepth,
       amodFrequency: engine.utility.lerpExp(2, 12, distanceRatio, 2),
-      detune: engine.utility.scale(relative.z, -radius, radius, -1200, 1200),
+      detune: engine.utility.scale(relative.z, -radius, radius, -2400, 2400),
       carrierGain: 1 - amodDepth,
       filterFrequency: rootFrequency * engine.utility.lerpExp(2, 4, angleRatio, 2),
       fmodDepth: engine.utility.addInterval(rootFrequency, -6/12),
-      fmodFrequency: rootFrequency,
-      gain: distanceRatio ** (1/4),
-      relative,
+      fmodFrequency: rootFrequency / 2,
+      gain: distanceRatio ** 1.5,
+      pan: Math.sin(Math.atan2(-relative.y, relative.x)),
     }
   }
 
@@ -50,7 +50,7 @@ content.audio.underwater.proximity = (() => {
       fmodDepth,
       fmodFrequency,
       gain,
-      relative,
+      pan,
     } = calculateParameters(node)
 
     synth = engine.audio.synth.createMod({
@@ -67,23 +67,20 @@ content.audio.underwater.proximity = (() => {
     }).filtered({
       detune,
       frequency: filterFrequency,
-    })
+    }).chainAssign('panner', context.createStereoPanner()).connect(bus)
 
-    binaural = engine.audio.binaural.create(relative).from(synth).to(bus)
+    synth.panner.pan.value = pan
   }
 
   function destroySynth() {
-    const previousBinaural = binaural,
-      previousSynth = synth
+    const previousSynth = synth
 
     engine.audio.ramp.linear(synth.param.gain, engine.const.zeroGain, release)
 
     setTimeout(() => {
-      previousBinaural.destroy()
       previousSynth.stop()
     }, release * 1000)
 
-    binaural = null
     synth = null
   }
 
@@ -97,13 +94,12 @@ content.audio.underwater.proximity = (() => {
       fmodDepth,
       fmodFrequency,
       gain,
-      relative,
+      pan,
     } = calculateParameters(node)
-
-    binaural.update(relative)
 
     engine.audio.ramp.set(synth.filter.detune, detune)
     engine.audio.ramp.set(synth.filter.frequency, filterFrequency)
+    engine.audio.ramp.set(synth.panner.pan, pan)
     engine.audio.ramp.set(synth.param.amod.depth, amodDepth)
     engine.audio.ramp.set(synth.param.amod.frequency, amodFrequency)
     engine.audio.ramp.set(synth.param.detune, detune)

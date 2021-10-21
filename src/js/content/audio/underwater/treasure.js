@@ -22,6 +22,7 @@ content.audio.underwater.treasure = (() => {
       carrierGain: 2/3,
       carrierFrequency: f0,
       carrierType: 'sawtooth',
+      gain: engine.const.zeroGain,
       modDepth: -1/3,
       modFrequency: 1,
     }).shaped(
@@ -33,7 +34,10 @@ content.audio.underwater.treasure = (() => {
 
   function createMelodySynth() {
     melodySynth = engine.audio.synth.createFm({
+      carrierDetune: 0,
+      carrierFrequency: f1 * 2,
       carrierType: 'triangle',
+      gain: baseGain,
       modDepth: f2 / 2,
       modFrequency: f1 * 8.13,
       modType: 'triangle',
@@ -91,7 +95,7 @@ content.audio.underwater.treasure = (() => {
       melodySynth.param.gain.setValueAtTime(baseGain, now)
     }
 
-    melodySynth.param.gain.exponentialRampToValueAtTime(1, now + attack)
+    melodySynth.param.gain.linearRampToValueAtTime(1, now + attack)
     melodySynth.param.gain.exponentialRampToValueAtTime(baseGain * 2, now + attack + decay)
     melodySynth.param.gain.exponentialRampToValueAtTime(1, now + decay + attack)
     melodySynth.param.gain.exponentialRampToValueAtTime(baseGain, now + decay + release)

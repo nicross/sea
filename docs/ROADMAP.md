@@ -12,7 +12,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 
 #### Known issues
 - Stuck under surface when jumping at lower velocities
-- Audio crashes still occurring
 - HUD fades get stuck at >0% opacity
 
 ### v1.6.0: Life update

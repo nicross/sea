@@ -57,6 +57,8 @@ app.autosave = (() => {
   }
 })()
 
+content.pois.on('discover', () => app.autosave.trigger())
+
 content.treasure.on('collect', (treasure) => {
   const treasures = app.storage.getTreasures()
 

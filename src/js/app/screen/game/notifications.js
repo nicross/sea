@@ -15,10 +15,12 @@ app.screen.game.notifications = (() => {
     app.state.screen.on('enter-game', onEnterGame)
     app.state.screen.on('exit-game', onExitGame)
 
+    content.pois.on('worm', onPoisWorm)
     content.treasure.on('collect', onTreasureCollect)
   })
 
   function onEnterGame() {
+    // TODO: Rework to support multiple notification type settings
     isActive = app.settings.raw.notifyTreasure
 
     if (!isActive) {
@@ -67,6 +69,14 @@ app.screen.game.notifications = (() => {
   function onEngineStateReset() {
     queue.length = 0
     root.innerHTML = ''
+  }
+
+  function onPoisWorm(poi) {
+    queue.push(
+      app.utility.dom.toElement(
+        `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Cave Discovered</h1><p class="c-notification--body">${poi.name}</p></aside>`
+      )
+    )
   }
 
   function onTreasureCollect(treasure) {

@@ -6,10 +6,8 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 
 ### v1.5.0: Deep update
 - Add cave discoveries
-  - Add system for saving discovered caves
-  - Add naming system for caves in order of discovery (A->Z, AA->ZZ, etc. with NATO phonetic alphabet)
   - Add entries for discovered caves to fast travel screen
-  - Add notifications for when caves are discovered
+  - Add sound effect for when caves are discovered
   - Add toggle for cave notifications on Gameplay screen
   - Consider refactoring fast travel as content system debt
 - Polish

@@ -9,6 +9,7 @@ content.audio.sfx = (() => {
 })()
 
 engine.ready(() => {
+  content.pois.on('discover', () => content.audio.sfx.discoverPoi())
   content.treasure.on('collect', () => content.audio.sfx.collectTreasure())
 })
 
@@ -74,4 +75,8 @@ content.audio.sfx.collectTreasure = () => {
     when: now + 0.25,
     off: now + 2.25,
   })
+}
+
+content.audio.sfx.discoverPoi = () => {
+  // TODO
 }

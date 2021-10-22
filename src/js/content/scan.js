@@ -3,42 +3,61 @@ content.scan = (() => {
 
   let isCooldown = false
 
-  function mergeResults({
-    scan2d,
-    scan3d,
-  } = {}) {
+  function mergeWorms(results) {
+    // Collects worms and their entrances and exposes them in the results
+
+    const position = engine.position.getVector()
+
+    if (position.z > content.const.lightZone) {
+      results.wormEntrances = []
+      results.worms = []
+      return
+    }
+
     const maxDistance = content.scan.scan3d.maxDistance(),
-      position = engine.position.getVector(),
-      worms2d = [],
-      worms2dResults = []
+      wormEntrances = [],
+      worms = new Set(),
+      worms2d = new Set()
 
-    const hasWorm = (worm) => worms2d.includes(worm)
-
-    for (const stream of scan2d) {
-      for (const result of stream) {
-        if (result.isWormEntrance && !hasWorm(result.worm)) {
-          const distance = position.distance(result.wormPoint)
-
-          if (distance > maxDistance) {
-            continue
-          }
-
-          worms2d.push(result.worm)
-
-          worms2dResults.push({
-            ...result,
-            distance,
-            distanceRatio: distance / maxDistance,
-            relativeZ: result.wormPoint.z - position.z,
-            x: result.wormPoint.x,
-            y: result.wormPoint.y,
-            z: result.wormPoint.z,
-          })
-        }
+    // Collect worms scanned in 3D
+    for (const result of results.scan3d) {
+      if (result.isWorm) {
+        worms.add(result.worm)
       }
     }
 
-    scan3d.push(...worms2dResults)
+    // Collect worms scanned in 2D
+    // Transform their entrances (closest point intersecting floor) into 3D scan results
+    for (const stream of results.scan2d) {
+      for (const result of stream) {
+        if (!result.isWormEntrance || worms2d.has(result.worm)) {
+          continue
+        }
+
+        const distance = position.distance(result.wormPoint)
+
+        if (distance > maxDistance) {
+          continue
+        }
+
+        worms.add(result.worm)
+        worms2d.add(result.worm)
+
+        wormEntrances.push({
+          ...result,
+          distance,
+          distanceRatio: distance / maxDistance,
+          relativeZ: result.wormPoint.z - position.z,
+          x: result.wormPoint.x,
+          y: result.wormPoint.y,
+          z: result.wormPoint.z,
+        })
+      }
+    }
+
+    results.scan3d.push(...wormEntrances)
+    results.wormEntrances = wormEntrances
+    results.worms = [...worms]
   }
 
   return engine.utility.pubsub.decorate({
@@ -63,7 +82,7 @@ content.scan = (() => {
         scan3d: await this.scan3d.forward(),
       }
 
-      mergeResults(results)
+      mergeWorms(results)
 
       await minimum
       pubsub.emit('complete', results)
@@ -90,7 +109,7 @@ content.scan = (() => {
         scan3d: await this.scan3d.reverse(),
       }
 
-      mergeResults(results)
+      mergeWorms(results)
 
       await minimum
       pubsub.emit('complete', results)

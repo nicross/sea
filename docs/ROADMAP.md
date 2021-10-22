@@ -8,7 +8,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Add cave discoveries
   - Add entries for discovered caves to fast travel screen
   - Add sound effect for when caves are discovered
-  - Add toggle for cave notifications on Gameplay screen
   - Consider refactoring fast travel as content system debt
 - Polish
   - Scan results statistic not working

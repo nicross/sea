@@ -20,8 +20,7 @@ app.screen.game.notifications = (() => {
   })
 
   function onEnterGame() {
-    // TODO: Rework to support multiple notification type settings
-    isActive = app.settings.raw.notifyTreasure
+    isActive = app.settings.raw.notifyPoi || app.settings.raw.notifyTreasure
 
     if (!isActive) {
       return
@@ -72,6 +71,10 @@ app.screen.game.notifications = (() => {
   }
 
   function onPoisWorm(poi) {
+    if (!app.settings.raw.notifyPoi) {
+      return
+    }
+
     queue.push(
       app.utility.dom.toElement(
         `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Cave Discovered</h1><p class="c-notification--body">${poi.name}</p></aside>`
@@ -80,6 +83,10 @@ app.screen.game.notifications = (() => {
   }
 
   function onTreasureCollect(treasure) {
+    if (!app.settings.raw.notifyTreasure) {
+      return
+    }
+
     queue.push(
       app.utility.dom.toElement(
         `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Treasure Collected</h1><p class="c-notification--body">${treasure.name}</p><div class="c-notification--extra"><span aria-hidden="true" role="presentation">Value:</span> ${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aria-label="gold">g</abbr></div></aside>`

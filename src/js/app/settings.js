@@ -156,6 +156,14 @@ app.settings = (() => {
         content.audio.mixer.bus.music.setGain(computedValue)
       },
     },
+    notifyPoi: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: true,
+    },
+    notifyTreasure: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: true,
+    },
     pausedVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, 0, rawValue, 66666)),
       default: 0.5,
@@ -171,10 +179,6 @@ app.settings = (() => {
         const gain = computed.mainVolume * computed.pausedVolume
         engine.audio.ramp.linear(engine.audio.mixer.master.param.gain, gain, 1/8)
       },
-    },
-    notifyTreasure: {
-      compute: (rawValue) => Boolean(rawValue),
-      default: true,
     },
     reverbOn: {
       compute: (rawValue) => Boolean(rawValue),

@@ -1,6 +1,4 @@
 app.screen.gameplay = (() => {
-  const sliders = []
-
   let root
 
   app.ready(() => {
@@ -54,6 +52,7 @@ app.screen.gameplay = (() => {
 
   function hydrateToggles() {
     [
+      ['.a-gameplay--notifyPoi', app.settings.raw.notifyPoi, app.settings.setNotifyPoi],
       ['.a-gameplay--notifyTreasure', app.settings.raw.notifyTreasure, app.settings.setNotifyTreasure],
       ['.a-gameplay--treasureHints', app.settings.raw.treasureHints, app.settings.setTreasureHints],
     ].forEach(([selector, initialValue, setter]) => {

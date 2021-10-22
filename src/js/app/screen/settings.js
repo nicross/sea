@@ -64,10 +64,12 @@ app.screen.settings = (() => {
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
 
+    const hasPois = app.stats.pois.count() > 0
+
     const hasTreasures = app.storage.getTreasures().length > 0
       || content.treasure.any().length > 0
 
-    root.querySelector('.a-settings--action-gameplay').hidden = !hasTreasures
+    root.querySelector('.a-settings--action-gameplay').hidden = !hasPois && !hasTreasures
   }
 
   function onExit() {

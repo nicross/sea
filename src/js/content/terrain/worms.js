@@ -93,7 +93,7 @@ content.terrain.worms = (() => {
     },
     chunks: () => [...chunks],
     find: (...args) => pointTree.find(...args),
-    isInside: function (x, y, z, radius = engine.const.zero) {
+    getInside: function (x, y, z, radius = engine.const.zero) {
       const from = engine.utility.vector3d.create({x, y, z}),
         searchRadius = maxWormRadius + radius
 
@@ -108,11 +108,12 @@ content.terrain.worms = (() => {
 
       for (const point of points) {
         if (from.distance(point) <= (point.radius + radius)) {
-          return true
+          return point
         }
       }
-
-      return false
+    },
+    isInside: function (...args) {
+      return Boolean(this.getInside(...args))
     },
     import: function () {
       streamChunks()

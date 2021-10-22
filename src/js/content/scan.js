@@ -3,6 +3,44 @@ content.scan = (() => {
 
   let isCooldown = false
 
+  function mergeResults({
+    scan2d,
+    scan3d,
+  } = {}) {
+    const maxDistance = content.scan.scan3d.maxDistance(),
+      position = engine.position.getVector(),
+      worms2d = [],
+      worms2dResults = []
+
+    const hasWorm = (worm) => worms2d.includes(worm)
+
+    for (const stream of scan2d) {
+      for (const result of stream) {
+        if (result.isWormEntrance && !hasWorm(result.worm)) {
+          const distance = position.distance(result.wormPoint)
+
+          if (distance > maxDistance) {
+            continue
+          }
+
+          worms2d.push(result.worm)
+
+          worms2dResults.push({
+            ...result,
+            distance,
+            distanceRatio: distance / maxDistance,
+            relativeZ: result.wormPoint.z - position.z,
+            x: result.wormPoint.x,
+            y: result.wormPoint.y,
+            z: result.wormPoint.z,
+          })
+        }
+      }
+    }
+
+    scan3d.push(...worms2dResults)
+  }
+
   return engine.utility.pubsub.decorate({
     benchmark: async function () {
       const start = performance.now()
@@ -25,13 +63,7 @@ content.scan = (() => {
         scan3d: await this.scan3d.forward(),
       }
 
-      for (const stream of results.scan2d) {
-        for (const result of stream) {
-          if (result.isWorm) {
-            results.scan3d.push(result)
-          }
-        }
-      }
+      mergeResults(results)
 
       await minimum
       pubsub.emit('complete', results)
@@ -57,6 +89,8 @@ content.scan = (() => {
         scan2d: await this.scan2d.reverse(),
         scan3d: await this.scan3d.reverse(),
       }
+
+      mergeResults(results)
 
       await minimum
       pubsub.emit('complete', results)

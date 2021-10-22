@@ -25,13 +25,20 @@ content.scan.scan3d = (() => {
       isSolid = content.terrain.voxels.get({x, y, z}).isSolid
     } while (!isSolid && ((distance + stepDistance) <= maxDistance))
 
+    const wormPoint = isSolid
+      ? content.terrain.worms.getInside(x, y, z, 1)
+      : undefined
+
     return {
       distance,
       distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
       isSolid,
-      isWorm: content.terrain.worms.isInside(x, y, z, 1),
+      isWorm: Boolean(wormPoint),
+      isWormEntrance: false,
       remember: isSolid,
       relativeZ: z - position.z,
+      worm: wormPoint ? wormPoint.worm : undefined,
+      wormPoint,
       x,
       y,
       z,

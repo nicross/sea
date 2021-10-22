@@ -187,4 +187,11 @@ content.terrain.worms.worm.prototype = {
 
     return this
   },
+  getId: function () {
+    return [
+      this.chunk.x,
+      this.chunk.y,
+      this.index,
+    ].join(',')
+  },
 }

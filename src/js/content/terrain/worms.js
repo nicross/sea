@@ -38,7 +38,7 @@ content.terrain.worms = (() => {
     chunks.push(chunk)
     chunkTree.insert(chunk)
 
-    return chunk.ready
+    return chunk
   }
 
   function getChunk(x, y) {
@@ -93,6 +93,11 @@ content.terrain.worms = (() => {
     },
     chunks: () => [...chunks],
     find: (...args) => pointTree.find(...args),
+    getWithId: (id) => {
+      const [x, y, index] = id.split(',')
+      const chunk = getChunk(x, y) || createChunk({x, y})
+      return chunk.worms[index]
+    },
     getInside: function (x, y, z, radius = engine.const.zero) {
       const from = engine.utility.vector3d.create({x, y, z}),
         searchRadius = maxWormRadius + radius

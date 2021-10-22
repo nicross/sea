@@ -15,11 +15,15 @@ content.terrain.worms.chunk.prototype = {
     this.x = x
     this.y = y
 
-    this.ready = content.utility.async.schedule(() => this.generate())
+    this.generate()
+
+    this.ready = Promise.all(
+      this.worms.map((worm) => worm.ready)
+    )
 
     return this
   },
-  generate: async function () {
+  generate: function () {
     // Determine worm count
     // XXX: Special case for chunk at origin, generate an unusual number of worms
     const isOrigin = !this.x && !this.y,
@@ -36,7 +40,6 @@ content.terrain.worms.chunk.prototype = {
         index,
       })
 
-      await worm.ready
       this.worms.push(worm)
     }
 

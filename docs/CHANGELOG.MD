@@ -42,7 +42,8 @@
         <li>Added cues for discovered worm-like caves</li>
         <li>Added occlusion filtering to treasure when behind terrain</li>
         <li>Added proximity cues to the nearest scanned terrain</li>
-        <li>Added unique cue for scanner result directly ahead</li>
+        <li>Added unique cue for directly ahead scanner results</li>
+        <li>Added unique cue for scanned cave entrances</li>
         <li>Remixed scanner audio sequence to support two-dimensional scans</li>
         <li>Reworked terrain frequency selection to communicate relative height</li>
         <li>Reworked pitch and timing of three-dimensional sonification cues</li>

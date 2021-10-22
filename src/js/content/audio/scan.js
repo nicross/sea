@@ -105,23 +105,25 @@ content.audio.scan = (() => {
     results.sort((a, b) => a.distanceRatio - b.distanceRatio)
 
     for (const result of results) {
-      if (!result.isSolid) {
+      if (!result.isSolid && !result.isWormEntrance) {
         continue
       }
 
       const when = now + engine.utility.lerp(0, content.const.scanCooldown, result.distanceRatio)
 
-      if (when <= nextWhen) {
+      if (when <= nextWhen && !result.isWormEntrance) {
         continue
       }
 
       render3dGrain({
         result,
-        type: result.isWorm ? 'square' : 'sine',
+        type: result.isWormEntrance ? 'triangle' : (result.isWorm ? 'square' : 'sine'),
         when,
       })
 
-      nextWhen = when + throttleTime
+      if (!result.isWormEntrance) {
+        nextWhen = when + throttleTime
+      }
     }
   }
 
@@ -139,6 +141,7 @@ content.audio.scan = (() => {
       sawtooth: 8,
       sine: 1,
       square: 1,
+      triangle: 2,
     }
 
     // Create synth
@@ -160,8 +163,11 @@ content.audio.scan = (() => {
     synth.panner.pan.value = Math.sin(Math.atan2(-relative.y, relative.x))
 
     // Automate
-    const duration = 1/16,
-      gain = (1 - result.distanceRatio) ** 4
+    const duration = result.isWormEntrance
+      ? engine.utility.scale(result.wormPoint.radius, 0, content.scan.scan3d.maxDistance(), 0, content.const.scanCooldown)
+      : 1/16
+
+    const gain = (1 - result.distanceRatio) ** 4 || engine.const.zeroGain
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
     synth.param.gain.exponentialRampToValueAtTime(gain, when + duration/4)

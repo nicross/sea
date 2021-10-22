@@ -71,6 +71,7 @@ app.screen.stats = (() => {
     const fastTravels = app.stats.fastTravels.get(),
       maxDepth = app.stats.maxDepth.get(),
       maxDistance = app.stats.maxDistance.get(),
+      poiTypes = app.stats.pois.types(),
       scanResults = app.stats.scanResults.get(),
       scans = app.stats.scans.get(),
       timeAir = app.stats.timeAir.get(),
@@ -96,6 +97,7 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--row-timeIdle').hidden = !timeIdle
     root.querySelector('.a-stats--row-timeSurface').hidden = !timeAir && !timeCaving && !timeUnderwater
     root.querySelector('.a-stats--row-timeUnderwater').hidden = !timeUnderwater
+    root.querySelector('.a-stats--row-worms').hidden = !poiTypes.worm
 
     root.querySelector('.a-stats--metric-gallery').innerHTML = app.utility.format.number(galleryValue)
     root.querySelector('.a-stats--metric-fastTravels').innerHTML = app.utility.format.number(fastTravels)
@@ -112,6 +114,7 @@ app.screen.stats = (() => {
     root.querySelector('.a-stats--metric-totalDistance').innerHTML = app.utility.format.number(totalDistance)
     root.querySelector('.a-stats--metric-totalTime').innerHTML = app.utility.format.time(totalTime)
     root.querySelector('.a-stats--metric-treasures').innerHTML = app.utility.format.number(treasuresCollected)
+    root.querySelector('.a-stats--metric-worms').innerHTML = app.utility.format.number(poiTypes.worm)
   }
 
   return {}

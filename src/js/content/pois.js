@@ -17,6 +17,7 @@ content.pois = (() => {
   }
 
   return engine.utility.pubsub.decorate({
+    all: () => [...pois],
     export: () => [...pois],
     import: function (data = []) {
       for (const poi of data) {
@@ -29,6 +30,7 @@ content.pois = (() => {
 
       return this
     },
+    ofType: (type) => pois.filter((poi) => poi.type == type),
     onScanRecharge: function ({
       worms: scannedWorms = [],
     }) {

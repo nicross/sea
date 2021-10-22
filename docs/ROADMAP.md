@@ -11,6 +11,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
   - Add toggle for cave notifications on Gameplay screen
   - Consider refactoring fast travel as content system debt
 - Polish
+  - Scan results statistic not working
   - Revise manual
   - Review update script
 

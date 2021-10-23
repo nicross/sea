@@ -36,8 +36,6 @@ content.scan.scan2d = (() => {
 
       const isWormPoint = Boolean(wormPoint)
 
-      console.log(isFloor)
-
       results.push({
         distance: d,
         distanceRatio: d / maxDistance,

@@ -138,14 +138,17 @@ content.audio.underwater.nodes = (() => {
       return this
     },
     update: function () {
-      const maxProps = app.settings.computed.streamerLimit
-
       cleanupProps()
 
       const count = activeNodes.size,
-        isMuted = content.audio.mixer.bus.music.isMuted()
+        maxProps = app.settings.computed.streamerLimit
 
-      if (isMuted || count >= maxProps || !content.terrain.worms.isReady()) {
+      const shouldRoll = count < maxProps
+        && !content.audio.mixer.bus.music.isMuted()
+        && content.utility.altimeter.isCloserToFloor()
+        && content.terrain.worms.isReady()
+
+      if (!shouldRoll) {
         return this
       }
 
@@ -158,6 +161,8 @@ content.audio.underwater.nodes = (() => {
       if (roll < chance) {
         generateProp(velocity)
       }
+
+      return this
     },
   }
 })()

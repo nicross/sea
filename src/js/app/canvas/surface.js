@@ -4,10 +4,9 @@ app.canvas.surface = (() => {
     cullCone = app.utility.cone.create(),
     main = app.canvas,
     maxDrawDistance = 75,
-    shimmerField = engine.utility.simplex3d.create('shimmer'),
-    shimmerScaleX = 1 / engine.utility.simplex3d.prototype.skewFactor,
-    shimmerScaleY = 1 / engine.utility.simplex3d.prototype.skewFactor,
-    shimmerScaleZ = 0.5 / engine.utility.simplex3d.prototype.skewFactor
+    noiseField = engine.utility.simplex3d.create('noise'),
+    noiseMagnitude = 1/16,
+    shimmerField = engine.utility.simplex3d.create('shimmer')
 
   const gridCache = engine.utility.octree.create({
     depth: maxDrawDistance * 2,
@@ -29,7 +28,9 @@ app.canvas.surface = (() => {
     }
   }
 
-  content.utility.ephemeralNoise.manage(shimmerField)
+  content.utility.ephemeralNoise
+    .manage(noiseField)
+    .manage(shimmerField)
 
   main.on('resize', () => {
     const height = main.height(),
@@ -81,6 +82,7 @@ app.canvas.surface = (() => {
       }
 
       global.z = content.surface.value(global.x, global.y) - engine.const.positionRadius/2
+      global.z += noiseMagnitude * noiseField.value(global.x, global.y, time)
       distance = global.distance(position)
 
       // Optimization: only draw within draw distance (again)
@@ -101,7 +103,7 @@ app.canvas.surface = (() => {
         alphaRatio = engine.utility.scale(distance, 0, drawDistance, 1, 0),
         radiusRatio = engine.utility.scale(distance, 0, maxDrawDistance, 1, 0),
         radius = engine.utility.lerpExp(1, nodeRadius, radiusRatio, 12),
-        shimmer = getShimmer(global.x, global.y, time)
+        shimmer = shimmerField.value(global.x, global.y, time)
 
       const alpha = engine.utility.clamp(color.a * engine.utility.lerp(0, 2, shimmer), 0, 1) * (alphaRatio ** 0.666) * alphaProximityAttenuation
 
@@ -130,14 +132,6 @@ app.canvas.surface = (() => {
     color.s *= 100
 
     return color
-  }
-
-  function getShimmer(x, y, time) {
-    x /= shimmerScaleX
-    y /= shimmerScaleY
-    time /= shimmerScaleZ
-
-    return shimmerField.value(x, y, time)
   }
 
   function shouldDraw() {

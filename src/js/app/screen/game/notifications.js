@@ -15,7 +15,7 @@ app.screen.game.notifications = (() => {
     app.state.screen.on('enter-game', onEnterGame)
     app.state.screen.on('exit-game', onExitGame)
 
-    content.pois.on('worm', onPoisWorm)
+    content.pois.on('discover', onPoisDiscover)
     content.treasure.on('collect', onTreasureCollect)
   })
 
@@ -70,14 +70,14 @@ app.screen.game.notifications = (() => {
     root.innerHTML = ''
   }
 
-  function onPoisWorm(poi) {
+  function onPoisDiscover(poi) {
     if (!app.settings.raw.notifyPoi) {
       return
     }
 
     queue.push(
       app.utility.dom.toElement(
-        `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Cave Discovered</h1><p class="c-notification--body">${poi.name}</p></aside>`
+        `<aside class="a-game--notification c-notification c-notification-treasure"><h1 class="c-notification--title">Location Discovered</h1><p class="c-notification--body">${poi.name}</p></aside>`
       )
     )
   }

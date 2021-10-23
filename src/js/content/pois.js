@@ -8,7 +8,7 @@ content.pois = (() => {
 
     return {
       id: worm.getId(),
-      name: content.utility.nato.fromNumber(wormIds.size + 1),
+      name: `Cave ${content.utility.nato.fromNumber(wormIds.size + 1)}`,
       type: 'worm',
       x: first.x,
       y: first.y,
@@ -48,7 +48,6 @@ content.pois = (() => {
         wormIds.add(id)
 
         pubsub.emit('discover', poi)
-        pubsub.emit('worm', poi)
       }
 
       return this

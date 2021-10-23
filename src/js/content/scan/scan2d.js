@@ -4,9 +4,10 @@ content.scan.scan2d = (() => {
     unitX = engine.utility.vector2d.unitX()
 
   function doRaytrace(position, plane, direction) {
-    const results = []
+    const isFloor = plane === content.terrain.floor,
+      results = []
 
-    let {
+    const {
       x: dx,
       y: dy,
     } = direction
@@ -29,11 +30,13 @@ content.scan.scan2d = (() => {
         scanY = content.terrain.voxels.snapValue(y + (variance * py)),
         scanZ = content.terrain.voxels.snapValue(plane.value(scanX, scanY))
 
-      const wormPoint = plane === content.terrain.floor
+      const wormPoint = isFloor
         ? content.terrain.worms.getInside(scanX, scanY, scanZ, 1)
         : undefined
 
       const isWormPoint = Boolean(wormPoint)
+
+      console.log(isFloor)
 
       results.push({
         distance: d,
@@ -55,15 +58,9 @@ content.scan.scan2d = (() => {
   }
 
   function getPlane() {
-    const {z} = engine.position.getVector()
-
-    if (z > content.const.lightZone / 2) {
-      return content.surface
-    }
-
-    if (z < content.const.lightZone) {
-      return content.terrain.floor
-    }
+    return content.utility.altimeter.isCloserToSurface()
+      ? content.surface
+      : content.terrain.floor
   }
 
   async function scanForward(plane) {

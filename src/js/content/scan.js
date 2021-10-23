@@ -4,8 +4,12 @@ content.scan = (() => {
   let isCooldown = false
 
   function mergeWorms(results) {
-    // Collects worms and their entrances and exposes them in the results
+    // Optimization: Ignore when scanning surface
+    if (!results.isFloor) {
+      return
+    }
 
+    // Collects worms and their entrances and exposes them in the results
     const position = engine.position.getVector()
 
     if (position.z > content.const.lightZone) {
@@ -72,12 +76,20 @@ content.scan = (() => {
         return this
       }
 
+      const trigger = {
+        isFloor: content.utility.altimeter.isCloserToFloor(),
+        isForward: true,
+        isReverse: false,
+        isSurface: content.utility.altimeter.isCloserToSurface(),
+      }
+
       isCooldown = true
-      pubsub.emit('trigger', {forward: true})
+      pubsub.emit('trigger', {...trigger})
 
       const minimum = engine.utility.timing.promise(content.const.scanMinimum * 1000)
 
       const results = {
+        ...trigger,
         scan2d: await this.scan2d.forward(),
         scan3d: await this.scan3d.forward(),
       }
@@ -99,12 +111,20 @@ content.scan = (() => {
         return this
       }
 
+      const trigger = {
+        isFloor: content.utility.altimeter.isCloserToFloor(),
+        isForward: false,
+        isReverse: true,
+        isSurface: content.utility.altimeter.isCloserToSurface(),
+      }
+
       isCooldown = true
-      pubsub.emit('trigger', {reverse: true})
+      pubsub.emit('trigger', {...trigger})
 
       const minimum = engine.utility.timing.promise(content.const.scanMinimum * 1000)
 
       const results = {
+        ...trigger,
         scan2d: await this.scan2d.reverse(),
         scan3d: await this.scan3d.reverse(),
       }

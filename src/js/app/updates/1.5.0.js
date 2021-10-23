@@ -39,6 +39,11 @@ app.updates.register('1.5.0-beta', () => {
       settings.streamerRadius = app.updates.rescaleSetting(settings.streamerRadius, 25, 100, 5)
     }
 
+    if ('treasureHints' in settings) {
+      settings.graphicsHudTreasureOn = settings.treasureHints
+      delete settings.treasureHints
+    }
+
     app.storage.setSettings(settings)
   }
 })

@@ -54,7 +54,6 @@ app.screen.gameplay = (() => {
     [
       ['.a-gameplay--notifyPoi', app.settings.raw.notifyPoi, app.settings.setNotifyPoi],
       ['.a-gameplay--notifyTreasure', app.settings.raw.notifyTreasure, app.settings.setNotifyTreasure],
-      ['.a-gameplay--treasureHints', app.settings.raw.treasureHints, app.settings.setTreasureHints],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValue()))
@@ -77,7 +76,6 @@ app.screen.gameplay = (() => {
       || content.treasure.any().length > 0
 
     root.querySelector('.a-gameplay--field-notifyTreasure').hidden = !hasTreasures
-    root.querySelector('.a-gameplay--field-treasureHints').hidden = !hasTreasures || !app.settings.computed.graphicsOn
   }
 
   function onExit() {

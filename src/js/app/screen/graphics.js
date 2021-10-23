@@ -108,6 +108,7 @@ app.screen.graphics = (() => {
       ['.a-graphics--hudCompassOn', app.settings.raw.graphicsHudCompassOn, app.settings.setGraphicsHudCompassOn],
       ['.a-graphics--hudCoordinatesOn', app.settings.raw.graphicsHudCoordinatesOn, app.settings.setGraphicsHudCoordinatesOn],
       ['.a-graphics--hudPitchOn', app.settings.raw.graphicsHudPitchOn, app.settings.setGraphicsHudPitchOn],
+      ['.a-graphics--hudTreasureOn', app.settings.raw.graphicsHudTreasureOn, app.settings.setGraphicsHudTreasureOn],
     ].forEach(([selector, initialValue, setter]) => {
       const component = app.component.toggle.hydrate(root.querySelector(selector), initialValue)
       component.on('change', () => setter(component.getValue()))
@@ -149,6 +150,11 @@ app.screen.graphics = (() => {
   function onEnter() {
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
+
+    const hasTreasures = app.storage.getTreasures().length > 0
+      || content.treasure.any().length > 0
+
+    root.querySelector('.a-graphics--field-hudTreasureOn').hidden = !hasTreasures
   }
 
   function onExit() {

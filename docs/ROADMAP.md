@@ -10,7 +10,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
   - Consider refactoring fast travel as content system debt
 - Polish
   - Scan results statistic not working
-  - Move toggle for Treasure Hints to Graphics screen, rename to HUD Treasure
   - Revise manual
   - Review update script
 

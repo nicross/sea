@@ -62,6 +62,7 @@ app.settings = (() => {
       },
     },
     graphicsHudCompassOn: {
+      compute: (rawValue) => Boolean(rawValue),
       default: true,
       update: () => {
         if (engine.loop.isPaused()) {
@@ -70,6 +71,7 @@ app.settings = (() => {
       },
     },
     graphicsHudCoordinatesOn: {
+      compute: (rawValue) => Boolean(rawValue),
       default: true,
       update: () => {
         if (engine.loop.isPaused()) {
@@ -86,6 +88,16 @@ app.settings = (() => {
       },
     },
     graphicsHudPitchOn: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: true,
+      update: () => {
+        if (engine.loop.isPaused()) {
+          app.canvas.forceUpdate()
+        }
+      },
+    },
+    graphicsHudTreasureOn: {
+      compute: (rawValue) => Boolean(rawValue),
       default: true,
       update: () => {
         if (engine.loop.isPaused()) {
@@ -204,15 +216,6 @@ app.settings = (() => {
     toggleTurbo: {
       compute: (rawValue) => Boolean(rawValue),
       default: true,
-    },
-    treasureHints: {
-      compute: (rawValue) => Boolean(rawValue),
-      default: true,
-      update: () => {
-        if (engine.loop.isPaused()) {
-          app.canvas.forceUpdate()
-        }
-      },
     },
   }
 

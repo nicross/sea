@@ -17,7 +17,7 @@ app.canvas.hud.treasure = (() => {
   })
 
   function draw({canvas, context}) {
-    if (!app.settings.computed.treasureHints) {
+    if (!app.settings.computed.graphicsHudTreasureOn) {
       return
     }
 

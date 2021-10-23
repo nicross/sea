@@ -44,6 +44,10 @@ content.exploration = (() => {
       return this
     },
     onScan: function (scan) {
+      if (!scan.isFloor) {
+        return this
+      }
+
       const results = [
         ...scan.scan2d.flat(),
         ...Object.values(scan.scan3d),
@@ -77,7 +81,7 @@ content.exploration = (() => {
 
 engine.ready(() => {
   content.movement.on('underwater-collision', ({voxel}) => content.exploration.onCollision(voxel))
-  content.scan.on('recharge', (scan) => content.exploration.onScan(scan))
+  content.scan.on('complete', (scan) => content.exploration.onScan(scan))
 })
 
 engine.state.on('export', (data) => data.exploration = content.exploration.export())

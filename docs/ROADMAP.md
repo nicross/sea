@@ -37,6 +37,7 @@ TBD
 - Scan animations
 - Godrays by day
 - Shooting stars by night
+- 4D oscillations of exploration node
 
 ### Plot
 - Abandoned alien labs

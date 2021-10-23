@@ -9,7 +9,10 @@ app.canvas.stars = (() => {
     depthCutoff = 1,
     firmament = 10000,
     main = app.canvas,
-    starTree = engine.utility.octree.create()
+    starTree = engine.utility.octree.create(),
+    twinkleField = engine.utility.simplex4d.create('twinkle')
+
+  content.utility.ephemeralNoise.manage(twinkleField)
 
   main.on('resize', () => {
     const height = main.height(),
@@ -46,6 +49,18 @@ app.canvas.stars = (() => {
     return cycleFactor * surfaceFactor
   }
 
+  function calculateHorizon() {
+    const cameraVector = app.canvas.camera.computedVector(),
+      positionForward = engine.position.getQuaternion().forward()
+
+    const screen = app.canvas.camera.toScreenFromGlobal({
+      ...cameraVector.add(positionForward.scale(firmament)),
+      z: 0,
+    })
+
+    return screen.y
+  }
+
   function calculateRadius() {
     const {z} = app.canvas.camera.computedVector()
     const surface = content.surface.current()
@@ -62,23 +77,14 @@ app.canvas.stars = (() => {
     return engine.utility.lerpExp(1, 16, scaled, 2)
   }
 
-  function calculateHorizon() {
-    const cameraVector = app.canvas.camera.computedVector(),
-      positionForward = engine.position.getQuaternion().forward()
-
-    const screen = app.canvas.camera.toScreenFromGlobal({
-      ...cameraVector.add(positionForward.scale(firmament)),
-      z: 0,
-    })
-
-    return screen.y
-  }
-
-  function calculateTwinkle(frequency, phase, depth) {
+  function calculateTwinkle(star, depth) {
     const time = content.time.time()
 
-    const amod = Math.sin((2 * Math.PI * frequency * time) + phase) ** 2
-    return (1 - depth) + (amod * depth)
+    const amod = Math.sin((2 * Math.PI * star.twinkleFrequency * time) + star.twinklePhase) ** 2
+    const value = (1 - depth) + (amod * depth)
+    const noise = twinkleField.value(star.x, star.y, star.z, time)
+
+    return value * engine.utility.lerp(0, 1, noise, 1/16)
   }
 
   function calculateTwinkleDepth() {
@@ -127,14 +133,6 @@ app.canvas.stars = (() => {
     context.fillStyle = '#FFFFFF'
 
     for (const star of stars) {
-      // Calculate star alpha
-      let alpha = star.alpha * globalAlpha * calculateTwinkle(star.twinkleFrequency, star.twinklePhase, twinkleDepth)
-
-      // Optimization: Skip when invisible
-      if (alpha <= 0) {
-        continue
-      }
-
       // Convert to screen space
       const screen = app.canvas.camera.toScreenFromGlobal(
         star.vector.rotateQuaternion(globalRotation).add(cameraVector)
@@ -145,15 +143,15 @@ app.canvas.stars = (() => {
         continue
       }
 
-      // Optimization: Skip if below horizon
-      if (screen.y > horizon) {
-        continue
-      }
+      // Calculate star alpha
+      let alpha = star.alpha * globalAlpha
 
       // Fade when close to horizon
       if (screen.y > horizon - horizonCutoff) {
-        alpha *= engine.utility.scale(screen.y, horizon - horizonCutoff, horizon, 1, 0)
+        alpha *= engine.utility.clamp(engine.utility.scale(screen.y, horizon - horizonCutoff, horizon, 1, 0), 0, 1)
       }
+
+      alpha *= calculateTwinkle(star, twinkleDepth)
 
       // Draw
       const radius = star.radius * globalRadius

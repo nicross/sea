@@ -17,14 +17,14 @@ content.audio.scan = (() => {
   lowpass2d.connect(notch2d)
   notch2d.connect(bus)
 
-  function honk() {
-    const root = rootFrequency
-
+  function honk(event) {
     const synth = engine.audio.synth.createFm({
-      carrierFrequency: root,
-      modDepth: root / 2,
-      modFrequency: root * 2,
+      carrierFrequency: rootFrequency,
+      modDepth: rootFrequency * 2.5,
+      modFrequency: rootFrequency * 2,
       modType: 'square',
+    }).filtered({
+      frequency: rootFrequency * (event.isForward ? 8 : 3),
     }).connect(bus)
 
     content.audio.reverb.from(synth.output)
@@ -38,14 +38,16 @@ content.audio.scan = (() => {
     synth.stop(now + 0.5)
   }
 
-  function render2d(results) {
-    render2dStream(results[0], 1)
-    render2dStream(results[1], 2/3)
-    render2dStream(results[2], 1/3)
-    render2dStream(results[3], 0)
-    render2dStream(results[4], -1/3)
-    render2dStream(results[5], -2/3)
-    render2dStream(results[6], -1)
+  function render2d({
+    scan2d: streams = [],
+  } = {}) {
+    render2dStream(streams[0], 1)
+    render2dStream(streams[1], 2/3)
+    render2dStream(streams[2], 1/3)
+    render2dStream(streams[3], 0)
+    render2dStream(streams[4], -1/3)
+    render2dStream(streams[5], -2/3)
+    render2dStream(streams[6], -1)
   }
 
   function render2dStream(stream, pan) {
@@ -84,8 +86,9 @@ content.audio.scan = (() => {
     synth.stop(when + duration)
   }
 
-  function render3d(results) {
-    const now = engine.audio.time()
+  function render3d(event) {
+    const now = engine.audio.time(),
+      results = [...event.scan3d]
 
     // First result
     const first = results.shift()
@@ -144,6 +147,12 @@ content.audio.scan = (() => {
       triangle: 2,
     }
 
+    const relative = engine.utility.vector3d.create(result)
+      .subtract(engine.position.getVector())
+      .rotateQuaternion(engine.position.getQuaternion().conjugate())
+
+    const shadow = Math.max(0, Math.cos(Math.atan2(relative.y, -relative.x)))
+
     // Create synth
     const synth = engine.audio.synth.createSimple({
       detune,
@@ -152,13 +161,8 @@ content.audio.scan = (() => {
       when,
     }).filtered({
       detune,
-      frequency: frequency * colors[type],
+      frequency: frequency * colors[type] * engine.utility.lerp(1, 0.5, shadow),
     }).chainAssign('panner', context.createStereoPanner()).connect(bus)
-
-    // Position synth in space
-    const relative = engine.utility.vector3d.create(result)
-      .subtract(engine.position.getVector())
-      .rotateQuaternion(engine.position.getQuaternion().conjugate())
 
     synth.panner.pan.value = Math.sin(Math.atan2(-relative.y, relative.x))
 
@@ -197,19 +201,19 @@ content.audio.scan = (() => {
   }
 
   return {
-    complete: function (results) {
-      render2d(results.scan2d)
-      render3d(results.scan3d)
+    complete: function (e) {
+      render2d(e)
+      render3d(e)
       return this
     },
-    trigger: function () {
-      honk()
+    trigger: function (e) {
+      honk(e)
       return this
     },
   }
 })()
 
 engine.ready(() => {
-  content.scan.on('complete', (results) => content.audio.scan.complete(results))
+  content.scan.on('complete', (e) => content.audio.scan.complete(e))
   content.scan.on('trigger', (e) => content.audio.scan.trigger(e))
 })

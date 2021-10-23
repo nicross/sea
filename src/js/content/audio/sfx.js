@@ -17,35 +17,35 @@ content.audio.sfx.collectTreasure = function () {
   const now = engine.audio.time()
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 57,
     when: now,
     off: now + 1/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 60,
     when: now + 1/16,
     off: now + 2 - 2/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 64,
     when: now + 2/16,
     off: now + 3/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 67,
     when: now + 3/16,
     off: now + 2 - 1/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 72,
     when: now + 4/16,
     off: now + 2,
@@ -56,42 +56,42 @@ content.audio.sfx.discoverPoi = function () {
   const now = engine.audio.time()
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 64,
     when: now,
     off: now + 2 - 2/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 57,
     when: now + 1/16,
     off: now + 2/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 60,
     when: now + 2/16,
     off: now + 2 - 1/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 62,
     when: now + 3/16,
     off: now + 4/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 69,
     when: now + 4/16,
     off: now + 5/16,
   })
 
   this.note({
-    gain: 1/16,
+    gain: 1/8,
     note: 67,
     when: now + 5/16,
     off: now + 2,

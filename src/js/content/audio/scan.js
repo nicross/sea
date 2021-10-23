@@ -1,7 +1,7 @@
 content.audio.scan = (() => {
   const bus = content.audio.mixer.bus.misc.createBypass(),
     context = engine.audio.context(),
-    rootFrequency = engine.utility.midiToFrequency(69)
+    rootFrequency = content.utility.rationalFrequency.fromMidi(69)
 
   const lowpass2d = context.createBiquadFilter(),
     notch2d = context.createBiquadFilter()

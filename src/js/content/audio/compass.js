@@ -1,6 +1,6 @@
 content.audio.compass = (() => {
   const bus = content.audio.mixer.createBus(),
-    frequency = engine.utility.midiToFrequency(81),
+    frequency = content.utility.rationalFrequency.fromMidi(81),
     tau = Math.PI * 2
 
   const roses = [

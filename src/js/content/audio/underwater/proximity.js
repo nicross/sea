@@ -4,7 +4,7 @@ content.audio.underwater.proximity = (() => {
     context = engine.audio.context(),
     radius = 10,
     release = 1/16,
-    rootFrequency = engine.utility.midiToFrequency(57)
+    rootFrequency = content.utility.rationalFrequency.fromMidi(57)
 
   let next,
     synth

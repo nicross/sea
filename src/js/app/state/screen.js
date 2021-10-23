@@ -16,31 +16,13 @@ app.state.screen = engine.utility.machine.create({
         this.change('gameMenu')
       },
       floor: function () {
-        // XXX: Hack for this.change('game')
-        // TODO: Improve app.state.game
-        this.dispatch('back')
-
-        window.requestAnimationFrame(() => {
-          this.dispatch('resume')
-        })
+        this.change('game')
       },
       origin: function () {
-        // XXX: Hack for this.change('game')
-        // TODO: Improve app.state.game
-        this.dispatch('back')
-
-        window.requestAnimationFrame(() => {
-          this.dispatch('resume')
-        })
+        this.change('game')
       },
       surface: function () {
-        // XXX: Hack for this.change('game')
-        // TODO: Improve app.state.game
-        this.dispatch('back')
-
-        window.requestAnimationFrame(() => {
-          this.dispatch('resume')
-        })
+        this.change('game')
       },
     },
     gallery: {

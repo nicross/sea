@@ -38,9 +38,15 @@ app.ready(() => {
   // Game state changes
   app.state.screen.on('before-game-pause', () => app.state.game.dispatch('pause'))
   app.state.screen.on('before-gameMenu-mainMenu', () => app.state.game.dispatch('exit'))
-  app.state.screen.on('before-gameMenu-resume', () => app.state.game.dispatch('resume'))
   app.state.screen.on('before-mainMenu-continue', () => app.state.game.dispatch('load'))
   app.state.screen.on('before-newGame-new', () => app.state.game.dispatch('new'))
+
+  // XXX: before-gameMenu-resume does not support directly changing to game screen, e.g. fast traveling
+  app.state.screen.on('enter-game', () => {
+    if (app.state.game.is('paused')) {
+      app.state.game.dispatch('resume')
+    }
+  })
 
   app.state.game.dispatch('activate')
 })

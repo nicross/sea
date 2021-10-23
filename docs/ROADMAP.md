@@ -7,7 +7,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.0: Deep update
 - Add cave discoveries
   - Add entries for discovered caves to fast travel screen
-  - Add sound effect for when caves are discovered
   - Consider refactoring fast travel as content system debt
 - Polish
   - Scan results statistic not working

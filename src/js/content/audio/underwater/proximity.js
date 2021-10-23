@@ -119,7 +119,10 @@ content.audio.underwater.proximity = (() => {
     },
     update: function () {
       const position = engine.position.getVector()
-      const node = content.exploration.find(position, radius)
+
+      const node = content.utility.altimeter.isCloserToFloor()
+        ? content.exploration.find(position, radius)
+        : undefined
 
       if (node) {
         if (synth) {

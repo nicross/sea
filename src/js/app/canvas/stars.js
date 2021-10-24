@@ -143,6 +143,12 @@ app.canvas.stars = (() => {
         continue
       }
 
+      // Optimization: Skip if below horizon
+      // TODO: cullPlaneHorizon should be handling this
+      if (screen.y > horizon) {
+        continue
+      }
+
       // Calculate star alpha
       let alpha = star.alpha * globalAlpha
 

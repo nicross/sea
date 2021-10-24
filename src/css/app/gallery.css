@@ -7,7 +7,7 @@
   }
   .a-gallery--items {
     list-style-type: none;
-    max-height: calc(3.25em * 4 + 0.5em);
+    max-height: calc(4 * 3.25em + 0.5em);
   }
   .a-gallery--items:focus-within .a-gallery--item,
   .a-gallery--items:hover .a-gallery--item {

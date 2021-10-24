@@ -1,6 +1,6 @@
 .a-fastTravel {}
   .a-fastTravel--data {
-    max-height: max-height: calc(3.25em * 4 + 0.5em);
+    max-height: max-height: calc(5 * 3.25em + 0.5em);
   }
   .a-fastTravel--name {
     border-right: 1px solid rgba(255, 255, 255, 0.25);

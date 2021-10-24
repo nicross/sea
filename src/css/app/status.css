@@ -1,7 +1,7 @@
 .a-status {}
   .a-status--data {
     list-style-type: none;
-    max-height: calc(2em * 5 + 0.5em);
+    max-height: calc(5 * 2em + 0.5em);
   }
   .a-status--table {
     border-collapse: collapse;

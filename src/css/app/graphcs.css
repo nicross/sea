@@ -1,5 +1,5 @@
 .a-graphics--fields {
-  max-height: calc(4 * 3.25em + 0.5em);
+  max-height: calc(5 * 3.25em + 0.5em);
 }
 .a-graphics--subfields {
   filter: grayscale(0);

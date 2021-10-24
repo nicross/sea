@@ -15,13 +15,7 @@ app.state.screen = engine.utility.machine.create({
       back: function () {
         this.change('gameMenu')
       },
-      floor: function () {
-        this.change('game')
-      },
-      origin: function () {
-        this.change('game')
-      },
-      surface: function () {
+      select: function () {
         this.change('game')
       },
     },
@@ -203,77 +197,4 @@ app.state.screen.on('enter', (e) => {
   window.requestAnimationFrame(() => {
     element.classList.add('a-app--screen-active')
   })
-})
-
-// Fast travel actions
-app.state.screen.on('before-fastTravel-floor', () => {
-  const position = engine.position.getVector()
-
-  const floor = content.terrain.floor.value(position.x, position.y),
-    velocity = content.const.underwaterTurboMaxVelocity
-
-  const next = engine.utility.vector3d.create({
-    ...position,
-    z: floor + velocity,
-  })
-
-  const distance = next.distance(position),
-    travelTime = distance / velocity
-
-  content.time.incrementOffset(travelTime)
-  engine.position.setVector(next)
-
-  content.movement.reset().import()
-  app.canvas.crossfade()
-
-  engine.position.setVelocity(
-    next.subtract(position).normalize().scale(velocity)
-  )
-
-  app.stats.fastTravels.increment()
-})
-
-app.state.screen.on('before-fastTravel-origin', () => {
-  const position = engine.position.getVector()
-
-  const travelTime = (engine.utility.distance({...position, z: 0}) / content.const.surfaceTurboMaxVelocity)
-    + (position.z / content.const.underwaterTurboMaxVelocity)
-
-  const next = engine.utility.vector3d.create({
-    z: -engine.const.zero,
-  })
-
-  engine.position.setVector(next)
-  content.time.incrementOffset(travelTime)
-
-  content.movement.reset().import()
-  app.canvas.crossfade()
-
-  app.stats.fastTravels.increment()
-})
-
-app.state.screen.on('before-fastTravel-surface', () => {
-  const position = engine.position.getVector(),
-    velocity = content.const.underwaterTurboMaxVelocity
-
-  const distance = Math.abs(position.z),
-    travelTime = distance / velocity
-
-  content.time.incrementOffset(travelTime)
-
-  const next = engine.utility.vector3d.create({
-    ...position,
-    z: content.surface.value(position.x, position.y) - (velocity / 6),
-  })
-
-  engine.position.setVector(next)
-
-  content.movement.reset().import()
-  app.canvas.crossfade()
-
-  engine.position.setVelocity(
-    next.subtract(position).normalize().scale(velocity / 2)
-  )
-
-  app.stats.fastTravels.increment()
 })

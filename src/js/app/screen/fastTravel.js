@@ -1,23 +1,37 @@
 app.screen.fastTravel = (() => {
-  let root
+  const destinations = [],
+    pois = new Set()
+
+  let root,
+    table
 
   app.ready(() => {
     root = document.querySelector('.a-fastTravel')
+    table = root.querySelector('.a-fastTravel--table')
 
     app.state.screen.on('enter-fastTravel', onEnter)
     app.state.screen.on('exit-fastTravel', onExit)
+    engine.state.on('reset', onReset)
 
     Object.entries({
       back: root.querySelector('.a-fastTravel--back'),
-      floor: root.querySelector('.a-fastTravel--floor'),
-      origin: root.querySelector('.a-fastTravel--origin'),
-      surface: root.querySelector('.a-fastTravel--surface'),
     }).forEach(([event, element]) => {
       element.addEventListener('click', () => app.state.screen.dispatch(event))
     })
 
     app.utility.focus.trap(root)
+
+    prepopulate()
   })
+
+  function addDestination(...args) {
+    const destination = app.component.destination.create(...args).attach(table)
+
+    destination.on('click', onDestinationClick.bind(destination))
+    destinations.push(destination)
+
+    return destination
+  }
 
   function canFloor() {
     return app.storage.getTreasures().length > 0
@@ -29,8 +43,23 @@ app.screen.fastTravel = (() => {
     return position.x || position.y
   }
 
+  function canSelectDestination() {
+    return content.pois.count() > 0
+  }
+
   function canSurface() {
     return engine.position.getVector().z < 0
+  }
+
+  function clear() {
+    for (const destination of destinations) {
+      destination.destroy()
+    }
+
+    destinations.length = 0
+    pois.clear()
+
+    prepopulate()
   }
 
   function handleControls() {
@@ -69,24 +98,93 @@ app.screen.fastTravel = (() => {
     }
   }
 
+  function onDestinationClick() {
+    app.state.screen.dispatch('select', this.data)
+  }
+
   function onEngineLoopFrame(e) {
     handleControls(e)
   }
 
   function onEnter() {
+    updateItems()
+
+    root.querySelector('.a-fastTravel--data').scrollTop = 0
+
     engine.loop.on('frame', onEngineLoopFrame)
     app.utility.focus.setWithin(root)
-
-    root.querySelector('.a-fastTravel--action-floor').hidden = !canFloor()
-    root.querySelector('.a-fastTravel--action-origin').hidden = !canOrigin()
-    root.querySelector('.a-fastTravel--action-surface').hidden = !canSurface()
   }
 
   function onExit() {
     engine.loop.off('frame', onEngineLoopFrame)
   }
 
+  function onReset() {
+    clear()
+  }
+
+  function prepopulate() {
+    addDestination({
+      name: 'Ascend to Surface',
+      type: 'surface',
+    }, {
+      beforeUpdate: function () {
+        const position = engine.position.getVector()
+
+        this.data.x = position.x
+        this.data.y = position.y
+        this.data.z = -engine.const.zero
+
+        this.setHidden(!canSurface())
+      },
+    })
+
+    addDestination({
+      name: 'Descend to Floor',
+      type: 'floor',
+    }, {
+      beforeUpdate: function () {
+        const position = engine.position.getVector()
+
+        this.data.x = position.x
+        this.data.y = position.y
+        this.data.z = content.terrain.floor.value(position.x, position.y)
+
+        this.setHidden(!canFloor())
+      },
+    })
+
+    addDestination({
+      name: 'Origin',
+      type: 'origin',
+      x: 0,
+      y: 0,
+      z: 0,
+    }, {
+      beforeUpdate: function () {
+        this.setHidden(!canOrigin())
+      },
+    })
+  }
+
+  function updateItems() {
+    for (const destination of destinations) {
+      destination.update()
+    }
+
+    for (const poi of content.pois.all()) {
+      if (pois.has(poi)) {
+        continue
+      }
+
+      addDestination(poi)
+      pois.add(poi)
+    }
+  }
+
   return {
-    hasOptions: () => canFloor() || canOrigin() || canSurface(),
+    hasOptions: function () {
+      return canFloor() || canOrigin() || canSelectDestination() || canSurface()
+    },
   }
 })()

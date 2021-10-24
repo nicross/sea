@@ -5,9 +5,6 @@ This document outlines upcoming changes for post-jam releases leading up to the 
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
 ### v1.5.0: Deep update
-- Add cave discoveries
-  - Add entries for discovered caves to fast travel screen
-  - Consider refactoring fast travel as content system debt
 - Polish
   - Scan results statistic not working
   - Revise manual

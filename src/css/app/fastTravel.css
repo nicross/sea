@@ -1,0 +1,33 @@
+.a-fastTravel {}
+  .a-fastTravel--data {
+    max-height: max-height: calc(3.25em * 4 + 0.5em);
+  }
+  .a-fastTravel--name {
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  .a-fastTravel--table {
+    border-collapse: collapse;
+    display: block;
+    margin: -0.5em;
+  }
+  .a-fastTravel--table td {
+    padding: 0.5em;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .a-fastTravel--table th {
+    padding: 0.5em;
+    text-align: left;
+    width: 100%;
+  }
+  .a-fastTravel--table tr {
+    transition: opacity 0.25s ease;
+  }
+  .a-fastTravel--table:focus-within tr,
+  .a-fastTravel--table:hover tr {
+    opacity: 0.333;
+  }
+  .a-fastTravel--table:focus-within tr:focus,
+  .a-fastTravel--table:hover tr:hover {
+    opacity: 1;
+  }

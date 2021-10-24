@@ -18,6 +18,7 @@ content.pois = (() => {
 
   return engine.utility.pubsub.decorate({
     all: () => [...pois],
+    count: () => pois.length,
     export: () => [...pois],
     import: function (data = []) {
       for (const poi of data) {

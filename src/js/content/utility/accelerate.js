@@ -1,5 +1,13 @@
 content.utility.accelerate = {}
 
+content.utility.accelerate.stoppingDistance = (velocity, deceleration = 1) => {
+  if (velocity.distance) {
+    velocity = velocity.distance()
+  }
+
+  return (velocity ** 2) / (2 * deceleration)
+}
+
 content.utility.accelerate.value = (current, target, rate = 1) => {
   if (current == target) {
     return target

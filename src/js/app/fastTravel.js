@@ -17,8 +17,8 @@ app.fastTravel = (() => {
       surfaceToDestination = Math.max(0, destination.z) / content.const.underwaterTurboMaxVelocity
 
     return Math.min(...[
-      directUnderwater,
-      positionToSurface + surfaceTime + surfaceToDestination,
+      directUnderwater, // best for short distances
+      positionToSurface + surfaceTime + surfaceToDestination, // best for long distances
     ])
   }
 
@@ -26,8 +26,8 @@ app.fastTravel = (() => {
     const position = engine.position.getVector()
     const velocity = content.const.underwaterTurboMaxVelocity
 
-    // TODO: Calculate
-    const stoppingDistance = velocity * 2
+    // Stop slightly above floor
+    const stoppingDistance = content.utility.accelerate.stoppingDistance(velocity, content.const.normalDeceleration) + 4
 
     const next = engine.utility.vector3d.create({
       x: destination.x,
@@ -41,22 +41,31 @@ app.fastTravel = (() => {
     return {
       next,
       travelTime,
-      velocity: next.subtract(position).normalize().scale(velocity),
+      velocity: engine.utility.vector3d.unitZ().scale(-velocity),
     }
   }
 
   function toOrigin(destination) {
+    const velocity = content.const.underwaterTurboMaxVelocity
+    const stoppingDistance = content.utility.accelerate.stoppingDistance(velocity, content.const.normalDeceleration)
+
+    const next = engine.utility.vector3d.create({
+      x: destination.x,
+      y: destination.y,
+      z: destination.z - stoppingDistance,
+    })
+
     return {
-      next: destination,
-      velocity: engine.utility.vector3d.create(),
+      next,
+      velocity: engine.utility.vector3d.unitZ().scale(velocity),
     }
   }
 
   function toSurface(destination) {
     const velocity = content.const.underwaterTurboMaxVelocity
 
-    // TODO: Calculate
-    const stoppingDistance = velocity / 2
+    // Jump slightly out from water
+    const stoppingDistance = content.utility.accelerate.stoppingDistance(velocity, content.const.normalDeceleration) - 4
 
     const next = engine.utility.vector3d.create({
       x: destination.x,
@@ -71,9 +80,23 @@ app.fastTravel = (() => {
   }
 
   function toWorm(destination) {
+    const position = engine.position.getVector()
+    const velocity = content.const.underwaterTurboMaxVelocity
+    const stoppingDistance = content.utility.accelerate.stoppingDistance(velocity, content.const.normalDeceleration)
+
+    const next = engine.utility.vector3d.create({
+      x: destination.x,
+      y: destination.y,
+      z: destination.z + stoppingDistance,
+    })
+
+    const distance = next.distance(position),
+      travelTime = distance / velocity
+
     return {
-      next: destination,
-      velocity: engine.utility.vector3d.create(),
+      next,
+      travelTime,
+      velocity: engine.utility.vector3d.unitZ().scale(-velocity),
     }
   }
 

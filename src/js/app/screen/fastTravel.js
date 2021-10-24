@@ -34,13 +34,15 @@ app.screen.fastTravel = (() => {
   }
 
   function canFloor() {
+    const floor = content.terrain.floor.current()
+    const {z} = engine.position.getVector()
+
+    if (engine.utility.between(z, floor, floor + content.const.underwaterTurboMaxVelocity)) {
+      return false
+    }
+
     return app.storage.getTreasures().length > 0
       || content.exploration.export().length > 0
-  }
-
-  function canOrigin() {
-    const position = engine.position.getVector()
-    return position.x || position.y
   }
 
   function canSelectDestination() {
@@ -48,7 +50,8 @@ app.screen.fastTravel = (() => {
   }
 
   function canSurface() {
-    return engine.position.getVector().z < 0
+    const {z} = engine.position.getVector().z
+    return z < -content.const.underwaterTurboMaxVelocity
   }
 
   function clear() {
@@ -125,7 +128,7 @@ app.screen.fastTravel = (() => {
 
   function prepopulate() {
     addDestination({
-      name: 'Ascend to Surface',
+      name: 'Surface',
       type: 'surface',
     }, {
       beforeUpdate: function () {
@@ -140,7 +143,7 @@ app.screen.fastTravel = (() => {
     })
 
     addDestination({
-      name: 'Descend to Floor',
+      name: 'Floor',
       type: 'floor',
     }, {
       beforeUpdate: function () {
@@ -162,11 +165,7 @@ app.screen.fastTravel = (() => {
       x: 0,
       y: 0,
       z: 0,
-    }, {
-      beforeUpdate: function () {
-        this.setHidden(!canOrigin())
-      },
-    })
+    }, {})
   }
 
   function updateItems() {
@@ -186,7 +185,7 @@ app.screen.fastTravel = (() => {
 
   return {
     hasOptions: function () {
-      return canFloor() || canOrigin() || canSelectDestination() || canSurface()
+      return canFloor() || canSelectDestination() || canSurface()
     },
   }
 })()

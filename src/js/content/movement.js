@@ -422,14 +422,15 @@ content.movement = (() => {
     const velocity = engine.position.getVelocity()
 
     if (velocity.z > 0) {
-      engine.position.setVelocity(
-        velocity.subtract({z: velocity.z})
-      )
+      engine.position.setVelocity({
+        ...velocity,
+        z: 0,
+      })
     }
   })
 
   medium.on('before-jump', () => {
-    setZ(content.surface.current() + surfaceLeeway)
+
   })
 
   medium.on('before-land', (e) => {
@@ -448,16 +449,14 @@ content.movement = (() => {
   })
 
   medium.on('before-surface', () => {
-    // Glue to surface
-    setZ(content.surface.current())
-
     // Prevent negative z-velocity
     const velocity = engine.position.getVelocity()
 
     if (velocity.z < 0) {
-      engine.position.setVelocity(
-        velocity.subtract({z: velocity.z})
-      )
+      engine.position.setVelocity({
+        ...velocity,
+        z: 0,
+      })
     }
   })
 

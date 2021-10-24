@@ -11,7 +11,6 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
   - Review update script
 
 #### Known issues
-- Stuck under surface when jumping at lower velocities
 - Treasure spawn audio crashes, less frequent after 75bb93b
 - HUD fades get stuck at >0% opacity
 

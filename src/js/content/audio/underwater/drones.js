@@ -77,8 +77,12 @@ content.audio.underwater.drones = (() => {
   }
 
   function updateGain(z) {
-    const isAbove = z > content.const.midnightZoneMin,
-      isBelow = z <= content.const.midnightZoneMax
+    const floor = content.terrain.floor.current(),
+      min = floor,
+      max = content.const.lightZone
+
+    const isAbove = z > max,
+      isBelow = z < min
 
     if ((isAbove && wasAbove) || (isBelow && wasBelow)) {
       return
@@ -89,8 +93,8 @@ content.audio.underwater.drones = (() => {
     } else if (isBelow) {
       engine.audio.ramp.set(mix.gain, 1)
     } else {
-      const zScaled = engine.utility.scale(z, content.const.midnightZoneMin, content.const.midnightZoneMax, 0, 1)
-      const gain = engine.utility.lerpExp(engine.const.zeroGain, 1, zScaled, 3)
+      const zScaled = engine.utility.clamp(engine.utility.scale(z, max, min, 0, 1), 0, 1)
+      const gain = engine.utility.lerpExp(engine.const.zeroGain, 1, zScaled, 2)
       engine.audio.ramp.set(mix.gain, gain)
     }
 
@@ -125,7 +129,7 @@ content.audio.underwater.drones = (() => {
       const isMuted = content.audio.mixer.bus.music.isMuted()
       const {z} = engine.position.getVector()
 
-      if (isMuted || z >= content.const.midnightZoneMin) {
+      if (isMuted || z > content.const.lightZone) {
         if (synths.length) {
           destroySynths()
         }
@@ -145,12 +149,5 @@ content.audio.underwater.drones = (() => {
   }
 })()
 
-engine.loop.on('frame', ({paused}) => {
-  if (paused) {
-    return
-  }
-
-  content.audio.underwater.drones.update()
-})
-
+engine.loop.on('frame', () => content.audio.underwater.drones.update())
 engine.state.on('import', () => content.audio.underwater.drones.import())

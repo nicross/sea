@@ -30,7 +30,7 @@ app.canvas.light = (() => {
   function calculateOpacity() {
     const {z} = app.canvas.camera.computedVector()
 
-    if (z > zones.twilight) {
+    if (z >= zones.suface) {
       return app.settings.computed.graphicsDarkModeOn
        ? app.settings.computed.graphicsBacklightStrength
        : 1
@@ -40,7 +40,7 @@ app.canvas.light = (() => {
       return 0
     }
 
-    const value = engine.utility.scale(z, zones.twilight, zones.midnight, 1, 0)
+    const value = engine.utility.scale(z, zones.surface, zones.midnight, 1, 0)
 
     return app.settings.computed.graphicsDarkModeOn
      ? value * app.settings.computed.graphicsBacklightStrength

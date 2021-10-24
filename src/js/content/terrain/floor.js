@@ -50,6 +50,8 @@ content.terrain.floor = (() => {
     type: engine.utility.simplex2d,
   })
 
+  let current
+
   content.utility.ephemeralNoise
     .manage(amplitudeField)
     .manage(biomeXField)
@@ -68,6 +70,11 @@ content.terrain.floor = (() => {
   function exponentValue(x, y, scale = 1) {
     scale /= engine.utility.simplex2d.prototype.skewFactor
     return exponentField.value(x / scale, y / scale)
+  }
+
+  function cacheCurrent() {
+    const position = engine.position.getVector()
+    current = getValue(position.x, position.y)
   }
 
   function generateBiome(x, y) {
@@ -220,12 +227,30 @@ content.terrain.floor = (() => {
   }
 
   return {
+    current: function () {
+      if (current === undefined) {
+        cacheCurrent()
+      }
+
+      return current
+    },
     registerBiome: function (definition) {
       biomes[definition.name] = definition
       return this
     },
     reset: function () {
       cache.clear()
+      current = undefined
+
+      return this
+    },
+    update: function () {
+      const {z} = engine.position.getVector()
+
+      if (z < content.const.lightZone) {
+        cacheCurrent()
+      }
+
       return this
     },
     value: function (x, y) {
@@ -234,6 +259,7 @@ content.terrain.floor = (() => {
   }
 })()
 
+engine.loop.on('frame', () => content.terrain.floor.update())
 engine.state.on('reset', () => content.terrain.floor.reset())
 
 /*

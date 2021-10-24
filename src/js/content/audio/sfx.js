@@ -17,38 +17,38 @@ content.audio.sfx.collectTreasure = function () {
   const now = engine.audio.time()
 
   this.note({
+    duration: 1/16,
     gain: 1/8,
     note: 57,
     when: now,
-    off: now + 1/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 60,
     when: now + 1/16,
-    off: now + 2 - 2/16,
   })
 
   this.note({
+    duration: 1/16,
     gain: 1/8,
     note: 64,
     when: now + 2/16,
-    off: now + 3/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 67,
     when: now + 3/16,
-    off: now + 2 - 1/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 72,
     when: now + 4/16,
-    off: now + 2,
   })
 }
 
@@ -56,56 +56,57 @@ content.audio.sfx.discoverPoi = function () {
   const now = engine.audio.time()
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 64,
     when: now,
-    off: now + 2 - 2/16,
   })
 
   this.note({
+    duration: 1/16,
     gain: 1/8,
     note: 57,
     when: now + 1/16,
-    off: now + 2/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 60,
     when: now + 2/16,
-    off: now + 2 - 1/16,
   })
 
   this.note({
+    duration: 1/16,
     gain: 1/8,
     note: 62,
     when: now + 3/16,
-    off: now + 4/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 69,
     when: now + 4/16,
-    off: now + 5/16,
   })
 
   this.note({
+    duration: 2,
     gain: 1/8,
     note: 67,
     when: now + 5/16,
-    off: now + 2,
   })
 }
 
 content.audio.sfx.note = function ({
   attack = 1/32,
   color = 4,
-  duration = engine.const.zeroTime,
+  duration,
   gain = engine.const.zeroGain,
   note = 69,
   off,
   release = 1/8,
+  sustain,
   when = engine.audio.time(),
 }) {
   const frequency = content.utility.rationalFrequency.fromMidi(note)
@@ -118,14 +119,19 @@ content.audio.sfx.note = function ({
     frequency: frequency * color,
   }).connect(this.bus())
 
-  off = off || when + duration
+  if (duration) {
+    off = when + duration
+  } else if (off) {
+    duration = off - when
+  }
+
+  if (!sustain) {
+    sustain = engine.utility.lerpExp(gain, engine.const.zeroGain, (off - when - attack) / duration)
+  }
 
   synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
   synth.param.gain.exponentialRampToValueAtTime(gain, when + attack)
-
-  const endGain = engine.utility.lerpExp(gain, engine.const.zeroGain, (off - when - attack) / duration)
-
-  synth.param.gain.linearRampToValueAtTime(endGain, off)
+  synth.param.gain.linearRampToValueAtTime(sustain, off)
   synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, off + release)
 
   synth.stop(off + release)

@@ -50,7 +50,7 @@ app.screen.fastTravel = (() => {
   }
 
   function canSurface() {
-    const {z} = engine.position.getVector().z
+    const {z} = engine.position.getVector()
     return z < -content.const.underwaterTurboMaxVelocity
   }
 

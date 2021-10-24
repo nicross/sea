@@ -98,12 +98,16 @@ content.audio.sfx.discoverPoi = function () {
   })
 }
 
-content.audio.sfx.note = ({
-  gain,
-  note,
+content.audio.sfx.note = function ({
+  attack = 1/32,
+  color = 4,
+  duration = engine.const.zeroTime,
+  gain = engine.const.zeroGain,
+  note = 69,
   off,
-  when,
-}) => {
+  release = 1/8,
+  when = engine.audio.time(),
+}) {
   const frequency = content.utility.rationalFrequency.fromMidi(note)
 
   const synth = engine.audio.synth.createSimple({
@@ -111,18 +115,20 @@ content.audio.sfx.note = ({
     type: 'square',
     when,
   }).filtered({
-    frequency: frequency * 4,
-  }).connect(content.audio.sfx.bus())
+    frequency: frequency * color,
+  }).connect(this.bus())
+
+  off = off || when + duration
 
   synth.param.gain.setValueAtTime(engine.const.zeroGain, when)
-  synth.param.gain.exponentialRampToValueAtTime(gain, when + 1/32)
+  synth.param.gain.exponentialRampToValueAtTime(gain, when + attack)
 
-  const endGain = engine.utility.lerpExp(gain, engine.const.zeroGain, (off - when) / 2)
+  const endGain = engine.utility.lerpExp(gain, engine.const.zeroGain, (off - when - attack) / duration)
 
   synth.param.gain.linearRampToValueAtTime(endGain, off)
-  synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, off + 1/8)
+  synth.param.gain.exponentialRampToValueAtTime(engine.const.zeroGain, off + release)
 
-  synth.stop(off + 1/8)
+  synth.stop(off + release)
 
   return synth
 }

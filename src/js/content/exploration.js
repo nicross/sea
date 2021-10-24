@@ -10,7 +10,7 @@ content.exploration = (() => {
 
     // XXX: Used by app.canvas.nodes, cached here for simplicity
     vector.phase = Math.random()
-    vector.time = engine.audio.time()
+    vector.time = engine.audio.time() + node.distanceRatio
 
     list.push(vector)
     tree.insert(vector)
@@ -81,7 +81,7 @@ content.exploration = (() => {
 
 engine.ready(() => {
   content.movement.on('underwater-collision', ({voxel}) => content.exploration.onCollision(voxel))
-  content.scan.on('complete', (scan) => content.exploration.onScan(scan))
+  content.scan.on('recharge', (scan) => content.exploration.onScan(scan))
 })
 
 engine.state.on('export', (data) => data.exploration = content.exploration.export())

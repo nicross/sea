@@ -126,7 +126,7 @@ content.terrain.floor = (() => {
 
     let value = depthField.value(x / scale, y / scale)
 
-    return engine.utility.lerp(-2500, -3500, value)
+    return engine.utility.lerp(-2000, -3000, value)
   }
 
   function getSauce(x, y) {

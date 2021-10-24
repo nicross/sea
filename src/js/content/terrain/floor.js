@@ -410,16 +410,19 @@ content.terrain.floor.registerBiome({
     amplitude,
     exponent,
     noise,
+    smooth,
     x,
     y,
   }) => {
-    noise = noise(x, y, 500)
+    noise = noise(x, y, 750)
+    noise = Math.abs(noise - 0.5) * 2
 
     amplitude = amplitude(x, y, 1000)
-    amplitude = engine.utility.lerp(500, 1000, amplitude)
+    amplitude = smooth(amplitude, 20)
+    amplitude = engine.utility.lerp(500, 1500, amplitude)
 
     exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(2, 4, exponent)
+    exponent = engine.utility.lerp(1, 2, exponent)
 
     return amplitude * (noise ** exponent)
   }

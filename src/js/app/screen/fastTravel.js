@@ -150,7 +150,7 @@ app.screen.fastTravel = (() => {
         this.data.y = position.y
 
         // XXX: Beware, this can cause cache issues, e.g. if this is called on reset, then those values persist on import
-        this.data.z = content.terrain.floor.value(position.x, position.y)
+        this.data.z = content.terrain.floor.current()
 
         this.setHidden(!canFloor())
       },

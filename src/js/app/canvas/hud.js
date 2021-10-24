@@ -1,8 +1,8 @@
 app.canvas.hud = (() => {
   const canvas = document.createElement('canvas'),
     context = canvas.getContext('2d'),
-    fadeInRate = 4,
-    fadeOutRate = 1,
+    fadeInRate = 2,
+    fadeOutRate = 1/4,
     main = app.canvas,
     pubsub = engine.utility.pubsub.create()
 

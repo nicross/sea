@@ -36,8 +36,6 @@ app.component.destination.prototype = {
     distance.innerHTML = '<span class="c-destination--distance"></span> <abbr aria-label="meters">m</abbr>'
     this.rootElement.appendChild(distance)
 
-    this.update()
-
     return this
   },
   destroy: function () {

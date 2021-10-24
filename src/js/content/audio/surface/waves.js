@@ -45,7 +45,7 @@ content.audio.surface.waves = (() => {
     buffers.push(buffer)
   }
 
-  bus.gain.value = engine.utility.fromDb(-7.5)
+  bus.gain.value = engine.utility.fromDb(-9)
 
   lowpassFilter.frequency.value = 0
   lowpassFilter.connect(highpassFilter)

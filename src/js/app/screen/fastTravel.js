@@ -178,7 +178,9 @@ app.screen.fastTravel = (() => {
         continue
       }
 
-      addDestination(poi)
+      const destination = addDestination(poi)
+      destination.update()
+
       pois.add(poi)
     }
   }

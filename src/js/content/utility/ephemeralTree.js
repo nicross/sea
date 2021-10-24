@@ -49,7 +49,7 @@ engine.loop.on('frame', ({delta, paused}) => {
     return
   }
 
-  content.utility.ephemeralNoise.update(delta)
+  content.utility.ephemeralTree.update(delta)
 })
 
-engine.state.on('reset', () => content.utility.ephemeralNoise.reset())
+engine.state.on('reset', () => content.utility.ephemeralTree.reset())

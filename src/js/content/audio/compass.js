@@ -1,5 +1,6 @@
 content.audio.compass = (() => {
   const bus = content.audio.mixer.createBus(),
+    context = engine.audio.context(),
     frequency = content.utility.rationalFrequency.fromMidi(81),
     tau = Math.PI * 2
 
@@ -51,23 +52,17 @@ content.audio.compass = (() => {
       return
     }
 
-    const binaural = engine.audio.binaural.create({
-      x: Math.cos(rose.angle - Math.PI/2),
-      y: Math.sin(rose.angle - Math.PI/2),
-      z: 0,
-    })
-
     const synth = engine.audio.synth.createSimple({
       frequency,
       type: 'square',
     }).filtered({
       frequency: engine.utility.choose([1, 2, 4, 8], rose.strength) * frequency,
-    })
+    }).chainAssign('panner', context.createStereoPanner()).connect(bus)
+
+    synth.panner.pan.value = Math.cos(rose.angle)
 
     const duration = engine.utility.choose([0.125, 0.25, 0.5, 0.75], rose.strength),
       now = engine.audio.time()
-
-    binaural.from(synth).to(bus)
 
     synth.param.gain.setValueAtTime(engine.const.zeroGain, now)
     synth.param.gain.exponentialRampToValueAtTime(1, now + 1/64)

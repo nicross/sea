@@ -1,7 +1,7 @@
 app.settings = (() => {
   const settings = {
     compassVolume: {
-      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -15, rawValue, 130000000)),
+      compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -18, rawValue, 130000000)),
       default: 0.5,
       update: (computedValue) => {
         content.audio.compass.setGain(computedValue)

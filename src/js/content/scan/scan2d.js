@@ -30,6 +30,12 @@ content.scan.scan2d = (() => {
         scanY = content.terrain.voxels.snapValue(y + (variance * py)),
         scanZ = content.terrain.voxels.snapValue(plane.value(scanX, scanY))
 
+      const isUnique = content.exploration.isUnique({
+        x: scanX,
+        y: scanY,
+        z: scanZ,
+      })
+
       const wormPoint = isFloor
         ? content.terrain.worms.getInside(scanX, scanY, scanZ, 1)
         : undefined
@@ -43,7 +49,7 @@ content.scan.scan2d = (() => {
         isWorm: isWormPoint,
         isWormEntrance: isWormPoint,
         relativeZ: scanZ - position.z,
-        remember: !isWormPoint,
+        remember: !isWormPoint && isUnique,
         worm: wormPoint ? wormPoint.worm : undefined,
         wormPoint,
         x: scanX,

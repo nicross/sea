@@ -34,10 +34,9 @@ content.exploration = (() => {
       values.map(addNode)
       return this
     },
+    isUnique: (voxel) => !tree.find(voxel, radius),
     onCollision: function (voxel) {
-      const checkNearby = tree.find(voxel, radius)
-
-      if (!checkNearby) {
+      if (this.isUnique(voxel)) {
         addNode(voxel)
       }
 
@@ -50,17 +49,11 @@ content.exploration = (() => {
 
       const results = [
         ...scan.scan2d.flat(),
-        ...Object.values(scan.scan3d),
+        ...scan.scan3d,
       ]
 
       for (const result of results) {
         if (result && !result.remember) {
-          continue
-        }
-
-        const checkNearby = tree.find(result, radius)
-
-        if (checkNearby) {
           continue
         }
 

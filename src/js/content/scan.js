@@ -4,21 +4,16 @@ content.scan = (() => {
   let isCooldown = false
 
   function mergeWorms(results) {
+    results.wormEntrances = []
+    results.worms = []
+
     // Optimization: Ignore when scanning surface
     if (!results.isFloor) {
       return
     }
 
-    // Collects worms and their entrances and exposes them in the results
-    const position = engine.position.getVector()
-
-    if (position.z > content.const.lightZone) {
-      results.wormEntrances = []
-      results.worms = []
-      return
-    }
-
     const maxDistance = content.scan.scan3d.maxDistance(),
+      position = engine.position.getVector(),
       wormEntrances = [],
       worms = new Set(),
       worms2d = new Set()
@@ -52,6 +47,7 @@ content.scan = (() => {
           distance,
           distanceRatio: distance / maxDistance,
           relativeZ: result.wormPoint.z - position.z,
+          remember: false,
           x: result.wormPoint.x,
           y: result.wormPoint.y,
           z: result.wormPoint.z,

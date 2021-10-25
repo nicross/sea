@@ -4,24 +4,25 @@ app.stats.scanResults = (() => {
   return app.stats.invent('scanResults', {
     get: () => counter,
     increment: function (value = 0) {
-      counter += value
+      counter += BigInt(value)
       return this
     },
     set: function (value) {
-      counter = Number(value) || 0
+      counter = BigInt(value) || 0
       return this
     },
   })
 })()
 
 content.scan.on('complete', (results) => {
-  let count = 0
-
-  for (const result of Object.values(results)) {
-    if (result && result.isSolid) {
-      count += 1
-    }
+  if (!results.isFloor) {
+    return
   }
+
+  const count = [
+    ...results.scan2d.flat(),
+    ...results.scan3d,
+  ].filter((result) => result.remember).length
 
   app.stats.scanResults.increment(count)
 })

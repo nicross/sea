@@ -2,26 +2,26 @@
 ## v1.5.0
 - Audio
   - Added heightmap sonification cues
+  - Remixed vehicle UI sounds with a harder panning model
   - Remixed waves for a wider stereo width
 - Gameplay
   - Added heightmap scanning of the surface
 - Graphics
-  - Added relative coordinates to heads-up-display
-  - Added pitch indicator to heads-up-display
+  - Added relative coordinates to heads-up-display (HUD)
+  - Added pitch indicator to HUD
   - Added saturation transitions when scanner is activated
-  - Added fade out to splash screen after a timeout
+  - Added fade out to splash screen when idle
+  - Adjusted timings of HUD transitions on idle state change
+  - Improved star animations and visibility
+  - Improved surface render performance
   - Added new title sequences that showcase vertical look
-  - Improved visibility of stars at night
-  - Improved render performance
-  - Increased default dynamic draw distance
 - User interface
   - Added vertical look controls
   - Added toggle for Invert Vertical Look to Controls screen
-  - Added slider for Static Object Limit to Graphics screen
-  - Split unified Draw Distance slider into separate dynamic and static sliders on Graphics screen
   - Added toggle for HUD Compass to Graphics screen
   - Added toggle for HUD Coordinates to Graphics screen
   - Added toggle for HUD Pitch to Graphics screen
+  - Renamed slider for Draw Distance to Dynamic Draw Distance
   - Allowed cancel button on New Game confirmation to go back to the main menu
   - Allowed certain keys to go back to splash screen from the main menu
   - Allowed escape key on splash screen to quit application
@@ -29,7 +29,6 @@
   - Overhauled surface wave generation
   - Increased size of tidal waves
 - Miscellaneous
-  - Added movement to Fast Travel transitions
   - Added save game versioning to support older builds
   - Updated desktop build to Electron 15 (Chromium 94)
   - Updated documentation to reflect changes
@@ -39,37 +38,58 @@
   <ul>
     <li>Audio
       <ul>
-        <li>Added cues for discovered worm-like caves</li>
+        <li>Added cues for discovering, scanning, and exploring caves</li>
         <li>Added occlusion filtering to treasure when behind terrain</li>
         <li>Added proximity cues to the nearest scanned terrain</li>
         <li>Added unique cue for directly ahead scanner results</li>
         <li>Added unique cue for scanned cave entrances</li>
-        <li>Remixed scanner audio sequence to support two-dimensional scans</li>
+        <li>Reworked terrain sonification cues</li>
         <li>Reworked terrain frequency selection to communicate relative height</li>
-        <li>Reworked pitch and timing of three-dimensional sonification cues</li>
+        <li>Reworked underwater soundtrack fader to consider floor depth</li>
       </ul>
     </li>
       <li>Gameplay
         <ul>
+          <li>Added cave discovery system</li>
           <li>Added heightmap scanning of the floor</li>
-          <li>Increased the amount of terrain revealed by three-dimensional scans</li>
+          <li>Increased the amount of terrain revealed by scans</li>
         </ul>
       </li>
     <li>Graphics
       <ul>
-        <li>Added fade-in animation to newly scanned terrain</li>
+        <li>Adjusted fade between surface and floor</li>
+        <li>Added animations to newly scanned terrain</li>
         <li>Added oscillating motion to scanned terrain</li>
-        <li>Reduced default static draw distance</li>
-        <li>Tweaked geometry of scanned terrain colors</li>
+        <li>Improved geometry of scanned terrain colors</li>
+        <li>Improved terrain render performance</li>
+      </ul>
+    </li>
+    <li>Movement
+      <ul>
+        <li>Added movement to fast travel transitions</li>
+        <li>Fixed some stickiness when surfacing</li>
+      </ul>
+    </li>
+    <li>User interface
+      <ul>
+        <li>Added discovered caves as options on Fast Travel screen</li>
+        <li>Added distances to options on Fast Travel screen</li>
+        <li>Added metric for Caves Discovered to Statistics screen</li>
+        <li>Added notifictions and autosaving when caves are discovered</li>
+        <li>Added slider for Static Draw Distance to Graphics screen</li>
+        <li>Added slider for Static Object Limit to Graphics screen</li>
+        <li>Added toggle for Discovery Notifications to Gameplay screen</li>
+        <li>Moved toggle for Treasure Hints from Gameplay to Graphics screen (renamed to HUD Treasure)</li>
+        <li>Reworked items on Gallery screen into a table layout</li>
       </ul>
     </li>
     <li>World generation
       <ul>
         <li>Overhauled underwater terrain generation</li>
         <li>Added nine unique biomes to the floor generator</li>
-        <li>Added worm-like caves that connect the floor to deeper areas</li>
-        <li>Added cheese-like caves below the floor for freeform spelunking</li>
-        <li>Added a worm-like cave below the origin for instant exploration</li>
+        <li>Added branching cave systems that connect the floor to deeper areas</li>
+        <li>Added freeform caverns that intersect the main caves</li>
+        <li>Added a large cave system beneath the origin</li>
       </ul>
     </li>
     <li>Save game changes due to breaking terrain changes

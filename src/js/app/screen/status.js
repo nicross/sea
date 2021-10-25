@@ -10,7 +10,7 @@ app.screen.status = (() => {
     root.querySelector('.a-status--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
-    app.utility.input.preventScrolling(root.querySelector('.a-status--data'))
+    app.utility.input.preventScrolling(root.querySelector('.c-screen--scrollable'))
   })
 
   function handleControls() {

@@ -12,6 +12,7 @@ app.screen.graphics = (() => {
     root.querySelector('.a-graphics--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(root.querySelector('.c-screen--scrollable'))
 
     hydrateSliders()
     hydrateToggles()

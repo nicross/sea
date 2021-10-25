@@ -12,23 +12,18 @@ app.component.treasure.prototype = {
     return this
   },
   construct: function (treasure = {}) {
-    this.rootElement = document.createElement('div')
+    this.rootElement = document.createElement('tr')
     this.rootElement.className = 'c-treasure'
     this.rootElement.tabIndex = 0
 
-    const title = document.createElement('p')
-    title.classList.add('c-treasure--name')
+    const title = document.createElement('th')
     title.innerHTML = treasure.name
+    title.scope = 'row'
     this.rootElement.appendChild(title)
 
-    const details = document.createElement('div')
-    details.classList.add('c-treasure--details')
-    this.rootElement.append(details)
-
-    const valueContainer = document.createElement('p')
-    valueContainer.classList.add('c-treasure--value')
-    valueContainer.innerHTML = `<span class="c-treasure--label">Value:</span> ${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aria-label="gold">g</abbr>`
-    details.appendChild(valueContainer)
+    const value = document.createElement('td')
+    value.innerHTML = `${app.utility.format.number(app.utility.treasure.computeValue(treasure))} <abbr aria-label="gold">g</abbr>`
+    this.rootElement.appendChild(value)
 
     return this
   },

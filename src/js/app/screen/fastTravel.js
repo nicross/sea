@@ -13,13 +13,10 @@ app.screen.fastTravel = (() => {
     app.state.screen.on('exit-fastTravel', onExit)
     engine.state.on('reset', onReset)
 
-    Object.entries({
-      back: root.querySelector('.a-fastTravel--back'),
-    }).forEach(([event, element]) => {
-      element.addEventListener('click', () => app.state.screen.dispatch(event))
-    })
+    root.querySelector('.a-fastTravel--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
+    app.utility.input.preventScrolling(root.querySelector('.c-screen--scrollable'))
 
     prepopulate()
   })
@@ -99,6 +96,10 @@ app.screen.fastTravel = (() => {
     if (ui.down) {
       return app.utility.focus.setNextFocusable(root)
     }
+  }
+
+  function onBackClick() {
+    app.state.screen.dispatch('back')
   }
 
   function onDestinationClick() {

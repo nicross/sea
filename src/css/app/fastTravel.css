@@ -1,6 +1,6 @@
 .a-fastTravel {}
   .a-fastTravel--data {
-    max-height: max-height: calc(5 * 3.25em + 0.5em);
+    max-height: max-height: calc(5 * 2em + 0.5em);
   }
   .a-fastTravel--table {
     border-collapse: collapse;
@@ -8,7 +8,6 @@
     margin: -0.5em;
   }
   .a-fastTravel--table td {
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
     padding: 0.5em;
     text-align: right;
     white-space: nowrap;

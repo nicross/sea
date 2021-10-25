@@ -1,12 +1,12 @@
 app.screen.gallery = (() => {
   const uuids = new Set()
 
-  let items,
-    root
+  let root,
+    table
 
   app.ready(() => {
     root = document.querySelector('.a-gallery')
-    items = root.querySelector('.a-gallery--items')
+    table = root.querySelector('.a-gallery--table')
 
     app.state.screen.on('enter-gallery', onEnter)
     app.state.screen.on('exit-gallery', onExit)
@@ -14,7 +14,7 @@ app.screen.gallery = (() => {
     root.querySelector('.a-gallery--back').addEventListener('click', onBackClick)
 
     app.utility.focus.trap(root)
-    app.utility.input.preventScrolling(items)
+    app.utility.input.preventScrolling(root.querySelector('.c-screen--scrollable'))
   })
 
   function handleControls() {
@@ -79,12 +79,7 @@ app.screen.gallery = (() => {
         continue
       }
 
-      const li = document.createElement('li')
-
-      li.classList.add('a-gallery--item')
-      app.component.treasure.create(treasure).attach(li)
-      items.appendChild(li)
-
+      app.component.treasure.create(treasure).attach(table)
       uuids.add(treasure.uuid)
     }
   }

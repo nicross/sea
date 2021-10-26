@@ -145,10 +145,12 @@ content.terrain.floor = (() => {
   }
 
   function getSauce(x, y) {
-    const amplitude = 1,
-      scale = 4 / engine.utility.simplex2d.prototype.skewFactor
+    const amplitude = maskValue(x, y, 100) ** 2,
+      exponent = engine.utility.lerp(4, 8, exponentValue(x, y, 100)),
+      scale = 4 / engine.utility.simplex2d.prototype.skewFactor,
+      value = sauceField.value(x / scale, y / scale)
 
-    return (sauceField.value(x / scale, y / scale) ** 8) * amplitude
+    return (value ** exponent) * amplitude
   }
 
   function getValue(x, y) {

@@ -1,5 +1,6 @@
 content.utility.altimeter = {
   isCloserToSurface: () => engine.position.getVector().z > content.terrain.floor.current()/2,
+  isSurface: () => engine.position.getVector().z > content.surface.current(),
   isCloserToFloor: () => engine.position.getVector().z <= content.terrain.floor.current()/2,
 }
 

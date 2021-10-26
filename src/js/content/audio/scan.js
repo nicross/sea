@@ -52,7 +52,7 @@ content.audio.scan = (() => {
 
   function render2dStream(stream, pan) {
     const duration = content.const.scanCooldown,
-      isSurface = engine.position.getVector().z > content.const.lightZone/2,
+      isSurface = content.utility.altimeter.isSurface(),
       panner = context.createStereoPanner(),
       when = engine.audio.time()
 
@@ -182,7 +182,7 @@ content.audio.scan = (() => {
 
   function to2dNote(z = 0, isSurface = false) {
     const scale = isSurface
-      ? content.surface.max() * 2
+      ? content.surface.max()
       : content.scan.scan2d.maxDistance()
 
     return {

@@ -44,8 +44,9 @@
         <li>Added unique cue for directly ahead scanner results</li>
         <li>Added unique cue for scanned cave entrances</li>
         <li>Reworked terrain sonification cues</li>
-        <li>Reworked terrain frequency selection to communicate relative height</li>
-        <li>Reworked underwater soundtrack fader to consider floor depth</li>
+        <li>Reworked terrain frequencies to reflect relative height</li>
+        <li>Reworked underwater soundtrack fader to reflect floor depth</li>
+        <li>Fixed reverb changes around sea level</li>
       </ul>
     </li>
       <li>Gameplay

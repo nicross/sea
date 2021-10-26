@@ -64,11 +64,11 @@ content.audio.reverb = (() => {
       return this
     },
     import: function () {
-      const {x, y, z} = engine.position.getVector()
+      const {z} = engine.position.getVector()
 
-      if (z >= 0) {
+      if (z >= content.surface.current()) {
         machine.change('surface')
-      } else if (z >= content.terrain.floor.value(x, y)) {
+      } else if (z >= content.terrain.floor.current()) {
         machine.change('underwater')
       } else {
         machine.change('cave')

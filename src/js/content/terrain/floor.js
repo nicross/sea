@@ -32,6 +32,12 @@ content.terrain.floor = (() => {
     type: engine.utility.simplex2d,
   })
 
+  const maskField = engine.utility.createNoiseWithOctaves({
+    octaves: 4,
+    seed: ['floor', 'mask'],
+    type: engine.utility.simplex2d,
+  })
+
   const noiseField = engine.utility.createNoiseWithOctaves({
     octaves: 4,
     seed: ['floor', 'noise'],
@@ -58,6 +64,7 @@ content.terrain.floor = (() => {
     .manage(biomeYField)
     .manage(depthField)
     .manage(exponentField)
+    .manage(maskField)
     .manage(noiseField)
     .manage(sauceField)
     .manage(wildcardField)
@@ -108,6 +115,7 @@ content.terrain.floor = (() => {
     const options = {
       amplitude: amplitudeValue,
       exponent: exponentValue,
+      mask: maskValue,
       noise: noiseValue,
       smooth,
       wildcard: wildcardValue,
@@ -203,6 +211,11 @@ content.terrain.floor = (() => {
   function noiseValue(x, y, scale = 1) {
     scale /= engine.utility.simplex2d.prototype.skewFactor
     return noiseField.value(x / scale, y / scale)
+  }
+
+  function maskValue(x, y, scale = 1) {
+    scale /= engine.utility.simplex2d.prototype.skewFactor
+    return maskField.value(x / scale, y / scale)
   }
 
   function setCache(x, y, value) {

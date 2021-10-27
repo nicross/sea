@@ -280,8 +280,8 @@ engine.state.on('reset', () => content.terrain.floor.reset())
 /*
 
 lowlands
-rolling plains
 canyons basins
+rolling plains
 rough outcrops
 mountains plateaus
 highlands
@@ -296,55 +296,15 @@ content.terrain.floor.registerBiome({
 })
 
 content.terrain.floor.registerBiome({
-  name: 'rolling',
+  name: 'canyons',
   x: 1/5,
   y: 1/3,
   generate: ({
     amplitude,
     exponent,
+    mask,
     noise,
-    x,
-    y,
-  }) => {
-    noise = noise(x, y, 750)
-    noise = Math.abs((noise * 2) - 1)
-
-    amplitude = amplitude(x, y, 500)
-    amplitude = engine.utility.lerp(0, 20, amplitude)
-
-    exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(1.5, 2.5, exponent)
-
-    return (noise ** exponent) * amplitude
-  }
-})
-
-content.terrain.floor.registerBiome({
-  name: 'plains',
-  x: 1/5,
-  y: 2/3,
-  generate: ({
-    amplitude,
-    noise,
-    x,
-    y,
-  }) => {
-    noise = noise(x, y, 1000)
-
-    amplitude = amplitude(x, y, 500)
-    amplitude = engine.utility.lerp(0, 10, amplitude)
-
-    return noise * amplitude
-  }
-})
-
-content.terrain.floor.registerBiome({
-  name: 'canyons',
-  x: 2/5,
-  y: 1/3,
-  generate: ({
-    amplitude,
-    noise,
+    wildcard,
     x,
     y,
   }) => {
@@ -352,37 +312,105 @@ content.terrain.floor.registerBiome({
     noise = Math.cos(noise * 2 * Math.PI)
     noise *= noise
     noise = engine.utility.clamp(noise, 0, 1)
-    noise **= 2
 
     amplitude = amplitude(x, y, 1000)
     amplitude = engine.utility.lerpExp(0, -500, amplitude, 2)
 
-    return noise * amplitude
+    exponent = exponent(x, y, 500)
+    exponent = engine.utility.lerp(1, 3, exponent)
+
+    mask = mask(x, y, 100)
+    mask = engine.utility.lerp(0.9, 1, mask)
+
+    wildcard = wildcard(x, y, 15)
+    wildcard = engine.utility.lerp(mask, 1, wildcard)
+
+    return (noise ** exponent) * amplitude * wildcard
   }
 })
 
 content.terrain.floor.registerBiome({
   name: 'basins',
-  x: 2/5,
+  x: 1/5,
   y: 2/3,
   generate: ({
     amplitude,
     exponent,
     noise,
     smooth,
+    weight = 1,
+    wildcard,
     x,
     y,
   }) => {
     noise = noise(x, y, 250)
-    noise = smooth(noise, 15)
 
     amplitude = amplitude(x, y, 1000)
     amplitude = engine.utility.lerpExp(0, -500, amplitude, 2)
 
     exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(1, 4, exponent)
+    exponent = engine.utility.lerp(0.5, 2, exponent)
 
-    return (noise ** exponent) * amplitude
+    const value = smooth((noise ** exponent), 15) * amplitude
+
+    wildcard = wildcard(x, y, 500)
+
+    const stairHeight = engine.utility.lerp(30, 50, wildcard) / weight
+    const v0 = Math.floor(value / stairHeight) * stairHeight
+    const delta = engine.utility.clamp(smooth(((value - v0) / stairHeight) ** 2, 25), 0, 1) * stairHeight
+
+    return v0 + delta
+  }
+})
+
+content.terrain.floor.registerBiome({
+  name: 'rolling',
+  x: 2/5,
+  y: 1/3,
+  generate: ({
+    amplitude,
+    exponent,
+    mask,
+    noise,
+    x,
+    y,
+  }) => {
+    noise = noise(x, y, 100)
+    noise = Math.abs((noise * 2) - 1)
+
+    amplitude = amplitude(x, y, 400)
+    amplitude = engine.utility.lerp(25, 75, amplitude)
+
+    exponent = exponent(x, y, 500)
+    exponent = engine.utility.lerp(1.5, 2.5, exponent)
+
+    mask = mask(x, y, 100)
+    mask = engine.utility.lerpExp(0.75, 1, mask, 2)
+
+    return (noise ** exponent) * amplitude * mask
+  }
+})
+
+content.terrain.floor.registerBiome({
+  name: 'plains',
+  x: 2/5,
+  y: 2/3,
+  generate: ({
+    amplitude,
+    mask,
+    noise,
+    x,
+    y,
+  }) => {
+    noise = noise(x, y, 250)
+
+    amplitude = amplitude(x, y, 500)
+    amplitude = engine.utility.lerp(25, 75, amplitude)
+
+    mask = mask(x, y, 25)
+    mask = engine.utility.lerpExp(0.9, 1, mask, 0.75)
+
+    return noise * amplitude * mask
   }
 })
 

@@ -120,6 +120,7 @@ app.fastTravel = (() => {
       app.canvas.crossfade()
       app.canvas.camera.reset()
       app.stats.fastTravels.increment()
+      content.idle.touch()
 
       pubsub.emit('travel', destination)
 

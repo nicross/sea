@@ -89,6 +89,7 @@ app.state.game.on('enter-none', () => {
 })
 
 app.state.game.on('exit-none', () => {
+  content.idle.touch()
   engine.audio.ramp.linear(content.audio.mixer.bus.environment.bus().gain, app.settings.computed.environmentVolume, 0.5)
 })
 

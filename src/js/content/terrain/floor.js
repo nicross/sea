@@ -85,7 +85,7 @@ content.terrain.floor = (() => {
   }
 
   function generateBiome(x, y) {
-    const scale = 10000 / engine.utility.simplex2d.prototype.skewFactor
+    const scale = 20000 / engine.utility.simplex2d.prototype.skewFactor
 
     x /= scale
     x += 0.5
@@ -137,15 +137,14 @@ content.terrain.floor = (() => {
   }
 
   function getDepth(x, y) {
-    const scale = 20000 / engine.utility.simplex2d.prototype.skewFactor
+    const scale = 50000 / engine.utility.simplex2d.prototype.skewFactor,
+      value = depthField.value(x / scale, y / scale)
 
-    let value = depthField.value(x / scale, y / scale)
-
-    return engine.utility.lerp(-2000, -3000, value)
+    return engine.utility.lerp(-2500, -3500, value)
   }
 
   function getSauce(x, y) {
-    const amplitude = maskValue(x, y, 100) ** 2,
+    const amplitude = (maskValue(x, y, 100) ** 2) * 2,
       exponent = engine.utility.lerp(4, 8, exponentValue(x, y, 100)),
       scale = 4 / engine.utility.simplex2d.prototype.skewFactor,
       value = sauceField.value(x / scale, y / scale)
@@ -292,7 +291,10 @@ content.terrain.floor.registerBiome({
   name: 'lowlands',
   x: 0,
   y: 1/2,
-  generate: () => 0,
+  generate: () => {
+    // Constant zero
+    return 0
+  },
 })
 
 content.terrain.floor.registerBiome({
@@ -308,24 +310,28 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
+    // Generate noise, applying cos() and squaring to produce river-like features within [0, 1]
     noise = noise(x, y, 500)
     noise = Math.cos(noise * 2 * Math.PI)
     noise *= noise
-    noise = engine.utility.clamp(noise, 0, 1)
 
+    // Scale noise, carving out from world
     amplitude = amplitude(x, y, 1000)
-    amplitude = engine.utility.lerpExp(0, -500, amplitude, 2)
+    amplitude = engine.utility.lerpExp(-500, 0, amplitude, 0.5)
 
+    // Massage depth and slope with exponent
     exponent = exponent(x, y, 500)
     exponent = engine.utility.lerp(1, 3, exponent)
 
-    mask = mask(x, y, 100)
-    mask = engine.utility.lerp(0.9, 1, mask)
+    // Determine masking amount
+    wildcard = wildcard(x, y, 100)
+    wildcard = engine.utility.lerp(-10, 0, wildcard)
 
-    wildcard = wildcard(x, y, 15)
-    wildcard = engine.utility.lerp(mask, 1, wildcard)
+    // Generate masking layer, carving hills from noise
+    mask = mask(x, y, 15)
 
-    return (noise ** exponent) * amplitude * wildcard
+    // Combine layers
+    return ((noise ** exponent) * amplitude) + (mask * wildcard)
   }
 })
 
@@ -336,6 +342,7 @@ content.terrain.floor.registerBiome({
   generate: ({
     amplitude,
     exponent,
+    mask,
     noise,
     smooth,
     weight = 1,
@@ -343,23 +350,33 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
-    noise = noise(x, y, 250)
+    // Generate noise
+    noise = noise(x, y, 500)
 
+    // Scale noise, carving out from world
     amplitude = amplitude(x, y, 1000)
-    amplitude = engine.utility.lerpExp(0, -500, amplitude, 2)
+    amplitude = engine.utility.lerpExp(-500, 0, amplitude, 0.5)
 
-    exponent = exponent(x, y, 250)
+    // Massage depth and slope with exponent
+    exponent = exponent(x, y, 750)
     exponent = engine.utility.lerp(0.5, 2, exponent)
 
+    // Combine and smooth layers into raw value
     const value = smooth((noise ** exponent), 15) * amplitude
 
-    wildcard = wildcard(x, y, 500)
+    // Determine gradiation, scaling by 1/weight to preserve gradiation when weighted
+    let gradiation = wildcard(x, y, 500)
+    gradiation = engine.utility.lerp(0.05, 0.1, gradiation) * Math.abs(amplitude) / weight
 
-    const stairHeight = engine.utility.lerp(30, 50, wildcard) / weight
-    const v0 = Math.floor(value / stairHeight) * stairHeight
-    const delta = engine.utility.clamp(smooth(((value - v0) / stairHeight) ** 2, 25), 0, 1) * stairHeight
+    // Transform into stairs at gradiation height (v0), smoothing the edges (delta)
+    const v0 = Math.floor(value / gradiation) * gradiation
+    const delta = engine.utility.clamp(smooth(((value - v0) / gradiation) ** 2, 25), 0, 1) * gradiation
 
-    return v0 + delta
+    // Generate mask, subtracting from gradiation
+    mask = mask(x, y, 50) * -gradiation
+
+    // Combine stair components and mask
+    return v0 + delta + mask
   }
 })
 
@@ -375,18 +392,23 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
+    // Generate noise
     noise = noise(x, y, 100)
     noise = Math.abs((noise * 2) - 1)
 
+    // Scale noise into hills
     amplitude = amplitude(x, y, 400)
     amplitude = engine.utility.lerp(25, 75, amplitude)
 
-    exponent = exponent(x, y, 500)
-    exponent = engine.utility.lerp(1.5, 2.5, exponent)
+    // Massage slopes with exponent
+    exponent = exponent(x, y, 1000)
+    exponent = engine.utility.lerp(1, 2, exponent)
 
-    mask = mask(x, y, 100)
+    // Attenuate up an octave with mask
+    mask = mask(x, y, 50)
     mask = engine.utility.lerpExp(0.75, 1, mask, 2)
 
+    // Combine layers
     return (noise ** exponent) * amplitude * mask
   }
 })
@@ -402,14 +424,18 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
+    // Generate noise
     noise = noise(x, y, 250)
 
-    amplitude = amplitude(x, y, 500)
+    // Scale into short wide hills
+    amplitude = amplitude(x, y, 750)
     amplitude = engine.utility.lerp(25, 75, amplitude)
 
-    mask = mask(x, y, 25)
-    mask = engine.utility.lerpExp(0.9, 1, mask, 0.75)
+    // Attenuate at higher octave with mask
+    mask = mask(x, y, 100)
+    mask = engine.utility.lerp(0.8, 1, mask)
 
+    // Combine layers
     return noise * amplitude * mask
   }
 })
@@ -421,19 +447,31 @@ content.terrain.floor.registerBiome({
   generate: ({
     amplitude,
     exponent,
+    mask,
     noise,
+    wildcard,
     x,
     y,
   }) => {
+    // Generate noise
     noise = noise(x, y, 100)
 
+    // Scale into tall narrow hills
     amplitude = amplitude(x, y, 500)
-    amplitude = engine.utility.lerp(0, 250, amplitude)
+    amplitude = engine.utility.lerp(50, 250, amplitude)
 
-    exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(4, 8, exponent)
+    // Massage slopes with exponent
+    exponent = exponent(x, y, 400)
+    exponent = engine.utility.lerp(1, 4, exponent)
 
-    return (noise ** exponent) * amplitude
+    // Add harmonic roughness at a low amplitude
+    wildcard = (wildcard(x, y, 10) ** 2) * engine.utility.lerp(0, 10, wildcard(x, y, 150))
+
+    // Attenuate with mask as percentage
+    mask = engine.utility.lerp(0.9, 1, mask(x, y, 25))
+
+    // Combine layers
+    return (((noise ** exponent) * amplitude) + wildcard) * mask
   }
 })
 
@@ -444,6 +482,7 @@ content.terrain.floor.registerBiome({
   generate: ({
     amplitude,
     exponent,
+    mask,
     noise,
     smooth,
     weight = 1,
@@ -451,23 +490,34 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
-    noise = noise(x, y, 50)
+    // Generate noise, abs(cos(x)) to shape into distinct areas
+    noise = noise(x, y, 75)
     noise = (Math.cos(noise * 2 * Math.PI) / 2) + 1
 
-    amplitude = amplitude(x, y, 250)
-    amplitude = engine.utility.lerpExp(0, 250, amplitude, 4)
+    // Scale into clusters of tall pillars
+    amplitude = amplitude(x, y, 500)
+    amplitude = engine.utility.lerpExp(30, 300, amplitude, 3)
 
+    // Massage height and slope with exponent
     exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerpExp(6, 2, exponent, 2)
+    exponent = engine.utility.lerp(1, 4, exponent)
 
-    wildcard = wildcard(x, y, 200)
-
-    const stairHeight = engine.utility.lerp(2, 25, wildcard) / weight
+    // Combine layers into raw value
     const value = amplitude * (noise ** exponent)
-    const v0 = Math.floor(value / stairHeight) * stairHeight
-    const delta = smooth((value - v0) / stairHeight, 20) * stairHeight
 
-    return v0 + delta
+    // Determine gradiation, scaling by 1/weight to preserve gradiation when weighted
+    let gradiation = wildcard(x, y, 250)
+    gradiation = engine.utility.lerp(0.05, 0.1, gradiation) * Math.abs(amplitude) / weight
+
+    // Transform into stairs at gradiation height (v0), smoothing the edges (delta)
+    const v0 = Math.floor(value / gradiation) * gradiation
+    const delta = engine.utility.clamp(smooth(((value - v0) / gradiation) ** 2, 20), 0, 1) * gradiation
+
+    // Generate mask, subtracting from gradiation
+    mask = mask(x, y, 50) * -gradiation/2
+
+    // Combine stair components and mask
+    return v0 + delta + mask
   }
 })
 
@@ -479,21 +529,34 @@ content.terrain.floor.registerBiome({
     amplitude,
     exponent,
     noise,
-    smooth,
+    mask,
+    wildcard,
     x,
     y,
   }) => {
-    noise = noise(x, y, 750)
+    // Generate noise, absolute value creates valleys
+    noise = noise(x, y, 500)
     noise = Math.abs(noise - 0.5) * 2
 
+    // Scale into large tall hills
     amplitude = amplitude(x, y, 1000)
-    amplitude = smooth(amplitude, 20)
-    amplitude = engine.utility.lerp(500, 1500, amplitude)
+    amplitude = engine.utility.lerp(300, 900, amplitude)
 
+    // Massage height and slope with exponent
     exponent = exponent(x, y, 250)
-    exponent = engine.utility.lerp(1, 2, exponent)
+    exponent = engine.utility.lerp(1, 3, exponent)
 
-    return amplitude * (noise ** exponent)
+    // Generate rocks, with wildcard amplitude and mask noise/exponent
+    wildcard = wildcard(x, y, 200)
+    wildcard = (Math.cos(2 * Math.PI * wildcard) + 1) / 2
+    wildcard = engine.utility.lerp(5, 50, wildcard)
+
+    mask = mask(x, y, 25) ** engine.utility.lerp(1, 3, mask(x, y, 250))
+
+    const rocks = wildcard * mask
+
+    // Combine layers
+    return (amplitude * (noise ** exponent)) + rocks
   }
 })
 
@@ -504,6 +567,7 @@ content.terrain.floor.registerBiome({
   generate: ({
     amplitude,
     exponent,
+    mask,
     noise,
     smooth,
     weight = 1,
@@ -511,22 +575,34 @@ content.terrain.floor.registerBiome({
     x,
     y,
   }) => {
-    noise = noise(x, y, 100)
+    // Generate noise
+    noise = noise(x, y, 500)
 
+    // Scale into large pillars
     amplitude = amplitude(x, y, 1000)
-    amplitude = engine.utility.lerp(0, 1000, amplitude)
+    amplitude = engine.utility.lerp(0, 750, amplitude)
 
-    exponent = exponent(x, y, 200)
-    exponent = engine.utility.lerp(1/2, 3/2, exponent)
+    // Massage height and slope with exponent
+    exponent = exponent(x, y, 500)
+    exponent = engine.utility.lerp(1, 3, exponent)
 
-    wildcard = wildcard(x, y, 400)
-
-    const stairHeight = engine.utility.lerp(1, 100, wildcard) / weight
+    // Combine layers into raw value
     const value = amplitude * (noise ** exponent)
-    const v0 = Math.floor(value / stairHeight) * stairHeight
-    const delta = smooth((value - v0) / stairHeight, 20) * stairHeight
 
-    return v0 + delta
+    // Determine gradiation, scaling by 1/weight to preserve gradiation when weighted
+    let gradiation = wildcard(x, y, 750)
+    gradiation = engine.utility.lerp(0.05, 0.1, gradiation) * Math.abs(amplitude) / weight
+
+    // Transform into stairs at gradiation height (v0), smoothing the edges (delta)
+    const v0 = Math.floor(value / gradiation) * gradiation
+    const delta = engine.utility.clamp(smooth(((value - v0) / gradiation) ** 3, 20), 0, 1) * gradiation
+
+    // Generate mask, adding to gradiation
+    mask = mask(x, y, 75) ** engine.utility.lerp(1, 3, mask(x, y, 300))
+    mask *= gradiation/2
+
+    // Combine stair components and mask
+    return v0 + delta + mask
   }
 })
 
@@ -534,5 +610,8 @@ content.terrain.floor.registerBiome({
   name: 'highlands',
   x: 1,
   y: 1/2,
-  generate: () => 1000,
+  generate: () => {
+    // Constant, range of depth field
+    return 1000
+  },
 })

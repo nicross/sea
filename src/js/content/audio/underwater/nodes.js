@@ -95,8 +95,7 @@ content.audio.underwater.nodes = (() => {
   }
 
   function selectNodes() {
-    const nodes = [],
-      position = engine.position.getVector(),
+    const position = engine.position.getVector(),
       radius = app.settings.computed.streamerRadius,
       step = Math.sqrt(radius)
 
@@ -114,9 +113,11 @@ content.audio.underwater.nodes = (() => {
       return []
     }
 
+    let nodes = []
+
     // Select increasing areas around position, weighting closer nodes by pushing copies into the result set
     for (let distance = step; distance < radius; distance += step) {
-      nodes.push(...content.exploration.retrieve({
+      nodes = nodes.concat(content.exploration.retrieve({
         depth: distance * 2,
         height: distance * 2,
         width: distance * 2,
@@ -127,7 +128,7 @@ content.audio.underwater.nodes = (() => {
     }
 
     // Push the cached full result set to include the last step
-    nodes.push(...all)
+    nodes = nodes.concat(all)
 
     return nodes
   }

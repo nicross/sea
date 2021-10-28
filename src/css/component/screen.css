@@ -6,6 +6,9 @@
   padding: 4em;
   width: 100%;
 }
+  .c-screen:focus {
+    outline: 0;
+  }
   .c-screen > * + *,
   .c-screen--field + .c-screen--field,
   .c-screen--fields > * + * {

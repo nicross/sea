@@ -14,7 +14,7 @@ html, body {
 }
 
 :focus {
-  outline: 0;
+  outline: 1px solid var(--color-cycle);
 }
 
 @media (max-width: 20rem) {

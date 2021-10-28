@@ -6,7 +6,7 @@ app.utility.octree.reduce = function (tree, filterNode, filterItem, depth = 0) {
       return tree.items.filter(filterItem)
     }
 
-    return [...tree.items]
+    return tree.items.slice()
   }
 
   if (!depth && !tree.nodes.length) {
@@ -29,11 +29,11 @@ app.utility.octree.reduce = function (tree, filterNode, filterItem, depth = 0) {
     return filteredItems()
   }
 
-  const items = []
+  let items = []
   depth += 1
 
   for (const subtree of tree.nodes) {
-    items.push(...this.reduce(subtree, filterNode, filterItem, depth))
+    items = items.concat(this.reduce(subtree, filterNode, filterItem, depth))
   }
 
   return items

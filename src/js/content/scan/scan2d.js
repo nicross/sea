@@ -30,6 +30,9 @@ content.scan.scan2d = (() => {
         scanY = content.terrain.voxels.snapValue(y + (variance * py)),
         scanZ = content.terrain.voxels.snapValue(plane.value(scanX, scanY))
 
+      const elevation = scanZ - position.z,
+        isAudible = content.audio.scan.isAudible(elevation)
+
       const isUnique = content.exploration.isUnique({
         x: scanX,
         y: scanY,
@@ -45,11 +48,12 @@ content.scan.scan2d = (() => {
       results.push({
         distance: d,
         distanceRatio: d / maxDistance,
+        isAudible,
         isSolid: !isWormPoint,
         isWorm: isWormPoint,
         isWormEntrance: isWormPoint,
-        relativeZ: scanZ - position.z,
-        remember: !isWormPoint && isUnique,
+        relativeZ: elevation,
+        remember: isAudible && isUnique && !isWormPoint,
         worm: wormPoint ? wormPoint.worm : undefined,
         wormPoint,
         x: scanX,

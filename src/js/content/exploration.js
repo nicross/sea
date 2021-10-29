@@ -43,7 +43,7 @@ content.exploration = (() => {
       return this
     },
     onScan: function (scan) {
-      if (!scan.isFloor) {
+      if (!scan.isAudible || !scan.isFloor) {
         return this
       }
 

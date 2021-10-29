@@ -3,12 +3,39 @@ content.scan = (() => {
 
   let isCooldown = false
 
-  function mergeWorms(results) {
-    results.wormEntrances = []
-    results.worms = []
+  function decorate(...args) {
+    const decorators = [
+      decorateAudibility,
+      decorateWorms,
+    ]
+
+    for (const decorator of decorators) {
+      decorator(...args)
+    }
+  }
+
+  function decorateAudibility(data) {
+    const results = [
+      data.scan2d,
+      data.scan3d,
+    ].flat()
+
+    data.isAudible = false
+
+    for (const result of results) {
+      if (content.audio.scan.isAudible(result.relativeZ)) {
+        data.isAudible = true
+        return
+      }
+    }
+  }
+
+  function decorateWorms(data) {
+    data.wormEntrances = []
+    data.worms = []
 
     // Optimization: Ignore when scanning surface
-    if (!results.isFloor) {
+    if (!data.isFloor) {
       return
     }
 
@@ -19,7 +46,7 @@ content.scan = (() => {
       worms2d = new Set()
 
     // Collect worms scanned in 3D
-    for (const result of results.scan3d) {
+    for (const result of data.scan3d) {
       if (result.isWorm) {
         worms.add(result.worm)
       }
@@ -27,17 +54,19 @@ content.scan = (() => {
 
     // Collect worms scanned in 2D
     // Transform their entrances (closest point intersecting floor) into 3D scan results
-    for (const stream of results.scan2d) {
+    for (const stream of data.scan2d) {
       for (const result of stream) {
         if (!result.isWormEntrance || worms2d.has(result.worm)) {
           continue
         }
 
-        const distance = position.distance(result.wormPoint)
+        const elevation = result.wormPoint.z - position.z
 
-        if (distance > maxDistance) {
+        if (!content.audio.scan.isAudible(elevation)) {
           continue
         }
+
+        const distance = position.distance(result.wormPoint)
 
         worms.add(result.worm)
         worms2d.add(result.worm)
@@ -46,7 +75,7 @@ content.scan = (() => {
           ...result,
           distance,
           distanceRatio: distance / maxDistance,
-          relativeZ: result.wormPoint.z - position.z,
+          relativeZ: elevation,
           remember: false,
           x: result.wormPoint.x,
           y: result.wormPoint.y,
@@ -55,9 +84,9 @@ content.scan = (() => {
       }
     }
 
-    results.scan3d.push(...wormEntrances)
-    results.wormEntrances = wormEntrances
-    results.worms = [...worms]
+    data.scan3d.push(...wormEntrances)
+    data.wormEntrances = wormEntrances
+    data.worms = [...worms]
   }
 
   return engine.utility.pubsub.decorate({
@@ -90,7 +119,7 @@ content.scan = (() => {
         scan3d: await this.scan3d.forward(),
       }
 
-      mergeWorms(results)
+      decorate(results)
 
       await minimum
       pubsub.emit('complete', results)
@@ -125,7 +154,7 @@ content.scan = (() => {
         scan3d: await this.scan3d.reverse(),
       }
 
-      mergeWorms(results)
+      decorate(results)
 
       await minimum
       pubsub.emit('complete', results)

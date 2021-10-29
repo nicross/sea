@@ -25,6 +25,9 @@ content.scan.scan3d = (() => {
       isSolid = content.terrain.voxels.get({x, y, z}).isSolid
     } while (!isSolid && ((distance + stepDistance) <= maxDistance))
 
+    const elevation = z - position.z,
+      isAudible = content.audio.scan.isAudible(elevation)
+
     const isUnique = content.exploration.isUnique({
       x,
       y,
@@ -38,11 +41,12 @@ content.scan.scan3d = (() => {
     return {
       distance,
       distanceRatio: engine.utility.clamp(engine.utility.scale(distance, 0, maxDistance, 0, 1), 0, 1),
+      isAudible,
       isSolid,
       isWorm: Boolean(wormPoint),
       isWormEntrance: false,
-      remember: isSolid && isUnique,
-      relativeZ: z - position.z,
+      remember: isAudible && isSolid && isUnique,
+      relativeZ: elevation,
       worm: wormPoint ? wormPoint.worm : undefined,
       wormPoint,
       x,

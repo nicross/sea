@@ -4,6 +4,8 @@ content.audio.scan = (() => {
     rootFrequency = content.utility.rationalFrequency.fromMidi(69)
 
   const lowpass2d = context.createBiquadFilter(),
+    maxAudibleElevation = frequencyToElevation(engine.const.maxFrequency),
+    minAudibleElevation = frequencyToElevation(engine.const.minFrequency),
     notch2d = context.createBiquadFilter()
 
   bus.gain.value = engine.utility.fromDb(-6)
@@ -180,32 +182,55 @@ content.audio.scan = (() => {
     synth.stop(when + duration)
   }
 
-  function to2dNote(z = 0, isSurface = false) {
+  function to2dNote(elevation = 0, isSurface = false) {
     const scale = isSurface
       ? content.surface.max()
       : content.scan.scan2d.maxDistance()
 
     return {
-      detune: engine.utility.scale(z, -scale, scale, -2400, 2400),
+      detune: engine.utility.scale(elevation, -scale, scale, -2400, 2400),
       frequency: rootFrequency,
     }
   }
 
-  function to3dNote(z = 0) {
+  function to3dNote(elevation = 0) {
     const scale = content.scan.scan3d.maxDistance()
 
     return {
-      detune: engine.utility.scale(z, -scale, scale, -2400, 2400),
+      detune: engine.utility.scale(elevation, -scale, scale, -2400, 2400),
       frequency: rootFrequency,
     }
+  }
+
+  function frequencyToElevation(frequency) {
+    const distancePerMultiplier = 100, // max distance
+      multiplier = 4 // two octaves
+
+    // Given:
+      // frequency = root * (multiplier ** scale(distance, 0, distancePerMultiplier, 0, 1))
+    // Therefore:
+      // multiplier ** exponent = frequency / root
+      // exponent = log(frequency / root) / log(multiplier)
+      // distance = scale(exponent, 0, 1, 0, distancePerMultiplier)
+
+    const exponent = Math.log(frequency / rootFrequency) / Math.log(multiplier)
+    return engine.utility.scale(exponent, 0, 1, 0, distancePerMultiplier)
   }
 
   return {
     complete: function (e) {
+      if (!e.isAudible) {
+        return this
+      }
+
       render2d(e)
       render3d(e)
+
       return this
     },
+    isAudible: (elevation) => engine.utility.between(elevation, minAudibleElevation, maxAudibleElevation),
+    maxAudibleElevation: () => maxAudibleElevation,
+    minAudibleElevation: () => minAudibleElevation,
     trigger: function (e) {
       honk(e)
       return this

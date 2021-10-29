@@ -7,6 +7,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 ### v1.5.x
 - Vehicle UI audio slider
 - Move treasure melody to music bus
+- Manual improvements
 
 #### Known issues
 - Treasure spawn audio crashes, less frequent after 75bb93b

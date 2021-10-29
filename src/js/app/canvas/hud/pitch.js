@@ -1,5 +1,5 @@
 app.canvas.hud.depth = (() => {
-  let lastPitch
+  let lastPitch = 0
 
   app.canvas.hud.on('draw', draw)
 
@@ -10,7 +10,7 @@ app.canvas.hud.depth = (() => {
 
     const pitch = engine.utility.euler.fromQuaternion(
       app.canvas.camera.computedQuaternion()
-    ).pitch || lastPitch
+    ).pitch || lastPitch || 0
 
     lastPitch = pitch
 

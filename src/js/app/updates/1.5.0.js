@@ -1,4 +1,4 @@
-app.updates.register('1.5.0-beta', () => {
+app.updates.register('1.5.0', () => {
   updateGame()
   updateSettings()
 

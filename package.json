@@ -1,6 +1,6 @@
 {
   "name": "S.E.A.",
-  "version": "1.5.0-beta",
+  "version": "1.5.0",
   "description": "",
   "license": "Unlicense",
   "main": "electron/main.js",

@@ -84,7 +84,7 @@ app.canvas.stars = (() => {
     const value = (1 - depth) + (amod * depth)
     const noise = twinkleField.value(star.x, star.y, star.z, time)
 
-    return value * engine.utility.lerp(0, 1, noise, 1/16)
+    return value * (noise ** 0.25)
   }
 
   function calculateTwinkleDepth() {

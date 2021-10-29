@@ -12,6 +12,7 @@ See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/
 - Treasure spawn audio crashes, less frequent after 75bb93b
 - HUD fades get stuck at >0% opacity
 - Tracers performance degredation
+- Surface culling overly conservative when looking up near tidal waves
 
 ### v1.6.0: Life update
 TBD

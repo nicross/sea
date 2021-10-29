@@ -22,6 +22,7 @@
   - Added toggle for HUD Coordinates to Graphics screen
   - Added toggle for HUD Pitch to Graphics screen
   - Added focus outlines to all interface components
+  - Fixed accessible fields on Graphics screen when toggled off
   - Renamed slider for Draw Distance to Dynamic Draw Distance
   - Allowed cancel button on New Game confirmation to go back to the main menu
   - Allowed certain keys to go back to splash screen from the main menu

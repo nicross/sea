@@ -27,7 +27,7 @@ app.screen.graphics = (() => {
       fields.setAttribute('role', 'presentation')
     }
 
-    [...fields.querySelectorAll('input')].forEach((field) => {
+    [...fields.querySelectorAll('button, input')].forEach((field) => {
       if (isEnabled) {
         field.removeAttribute('disabled')
       } else {

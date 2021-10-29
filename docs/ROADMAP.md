@@ -4,14 +4,14 @@ This document outlines upcoming changes for post-jam releases leading up to the 
 ## Planned versions
 See [the latest roadmap update](https://shiftbacktick.io/sea/devlogs/2021/06/21/roadmap-update.html) to learn more.
 
-### v1.5.0: Deep update
-- Polish
-  - Revise manual as needed
-  - Change version of upgrade script
+### v1.5.x
+- Vehicle UI audio slider
+- Move treasure melody to music bus
 
 #### Known issues
 - Treasure spawn audio crashes, less frequent after 75bb93b
 - HUD fades get stuck at >0% opacity
+- Tracers performance degredation
 
 ### v1.6.0: Life update
 TBD
@@ -27,11 +27,32 @@ TBD
 - Dynamic range presets
 - Miscellaneous submixes with volume sliders for collisions, engine, scanner, treasure
 
+### Economy
+- Depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
+- Better loot tables farther away from and at end of caves
+- Break down treasure into components
+- Sell treasure for gold
+- Crafting menu with inventory, materials, and upgrades screens
+- Upgrades
+  - Upgrade tracks have multiple levels with increasing bonuses
+  - Levels increase in material and gold rarity and costs
+  - Upgrades can have prerequisits
+  - Tracks
+    - Jump Jets (press ascend on surface / descend in air)
+      - Vectors (control jet direction)
+      - Intakes (more fuel / faster recharge)
+    - Temporal Drives (press and hold button to slow time by that amount, increased levels )
+    - Attractors (passive treasure magnetism)
+    - RCS Thrusters (turn / stop mid-air)
+    - Stabilizers (press descend on floor to switch to a driving movement model)
+    - Engines (increase underwater acceleration / speed)
+
 ### Graphics
 - Scan animations
 - Godrays by day
 - Shooting stars by night
-- 4D oscillations of exploration node
+- Exploration node radius animations
+- Full WebGL refactor
 
 ### Plot
 - Abandoned alien labs
@@ -77,11 +98,6 @@ TBD
   - Clouds
   - Weather patterns (rain, storm)
   - Light levels affected by clouds
-
-### Treasure
-- Consider whether treasures should be broken into raw materials that have uses beyond score
-- Depth-based probabilities and ranges to treasures (e.g. human junk versus dinosaur bones)
-- Better loot tables farther away from and at end of caves
 
 ### User interface
 - Improve screen transitions

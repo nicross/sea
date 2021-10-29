@@ -126,7 +126,8 @@ app.settings = (() => {
     graphicsOn: {
       compute: (rawValue) => Boolean(rawValue),
       default: true,
-      update: () => {
+      update: (computedValue) => {
+        app.canvas.crossfade()
         app.canvas.forceUpdate()
       },
     },

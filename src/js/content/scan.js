@@ -18,12 +18,12 @@ content.scan = (() => {
     const results = [
       data.scan2d,
       data.scan3d,
-    ].flat()
+    ].flat(2)
 
     data.isAudible = false
 
     for (const result of results) {
-      if (content.audio.scan.isAudible(result.relativeZ)) {
+      if (result.isAudible) {
         data.isAudible = true
         return
       }
@@ -56,13 +56,7 @@ content.scan = (() => {
     // Transform their entrances (closest point intersecting floor) into 3D scan results
     for (const stream of data.scan2d) {
       for (const result of stream) {
-        if (!result.isWormEntrance || worms2d.has(result.worm)) {
-          continue
-        }
-
-        const elevation = result.wormPoint.z - position.z
-
-        if (!content.audio.scan.isAudible(elevation)) {
+        if (!result.isAudible || !result.isWormEntrance || worms2d.has(result.worm)) {
           continue
         }
 
@@ -75,7 +69,7 @@ content.scan = (() => {
           ...result,
           distance,
           distanceRatio: distance / maxDistance,
-          relativeZ: elevation,
+          relativeZ: result.wormPoint.z - position.z,
           remember: false,
           x: result.wormPoint.x,
           y: result.wormPoint.y,

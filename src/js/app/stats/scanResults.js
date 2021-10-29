@@ -8,7 +8,7 @@ app.stats.scanResults = (() => {
       return this
     },
     set: function (value) {
-      counter = BigInt(value) || 0
+      counter = BigInt(value || 0)
       return this
     },
   })

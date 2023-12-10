@@ -2,6 +2,12 @@
 A chill audio watercraft simulator originally submitted to [No Video Jam](https://itch.io/jam/no-video-jam).
 Developed with [syngen](https://github.com/nicross/syngen).
 
+## Now Available
+This game has been remade as part of [Periphery Synthetic EP](https://periphery-synthetic-ep.shiftbacktick.io).
+
+Survey a planetary system in an upgradable exosuit and uncover its mysterious past.
+This interactive EP offers a chill and non-violent metroidvania experience across otherworldly musical playgrounds.
+
 ## How to Play
 You lie prone in your S.E.A., an experimental military watercraft that's fully enclosed.
 Moments before, you were dropped off in the middle of the Pacific.

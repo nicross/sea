@@ -63,7 +63,7 @@ app.settings = (() => {
     },
     graphicsHudCompassOn: {
       compute: (rawValue) => Boolean(rawValue),
-      default: true,
+      default: false,
       update: () => {
         if (engine.loop.isPaused()) {
           app.canvas.forceUpdate()
@@ -72,7 +72,7 @@ app.settings = (() => {
     },
     graphicsHudCoordinatesOn: {
       compute: (rawValue) => Boolean(rawValue),
-      default: true,
+      default: false,
       update: () => {
         if (engine.loop.isPaused()) {
           app.canvas.forceUpdate()
@@ -89,7 +89,7 @@ app.settings = (() => {
     },
     graphicsHudPitchOn: {
       compute: (rawValue) => Boolean(rawValue),
-      default: true,
+      default: false,
       update: () => {
         if (engine.loop.isPaused()) {
           app.canvas.forceUpdate()

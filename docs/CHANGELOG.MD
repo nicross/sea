@@ -1,4 +1,7 @@
 # S.E.A. changelog
+## v1.5.2
+- Upgraded desktop builds to Electron 28
+
 ## v1.5.0
 - Audio
   - Added heightmap sonification cues

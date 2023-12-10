@@ -1,5 +1,5 @@
 # S.E.A. changelog
-## v1.5.2
+## v1.5.1
 - Added a dismissible ad for Periphery Synthetic EP
 - Toggled HUD off by default
 - Improved accessibility of tables in manual

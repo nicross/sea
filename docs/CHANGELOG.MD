@@ -2,6 +2,7 @@
 ## v1.5.2
 - Added a dismissible ad for Periphery Synthetic EP
 - Toggled HUD off by default
+- Improved accessibility of tables in manual
 - Upgraded desktop builds to Electron 28
 
 ## v1.5.0

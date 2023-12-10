@@ -1,0 +1,6 @@
+#a-peripherySynthetic--title p {
+  line-height: 1.5;
+  margin-top: 1em;
+  max-width: 64ch;
+  text-shadow: 0 0 0.25em rgba(0, 0, 0, 1);
+}

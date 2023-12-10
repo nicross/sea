@@ -1,5 +1,9 @@
 app.settings = (() => {
   const settings = {
+    acknowledgePeripherySynthetic: {
+      compute: (rawValue) => Boolean(rawValue),
+      default: false,
+    },
     compassVolume: {
       compute: (rawValue) => engine.utility.fromDb(engine.utility.lerpLog(engine.const.zeroDb, -18, rawValue, 130000000)),
       default: 0.5,

@@ -1,5 +1,6 @@
 # S.E.A. changelog
 ## v1.5.2
+- Added a dismissible ad for Periphery Synthetic EP
 - Toggled HUD off by default
 - Upgraded desktop builds to Electron 28
 

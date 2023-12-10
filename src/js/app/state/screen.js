@@ -107,6 +107,17 @@ app.state.screen = engine.utility.machine.create({
         this.change('splash')
       },
     },
+    peripherySynthetic: {
+      acknowledge: function () {
+        app.settings.setAcknowledgePeripherySynthetic(true)
+        app.settings.save()
+
+        this.change('mainMenu')
+      },
+      dismiss: function () {
+        this.change('mainMenu')
+      },
+    },
     settings: {
       audio: function () {
         this.change('audio')
@@ -126,7 +137,7 @@ app.state.screen = engine.utility.machine.create({
     },
     splash: {
       start: function () {
-        this.change('mainMenu')
+        this.change(app.settings.computed.acknowledgePeripherySynthetic ? 'mainMenu' : 'peripherySynthetic')
       },
     },
     stats: {
@@ -181,6 +192,7 @@ app.state.screen.on('enter', (e) => {
     mainMenu: '.a-app--mainMenu',
     misc: '.a-app--misc',
     newGame: '.a-app--newGame',
+    peripherySynthetic: '.a-app--peripherySynthetic',
     settings: '.a-app--settings',
     splash: '.a-app--splash',
     stats: '.a-app--stats',
